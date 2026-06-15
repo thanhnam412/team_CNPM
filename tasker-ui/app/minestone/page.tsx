@@ -343,6 +343,7 @@ export default function ContractLayout() {
           </Card>
         </div>
       </div>
+      {A}
     </main>
   );
 }
@@ -664,5 +665,297 @@ const A = (
         </Card>
       </div>
     </div>
+    <ReviewMilestoneLayout />
   </main>
 );
+
+import { useState } from "react";
+import { CardDescription } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import {
+  Package,
+  Braces,
+  Code,
+  ExternalLink,
+  CheckSquare,
+  Edit,
+  AlertTriangle,
+  MonitorPlay,
+} from "lucide-react";
+
+function ReviewMilestoneLayout() {
+  // State quản lý việc hiển thị panel "Request Revision"
+  const [showRevision, setShowRevision] = useState(false);
+
+  return (
+    <main className="flex-1 w-full max-w-5xl mx-auto px-4 py-8 md:py-12 flex flex-col min-h-screen">
+      <div className="flex-1 space-y-6">
+        {/* Page Header */}
+        <header className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8 border-b pb-6">
+          <div>
+            <div className="flex items-center gap-3 mb-3">
+              <Badge
+                variant="outline"
+                className="bg-amber-100 text-amber-800 border-amber-300 dark:bg-amber-950/30 dark:text-amber-400 dark:border-amber-800 gap-1.5 px-2.5 py-0.5"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-600 dark:bg-amber-400 animate-pulse"></span>
+                UNDER REVIEW
+              </Badge>
+              <span className="text-sm text-muted-foreground">
+                Submitted on Oct 24, 2024
+              </span>
+            </div>
+            <h1 className="text-3xl font-bold tracking-tight text-foreground">
+              Review Milestone
+            </h1>
+            <p className="text-lg text-muted-foreground mt-1">
+              Core AI Chatbot Development
+            </p>
+          </div>
+        </header>
+
+        {/* Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Left Column: Details & Deliverables */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Deliverables Card */}
+            <Card className="overflow-hidden">
+              <CardHeader className="bg-muted/40 border-b pb-4">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Package className="w-5 h-5 text-muted-foreground" />
+                  Deliverables Submitted
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-0">
+                <ul className="divide-y">
+                  {/* Item 1 */}
+                  <li className="p-4 flex items-start gap-4 hover:bg-muted/30 transition-colors">
+                    <div className="w-10 h-10 rounded-md bg-muted flex items-center justify-center shrink-0 border">
+                      <Braces className="w-5 h-5 text-primary" />
+                    </div>
+                    <div className="flex-1 pt-0.5">
+                      <h4 className="text-sm font-semibold mb-1">
+                        API (RESTful endpoints)
+                      </h4>
+                      <p className="text-sm text-muted-foreground">
+                        Complete set of endpoints for chat completion, context
+                        management, and user history.
+                      </p>
+                    </div>
+                    <Button variant="ghost" size="icon" className="shrink-0">
+                      <Download className="w-4 h-4 text-muted-foreground" />
+                    </Button>
+                  </li>
+                  {/* Item 2 */}
+                  <li className="p-4 flex items-start gap-4 hover:bg-muted/30 transition-colors">
+                    <div className="w-10 h-10 rounded-md bg-muted flex items-center justify-center shrink-0 border">
+                      <Code className="w-5 h-5 text-primary" />
+                    </div>
+                    <div className="flex-1 pt-0.5">
+                      <h4 className="text-sm font-semibold mb-1">
+                        Source code (GitHub repository)
+                      </h4>
+                      <p className="text-sm text-muted-foreground">
+                        Access granted to the main repository branch
+                        &apos;release/v1.0&apos;.
+                      </p>
+                    </div>
+                    <Button variant="ghost" size="icon" className="shrink-0">
+                      <ExternalLink className="w-4 h-4 text-muted-foreground" />
+                    </Button>
+                  </li>
+                  {/* Item 3 */}
+                  <li className="p-4 flex items-start gap-4 hover:bg-muted/30 transition-colors">
+                    <div className="w-10 h-10 rounded-md bg-muted flex items-center justify-center shrink-0 border">
+                      <FileText className="w-5 h-5 text-primary" />
+                    </div>
+                    <div className="flex-1 pt-0.5">
+                      <h4 className="text-sm font-semibold mb-1">
+                        Documentation (PDF)
+                      </h4>
+                      <p className="text-sm text-muted-foreground">
+                        Technical architecture, integration guide, and API
+                        reference manual.
+                      </p>
+                    </div>
+                    <Button variant="ghost" size="icon" className="shrink-0">
+                      <Download className="w-4 h-4 text-muted-foreground" />
+                    </Button>
+                  </li>
+                  {/* Item 4 */}
+                  <li className="p-4 flex items-start gap-4 hover:bg-muted/30 transition-colors">
+                    <div className="w-10 h-10 rounded-md bg-muted flex items-center justify-center shrink-0 border">
+                      <MonitorPlay className="w-5 h-5 text-primary" />
+                    </div>
+                    <div className="flex-1 pt-0.5">
+                      <h4 className="text-sm font-semibold mb-1">Demo Link</h4>
+                      <a
+                        href="#"
+                        className="text-sm text-primary hover:underline block truncate w-full md:w-auto"
+                      >
+                        staging-env.example.com
+                      </a>
+                    </div>
+                    <Button variant="ghost" size="icon" className="shrink-0">
+                      <ExternalLink className="w-4 h-4 text-muted-foreground" />
+                    </Button>
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+
+            {/* Acceptance Criteria Card */}
+            <Card className="overflow-hidden">
+              <CardHeader className="bg-muted/40 border-b pb-4">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <CheckSquare className="w-5 h-5 text-muted-foreground" />
+                  Acceptance Criteria Checklist
+                </CardTitle>
+                <CardDescription className="mt-1">
+                  Verify the following criteria before approving the milestone.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="p-6 space-y-5">
+                <div className="flex items-start gap-3 group">
+                  <Checkbox id="criteria-1" className="mt-0.5" />
+                  <Label
+                    htmlFor="criteria-1"
+                    className="text-base font-medium leading-none cursor-pointer group-hover:text-primary transition-colors"
+                  >
+                    NLU Engine integrated with 95% accuracy
+                  </Label>
+                </div>
+                <div className="flex items-start gap-3 group">
+                  <Checkbox id="criteria-2" className="mt-0.5" />
+                  <Label
+                    htmlFor="criteria-2"
+                    className="text-base font-medium leading-none cursor-pointer group-hover:text-primary transition-colors"
+                  >
+                    API latency &lt; 200ms
+                  </Label>
+                </div>
+                <div className="flex items-start gap-3 group">
+                  <Checkbox id="criteria-3" className="mt-0.5" />
+                  <Label
+                    htmlFor="criteria-3"
+                    className="text-base font-medium leading-none cursor-pointer group-hover:text-primary transition-colors"
+                  >
+                    Comprehensive unit testing &gt; 80%
+                  </Label>
+                </div>
+                <div className="flex items-start gap-3 group">
+                  <Checkbox id="criteria-4" className="mt-0.5" />
+                  <Label
+                    htmlFor="criteria-4"
+                    className="text-base font-medium leading-none cursor-pointer group-hover:text-primary transition-colors"
+                  >
+                    Deployment documentation updated
+                  </Label>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Right Column: Actions */}
+          <div className="lg:col-span-1">
+            <Card className="sticky top-8 shadow-sm">
+              <CardHeader className="pb-4">
+                <CardTitle className="text-xl">Milestone Decision</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {/* Milestone Value Box */}
+                <div className="bg-muted/50 rounded-lg p-4 mb-6 border">
+                  <div className="flex justify-between items-center mb-1">
+                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                      Milestone Value
+                    </span>
+                    <span className="text-lg font-bold text-foreground">
+                      $5,000.00
+                    </span>
+                  </div>
+                  <div className="w-full bg-muted-foreground/20 rounded-full h-1.5 mb-2 mt-3">
+                    <div className="bg-primary h-1.5 rounded-full w-3/4"></div>
+                  </div>
+                  <span className="text-xs text-muted-foreground">
+                    75% of Total Contract
+                  </span>
+                </div>
+
+                {/* Primary Action */}
+                <div className="space-y-3">
+                  <Button
+                    size="lg"
+                    className="w-full gap-2 text-base h-12 shadow-sm"
+                  >
+                    <CheckCircle className="w-5 h-5" />
+                    Approve & Release Funds
+                  </Button>
+                  <p className="text-xs text-center text-muted-foreground px-2">
+                    Releasing $5,000.00 from escrow to the provider.
+                  </p>
+
+                  <div className="border-t pt-6 mt-6 space-y-3">
+                    {/* Toggle Revision Form */}
+                    <Button
+                      variant="outline"
+                      className="w-full gap-2"
+                      onClick={() => setShowRevision(!showRevision)}
+                    >
+                      <Edit className="w-4 h-4" />
+                      Request Revision
+                    </Button>
+
+                    {/* Conditional Revision Form */}
+                    {showRevision && (
+                      <div className="mt-3 space-y-3 animate-in fade-in slide-in-from-top-2 duration-200">
+                        <Textarea
+                          className="w-full bg-background resize-none"
+                          rows={4}
+                          placeholder="Provide specific feedback on what needs to be changed..."
+                        />
+                        <Button variant="secondary" className="w-full">
+                          Send Feedback
+                        </Button>
+                      </div>
+                    )}
+
+                    {/* Danger Action */}
+                    <Button
+                      variant="ghost"
+                      className="w-full gap-2 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/50 dark:text-red-500"
+                    >
+                      <AlertTriangle className="w-4 h-4" />
+                      Reject & Raise Dispute
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <footer className="w-full py-8 mt-16 border-t flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
+        <div className="text-lg font-bold text-foreground">AI Workspace</div>
+        <div className="flex flex-wrap justify-center gap-4 md:gap-6">
+          <a href="#" className="hover:text-primary transition-colors">
+            Privacy Policy
+          </a>
+          <a href="#" className="hover:text-primary transition-colors">
+            Terms of Service
+          </a>
+          <a href="#" className="hover:text-primary transition-colors">
+            Legal
+          </a>
+          <a href="#" className="hover:text-primary transition-colors">
+            Help Center
+          </a>
+        </div>
+        <div>© 2024 AI Workspace Inc. All rights reserved.</div>
+      </footer>
+    </main>
+  );
+}

@@ -1,0 +1,19 @@
+"use client";
+
+import { AiAutoQualityReport } from "@/components/ai-auto-quality-report";
+import { ApproveMilestoneClient } from "@/components/approve-milestone-client";
+import { DeliveryPolicyConfig } from "@/components/delivery-policy-config";
+import { SecurityReviewAlert } from "@/components/security-review-alert";
+import ModerationDashboardPage from "@/containers/moderation/review/page";
+
+export default function ReviewModerationPage() {
+  return (
+    <main className="flex-1 overflow-y-auto p-6 md:p-10">
+      <ModerationDashboardPage />
+      <AiAutoQualityReport></AiAutoQualityReport>
+      <ApproveMilestoneClient></ApproveMilestoneClient>
+      <SecurityReviewAlert></SecurityReviewAlert>
+      <DeliveryPolicyConfig></DeliveryPolicyConfig>
+    </main>
+  );
+}
