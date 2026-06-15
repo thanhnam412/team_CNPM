@@ -1,0 +1,454 @@
+<!DOCTYPE html><html class="light" lang="vi"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Aitasker - Khám Phá Dịch Vụ</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "background": "#f7f9fb",
+                    "on-background": "#191c1e",
+                    "on-tertiary-container": "#d4dbf5",
+                    "surface-dim": "#d8dadc",
+                    "error-container": "#ffdad6",
+                    "on-error-container": "#93000a",
+                    "primary": "#3525cd",
+                    "tertiary-fixed-dim": "#bec6e0",
+                    "on-error": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-low": "#f2f4f6",
+                    "surface-bright": "#f7f9fb",
+                    "surface-container": "#eceef0",
+                    "on-secondary-container": "#54647a",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "secondary-fixed-dim": "#b7c8e1",
+                    "on-surface-variant": "#464555",
+                    "on-primary-container": "#dad7ff",
+                    "inverse-surface": "#2d3133",
+                    "error": "#ba1a1a",
+                    "tertiary-container": "#586076",
+                    "primary-fixed-dim": "#c3c0ff",
+                    "on-surface": "#191c1e",
+                    "surface-tint": "#4d44e3",
+                    "surface": "#f7f9fb",
+                    "on-secondary-fixed-variant": "#38485d",
+                    "tertiary-fixed": "#dae2fd",
+                    "surface-variant": "#e0e3e5",
+                    "secondary": "#505f76",
+                    "on-primary": "#ffffff",
+                    "secondary-container": "#d0e1fb",
+                    "inverse-on-surface": "#eff1f3",
+                    "on-secondary-fixed": "#0b1c30",
+                    "surface-container-high": "#e6e8ea",
+                    "outline": "#777587",
+                    "on-tertiary-fixed-variant": "#3f465c",
+                    "inverse-primary": "#c3c0ff",
+                    "on-primary-fixed-variant": "#3323cc",
+                    "surface-container-highest": "#e0e3e5",
+                    "primary-fixed": "#e2dfff",
+                    "primary-container": "#4f46e5",
+                    "on-primary-fixed": "#0f0069",
+                    "secondary-fixed": "#d3e4fe",
+                    "outline-variant": "#c7c4d8",
+                    "on-tertiary-fixed": "#131b2e",
+                    "tertiary": "#41485e"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-desktop": "2rem",
+                    "container-max": "1280px",
+                    "16": "4rem",
+                    "margin-mobile": "1rem",
+                    "base": "0.25rem",
+                    "1": "0.25rem",
+                    "12": "3rem",
+                    "2": "0.5rem",
+                    "gutter": "1rem",
+                    "8": "2rem",
+                    "6": "1.5rem",
+                    "4": "1rem",
+                    "3": "0.75rem"
+            },
+            "fontFamily": {
+                    "h3": ["Inter"],
+                    "h2": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "label-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "h1": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "body-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "h3": ["1.5rem", {"lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "h2": ["2.25rem", {"lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "label-sm": ["0.75rem", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "label-md": ["0.875rem", {"lineHeight": "1", "fontWeight": "500"}],
+                    "body-md": ["1rem", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "h1": ["3rem", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["1.125rem", {"lineHeight": "1.75", "fontWeight": "400"}],
+                    "body-sm": ["0.875rem", {"lineHeight": "1.5", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .active-heart {
+            font-variation-settings: 'FILL' 1;
+            color: #ba1a1a;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f7f9fb;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c7c4d8;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #777587;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-50 bg-surface border-b border-outline-variant">
+<div class="flex justify-between items-center px-margin-desktop py-4 max-w-container-max mx-auto gap-8">
+<div class="flex items-center gap-12 flex-1">
+<a class="font-h3 text-h3 font-bold text-primary" href="#">Aitasker</a>
+<div class="hidden md:flex flex-1 max-w-xl relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="Tìm kiếm dịch vụ..." type="text">
+</div>
+</div>
+<nav class="hidden lg:flex items-center gap-6">
+<a class="font-body-md text-body-md text-primary border-b-2 border-primary pb-1 transition-colors cursor-pointer active:opacity-80" href="#">Find Talent</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:opacity-80" href="#">My Postings</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:opacity-80" href="#">Messages</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:opacity-80" href="#">Payments</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer p-2 rounded-full transition-colors">notifications</button>
+<div class="h-10 w-10 rounded-full bg-surface-container-highest overflow-hidden border border-outline-variant cursor-pointer">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="A professional headshot of a young entrepreneur with a friendly smile, set against a clean, out-of-focus modern office background. The lighting is natural and bright, matching a professional corporate aesthetic. The colors are muted and sophisticated, emphasizing trust and competence." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoKuNfqDpNRUgTxwLGjzUaV1qNBRMNKVjD00kPCRq-dTUUKHvfUFpFhzY_3XrcEx2KONCYbyE8U_S3UV8X6sTJpLQ2FRb4ldgwqsv-IWeUjQwY013ItUsym0aApR59K4vtxPlxswGTKuYV0tRyCuAtxc1kkrDd36iWKBOprF8Vu0ONb9HbfLW1fAmmMy2PgUv0yLXHj7Zn7tV-vWwJ8VgkdEnE7mDUDmVXwgpZwyzgcoA4PdsDSBoU5VB74vGSZ-55cS8xOrUHE8U">
+</div>
+<button class="hidden sm:block px-6 py-2 bg-primary text-on-primary rounded-lg font-label-md hover:opacity-90 transition-all active:scale-95">Post a Job</button>
+</div>
+</div>
+</header>
+<main class="flex-1 max-w-container-max mx-auto w-full flex flex-col md:flex-row gap-8 px-margin-desktop py-8">
+<!-- Sidebar Filters -->
+<aside class="w-full md:w-64 flex-shrink-0 space-y-6">
+<div class="bg-surface p-6 rounded-xl border border-outline-variant">
+<div class="flex items-center justify-between mb-4">
+<h2 class="font-h3 text-h3 text-on-surface">Bộ lọc</h2>
+<button class="text-label-sm text-primary hover:underline">Xóa tất cả</button>
+</div>
+<!-- Category -->
+<div class="mb-6">
+<h3 class="font-label-md text-on-surface mb-3 uppercase tracking-wider">Danh mục</h3>
+<div class="space-y-2">
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="rounded border-outline-variant text-primary focus:ring-primary h-4 w-4" type="checkbox">
+<span class="font-body-sm text-on-surface-variant group-hover:text-primary">Thiết kế đồ họa</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer group">
+<input checked="" class="rounded border-outline-variant text-primary focus:ring-primary h-4 w-4" type="checkbox">
+<span class="font-body-sm text-on-surface-variant group-hover:text-primary">Lập trình &amp; Tech</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="rounded border-outline-variant text-primary focus:ring-primary h-4 w-4" type="checkbox">
+<span class="font-body-sm text-on-surface-variant group-hover:text-primary">Marketing Kỹ thuật số</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="rounded border-outline-variant text-primary focus:ring-primary h-4 w-4" type="checkbox">
+<span class="font-body-sm text-on-surface-variant group-hover:text-primary">Viết lách &amp; Dịch thuật</span>
+</label>
+</div>
+</div>
+<!-- Budget -->
+<div class="mb-6">
+<h3 class="font-label-md text-on-surface mb-3 uppercase tracking-wider">Ngân sách (VNĐ)</h3>
+<div class="space-y-4">
+<input class="w-full h-1 bg-surface-container-highest rounded-lg appearance-none cursor-pointer accent-primary" max="10000000" min="0" step="500000" type="range">
+<div class="flex justify-between text-label-sm text-on-surface-variant">
+<span>0đ</span>
+<span>10Tr+</span>
+</div>
+</div>
+</div>
+<!-- Delivery Time -->
+<div class="mb-6">
+<h3 class="font-label-md text-on-surface mb-3 uppercase tracking-wider">Thời gian giao</h3>
+<div class="grid grid-cols-1 gap-2">
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="border-outline-variant text-primary focus:ring-primary h-4 w-4" name="delivery" type="radio">
+<span class="font-body-sm text-on-surface-variant group-hover:text-primary">24 Giờ</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="border-outline-variant text-primary focus:ring-primary h-4 w-4" name="delivery" type="radio">
+<span class="font-body-sm text-on-surface-variant group-hover:text-primary">3 Ngày</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer group">
+<input checked="" class="border-outline-variant text-primary focus:ring-primary h-4 w-4" name="delivery" type="radio">
+<span class="font-body-sm text-on-surface-variant group-hover:text-primary">7 Ngày</span>
+</label>
+</div>
+</div>
+<!-- Rating -->
+<div>
+<h3 class="font-label-md text-on-surface mb-3 uppercase tracking-wider">Đánh giá</h3>
+<div class="space-y-2">
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="rounded border-outline-variant text-primary focus:ring-primary h-4 w-4" type="checkbox">
+<div class="flex text-yellow-500 text-sm">
+<span class="material-symbols-outlined fill-1" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined fill-1" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined fill-1" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined fill-1" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="text-on-surface-variant ml-1">trở lên</span>
+</div>
+</label>
+</div>
+</div>
+</div>
+</aside>
+<!-- Service Grid -->
+<section class="flex-1">
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+<div>
+<h1 class="font-h2 text-h2 text-on-surface mb-1">Dịch vụ Lập trình &amp; Tech</h1>
+<p class="text-on-surface-variant font-body-sm">Tìm thấy 1,240 dịch vụ cho nhu cầu của bạn</p>
+</div>
+<div class="flex items-center gap-2 bg-surface p-1 rounded-lg border border-outline-variant">
+<button class="px-4 py-1.5 rounded bg-primary text-on-primary font-label-md">Phổ biến</button>
+<button class="px-4 py-1.5 rounded hover:bg-surface-container text-on-surface-variant font-label-md">Mới nhất</button>
+</div>
+</div>
+<!-- Bento-ish Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Card 1 -->
+<div class="group bg-surface rounded-xl border border-outline-variant overflow-hidden hover:shadow-lg transition-all duration-300">
+<div class="relative aspect-video overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A clean, cinematic top-down view of a modern workstation with a sleek laptop displaying complex source code. The environment is a minimalist studio with soft, directional cool lighting and indigo accents that reflect the brand's primary color. The atmosphere is focused and highly professional." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZBNlqO-272Eq-IVx0uB9FCauztCcAuv2U1UZY5N0bBu98rkn0dDLPdxqst5H9COHPm0EReyfFXkzc8cGYuP_yTqjL9K4VoRv1LkW0ej6Wn2uYC2kMe55ub_9_MN1zKrmze1857FVf9sbqHV537nJARW1tazYY2MVEPdjwrxJhXZ3jNY3t1YZBjlJY7Rxs4vPhxTssVt-mcKxfHeFh55V0BiRhItEiqUWSEiwuhNDbWUuZOzm8FmmY6HTMHkWdwyPdAL6U-dN9sRg">
+<button class="absolute top-3 right-3 p-2 bg-white/80 backdrop-blur rounded-full hover:bg-white transition-colors" onclick="this.querySelector('span').classList.toggle('active-heart')">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">favorite</span>
+</button>
+</div>
+<div class="p-5">
+<div class="flex items-center gap-3 mb-3">
+<div class="w-8 h-8 rounded-full bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional circular avatar portrait of a male expert developer with a confident smile, wearing a casual polo shirt. The studio lighting is bright and even, set against a solid light gray background that emphasizes clarity and modern professionalism." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWl5uWCrkJf2zXF9EkvAl6N4t2Bm4xRBxQs2ELMHMLWAYnQOOJQwG2QP3xr6-Ep4f8UX86R6exyIkOfdMMfoBDDY-hI1dWZly2T2ffd6ca3NLCQgHI0AX7jn7eAfyRjlRCBOB5OahNubmpf7H_texEzqHx9QXtve1GhHVPW7u3J-nm3AesXVjj0GyMuYdQ-CVhbt5flatlvM4ZVyRE7-g9rJFqhdZqZkV4pLmuOjj4KUKlFLFn2wi9pUwW_-HTQwv74F3jfE_CRFw">
+</div>
+<span class="font-label-md text-on-surface">Minh Quân</span>
+<span class="ml-auto flex items-center gap-1 text-yellow-500 font-label-sm">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1">star</span>
+                                4.9 (124)
+                            </span>
+</div>
+<h3 class="font-label-md text-on-surface line-clamp-2 mb-4 group-hover:text-primary transition-colors">Tôi sẽ thiết kế và phát triển ứng dụng Web React chuyên nghiệp cho doanh nghiệp bạn</h3>
+<div class="pt-4 border-t border-outline-variant flex justify-between items-center">
+<span class="text-label-sm text-on-surface-variant uppercase">Bắt đầu từ</span>
+<span class="font-h3 text-primary">2.500.000đ</span>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group bg-surface rounded-xl border border-outline-variant overflow-hidden hover:shadow-lg transition-all duration-300">
+<div class="relative aspect-video overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A macro shot of a computer monitor displaying vibrant lines of Python code in a dark mode IDE. The surrounding environment is dimly lit with subtle neon blue backlighting, creating a high-tech, futuristic developer workspace vibe. The composition is dynamic and sharp." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAd_dgt8tUR97OCj5vtejplgZhPqkI90FVLUL764qjIHcKJvzuIHe8dhf8POd9G_T7Ftc1nfcNFix36Q1ujWkpw1vmnYbM-Hnc8Mmrfd5CVDpSGZ3RRHvkIFrPzHfQpa_FQvs9goPHKFiGDm3540YgtaY6v8LKIJK_CnO1YJWyMoLR61x1kuKyWqJAzb34S9aNqW97vhIuq-jHQQB5508-vkE-PSNaDWM1wW4qmhD3-l8q1vBGhTDQhQWJxNDDsYfflANhaGiRVFpI">
+<button class="absolute top-3 right-3 p-2 bg-white/80 backdrop-blur rounded-full hover:bg-white transition-colors" onclick="this.querySelector('span').classList.toggle('active-heart')">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">favorite</span>
+</button>
+</div>
+<div class="p-5">
+<div class="flex items-center gap-3 mb-3">
+<div class="w-8 h-8 rounded-full bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A circular profile photo of a female software engineer with glasses, looking directly at the camera with an intelligent and friendly expression. The lighting is soft and professional, set in a bright, modern co-working space background. The overall tone is bright, clean, and corporate." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmK7y6rdy2SUV42UyR7r44f4lLhSg9w4I28BI8iXu14ntfPqpsJksBuA6PwBjUN89hXxtEfEDT65pmdLMOwViw47JhQJw1Ot8QRNL6-rfr5eGU6YIB1Bw3wIaq15kXX627KhJ73Cnu3mCaWOVHEuBItSdtWqmiQ_YWyEVOUeRFcJgvw18fTecg5HJLs14RyBnXyWUFDqo6SjJe1OvscI3ak8oVYP6B2fEmIcoPTgXMzKXOh-5YR_8Mydwty6n9_HHjZmToFPPyesg">
+</div>
+<span class="font-label-md text-on-surface">Lan Anh</span>
+<span class="ml-auto flex items-center gap-1 text-yellow-500 font-label-sm">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1">star</span>
+                                5.0 (86)
+                            </span>
+</div>
+<h3 class="font-label-md text-on-surface line-clamp-2 mb-4 group-hover:text-primary transition-colors">Tối ưu hóa SEO và tốc độ website WordPress chuẩn Google Core Web Vitals</h3>
+<div class="pt-4 border-t border-outline-variant flex justify-between items-center">
+<span class="text-label-sm text-on-surface-variant uppercase">Bắt đầu từ</span>
+<span class="font-h3 text-primary">1.200.000đ</span>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="group bg-surface rounded-xl border border-outline-variant overflow-hidden hover:shadow-lg transition-all duration-300">
+<div class="relative aspect-video overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A professional team of developers collaborating around a large digital tablet screen in a sunlit, glass-walled office. The aesthetic is contemporary corporate with a focus on teamwork and technology. Soft shadows and high-key lighting create a welcoming, high-end professional atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwZhO2S9gjXw3-ElzIByHY30wB9dK2SHFUXBSVBxODG1r1_QwJWM6OOQq43yBRRJC6JuYA8M--vkD9iHsQ1hMJgtkndRKmPIKnKLfm0tpOm3BsKoCHUzP6T2piTYpY819gXfNPj75Tlswot0dfs7jun1QX_orQfjuKqVN13AXrmexy-rL_hoDfOyGWzk1xdVMIHT3XnK8Cvft75JZWbANliJiCd8ruz38WXXtQAgDFs3X3jd6124uYZ5Yz0AMXt9yr11pYpOrjhFM">
+<button class="absolute top-3 right-3 p-2 bg-white/80 backdrop-blur rounded-full hover:bg-white transition-colors" onclick="this.querySelector('span').classList.toggle('active-heart')">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">favorite</span>
+</button>
+</div>
+<div class="p-5">
+<div class="flex items-center gap-3 mb-3">
+<div class="w-8 h-8 rounded-full bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A high-quality studio portrait of a senior tech consultant with silver-accented hair and a sharp navy blazer. The lighting is crisp and sophisticated, casting subtle shadows that define his features. The background is a muted dark blue, projecting authority and deep professional expertise." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMtRncxnYpjQYTGCxKPIdxcJRTt7vv1wHNoV4Eo-oK9u1OPgJ32dx0mW-bfabLfobOSfd6IRaT7m3e9zuHxOX-XQmQh_aLZhZ-NSi8RZqr9TqiqPhRYw0wSMQ-cDDYaMro_wkADu_x9qZGZAEolzhw48xRXDKLlCNpIwt71AvPNMVVLAEtgDSfW-zrK4vjGo3k0vjQUgl5RB9oheIt6SsZt1phH1EFv1MXWA6sfEIGaPjcAvUDDISq_Z7UUYkRoQ1ZBaWU8-KpnpE">
+</div>
+<span class="font-label-md text-on-surface">Đức Hoàng</span>
+<span class="ml-auto flex items-center gap-1 text-yellow-500 font-label-sm">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1">star</span>
+                                4.8 (210)
+                            </span>
+</div>
+<h3 class="font-label-md text-on-surface line-clamp-2 mb-4 group-hover:text-primary transition-colors">Tư vấn và triển khai hạ tầng Cloud AWS cho ứng dụng quy mô lớn</h3>
+<div class="pt-4 border-t border-outline-variant flex justify-between items-center">
+<span class="text-label-sm text-on-surface-variant uppercase">Bắt đầu từ</span>
+<span class="font-h3 text-primary">5.000.000đ</span>
+</div>
+</div>
+</div>
+<!-- More Cards (Repeating pattern for grid) -->
+<!-- Card 4 -->
+<div class="group bg-surface rounded-xl border border-outline-variant overflow-hidden hover:shadow-lg transition-all duration-300">
+<div class="relative aspect-video overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A flat-lay photograph of a designer's desk featuring a high-end drawing tablet, a digital stylus, and a smartphone. The aesthetic is clean and minimalist, with a palette of whites, grays, and soft blues. The lighting is diffused and bright, creating a crisp and artistic professional feel." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKp5WvlAYGiavfgWj0EWcRxQTLIMjscs5xVtlzZm-vxO2KdH94ufaOOcTleMeNdNOYKbOHGgUOT3Ke9drLHUDm9Av30pIWzuULMyXbzGl_i4mFBqGqnb9q_r485Udb8tkFGYYRIDVk1Ckv0P9ZvLdG07aThC55WuwbmwPOnA9Nc59O90VvIOSalXqJ5se5qprRBx6nLpCslS0rLNhbseMSoygy-XseDGsT33hNAVhZLVPcp2bRrZdxCbUqCKRsEobJZk0-fW96KOU">
+<button class="absolute top-3 right-3 p-2 bg-white/80 backdrop-blur rounded-full hover:bg-white transition-colors" onclick="this.querySelector('span').classList.toggle('active-heart')">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">favorite</span>
+</button>
+</div>
+<div class="p-5">
+<div class="flex items-center gap-3 mb-3">
+<div class="w-8 h-8 rounded-full bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A circular profile shot of a professional female project manager in a minimalist white blouse, looking confident and poised. The setting is a bright corporate foyer with subtle architectural lines in the background. The mood is calm, professional, and reliable." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPMduCTehOyej2aoEd267gsf1qWmWXZUOyvHMaoH60rdZ7x55MzvFolPh3_nnLuGytUOpQPYRHrTsCb_Ecguo8-h4eTYWYhxIK0eadcMqG7aRboSusF1NNuox2fwWAgRG-8I7blQ27pDFray8uk3-_m0eyzi3_AYIIuS28NAKX93vexV2XXx_zUrZbNi3Ha9xBkIZZTl02lspvyTyI7yLkHanv_llb6S6i55LfUDaMfd_7bJPZX2_WLr-mQ5PW9D_nEkyIjIt7VJs">
+</div>
+<span class="font-label-md text-on-surface">Hải Yến</span>
+<span class="ml-auto flex items-center gap-1 text-yellow-500 font-label-sm">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1">star</span>
+                                4.9 (45)
+                            </span>
+</div>
+<h3 class="font-label-md text-on-surface line-clamp-2 mb-4 group-hover:text-primary transition-colors">Thiết kế UI/UX Mobile App hiện đại cho iOS và Android</h3>
+<div class="pt-4 border-t border-outline-variant flex justify-between items-center">
+<span class="text-label-sm text-on-surface-variant uppercase">Bắt đầu từ</span>
+<span class="font-h3 text-primary">3.200.000đ</span>
+</div>
+</div>
+</div>
+<!-- Card 5 -->
+<div class="group bg-surface rounded-xl border border-outline-variant overflow-hidden hover:shadow-lg transition-all duration-300">
+<div class="relative aspect-video overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A cinematic shot of a data scientist's workspace with multiple monitors displaying complex data visualizations and charts. The room is dimly lit with high-contrast amber and blue lighting, emphasizing the technical complexity and precision of data analysis. The visual style is modern and data-centric." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwAnsiCNbFMqkzJPXMiY8Yl7Al7shY-rk6edZ1Y8kagrlX4iEcAl_Q7MSsu3-Hj3BvxtMTKA9M5pTosTB0m7kHvTthUer7rKk226I0oTaKlz053t1ydpFI1PiE6LZuAr2vA6Km7A-r6V97vsC7QCmakh8EK3FpaTpZJQYWb9z5X_gxam4pmZKq1-ivVTB0AuAmR5FzSVdjnzJh0TP-_iLvzL1IdG92AT1TTn3_gbBJV1_d4RUpRJvOgV8Q2jrJUUVmOuP-CmmITfY">
+<button class="absolute top-3 right-3 p-2 bg-white/80 backdrop-blur rounded-full hover:bg-white transition-colors" onclick="this.querySelector('span').classList.toggle('active-heart')">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">favorite</span>
+</button>
+</div>
+<div class="p-5">
+<div class="flex items-center gap-3 mb-3">
+<div class="w-8 h-8 rounded-full bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional avatar of a young male data analyst wearing a smart casual sweater. The lighting is warm and natural, set against an out-of-focus background of a contemporary library or bookstore, suggesting intelligence and research-driven expertise." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYUYEDHsK1WHYoT15NcGD9hL962a2IncVrFpYWAvYJs-OhVB-9qYtbCtwNOXypnyvpC2UYjWshN3rDEMeZSzK1X9rC74u4NXJDs1h6Fnx5xtFIXf2dGlNbSs8V_o3mwtBmX60hu4SPNKPjtcgsmqUz1AugE9trWzGk4e8digPb8iPX7r1Vr9iBSG7v5xQBhuRMWn1S0KTXDhFdvrBjvUY_X5n8bQGhnwrr7Unn1WONjYDrg4yN_qEAyEzdpF_DXT38-YyMHuBWSOg">
+</div>
+<span class="font-label-md text-on-surface">Tùng Dương</span>
+<span class="ml-auto flex items-center gap-1 text-yellow-500 font-label-sm">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1">star</span>
+                                5.0 (32)
+                            </span>
+</div>
+<h3 class="font-label-md text-on-surface line-clamp-2 mb-4 group-hover:text-primary transition-colors">Xây dựng hệ thống Dashboard phân tích dữ liệu doanh nghiệp Power BI</h3>
+<div class="pt-4 border-t border-outline-variant flex justify-between items-center">
+<span class="text-label-sm text-on-surface-variant uppercase">Bắt đầu từ</span>
+<span class="font-h3 text-primary">4.500.000đ</span>
+</div>
+</div>
+</div>
+<!-- Card 6 -->
+<div class="group bg-surface rounded-xl border border-outline-variant overflow-hidden hover:shadow-lg transition-all duration-300">
+<div class="relative aspect-video overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A dramatic and crisp photograph of a server rack with blinking green and blue LED lights in a temperature-controlled data center. The perspective is from a low angle, giving a sense of scale and technological power. The aesthetic is industrial-modern, clean, and highly secure." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsDMlFcjfvn63kv2DsBa73OVSJCiJWgnVhelH4tM43zsrBCJg-MvQ1ty6waq8r5ctwviuqXgYGS2qz_A55jFqvHsu7WnfCat42qcZpxOnMZGey-L38afRDEpIX4c_3lWuBWHohwVopR2XeWxEhIWIKek6UYDV-TemQtcfuxvT1ajs4ZF_TnPw3id2rltu1FLzEjZua6W8ksFvFrQxeJwV_OCjdZhgzfo1XhIlv_I45mB_1CF_GdZRowAlzO44mpq_wGPss-MiT51c">
+<button class="absolute top-3 right-3 p-2 bg-white/80 backdrop-blur rounded-full hover:bg-white transition-colors" onclick="this.querySelector('span').classList.toggle('active-heart')">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">favorite</span>
+</button>
+</div>
+<div class="p-5">
+<div class="flex items-center gap-3 mb-3">
+<div class="w-8 h-8 rounded-full bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A high-end professional headshot of a middle-aged security expert in a crisp white shirt. The lighting is classic and sharp, with a neutral gray background that provides a clean, institutional feel. The expression is serious and capable, conveying trust and reliability." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtOenN1huig9RodqhaBi52HMy5Uo5OPtkfSZlI-e7P9jvkM8e1WBkF9vyza_X32TO_MWgi3S695u717fF0D75lQpzEXSzn8RO5wxCsi9ZxgOW1JPOTZqwkGDA-rNK08Jx3e60ECIm3AewtZXemkSNqVat-5eydU9x7Lp6vFSrZUDa5hmvF7LBeAYP18OS2GrP4b7VcHcFIxsWLRwH2XbhPncJLBrMYAem6k_kORfdYNb7FYsLdZrafr-NHhz-EAu8xGND5tFI5_X8">
+</div>
+<span class="font-label-md text-on-surface">Quốc Bảo</span>
+<span class="ml-auto flex items-center gap-1 text-yellow-500 font-label-sm">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1">star</span>
+                                4.7 (158)
+                            </span>
+</div>
+<h3 class="font-label-md text-on-surface line-clamp-2 mb-4 group-hover:text-primary transition-colors">Kiểm thử bảo mật (Pentest) và vá lỗ hổng cho hệ thống Web/API</h3>
+<div class="pt-4 border-t border-outline-variant flex justify-between items-center">
+<span class="text-label-sm text-on-surface-variant uppercase">Bắt đầu từ</span>
+<span class="font-h3 text-primary">8.000.000đ</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Pagination -->
+<div class="mt-12 flex justify-center items-center gap-2">
+<button class="w-10 h-10 flex items-center justify-center rounded-lg border border-outline-variant hover:bg-surface-container transition-colors disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg bg-primary text-on-primary font-label-md">1</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg border border-outline-variant hover:bg-surface-container transition-colors font-label-md">2</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg border border-outline-variant hover:bg-surface-container transition-colors font-label-md">3</button>
+<span class="px-2 text-on-surface-variant">...</span>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg border border-outline-variant hover:bg-surface-container transition-colors font-label-md">12</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg border border-outline-variant hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full mt-auto bg-surface-container border-t border-outline-variant">
+<div class="flex flex-col md:flex-row justify-between items-center px-margin-desktop py-8 max-w-container-max mx-auto gap-4">
+<div class="flex flex-col items-center md:items-start gap-2">
+<span class="font-h3 text-h3 font-bold text-primary">Aitasker</span>
+<p class="font-label-sm text-label-sm text-on-secondary-fixed-variant">© 2024 Aitasker Freelance Solutions. All rights reserved.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-6">
+<a class="font-label-sm text-label-sm text-on-secondary-fixed-variant hover:underline transition-all cursor-pointer" href="#">Privacy Policy</a>
+<a class="font-label-sm text-label-sm text-on-secondary-fixed-variant hover:underline transition-all cursor-pointer" href="#">Terms of Service</a>
+<a class="font-label-sm text-label-sm text-on-secondary-fixed-variant hover:underline transition-all cursor-pointer" href="#">Help Center</a>
+<a class="font-label-sm text-label-sm text-on-secondary-fixed-variant hover:underline transition-all cursor-pointer" href="#">Contact Support</a>
+</div>
+<div class="flex gap-4">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">public</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">currency_exchange</button>
+</div>
+</div>
+</footer>
+<script>
+        // Micro-interaction for filter inputs
+        const rangeInput = document.querySelector('input[type="range"]');
+        if (rangeInput) {
+            rangeInput.addEventListener('input', (e) => {
+                const value = e.target.value;
+                // Add any logic to update a price display if needed
+            });
+        }
+
+        // Toggle active heart functionality is handled via inline onclick for simplicity
+    </script>
+</body></html>

@@ -1,0 +1,300 @@
+<main class="flex-1 md:ml-64 p-4 md:p-8 max-w-container-max mx-auto w-full">
+  <!-- Header -->
+  <header class="mb-8">
+    <div
+      class="flex items-center gap-2 text-on-surface-variant font-label-sm text-label-sm mb-2"
+    >
+      <span class="material-symbols-outlined text-base">event_available</span>
+      <span>Milestones</span>
+      <span class="material-symbols-outlined text-sm">chevron_right</span>
+      <span>Phase 1 Delivery</span>
+      <span class="material-symbols-outlined text-sm">chevron_right</span>
+      <span class="text-primary font-medium">Policy Setup</span>
+    </div>
+    <h1 class="font-h2 text-h2 text-on-background mb-2">
+      Delivery &amp; Data Access Policy
+    </h1>
+    <p class="font-body-lg text-body-lg text-on-surface-variant max-w-3xl">
+      Configure how deliverables for this milestone will be handled, stored, and
+      accessed. This ensures clear expectations and compliance with project
+      security requirements.
+    </p>
+  </header>
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Left/Main Column: Configuration -->
+    <div class="lg:col-span-2 flex flex-col gap-6">
+      <!-- Section 1: Delivery Mode Selection -->
+      <section
+        class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6"
+      >
+        <h2
+          class="font-h3 text-h3 text-on-background mb-4 flex items-center gap-2"
+        >
+          <span class="material-symbols-outlined text-primary">policy</span>
+          1. Select Delivery Mode
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <!-- Option A: Platform Transfer -->
+          <label class="relative cursor-pointer group">
+            <input
+              checked=""
+              class="peer sr-only"
+              name="delivery_mode"
+              onchange="toggleConfigView('platform')"
+              type="radio"
+              value="platform"
+            />
+            <div
+              class="h-full border border-outline-variant rounded-lg p-5 hover:bg-surface-container-low transition-colors peer-checked:border-primary peer-checked:bg-primary-fixed/20 peer-checked:ring-1 peer-checked:ring-primary flex flex-col gap-3"
+            >
+              <div class="flex justify-between items-start">
+                <div
+                  class="p-2 bg-primary-container text-on-primary-container rounded-lg"
+                >
+                  <span class="material-symbols-outlined text-2xl"
+                    >cloud_sync</span
+                  >
+                </div>
+                <div
+                  class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center peer-checked:border-primary peer-checked:bg-primary"
+                >
+                  <div
+                    class="w-2.5 h-2.5 rounded-full bg-white opacity-0 peer-checked:opacity-100 transition-opacity"
+                  ></div>
+                </div>
+              </div>
+              <div>
+                <h3 class="font-label-md text-label-md text-on-background mb-1">
+                  Platform Transfer
+                </h3>
+                <p
+                  class="font-label-sm text-label-sm text-on-surface-variant font-normal"
+                >
+                  Shared Delivery
+                </p>
+              </div>
+              <p
+                class="font-body-sm text-body-sm text-on-surface-variant flex-grow"
+              >
+                All deliverables (Documentation, Source code, Reports) are
+                transferred and stored on AITasker for member access.
+              </p>
+              <div
+                class="mt-2 inline-flex items-center gap-1 px-2 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm w-fit"
+              >
+                <span class="material-symbols-outlined text-[14px]"
+                  >verified</span
+                >
+                Recommended for transparency
+              </div>
+            </div>
+          </label>
+          <!-- Option B: Private Delivery -->
+          <label class="relative cursor-pointer group">
+            <input
+              class="peer sr-only"
+              name="delivery_mode"
+              onchange="toggleConfigView('private')"
+              type="radio"
+              value="private"
+            />
+            <div
+              class="h-full border border-outline-variant rounded-lg p-5 hover:bg-surface-container-low transition-colors peer-checked:border-primary peer-checked:bg-primary-fixed/20 peer-checked:ring-1 peer-checked:ring-primary flex flex-col gap-3"
+            >
+              <div class="flex justify-between items-start">
+                <div
+                  class="p-2 bg-surface-variant text-on-surface-variant rounded-lg"
+                >
+                  <span class="material-symbols-outlined text-2xl">lock</span>
+                </div>
+                <div
+                  class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center peer-checked:border-primary peer-checked:bg-primary"
+                >
+                  <div
+                    class="w-2.5 h-2.5 rounded-full bg-white opacity-0 peer-checked:opacity-100 transition-opacity"
+                  ></div>
+                </div>
+              </div>
+              <div>
+                <h3 class="font-label-md text-label-md text-on-background mb-1">
+                  Private Delivery
+                </h3>
+                <p
+                  class="font-label-sm text-label-sm text-on-surface-variant font-normal"
+                >
+                  Restricted Access
+                </p>
+              </div>
+              <p
+                class="font-body-sm text-body-sm text-on-surface-variant flex-grow"
+              >
+                No physical file transfer. Used for private source code,
+                internal company data, or sensitive systems.
+              </p>
+              <div
+                class="mt-2 inline-flex items-center gap-1 px-2 py-1 rounded-full bg-surface-variant text-on-surface-variant font-label-sm text-label-sm w-fit"
+              >
+                <span class="material-symbols-outlined text-[14px]"
+                  >shield</span
+                >
+                Used for high-security projects
+              </div>
+            </div>
+          </label>
+        </div>
+      </section>
+      <!-- Section 2: Mode-Specific Configuration -->
+      <section
+        class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 min-h-[200px]"
+      >
+        <h2
+          class="font-h3 text-h3 text-on-background mb-4 flex items-center gap-2"
+        >
+          <span class="material-symbols-outlined text-primary">settings</span>
+          2. Configuration Details
+        </h2>
+        <!-- View for Platform Transfer -->
+        <div
+          class="block animate-[fadeIn_0.3s_ease-in-out]"
+          id="config-platform"
+        >
+          <div class="flex flex-col gap-4">
+            <div>
+              <label
+                class="block font-label-md text-label-md text-on-background mb-2"
+                >Access Visibility</label
+              >
+              <select
+                class="w-full md:w-1/2 p-2.5 border border-outline-variant rounded-lg bg-surface focus:ring-2 focus:ring-primary focus:border-primary font-body-sm text-body-sm text-on-background"
+              >
+                <option>Project Members Only</option>
+                <option>Admin &amp; Milestone Assignees</option>
+                <option>Specific Team Selection</option>
+              </select>
+            </div>
+            <div
+              class="bg-surface-container-low p-4 rounded-lg border border-outline-variant flex items-start gap-3 mt-2"
+            >
+              <span class="material-symbols-outlined text-primary mt-0.5"
+                >info</span
+              >
+              <div>
+                <h4 class="font-label-md text-label-md text-on-background mb-1">
+                  System Tracking Enabled
+                </h4>
+                <p class="font-body-sm text-body-sm text-on-surface-variant">
+                  AITasker will automatically generate cryptographic hashes for
+                  uploaded files and maintain an immutable log of timestamps and
+                  member access events for audit purposes.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- View for Private Delivery -->
+        <div
+          class="hidden animate-[fadeIn_0.3s_ease-in-out]"
+          id="config-private"
+        >
+          <div class="flex flex-col gap-4">
+            <div
+              class="bg-error-container text-on-error-container p-4 rounded-lg border border-error/20 flex items-start gap-3"
+            >
+              <span class="material-symbols-outlined mt-0.5">warning</span>
+              <div>
+                <h4 class="font-label-md text-label-md mb-1">
+                  Out-of-Band Delivery
+                </h4>
+                <p class="font-body-sm text-body-sm">
+                  The Expert will not upload sensitive data to the platform.
+                  Both parties must manually confirm completion and access via
+                  external secure channels before this milestone can be marked
+                  as complete.
+                </p>
+              </div>
+            </div>
+            <label class="flex items-start gap-3 mt-2 cursor-pointer group">
+              <div class="relative flex items-center mt-1">
+                <input class="peer sr-only" id="private-ack" type="checkbox" />
+                <div
+                  class="w-5 h-5 border border-outline-variant rounded bg-surface peer-checked:bg-primary peer-checked:border-primary flex items-center justify-center transition-colors"
+                >
+                  <span
+                    class="material-symbols-outlined text-white text-[16px] opacity-0 peer-checked:opacity-100"
+                    >check</span
+                  >
+                </div>
+              </div>
+              <span
+                class="font-body-sm text-body-sm text-on-background group-hover:text-primary transition-colors"
+              >
+                I acknowledge that deliverables will be managed outside of
+                AITasker storage and assume responsibility for verifying
+                receipt.
+              </span>
+            </label>
+          </div>
+        </div>
+      </section>
+    </div>
+    <!-- Right Column: Summary & Actions -->
+    <div class="lg:col-span-1">
+      <div
+        class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 sticky top-8 flex flex-col gap-6"
+      >
+        <div>
+          <h3 class="font-h3 text-h3 text-on-background mb-4">
+            Milestone Agreement
+          </h3>
+          <div class="space-y-4">
+            <div class="pb-3 border-b border-outline-variant">
+              <span
+                class="block font-label-sm text-label-sm text-on-surface-variant mb-1"
+                >Selected Policy</span
+              >
+              <span
+                class="block font-label-md text-label-md text-on-background"
+                id="summary-mode"
+                >Platform Transfer</span
+              >
+            </div>
+            <div class="pb-3 border-b border-outline-variant">
+              <span
+                class="block font-label-sm text-label-sm text-on-surface-variant mb-1"
+                >Data Storage</span
+              >
+              <span
+                class="block font-label-md text-label-md text-on-background"
+                id="summary-storage"
+                >AITasker Secure Cloud</span
+              >
+            </div>
+            <div>
+              <span
+                class="block font-label-sm text-label-sm text-on-surface-variant mb-1"
+                >Audit Trail</span
+              >
+              <span
+                class="block font-label-md text-label-md text-on-background"
+                id="summary-audit"
+                >Full System Logs</span
+              >
+            </div>
+          </div>
+        </div>
+        <div class="mt-auto pt-4 flex flex-col gap-3">
+          <button
+            class="w-full h-10 px-4 bg-primary text-white font-label-md text-label-md rounded-lg hover:bg-primary-container transition-colors shadow-sm active:scale-[0.98]"
+          >
+            Apply to Milestone
+          </button>
+          <button
+            class="w-full h-10 px-4 bg-surface text-on-surface-variant border border-outline-variant font-label-md text-label-md rounded-lg hover:bg-surface-container-low transition-colors active:scale-[0.98]"
+          >
+            Save as Draft
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

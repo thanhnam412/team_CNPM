@@ -1,0 +1,338 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Precision Hire - Contract Workspace</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-bright": "#f7f9fb",
+                        "primary-fixed": "#e2dfff",
+                        "background": "#f7f9fb",
+                        "surface-container-high": "#e6e8ea",
+                        "tertiary": "#41485e",
+                        "on-tertiary": "#ffffff",
+                        "surface": "#f7f9fb",
+                        "on-background": "#191c1e",
+                        "on-primary-fixed-variant": "#3323cc",
+                        "on-error": "#ffffff",
+                        "tertiary-container": "#586076",
+                        "primary-container": "#4f46e5",
+                        "surface-container": "#eceef0",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "surface-dim": "#d8dadc",
+                        "surface-variant": "#e0e3e5",
+                        "secondary-container": "#d0e1fb",
+                        "on-secondary-fixed": "#0b1c30",
+                        "on-secondary-container": "#54647a",
+                        "on-tertiary-fixed": "#131b2e",
+                        "primary": "#3525cd",
+                        "tertiary-fixed": "#dae2fd",
+                        "secondary-fixed": "#d3e4fe",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#bec6e0",
+                        "on-tertiary-fixed-variant": "#3f465c",
+                        "on-surface": "#191c1e",
+                        "surface-container-low": "#f2f4f6",
+                        "on-surface-variant": "#464555",
+                        "on-primary-container": "#dad7ff",
+                        "surface-tint": "#4d44e3",
+                        "on-tertiary-container": "#d4dbf5",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "surface-container-highest": "#e0e3e5",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-error-container": "#93000a",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "on-primary-fixed": "#0f0069",
+                        "surface-container-lowest": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-secondary": "#ffffff",
+                        "secondary": "#505f76",
+                        "outline-variant": "#c7c4d8",
+                        "inverse-surface": "#2d3133",
+                        "inverse-primary": "#c3c0ff",
+                        "outline": "#777587",
+                        "on-primary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "16": "4rem",
+                        "2": "0.5rem",
+                        "1": "0.25rem",
+                        "gutter": "1rem",
+                        "margin-desktop": "2rem",
+                        "margin-mobile": "1rem",
+                        "3": "0.75rem",
+                        "container-max": "1280px",
+                        "6": "1.5rem",
+                        "4": "1rem",
+                        "8": "2rem",
+                        "12": "3rem",
+                        "base": "0.25rem"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "h2": ["Inter"],
+                        "h1-mobile": ["Inter"],
+                        "h2-mobile": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "h3": ["Inter"],
+                        "h1": ["Inter"],
+                        "label-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["0.75rem", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "body-lg": ["1.125rem", { "lineHeight": "1.75", "fontWeight": "400" }],
+                        "h2": ["2.25rem", { "lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "h1-mobile": ["2.25rem", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "h2-mobile": ["1.875rem", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "body-sm": ["0.875rem", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "body-md": ["1rem", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "h3": ["1.5rem", { "lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "h1": ["3rem", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-md": ["0.875rem", { "lineHeight": "1", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md text-body-md">
+<!-- TopNavBar -->
+<nav class="bg-surface-container-lowest border-b border-outline-variant w-full fixed top-0 z-50">
+<div class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto h-16">
+<div class="flex items-center gap-8">
+<a class="font-h3 text-h3 font-bold text-primary" href="#">Precision Hire</a>
+<div class="hidden md:flex gap-6 items-center">
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors py-5" href="#">Dashboard</a>
+<a class="font-body-sm text-body-sm text-primary border-b-2 border-primary py-5 opacity-80 transition-opacity" href="#">Projects</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors py-5" href="#">Talent</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors py-5" href="#">Analytics</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="hidden md:block font-label-md text-label-md text-secondary hover:text-primary transition-colors">Help</button>
+<button class="bg-primary text-on-primary font-label-md text-label-md h-10 px-4 rounded hover:bg-surface-tint transition-colors">Create Project</button>
+<div class="w-8 h-8 rounded-full bg-surface-container-high border border-outline-variant overflow-hidden cursor-pointer flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]" data-icon="person">person</span>
+</div>
+</div>
+</div>
+</nav>
+<!-- Main Canvas -->
+<main class="flex-grow pt-16 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto w-full pb-16">
+<!-- Auto-approve Banner -->
+<div class="mt-8 mb-6 bg-surface-bright border border-outline-variant rounded-lg p-4 flex items-start sm:items-center gap-3">
+<span class="material-symbols-outlined text-secondary" data-icon="timer">timer</span>
+<div class="flex-1">
+<p class="font-body-sm text-body-sm text-on-surface">Auto-approving in <strong>3 days, 14 hours</strong>. Please review.</p>
+</div>
+<button class="text-primary font-label-sm text-label-sm hover:underline shrink-0">Review Now</button>
+</div>
+<!-- Page Header -->
+<header class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h1 class="font-h2 text-h2-mobile md:text-h2 text-on-background mb-2">E-commerce Platform Development</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]" data-icon="work">work</span>
+                    Contract Workspace
+                </p>
+</div>
+<!-- Escrow Summary Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-4 min-w-[300px]">
+<div class="flex justify-between items-center mb-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Escrow Balance</span>
+<span class="font-h3 text-h3 text-primary">$1,500</span>
+</div>
+<div class="flex gap-4 font-body-sm text-body-sm text-on-surface-variant">
+<div class="flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-surface-container-high"></span>
+                        $500 Released
+                    </div>
+<div class="flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+                        $1,000 In Escrow
+                    </div>
+</div>
+<!-- Progress bar -->
+<div class="w-full h-1 bg-surface-container mt-3 rounded-full overflow-hidden flex">
+<div class="h-full bg-surface-container-high" style="width: 33.33%"></div>
+<div class="h-full bg-primary" style="width: 66.67%"></div>
+</div>
+</div>
+</header>
+<!-- Main Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Timeline Section -->
+<div class="lg:col-span-8">
+<h2 class="font-h3 text-h3 text-on-background mb-6">Milestones</h2>
+<div class="relative pl-6 border-l border-outline-variant ml-3 space-y-12 pb-8">
+<!-- Milestone 1 (Completed) -->
+<div class="relative">
+<div class="absolute -left-[31px] bg-surface-container-lowest w-6 h-6 rounded-full border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant" data-icon="check">check</span>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 opacity-70">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-body-lg text-body-lg text-on-surface font-semibold">Milestone 1: Project Kickoff &amp; Setup</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Completed on Oct 12, 2024</p>
+</div>
+<span class="bg-surface-container font-label-sm text-label-sm text-on-surface px-2 py-1 rounded">Completed</span>
+</div>
+<div class="flex items-center justify-between border-t border-surface-variant pt-4 mt-4">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Amount: $500</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Funds Released</span>
+</div>
+</div>
+</div>
+<!-- Milestone 2 (Active/Awaiting Approval) -->
+<div class="relative">
+<div class="absolute -left-[31px] bg-primary w-6 h-6 rounded-full border-2 border-surface-container-lowest flex items-center justify-center">
+<span class="w-2 h-2 rounded-full bg-on-primary"></span>
+</div>
+<div class="bg-surface-container-lowest border border-primary rounded-lg p-6 shadow-[0_0_15px_rgba(79,70,229,0.05)] ring-1 ring-primary/20">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-body-lg text-body-lg text-on-surface font-semibold">Milestone 2: UI/UX Design Approval</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Submitted on Oct 25, 2024</p>
+</div>
+<span class="bg-secondary-container font-label-sm text-label-sm text-on-secondary-container px-2 py-1 rounded flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                                    Awaiting Approval
+                                </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface mb-6">The initial design files and specifications are ready for your review. Please check the attached documents before approving the release of funds for this phase.</p>
+<!-- Deliverables Area -->
+<div class="bg-surface-bright rounded border border-outline-variant p-4 mb-6">
+<div class="flex justify-between items-center mb-3">
+<h4 class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Deliverables</h4>
+<button class="font-label-sm text-label-sm text-primary hover:underline flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="download">download</span>
+                                        Download All
+                                    </button>
+</div>
+<div class="flex flex-col sm:flex-row gap-3">
+<div class="flex items-center gap-3 p-3 bg-surface-container-lowest border border-outline-variant rounded flex-1 hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="w-8 h-8 rounded bg-surface-container flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]" data-icon="insert_drive_file">insert_drive_file</span>
+</div>
+<div class="flex-1">
+<p class="font-body-sm text-body-sm font-medium text-on-surface">design_v1.fig</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">12.4 MB</p>
+</div>
+</div>
+<div class="flex items-center gap-3 p-3 bg-surface-container-lowest border border-outline-variant rounded flex-1 hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="w-8 h-8 rounded bg-surface-container flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]" data-icon="picture_as_pdf">picture_as_pdf</span>
+</div>
+<div class="flex-1">
+<p class="font-body-sm text-body-sm font-medium text-on-surface">specs.pdf</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">2.1 MB</p>
+</div>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between border-t border-surface-variant pt-4">
+<span class="font-body-sm text-body-sm text-on-surface font-medium">Amount to Release: $500</span>
+<div class="flex gap-3">
+<button class="h-10 px-4 border border-outline-variant bg-surface-container-lowest text-on-surface font-label-md text-label-md rounded hover:bg-surface-container-low transition-colors">Request Changes</button>
+<button class="h-10 px-4 bg-primary text-on-primary font-label-md text-label-md rounded hover:bg-surface-tint transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="check_circle">check_circle</span>
+                                        Approve &amp; Release Funds
+                                    </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Milestone 3 (Upcoming) -->
+<div class="relative">
+<div class="absolute -left-[31px] bg-surface-bright w-6 h-6 rounded-full border border-outline-variant flex items-center justify-center">
+<span class="w-1.5 h-1.5 rounded-full bg-outline-variant"></span>
+</div>
+<div class="bg-surface-bright border border-outline-variant rounded-lg p-6 opacity-50">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-body-lg text-body-lg text-on-surface font-semibold">Milestone 3: Backend Integration</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Est. Nov 15, 2024</p>
+</div>
+<span class="bg-surface-container-low border border-outline-variant font-label-sm text-label-sm text-on-surface-variant px-2 py-1 rounded">Upcoming</span>
+</div>
+<div class="flex items-center justify-between mt-4">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Amount: $500</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Side Panel -->
+<div class="lg:col-span-4 space-y-6">
+<!-- Freelancer Info -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+<h4 class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-4">Contractor</h4>
+<div class="flex items-center gap-4 mb-4">
+<div class="w-12 h-12 rounded-full bg-surface-container-high border border-outline-variant overflow-hidden flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="person">person</span>
+</div>
+<div>
+<p class="font-body-md text-body-md font-medium text-on-surface">Alex Mercer</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Full-Stack Developer</p>
+</div>
+</div>
+<button class="w-full h-8 border border-outline-variant bg-surface-container-lowest text-on-surface font-label-sm text-label-sm rounded hover:bg-surface-container-low transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[16px]" data-icon="chat">chat</span>
+                        Message
+                    </button>
+</div>
+<!-- Contract Details -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+<h4 class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-4">Contract Details</h4>
+<div class="space-y-4">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Total Contract Value</p>
+<p class="font-body-md text-body-md text-on-surface font-medium">$1,500.00</p>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Start Date</p>
+<p class="font-body-md text-body-md text-on-surface">Oct 10, 2024</p>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Contract ID</p>
+<p class="font-body-md text-body-md text-on-surface font-mono text-sm">CTR-88291-A</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-low border-t border-outline-variant mt-auto w-full">
+<div class="w-full py-8 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto flex flex-col md:flex-row justify-between items-center gap-4 transition-all duration-200">
+<div class="font-label-md text-label-md font-bold text-secondary">
+                Precision Hire
+            </div>
+<div class="flex flex-wrap justify-center gap-6">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:underline hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:underline hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:underline hover:text-primary transition-colors" href="#">Help Center</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:underline hover:text-primary transition-colors" href="#">Security</a>
+</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant">
+                © 2024 Precision Hire Enterprise. All rights reserved.
+            </div>
+</div>
+</footer>
+</body></html>

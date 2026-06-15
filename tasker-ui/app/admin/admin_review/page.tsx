@@ -1,9 +1,11 @@
 "use client";
 
+import { ActiveUserPermissionAlert } from "@/components/active-user-permission-alert";
 import { AiAutoQualityReport } from "@/components/ai-auto-quality-report";
 import { ApproveMilestoneClient } from "@/components/approve-milestone-client";
 import { DeliveryPolicyConfig } from "@/components/delivery-policy-config";
 import { SecurityReviewAlert } from "@/components/security-review-alert";
+import { SystemConfigWarning } from "@/components/system-config-warning";
 import ModerationDashboardPage from "@/containers/moderation/review/page";
 
 export default function ReviewModerationPage() {
@@ -14,6 +16,8 @@ export default function ReviewModerationPage() {
       <ApproveMilestoneClient></ApproveMilestoneClient>
       <SecurityReviewAlert></SecurityReviewAlert>
       <DeliveryPolicyConfig></DeliveryPolicyConfig>
+      <SystemConfigWarning></SystemConfigWarning>
+      <ActiveUserPermissionAlert></ActiveUserPermissionAlert>
     </main>
   );
 }

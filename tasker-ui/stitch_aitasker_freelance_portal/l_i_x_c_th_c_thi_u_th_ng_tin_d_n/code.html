@@ -1,0 +1,284 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Precision Hire - Create Project</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary": "#505f76",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "tertiary-fixed-dim": "#bec6e0",
+                        "on-tertiary-fixed": "#131b2e",
+                        "surface": "#f7f9fb",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-surface-variant": "#464555",
+                        "surface-container-low": "#f2f4f6",
+                        "on-error": "#ffffff",
+                        "background": "#f7f9fb",
+                        "tertiary-fixed": "#dae2fd",
+                        "secondary-container": "#d0e1fb",
+                        "inverse-surface": "#2d3133",
+                        "inverse-primary": "#c3c0ff",
+                        "on-primary-container": "#dad7ff",
+                        "surface-tint": "#4d44e3",
+                        "on-secondary-fixed": "#0b1c30",
+                        "on-primary-fixed": "#0f0069",
+                        "primary-container": "#4f46e5",
+                        "surface-bright": "#f7f9fb",
+                        "primary": "#3525cd",
+                        "tertiary": "#41485e",
+                        "on-tertiary-container": "#d4dbf5",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "surface-dim": "#d8dadc",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "outline": "#777587",
+                        "on-background": "#191c1e",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-container": "#586076",
+                        "surface-container-high": "#e6e8ea",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-primary": "#ffffff",
+                        "primary-fixed": "#e2dfff",
+                        "on-secondary-container": "#54647a",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "on-primary-fixed-variant": "#3323cc",
+                        "surface-container": "#eceef0",
+                        "on-secondary": "#ffffff",
+                        "surface-variant": "#e0e3e5",
+                        "secondary-fixed": "#d3e4fe",
+                        "on-surface": "#191c1e",
+                        "error-container": "#ffdad6",
+                        "outline-variant": "#c7c4d8",
+                        "on-tertiary-fixed-variant": "#3f465c",
+                        "error": "#ba1a1a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "0.25rem",
+                        "3": "0.75rem",
+                        "6": "1.5rem",
+                        "2": "0.5rem",
+                        "gutter": "1rem",
+                        "8": "2rem",
+                        "container-max": "1280px",
+                        "1": "0.25rem",
+                        "16": "4rem",
+                        "4": "1rem",
+                        "margin-mobile": "1rem",
+                        "margin-desktop": "2rem",
+                        "12": "3rem"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "h2-mobile": ["Inter"],
+                        "h1": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "h2": ["Inter"],
+                        "h3": ["Inter"],
+                        "h1-mobile": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "label-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-sm": ["0.875rem", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "body-md": ["1rem", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "h2-mobile": ["1.875rem", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "h1": ["3rem", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["1.125rem", { "lineHeight": "1.75", "fontWeight": "400" }],
+                        "h2": ["2.25rem", { "lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "h3": ["1.5rem", { "lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "h1-mobile": ["2.25rem", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "label-sm": ["0.75rem", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "label-md": ["0.875rem", { "lineHeight": "1", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased flex flex-col min-h-screen">
+<!-- TopNavBar: Intent is transactional/task-focused (Create Project), so global nav is suppressed per strict instructions, replacing with a localized back header -->
+<header class="bg-surface-container-lowest border-b border-outline-variant w-full h-16 flex items-center px-margin-desktop sticky top-0 z-50">
+<div class="max-w-container-max mx-auto w-full flex justify-between items-center">
+<div class="flex items-center gap-4">
+<button aria-label="Go back" class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center w-8 h-8 rounded-full hover:bg-surface-container-low" type="button">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="font-h3 text-h3 font-bold text-primary">Create New Project</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="font-label-md text-label-md text-on-surface-variant hover:text-primary px-4 py-2 rounded border border-transparent hover:border-outline-variant transition-colors">Save Draft</button>
+</div>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="flex-grow w-full px-margin-desktop py-8 max-w-container-max mx-auto">
+<!-- Global Error Banner -->
+<div class="bg-error-container text-on-error-container border border-error rounded-lg p-4 mb-8 flex items-start gap-3 animate-pulse-once">
+<span class="material-symbols-outlined mt-0.5" data-weight="fill" style="font-variation-settings: 'FILL' 1;">error</span>
+<div>
+<h3 class="font-label-md text-label-md font-bold mb-1">Validation Errors Found</h3>
+<p class="font-body-sm text-body-sm">Please correct the errors in the highlighted sections below before submitting for approval.</p>
+</div>
+</div>
+<form class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- Left Column: Primary Details (Valid) -->
+<div class="lg:col-span-8 flex flex-col gap-6">
+<!-- Basic Info Card -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+<h2 class="font-h3 text-h3 mb-6 text-on-surface border-b border-outline-variant pb-3">Project Details</h2>
+<div class="space-y-4">
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1" for="projectName">Project Name</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded px-3 py-2 font-body-sm text-body-sm focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-transparent transition-shadow" id="projectName" placeholder="Enter project name" type="text" value="Q4 Cloud Migration Initiative">
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1" for="projectDesc">Description</label>
+<textarea class="w-full bg-surface-container-lowest border border-outline-variant rounded px-3 py-2 font-body-sm text-body-sm focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-transparent transition-shadow" id="projectDesc" placeholder="Briefly describe the project scope and objectives..." rows="3">Migrate legacy on-premise infrastructure to AWS over 3 phases to reduce operational overhead.</textarea>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1" for="startDate">Start Date</label>
+<div class="relative">
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded pl-3 pr-10 py-2 font-body-sm text-body-sm focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-transparent transition-shadow" id="startDate" type="date" value="2024-10-01">
+</div>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1" for="endDate">Target End Date</label>
+<div class="relative">
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded pl-3 pr-10 py-2 font-body-sm text-body-sm focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-transparent transition-shadow" id="endDate" type="date" value="2024-12-31">
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Team Structure Card (INVALID STATE) -->
+<section class="bg-error-container/10 border-2 border-error rounded-lg p-6 relative">
+<!-- Error Indicator -->
+<div class="absolute top-0 right-0 transform translate-x-1/4 -translate-y-1/4 bg-error text-on-error rounded-full w-6 h-6 flex items-center justify-center shadow-md">
+<span class="material-symbols-outlined text-sm font-bold">priority_high</span>
+</div>
+<div class="flex justify-between items-center mb-6 border-b border-error/20 pb-3">
+<h2 class="font-h3 text-h3 text-error">Team Structure</h2>
+<button class="font-label-sm text-label-sm text-primary hover:text-primary-container flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px]">add</span> Add Role
+                        </button>
+</div>
+<!-- Error Message -->
+<p class="font-label-md text-label-md text-error mb-4 flex items-center gap-2 bg-error-container py-2 px-3 rounded inline-flex">
+<span class="material-symbols-outlined text-[18px]">error</span> Please define at least one role
+                    </p>
+<div class="border border-dashed border-error/50 rounded p-8 flex flex-col items-center justify-center text-center bg-surface-container-lowest">
+<div class="w-12 h-12 rounded-full bg-error-container flex items-center justify-center text-error mb-3">
+<span class="material-symbols-outlined text-[24px]">group_off</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-2">No roles defined for this project.</p>
+<p class="font-body-sm text-body-sm text-outline mb-4">You must allocate headcount to submit for approval.</p>
+<button class="bg-surface-container-lowest border border-outline text-on-surface font-label-md text-label-md px-4 py-2 rounded hover:bg-surface-container-low transition-colors flex items-center gap-2 focus:ring-2 focus:ring-error focus:border-transparent" type="button">
+<span class="material-symbols-outlined text-[18px]">add_circle</span> Define Initial Role
+                        </button>
+</div>
+</section>
+</div>
+<!-- Right Column: Meta & Budget (Valid/Invalid mix) -->
+<div class="lg:col-span-4 flex flex-col gap-6">
+<!-- Status & Classification -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+<h3 class="font-label-md text-label-md font-bold mb-4 text-on-surface border-b border-outline-variant pb-2">Classification</h3>
+<div class="space-y-4">
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Department</label>
+<select class="w-full bg-surface-container-lowest border border-outline-variant rounded px-3 py-2 font-body-sm text-body-sm focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-transparent">
+<option>Engineering</option>
+<option>Product</option>
+<option>Marketing</option>
+<option>Design</option>
+</select>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Priority Level</label>
+<div class="flex gap-2">
+<span class="bg-surface-container-low text-on-surface px-3 py-1 rounded-full font-label-sm text-label-sm border border-outline-variant cursor-pointer hover:bg-surface-variant">Low</span>
+<span class="bg-surface-container-low text-on-surface px-3 py-1 rounded-full font-label-sm text-label-sm border border-outline-variant cursor-pointer hover:bg-surface-variant">Medium</span>
+<span class="bg-primary-container text-on-primary-container px-3 py-1 rounded-full font-label-sm text-label-sm border border-transparent font-bold">High</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Budget Section (INVALID STATE) -->
+<section class="bg-error-container/10 border-2 border-error rounded-lg p-6 relative">
+<!-- Error Indicator -->
+<div class="absolute top-0 right-0 transform translate-x-1/4 -translate-y-1/4 bg-error text-on-error rounded-full w-6 h-6 flex items-center justify-center shadow-md">
+<span class="material-symbols-outlined text-sm font-bold">priority_high</span>
+</div>
+<h3 class="font-label-md text-label-md font-bold mb-4 text-error border-b border-error/20 pb-2">Financials</h3>
+<div class="space-y-4">
+<div>
+<label class="block font-label-sm text-label-sm text-error mb-1" for="totalBudget">Total Budget (USD)</label>
+<div class="relative">
+<span class="absolute left-3 top-2 text-outline">$</span>
+<input class="w-full bg-error-container/20 border border-error rounded pl-7 pr-3 py-2 font-body-sm text-body-sm text-error focus:outline-none focus:ring-2 focus:ring-error focus:border-transparent placeholder-error/50" id="totalBudget" placeholder="0.00" type="number">
+</div>
+<p class="font-label-sm text-label-sm text-error mt-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">error</span> Total budget is required
+                            </p>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1 opacity-50">CapEx / OpEx Split</label>
+<div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden opacity-50">
+<div class="bg-outline h-full" style="width: 0%"></div>
+</div>
+<div class="flex justify-between mt-1 opacity-50">
+<span class="font-label-sm text-label-sm text-on-surface-variant">CapEx: $0</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">OpEx: $0</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+</form>
+<!-- Sticky Footer Action Bar for Transactional Screen -->
+<div class="fixed bottom-0 left-0 w-full bg-surface-container-lowest border-t border-outline-variant p-4 flex justify-end gap-4 z-40">
+<div class="max-w-container-max mx-auto w-full flex justify-end gap-4 px-margin-desktop">
+<button class="px-6 py-2 rounded font-label-md text-label-md border border-outline-variant text-on-surface bg-surface-container-lowest hover:bg-surface-container-low transition-colors" type="button">Cancel</button>
+<button class="px-6 py-2 rounded font-label-md text-label-md border border-transparent text-on-error bg-error hover:bg-error/90 transition-colors shadow-sm flex items-center gap-2" type="button">
+<span class="material-symbols-outlined text-[18px]">warning</span> Fix Errors to Submit
+                </button>
+</div>
+</div>
+<!-- Spacer to prevent content from hiding behind fixed footer -->
+<div class="h-20 w-full"></div>
+</main>
+<style>
+        /* Lightweight keyframe for initial pulse on error banner to draw attention */
+        @keyframes pulse-border {
+            0% { border-color: rgba(186, 26, 26, 1); box-shadow: 0 0 0 0 rgba(186, 26, 26, 0.4); }
+            70% { border-color: rgba(186, 26, 26, 0.5); box-shadow: 0 0 0 10px rgba(186, 26, 26, 0); }
+            100% { border-color: rgba(186, 26, 26, 1); box-shadow: 0 0 0 0 rgba(186, 26, 26, 0); }
+        }
+        .animate-pulse-once {
+            animation: pulse-border 1.5s ease-out 1;
+        }
+    </style>
+</body></html>

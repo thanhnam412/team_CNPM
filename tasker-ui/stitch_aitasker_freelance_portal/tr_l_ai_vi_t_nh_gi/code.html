@@ -1,0 +1,283 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Review Workspace - Aitasker</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "primary": "#3525cd",
+                      "tertiary-fixed": "#dae2fd",
+                      "background": "#f7f9fb",
+                      "on-surface": "#191c1e",
+                      "secondary-fixed-dim": "#b7c8e1",
+                      "on-secondary-fixed-variant": "#38485d",
+                      "surface-container-highest": "#e0e3e5",
+                      "on-primary-fixed-variant": "#3323cc",
+                      "surface": "#f7f9fb",
+                      "primary-fixed-dim": "#c3c0ff",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "on-primary-fixed": "#0f0069",
+                      "error": "#ba1a1a",
+                      "secondary-fixed": "#d3e4fe",
+                      "secondary-container": "#d0e1fb",
+                      "surface-container-low": "#f2f4f6",
+                      "on-error-container": "#93000a",
+                      "primary-fixed": "#e2dfff",
+                      "surface-container": "#eceef0",
+                      "on-tertiary-container": "#d4dbf5",
+                      "inverse-on-surface": "#eff1f3",
+                      "on-secondary-fixed": "#0b1c30",
+                      "on-primary-container": "#dad7ff",
+                      "on-tertiary-fixed": "#131b2e",
+                      "on-surface-variant": "#464555",
+                      "tertiary-fixed-dim": "#bec6e0",
+                      "tertiary-container": "#586076",
+                      "secondary": "#505f76",
+                      "on-secondary-container": "#54647a",
+                      "surface-variant": "#e0e3e5",
+                      "surface-tint": "#4d44e3",
+                      "surface-container-high": "#e6e8ea",
+                      "on-background": "#191c1e",
+                      "tertiary": "#41485e",
+                      "inverse-primary": "#c3c0ff",
+                      "error-container": "#ffdad6",
+                      "inverse-surface": "#2d3133",
+                      "outline": "#777587",
+                      "on-tertiary-fixed-variant": "#3f465c",
+                      "on-secondary": "#ffffff",
+                      "on-primary": "#ffffff",
+                      "on-error": "#ffffff",
+                      "primary-container": "#4f46e5",
+                      "surface-bright": "#f7f9fb",
+                      "surface-dim": "#d8dadc",
+                      "outline-variant": "#c7c4d8"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-mobile": "1rem",
+                      "container-max": "1280px",
+                      "6": "1.5rem",
+                      "4": "1rem",
+                      "16": "4rem",
+                      "gutter": "1rem",
+                      "margin-desktop": "2rem",
+                      "8": "2rem",
+                      "base": "0.25rem",
+                      "3": "0.75rem",
+                      "2": "0.5rem",
+                      "1": "0.25rem",
+                      "12": "3rem"
+              },
+              "fontFamily": {
+                      "h2": ["Inter"], "body-md": ["Inter"], "h1": ["Inter"], "h1-mobile": ["Inter"], "body-sm": ["Inter"], "body-lg": ["Inter"], "label-sm": ["Inter"], "label-md": ["Inter"], "h3": ["Inter"], "h2-mobile": ["Inter"]
+              },
+              "fontSize": {
+                      "h2": ["2.25rem", {"lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                      "body-md": ["1rem", {"lineHeight": "1.5", "fontWeight": "400"}],
+                      "h1": ["3rem", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "h1-mobile": ["2.25rem", {"lineHeight": "1.2", "fontWeight": "700"}],
+                      "body-sm": ["0.875rem", {"lineHeight": "1.5", "fontWeight": "400"}],
+                      "body-lg": ["1.125rem", {"lineHeight": "1.75", "fontWeight": "400"}],
+                      "label-sm": ["0.75rem", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                      "label-md": ["0.875rem", {"lineHeight": "1", "fontWeight": "500"}],
+                      "h3": ["1.5rem", {"lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "h2-mobile": ["1.875rem", {"lineHeight": "1.3", "fontWeight": "600"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        
+        /* Shimmer Loading Animation */
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+        .animate-shimmer {
+            animation: shimmer 2s infinite linear;
+            background: linear-gradient(to right, #f2f4f6 4%, #e0e3e5 25%, #f2f4f6 36%);
+            background-size: 1000px 100%;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.4s ease-in-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface antialiased min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<nav class="bg-surface dark:bg-on-surface docked full-width top-0 border-b border-outline-variant dark:border-outline flat no shadows relative z-50">
+<div class="flex justify-between items-center w-full px-margin-desktop max-w-container-max mx-auto h-16">
+<div class="flex items-center gap-8">
+<div class="font-h3 text-h3 font-bold text-primary dark:text-primary-fixed-dim">
+                    Aitasker
+                </div>
+<div class="hidden md:flex items-center gap-6">
+<a class="text-primary dark:text-primary-fixed-dim font-bold border-b-2 border-primary dark:border-primary-fixed-dim pb-1 font-body-md text-body-md hover:text-primary dark:hover:text-primary-fixed-dim transition-colors duration-200 cursor-pointer active:opacity-80" href="#">
+                        Projects
+                    </a>
+<a class="text-secondary dark:text-secondary-fixed-dim font-body-md text-body-md hover:text-primary dark:hover:text-primary-fixed-dim transition-colors duration-200 cursor-pointer active:opacity-80" href="#">
+                        Talent
+                    </a>
+<a class="text-secondary dark:text-secondary-fixed-dim font-body-md text-body-md hover:text-primary dark:hover:text-primary-fixed-dim transition-colors duration-200 cursor-pointer active:opacity-80" href="#">
+                        Messages
+                    </a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="hidden md:block font-label-md text-label-md text-primary dark:text-primary-fixed-dim hover:text-primary dark:hover:text-primary-fixed-dim transition-colors duration-200 cursor-pointer active:opacity-80">
+                    Sign In
+                </button>
+<button class="bg-primary text-on-primary font-label-md text-label-md px-4 py-2 rounded h-[32px] flex items-center justify-center cursor-pointer active:opacity-80 hover:bg-surface-tint transition-colors">
+                    Post a Project
+                </button>
+<div class="flex items-center gap-3 text-secondary dark:text-secondary-fixed-dim">
+<button class="hover:text-primary dark:hover:text-primary-fixed-dim transition-colors duration-200 cursor-pointer active:opacity-80 flex items-center justify-center w-8 h-8 rounded-full hover:bg-surface-container">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="hover:text-primary dark:hover:text-primary-fixed-dim transition-colors duration-200 cursor-pointer active:opacity-80 flex items-center justify-center w-8 h-8 rounded-full hover:bg-surface-container">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-container-high border border-outline-variant overflow-hidden ml-2 flex-shrink-0">
+<img alt="User profile avatar" class="w-full h-full object-cover" data-alt="A professional headshot of a smiling man with a neat beard, wearing a casual grey t-shirt against a clean, neutral background. The lighting is soft and flattering, typical of a modern corporate or tech platform avatar. The image conveys approachability and professionalism." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBegSI3VRi1_5ZnYOL_mWbQoTPJOcW_3-EtWPyU-ZRRsOB90ZpM-fy7Ag0ScObzCFt9cXNEmuv2Rg1kZz8DerVgROTJrrclpxA1AQM5z5BbonRzEWawaIXUfiah_gsx5YVnT3CNsyhr3-d7lDDE9T2_CNrgRajs82mcq0uXGqci9DFdWxQvuU8KcrSRWsUUYAi847tu0e8JMJmJ-0mR2VmHfuYmhyTAvLUd_p84h4dJUjMPwAdGBDz4M81B517QkZpMITf2G9SABfY">
+</div>
+</div>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-grow w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-12">
+<div class="max-w-2xl mx-auto">
+<header class="mb-8">
+<h1 class="font-h2 text-h2 text-on-surface mb-2">Leave a Public Review</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Share your experience working with Elena R. on the "E-commerce Platform Redesign" project.</p>
+</header>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-8">
+<!-- AI Writing Assistant Area -->
+<div class="relative flex flex-col gap-2">
+<div class="flex justify-between items-end mb-1">
+<label class="font-label-md text-label-md text-on-surface font-semibold" for="review-text">Public Review</label>
+<!-- AI Badge (Initially Hidden, shown after generation) -->
+<div class="hidden items-center gap-1.5 px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm border border-tertiary-fixed-dim fade-in" id="ai-badge">
+<span class="material-symbols-outlined text-[14px]">auto_awesome</span>
+                            Generated by AI
+                        </div>
+</div>
+<div class="relative group">
+<!-- The Textarea -->
+<textarea class="w-full bg-surface border border-outline-variant rounded-lg p-4 font-body-md text-body-md text-on-surface focus:ring-2 focus:ring-primary focus:border-primary transition-all resize-none placeholder:text-on-surface-variant" id="review-text" placeholder="Describe what it was like working on this project. Need help? Try our AI writing assistant." rows="6"></textarea>
+<!-- Loading Overlay (Initially Hidden) -->
+<div class="hidden absolute inset-0 bg-surface rounded-lg pointer-events-none p-4 flex flex-col gap-3" id="loading-overlay">
+<div class="h-4 w-3/4 rounded animate-shimmer"></div>
+<div class="h-4 w-full rounded animate-shimmer"></div>
+<div class="h-4 w-5/6 rounded animate-shimmer"></div>
+<div class="h-4 w-1/2 rounded animate-shimmer"></div>
+</div>
+<!-- AI Trigger Button -->
+<button aria-label="Generate review with AI" class="absolute bottom-3 right-3 flex items-center gap-2 px-3 py-1.5 bg-primary-container hover:bg-primary text-on-primary-container hover:text-on-primary rounded-lg font-label-sm text-label-sm transition-colors duration-200 shadow-sm group-focus-within:opacity-100" id="ai-trigger">
+<span class="material-symbols-outlined text-[18px]" id="ai-icon">auto_awesome</span>
+<span id="ai-btn-text">Write with AI</span>
+</button>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-2">
+                        This review will be visible on the expert's public profile.
+                    </p>
+</div>
+<div class="mt-8 pt-6 border-t border-outline-variant flex justify-end gap-4">
+<button class="px-4 py-2 font-label-md text-label-md text-on-surface border border-outline-variant rounded hover:bg-surface-container-low transition-colors h-[40px]">
+                        Cancel
+                    </button>
+<button class="px-6 py-2 font-label-md text-label-md text-on-primary bg-primary rounded hover:bg-surface-tint transition-colors h-[40px]">
+                        Submit Review
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-low dark:bg-inverse-surface border-t border-outline-variant dark:border-outline full-width flat no shadows mt-auto">
+<div class="flex flex-col md:flex-row justify-between items-center w-full px-margin-desktop py-8 max-w-container-max mx-auto">
+<div class="font-h3 text-h3 font-bold text-on-surface dark:text-inverse-on-surface mb-4 md:mb-0">
+                Aitasker
+            </div>
+<div class="flex flex-wrap justify-center gap-6 mb-4 md:mb-0">
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed-dim transition-colors duration-200 cursor-pointer" href="#">Privacy Policy</a>
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed-dim transition-colors duration-200 cursor-pointer" href="#">Terms of Service</a>
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed-dim transition-colors duration-200 cursor-pointer" href="#">Support Center</a>
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed-dim transition-colors duration-200 cursor-pointer" href="#">Contact Us</a>
+</div>
+<div class="font-label-md text-label-md text-on-surface-variant dark:text-secondary-fixed-dim">
+                © 2024 Aitasker Inc. All rights reserved.
+            </div>
+</div>
+</footer>
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const triggerBtn = document.getElementById('ai-trigger');
+            const textarea = document.getElementById('review-text');
+            const loadingOverlay = document.getElementById('loading-overlay');
+            const aiBadge = document.getElementById('ai-badge');
+            const aiIcon = document.getElementById('ai-icon');
+            const aiBtnText = document.getElementById('ai-btn-text');
+
+            const generatedText = "The expert delivered high-quality work on time and maintained excellent communication throughout the project. Highly professional and easy to work with.";
+
+            triggerBtn.addEventListener('click', () => {
+                // 1. Enter Loading State
+                textarea.disabled = true;
+                textarea.value = ''; // clear if any text
+                loadingOverlay.classList.remove('hidden');
+                
+                // Update Button State
+                triggerBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                aiIcon.innerHTML = 'hourglass_empty';
+                aiIcon.classList.add('animate-spin'); // Simple spin trick with material icon rotation if needed, or just change icon
+                aiBtnText.textContent = 'Generating...';
+                aiBadge.classList.add('hidden');
+
+                // 2. Simulate Network Delay (1.5s)
+                setTimeout(() => {
+                    // 3. Enter Result State
+                    loadingOverlay.classList.add('hidden');
+                    textarea.disabled = false;
+                    
+                    // Typing effect or instant fill. Let's do instant for immediate feedback as requested by prompt "should show the result"
+                    textarea.value = generatedText;
+                    
+                    // Show Badge
+                    aiBadge.classList.remove('hidden');
+                    aiBadge.classList.add('flex'); // Switch from hidden to flex
+                    
+                    // Reset Button (Maybe change to "Regenerate")
+                    triggerBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                    aiIcon.innerHTML = 'refresh';
+                    aiIcon.classList.remove('animate-spin');
+                    aiBtnText.textContent = 'Rewrite';
+                    
+                    // Give textarea focus
+                    textarea.focus();
+
+                }, 1500);
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,447 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Review &amp; Hire AI Expert | HireSync Enterprise</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed": "#0b1c30",
+                        "primary": "#3525cd",
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#eff1f3",
+                        "surface-variant": "#e0e3e5",
+                        "on-secondary-container": "#54647a",
+                        "surface": "#f7f9fb",
+                        "background": "#f7f9fb",
+                        "on-tertiary-fixed": "#131b2e",
+                        "on-error": "#ffffff",
+                        "primary-container": "#4f46e5",
+                        "on-surface": "#191c1e",
+                        "inverse-primary": "#c3c0ff",
+                        "surface-container-low": "#f2f4f6",
+                        "on-tertiary": "#ffffff",
+                        "on-background": "#191c1e",
+                        "on-tertiary-container": "#d4dbf5",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed-dim": "#bec6e0",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-primary-container": "#dad7ff",
+                        "outline": "#777587",
+                        "error-container": "#ffdad6",
+                        "surface-container-high": "#e6e8ea",
+                        "secondary": "#505f76",
+                        "on-surface-variant": "#464555",
+                        "secondary-fixed": "#d3e4fe",
+                        "surface-container-lowest": "#ffffff",
+                        "outline-variant": "#c7c4d8",
+                        "surface-dim": "#d8dadc",
+                        "surface-tint": "#4d44e3",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "inverse-surface": "#2d3133",
+                        "on-primary-fixed-variant": "#3323cc",
+                        "tertiary": "#41485e",
+                        "tertiary-container": "#586076",
+                        "surface-container": "#eceef0",
+                        "secondary-container": "#d0e1fb",
+                        "on-secondary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "primary-fixed": "#e2dfff",
+                        "on-primary-fixed": "#0f0069",
+                        "surface-bright": "#f7f9fb",
+                        "tertiary-fixed": "#dae2fd",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "on-tertiary-fixed-variant": "#3f465c"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "12": "3rem",
+                        "4": "1rem",
+                        "gutter": "1rem",
+                        "6": "1.5rem",
+                        "2": "0.5rem",
+                        "margin-mobile": "1rem",
+                        "container-max": "1280px",
+                        "1": "0.25rem",
+                        "base": "0.25rem",
+                        "16": "4rem",
+                        "8": "2rem",
+                        "margin-desktop": "2rem",
+                        "3": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "h3": ["Inter"],
+                        "h1": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "h2-mobile": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "h1-mobile": ["Inter"],
+                        "h2": ["Inter"],
+                        "label-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "h3": ["1.5rem", {"lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "h1": ["3rem", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-sm": ["0.875rem", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "body-md": ["1rem", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "label-md": ["0.875rem", {"lineHeight": "1", "fontWeight": "500"}],
+                        "h2-mobile": ["1.875rem", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "body-lg": ["1.125rem", {"lineHeight": "1.75", "fontWeight": "400"}],
+                        "h1-mobile": ["2.25rem", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "h2": ["2.25rem", {"lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "label-sm": ["0.75rem", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen flex">
+<!-- Sidebar Navigation (From JSON) -->
+<aside class="hidden md:flex flex-col h-screen w-64 flex-shrink-0 bg-surface-container-lowest dark:bg-inverse-surface border-r border-outline-variant dark:border-outline py-6">
+<div class="px-6 mb-8">
+<h1 class="text-h3 font-h3 text-primary dark:text-primary-fixed-dim tracking-tight">HireSync Enterprise</h1>
+<p class="font-label-sm text-label-sm text-secondary uppercase tracking-wider mt-1">Workspace Admin</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center px-6 py-3 text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed-dim hover:bg-surface-container dark:hover:bg-surface-variant transition-colors duration-150 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined mr-3">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center px-6 py-3 text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed-dim hover:bg-surface-container dark:hover:bg-surface-variant transition-colors duration-150 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined mr-3">chat_bubble</span>
+<span class="font-body-md text-body-md">Messages</span>
+</a>
+<!-- Active State: Candidates (Because we are reviewing a candidate proposal) -->
+<a class="flex items-center px-6 py-3 text-primary dark:text-primary-fixed-dim font-bold border-r-4 border-primary dark:border-primary-fixed-dim bg-primary-container/10 transition-colors duration-150 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined mr-3">group</span>
+<span class="font-body-md text-body-md">Candidates</span>
+</a>
+<a class="flex items-center px-6 py-3 text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed-dim hover:bg-surface-container dark:hover:bg-surface-variant transition-colors duration-150 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined mr-3">assignment</span>
+<span class="font-body-md text-body-md">Projects</span>
+</a>
+<a class="flex items-center px-6 py-3 text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed-dim hover:bg-surface-container dark:hover:bg-surface-variant transition-colors duration-150 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined mr-3">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</nav>
+<div class="px-4 mb-6">
+<button class="w-full bg-primary text-on-primary py-3 rounded-lg font-label-md flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined">add</span>
+                New Chat
+            </button>
+</div>
+<div class="mt-auto border-t border-outline-variant pt-4">
+<a class="flex items-center px-6 py-3 text-secondary hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined mr-3">help</span>
+<span class="font-body-md text-body-md">Help</span>
+</a>
+<a class="flex items-center px-6 py-3 text-secondary hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined mr-3">logout</span>
+<span class="font-body-md text-body-md">Logout</span>
+</a>
+</div>
+</aside>
+<main class="flex-1 flex flex-col min-w-0 bg-background">
+<!-- Top App Bar (From JSON) -->
+<header class="flex items-center justify-between px-6 py-3 w-full bg-surface-container-lowest dark:bg-inverse-surface border-b border-outline-variant dark:border-outline">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary outline-none text-body-sm" placeholder="Search proposals..." type="text">
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4 text-on-surface-variant">
+<button class="material-symbols-outlined hover:text-primary transition-all">notifications</button>
+<button class="material-symbols-outlined hover:text-primary transition-all">history</button>
+<button class="material-symbols-outlined hover:text-primary transition-all">info</button>
+</div>
+<div class="h-6 w-px bg-outline-variant"></div>
+<button class="text-label-md font-label-md text-secondary hover:text-primary transition-all">Support</button>
+<button class="bg-primary text-on-primary px-4 py-2 rounded font-label-md hover:opacity-90 transition-all">Hire Candidate</button>
+<img alt="User Profile" class="w-8 h-8 rounded-full border border-outline-variant" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2o0s8aRpfQdR8DXUmG43E3wITyAZ8jk86NbXEzQSkd4M-wHLkrOpnbpGUG6RhSP7Us1jjrzatxAaDqdqmAWysgSEElUUrXFi4b_A2gtrXq5uVtMpti-LKWpDv-0KHxAeRGB1CBVUAfrNQ2akI2_0qnNpk-oSHqkvfaIKpJ0ai-TLoV73nQL4EbcK7SWOYTicduB2sZEU-MlFXjxZh_W1pl_SkfMCSQVj7DrXIBWf8fN7uGzAmE_idHbChOt8NqqIU7JissyU6_Xk">
+</div>
+</header>
+<!-- Page Content -->
+<div class="flex-1 overflow-y-auto p-6 md:p-8 space-y-8">
+<!-- Breadcrumbs and Header -->
+<section class="max-w-container-max mx-auto">
+<nav class="flex items-center gap-2 text-secondary mb-2">
+<a class="text-label-sm font-label-sm hover:text-primary" href="#">Dashboard</a>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<a class="text-label-sm font-label-sm hover:text-primary" href="#">Candidates</a>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="text-label-sm font-label-sm text-on-surface">Proposal: Sasha Belov</span>
+</nav>
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h2 class="text-h2 font-h2 text-on-surface">Review &amp; Hire Expert</h2>
+<p class="text-body-md text-secondary mt-1">Review the technical proposal and milestones before starting the project.</p>
+</div>
+<div class="flex gap-3">
+<button class="px-4 py-2 border border-outline text-on-surface rounded-lg font-label-md hover:bg-surface-container-low transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined">chat_bubble</span>
+                            Message Expert
+                        </button>
+<button class="px-6 py-2 bg-primary text-on-primary rounded-lg font-label-md hover:opacity-90 transition-opacity flex items-center gap-2 shadow-sm">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                            Accept Proposal &amp; Start Project
+                        </button>
+</div>
+</div>
+</section>
+<!-- Main Content Grid -->
+<div class="max-w-container-max mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Left Column: Expert Summary & Proposal -->
+<div class="lg:col-span-8 space-y-8">
+<!-- Expert Summary Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 flex flex-col md:flex-row gap-6 items-start">
+<div class="relative">
+<img alt="Sasha Belov" class="w-24 h-24 rounded-xl object-cover border-2 border-primary/10 shadow-sm" data-alt="A professional headshot of a senior AI expert, a man with a friendly yet confident expression, wearing a minimalist grey sweater. The background is a blurred, high-end tech workspace with cool blue and white ambient lighting. The style is modern corporate photography, clean and well-lit with high clarity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDi2ZjOxeTW2Q22fkttAAYSekl1FppSy-t1a2homg_iBPoiNDzInyn1N7IJ_MujcSTLtCcHvMfPFzXpb8lvB-9UxWjC87pAFMT8Ao3OsWgQ8ZI5wejSFLC-DHGDeinApA4eCOSKZGzqBePG7LF1vCZkdI79TOo5wdI09wbnguJDX6SgOFEXZlv39scpLG7YScE8HttBgy12l5UhzEKlWosU-dTU-mZptfBwS6MzUuhSjUh51-09pyNod3vrFWyIG2XkA8P3Z2qUBPA">
+<div class="absolute -bottom-2 -right-2 bg-primary text-on-primary text-[10px] px-2 py-1 rounded-full font-bold uppercase tracking-wider">Top Expert</div>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-h3 font-h3 text-on-surface">Sasha Belov</h3>
+<p class="text-body-sm text-secondary">Senior ML Engineer &amp; LLM Specialist</p>
+</div>
+<div class="text-right">
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-bold text-h3">4.9</span>
+<span class="text-body-sm text-secondary">(124 reviews)</span>
+</div>
+</div>
+</div>
+<div class="mt-4 flex flex-wrap gap-2">
+<span class="px-3 py-1 bg-primary-container/10 text-primary border border-primary/20 rounded-full text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">verified</span> 98% Match Score
+                                </span>
+<span class="px-3 py-1 bg-surface-container text-secondary rounded-full text-label-sm">Python</span>
+<span class="px-3 py-1 bg-surface-container text-secondary rounded-full text-label-sm">OpenAI API</span>
+<span class="px-3 py-1 bg-surface-container text-secondary rounded-full text-label-sm">Vector DBs</span>
+</div>
+</div>
+</div>
+<!-- Proposal Details Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden">
+<div class="px-6 py-4 bg-surface-container-low border-b border-outline-variant">
+<h4 class="font-h3 text-on-surface">Technical Proposal</h4>
+</div>
+<div class="p-6 space-y-6">
+<div>
+<h5 class="font-label-md text-secondary uppercase tracking-widest mb-3">Project Approach</h5>
+<div class="p-4 bg-surface-container-low rounded-lg border border-outline-variant/30">
+<p class="text-body-md text-on-surface leading-relaxed">
+                                        I will implement a custom <strong class="text-primary">Retrieval-Augmented Generation (RAG)</strong> pipeline leveraging the GPT-4o API. The architecture will use Pinecone for high-dimensional vector storage, ensuring the AI responses are grounded in your proprietary documentation. The solution will include a FastAPI backend and a clean, responsive React-based interface for your team to interact with the internal knowledge base.
+                                    </p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="p-4 border border-outline-variant rounded-lg flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-secondary-container/20 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">schedule</span>
+</div>
+<div>
+<p class="text-label-sm text-secondary">Timeline</p>
+<p class="font-bold text-body-lg">3 Weeks</p>
+</div>
+</div>
+<div class="p-4 border border-outline-variant rounded-lg flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-primary-container/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">payments</span>
+</div>
+<div>
+<p class="text-label-sm text-secondary">Total Price</p>
+<p class="font-bold text-body-lg">$2,500.00</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Milestone Breakdown -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden">
+<div class="px-6 py-4 bg-surface-container-low border-b border-outline-variant">
+<h4 class="font-h3 text-on-surface">Milestone Breakdown</h4>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-surface-container-low border-b border-outline-variant">
+<tr>
+<th class="px-6 py-3 font-label-sm text-secondary uppercase tracking-wider">Milestone</th>
+<th class="px-6 py-3 font-label-sm text-secondary uppercase tracking-wider">Amount</th>
+<th class="px-6 py-3 font-label-sm text-secondary uppercase tracking-wider text-right">Due Date</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-surface-container transition-colors">
+<td class="px-6 py-4">
+<p class="font-label-md text-on-surface">Data Preparation &amp; Cleaning</p>
+<p class="text-body-sm text-secondary">Indexing 5,000+ internal documents into Pinecone.</p>
+</td>
+<td class="px-6 py-4 font-body-md text-on-surface">$750.00</td>
+<td class="px-6 py-4 text-right font-body-sm text-secondary">Oct 24, 2023</td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors">
+<td class="px-6 py-4">
+<p class="font-label-md text-on-surface">RAG Pipeline Development</p>
+<p class="text-body-sm text-secondary">Core GPT-4 integration and prompt engineering.</p>
+</td>
+<td class="px-6 py-4 font-body-md text-on-surface">$1,250.00</td>
+<td class="px-6 py-4 text-right font-body-sm text-secondary">Nov 07, 2023</td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors">
+<td class="px-6 py-4">
+<p class="font-label-md text-on-surface">UI Integration &amp; Deployment</p>
+<p class="text-body-sm text-secondary">Deployment to AWS and final QA testing.</p>
+</td>
+<td class="px-6 py-4 font-body-md text-on-surface">$500.00</td>
+<td class="px-6 py-4 text-right font-body-sm text-secondary">Nov 14, 2023</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Right Column: Contract Terms & Details -->
+<div class="lg:col-span-4 space-y-6">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 sticky top-8">
+<h4 class="font-h3 text-on-surface mb-6">Contract Terms</h4>
+<div class="space-y-6">
+<div class="flex gap-4">
+<div class="mt-1">
+<span class="material-symbols-outlined text-primary">security</span>
+</div>
+<div>
+<p class="font-label-md text-on-surface">Escrow Protection</p>
+<p class="text-body-sm text-secondary">Funds are held by HireSync and released only after milestone approval.</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="mt-1">
+<span class="material-symbols-outlined text-primary">gavel</span>
+</div>
+<div>
+<p class="font-label-md text-on-surface">IP Ownership</p>
+<p class="text-body-sm text-secondary">All code and documentation produced belong to your company upon full payment.</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="mt-1">
+<span class="material-symbols-outlined text-primary">policy</span>
+</div>
+<div>
+<p class="font-label-md text-on-surface">Data Access Policy</p>
+<p class="text-body-sm text-secondary">Expert agrees to strict NDA and secure handling of all provided datasets.</p>
+</div>
+</div>
+</div>
+<div class="mt-8 pt-6 border-t border-outline-variant">
+<div class="flex justify-between mb-4">
+<span class="text-body-md text-secondary">Project Total</span>
+<span class="font-bold text-h3 text-on-surface">$2,500.00</span>
+</div>
+<div class="flex justify-between mb-6">
+<span class="text-body-sm text-secondary">HireSync Service Fee (3%)</span>
+<span class="text-body-sm text-on-surface">$75.00</span>
+</div>
+<div class="p-3 bg-primary/5 rounded border border-primary/10 flex items-start gap-2 mb-6">
+<span class="material-symbols-outlined text-[18px] text-primary mt-0.5">info</span>
+<p class="text-label-sm text-primary/80">You won't be charged until you click the accept button and fund the first milestone.</p>
+</div>
+<button class="w-full bg-primary text-on-primary py-4 rounded-lg font-bold text-body-md hover:opacity-95 transition-all shadow-md active:scale-[0.99]">
+                                Accept &amp; Start Project
+                            </button>
+<button class="w-full mt-3 border border-outline text-on-surface py-3 rounded-lg font-label-md hover:bg-surface-container transition-all">
+                                Decline Proposal
+                            </button>
+</div>
+</div>
+<!-- Mini Map or Location context -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4">
+<div class="flex items-center justify-between mb-3">
+<span class="text-label-sm font-label-sm text-secondary uppercase">Expert Location</span>
+<span class="text-label-sm font-label-sm text-primary">GMT +3 (Local time: 14:32)</span>
+</div>
+<div class="h-32 bg-surface-container-high rounded-lg relative overflow-hidden">
+<div class="absolute inset-0 grayscale opacity-40 bg-[url('https://api.dicebear.com/7.x/initials/svg?seed=Map')] bg-cover"></div>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="bg-white p-2 rounded-full shadow-lg border-2 border-primary">
+<span class="material-symbols-outlined text-primary">location_on</span>
+</div>
+</div>
+</div>
+<p class="mt-3 text-body-sm text-secondary text-center">Berlin, Germany</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Shell (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-surface-container-lowest border-t border-outline-variant flex justify-around py-3 px-4 z-50">
+<button class="flex flex-col items-center gap-1 text-secondary">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px] font-medium">Home</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="text-[10px] font-bold">Candidates</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-secondary">
+<span class="material-symbols-outlined">chat_bubble</span>
+<span class="text-[10px] font-medium">Chat</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-secondary">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-medium">Settings</span>
+</button>
+</nav>
+<script>
+        // Simple micro-interactions
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('mousedown', () => {
+                button.style.transform = 'scale(0.98)';
+            });
+            button.addEventListener('mouseup', () => {
+                button.style.transform = 'scale(1)';
+            });
+            button.addEventListener('mouseleave', () => {
+                button.style.transform = 'scale(1)';
+            });
+        });
+
+        // Sticky Header Effect
+        const header = document.querySelector('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 0) {
+                header.classList.add('shadow-sm');
+            } else {
+                header.classList.remove('shadow-sm');
+            }
+        });
+    </script>
+</body></html>

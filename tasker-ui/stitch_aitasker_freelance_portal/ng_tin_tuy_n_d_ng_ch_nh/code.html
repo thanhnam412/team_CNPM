@@ -1,0 +1,272 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Post a Job | GigFlow</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-container": "#d4dbf5",
+                    "secondary-fixed": "#d3e4fe",
+                    "inverse-surface": "#2d3133",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-container": "#54647a",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-fixed": "#0b1c30",
+                    "outline-variant": "#c7c4d8",
+                    "on-secondary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "surface-dim": "#d8dadc",
+                    "surface-container-highest": "#e0e3e5",
+                    "secondary": "#505f76",
+                    "on-surface-variant": "#464555",
+                    "error-container": "#ffdad6",
+                    "tertiary-fixed-dim": "#bec6e0",
+                    "surface-container-low": "#f2f4f6",
+                    "on-primary-container": "#dad7ff",
+                    "surface-container": "#eceef0",
+                    "inverse-primary": "#c3c0ff",
+                    "surface-tint": "#4d44e3",
+                    "secondary-fixed-dim": "#b7c8e1",
+                    "on-tertiary-fixed-variant": "#3f465c",
+                    "on-tertiary-fixed": "#131b2e",
+                    "primary-fixed-dim": "#c3c0ff",
+                    "on-surface": "#191c1e",
+                    "tertiary-container": "#586076",
+                    "on-primary-fixed": "#0f0069",
+                    "outline": "#777587",
+                    "on-primary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "tertiary-fixed": "#dae2fd",
+                    "secondary-container": "#d0e1fb",
+                    "on-error": "#ffffff",
+                    "on-background": "#191c1e",
+                    "surface-container-high": "#e6e8ea",
+                    "background": "#f7f9fb",
+                    "surface-variant": "#e0e3e5",
+                    "tertiary": "#41485e",
+                    "surface": "#f7f9fb",
+                    "primary-fixed": "#e2dfff",
+                    "primary-container": "#4f46e5",
+                    "inverse-on-surface": "#eff1f3",
+                    "primary": "#3525cd",
+                    "on-primary-fixed-variant": "#3323cc",
+                    "surface-bright": "#f7f9fb",
+                    "on-secondary-fixed-variant": "#38485d"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-desktop": "2rem",
+                    "6": "1.5rem",
+                    "container-max": "1280px",
+                    "12": "3rem",
+                    "gutter": "1rem",
+                    "1": "0.25rem",
+                    "base": "0.25rem",
+                    "margin-mobile": "1rem",
+                    "4": "1rem",
+                    "3": "0.75rem",
+                    "16": "4rem",
+                    "2": "0.5rem",
+                    "8": "2rem"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "label-md": ["Inter"],
+                    "h2-mobile": ["Inter"],
+                    "h2": ["Inter"],
+                    "h3": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "h1-mobile": ["Inter"],
+                    "h1": ["Inter"],
+                    "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "body-md": ["1rem", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "label-sm": ["0.75rem", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "label-md": ["0.875rem", {"lineHeight": "1", "fontWeight": "500"}],
+                    "h2-mobile": ["1.875rem", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "h2": ["2.25rem", {"lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "h3": ["1.5rem", {"lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-sm": ["0.875rem", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "h1-mobile": ["2.25rem", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "h1": ["3rem", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["1.125rem", {"lineHeight": "1.75", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: none !important;
+            border-color: #3525cd !important;
+            box-shadow: 0 0 0 2px rgba(53, 37, 205, 0.1) !important;
+        }
+        .form-card {
+            background-color: #ffffff;
+            border: 1px solid #e0e3e5;
+            border-radius: 0.5rem;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky bg-surface border-b border-outline-variant z-50">
+<div class="flex justify-between items-center px-margin-desktop py-4 max-w-container-max mx-auto">
+<div class="flex items-center gap-8">
+<span class="font-h3 text-h3 font-bold text-primary">GigFlow</span>
+<nav class="hidden md:flex items-center gap-6">
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:opacity-80" href="#">Find Talent</a>
+<a class="font-body-md text-body-md text-primary border-b-2 border-primary pb-1 cursor-pointer active:opacity-80" href="#">My Postings</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:opacity-80" href="#">Messages</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:opacity-80" href="#">Payments</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors cursor-pointer">notifications</button>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest overflow-hidden border border-outline-variant">
+<img alt="User profile photo" class="w-full h-full object-cover" data-alt="A professional headshot of a software project manager in a bright, modern corporate office. The lighting is soft and natural, emphasizing a trustworthy and capable persona. The background is slightly blurred, showing a contemporary glass-walled workspace with clean minimalist aesthetics." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1FxynKs2GZKh9qh7ngqFzefuZE-ccErJ0RTbISoJnDUY1-zDT8Cw5avLu3zIlLMhC_9ChQF09Cy4hHJTYIOTyn3BgJiIfl1JoTI8UMeNZU4G7ZV4Di43__yjtYf3QhHvcGkYPADo7MpG3Z0z-MpCuDfU1BCEFHE68-mI6eHc4bUeDYoeaX90SH4QFnFQynWF8aXasgIlC9D89u5Ts9tDRjlTB9dY4RH5f8npDwfBI1zfQ8v9Shp6nrd9auUd_d6PElMGW-Eqop1Y">
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-grow max-w-4xl mx-auto w-full px-margin-mobile md:px-margin-desktop py-12">
+<div class="mb-8">
+<h1 class="font-h2 text-h2 text-on-surface mb-2">Create a Job Posting</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Attract top AI talent by providing clear details and requirements for your project.</p>
+</div>
+<form class="space-y-8">
+<!-- Basic Information Section -->
+<section class="form-card p-6 md:p-8 space-y-6">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary">info</span>
+<h2 class="font-h3 text-h3">Basic Information</h2>
+</div>
+<div class="space-y-2">
+<label class="font-label-md text-label-md text-on-surface" for="job-title">Job Title</label>
+<input class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface-container-lowest font-body-md text-body-md transition-all" id="job-title" placeholder="e.g. LLM Engineer for RAG Implementation" type="text">
+</div>
+<div class="space-y-2 relative">
+<div class="flex justify-between items-center">
+<label class="font-label-md text-label-md text-on-surface" for="job-description">Job Description</label>
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary-container/10 text-primary-container font-label-sm text-label-sm hover:bg-primary-container/20 transition-all" type="button">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+                            Optimize Description with AI
+                        </button>
+</div>
+<textarea class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface-container-lowest font-body-md text-body-md transition-all" id="job-description" placeholder="Describe the project goals, responsibilities, and expected outcomes..." rows="6"></textarea>
+</div>
+<div class="space-y-2">
+<label class="font-label-md text-label-md text-on-surface">File Attachments</label>
+<div class="border-2 border-dashed border-outline-variant rounded-lg p-8 flex flex-col items-center justify-center bg-surface-container-low hover:bg-surface-container transition-colors cursor-pointer group">
+<span class="material-symbols-outlined text-outline text-4xl mb-2 group-hover:text-primary transition-colors">upload_file</span>
+<p class="font-body-md text-body-md text-on-surface-variant text-center">
+<span class="text-primary font-semibold">Click to upload</span> or drag and drop<br>
+<span class="text-label-sm font-label-sm">PDF, DOCX, TXT up to 10MB</span>
+</p>
+</div>
+</div>
+</section>
+<!-- Job Requirements Section -->
+<section class="form-card p-6 md:p-8 space-y-6">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary">assignment_turned_in</span>
+<h2 class="font-h3 text-h3">Job Requirements</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-4">
+<label class="font-label-md text-label-md text-on-surface">Budget Type</label>
+<div class="flex bg-surface-container p-1 rounded-lg w-fit">
+<button class="px-6 py-2 rounded-md bg-white shadow-sm text-primary font-label-md text-label-md transition-all" type="button">Fixed Price</button>
+<button class="px-6 py-2 rounded-md text-on-surface-variant font-label-md text-label-md hover:text-on-surface transition-all" type="button">Hourly Rate</button>
+</div>
+</div>
+<div class="space-y-2">
+<label class="font-label-md text-label-md text-on-surface" for="budget-amount">Budget Amount ($)</label>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">$</span>
+<input class="w-full pl-8 pr-4 py-3 rounded-lg border border-outline-variant bg-surface-container-lowest font-body-md text-body-md transition-all" id="budget-amount" placeholder="5,000" type="number">
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-2">
+<label class="font-label-md text-label-md text-on-surface" for="timeline">Timeline/Duration</label>
+<select class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface-container-lowest font-body-md text-body-md appearance-none transition-all cursor-pointer" id="timeline">
+<option>Less than 1 month</option>
+<option>1 to 3 months</option>
+<option>3 to 6 months</option>
+<option>More than 6 months</option>
+</select>
+</div>
+<div class="space-y-2">
+<label class="font-label-md text-label-md text-on-surface" for="skills">Skill Tags</label>
+<div class="flex flex-wrap gap-2 p-2 rounded-lg border border-outline-variant bg-surface-container-lowest min-h-[48px]">
+<span class="inline-flex items-center gap-1 bg-secondary-container text-on-secondary-fixed px-3 py-1 rounded-full font-label-sm text-label-sm">
+                                Python <button class="material-symbols-outlined text-[14px]" type="button">close</button>
+</span>
+<span class="inline-flex items-center gap-1 bg-secondary-container text-on-secondary-fixed px-3 py-1 rounded-full font-label-sm text-label-sm">
+                                MLOps <button class="material-symbols-outlined text-[14px]" type="button">close</button>
+</span>
+<span class="inline-flex items-center gap-1 bg-secondary-container text-on-secondary-fixed px-3 py-1 rounded-full font-label-sm text-label-sm">
+                                LLM <button class="material-symbols-outlined text-[14px]" type="button">close</button>
+</span>
+<input class="flex-grow min-w-[100px] border-none bg-transparent focus:ring-0 p-1 font-body-sm text-body-sm" id="skills" placeholder="Add more..." type="text">
+</div>
+</div>
+</div>
+</section>
+</form>
+<!-- Action Footer -->
+<div class="mt-12 flex flex-col md:flex-row items-center justify-end gap-4 pb-12 border-t border-outline-variant pt-8">
+<button class="w-full md:w-auto px-8 py-3 text-on-surface-variant font-label-md text-label-md hover:text-on-surface transition-all active:opacity-80">Cancel</button>
+<button class="w-full md:w-auto px-8 py-3 border border-outline text-on-surface font-label-md text-label-md rounded-lg hover:bg-surface-container-low transition-all active:opacity-80">Save Draft</button>
+<button class="w-full md:w-auto px-12 py-3 bg-primary text-on-primary font-label-md text-label-md rounded-lg shadow-sm hover:opacity-90 transition-all active:opacity-80">Post Job</button>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full mt-auto bg-surface-container border-t border-outline-variant">
+<div class="flex flex-col md:flex-row justify-between items-center px-margin-desktop py-8 max-w-container-max mx-auto gap-4">
+<span class="font-h3 text-h3 font-bold text-primary">GigFlow</span>
+<div class="flex gap-6">
+<a class="font-label-sm text-label-sm text-on-secondary-fixed-variant hover:underline transition-all" href="#">Privacy Policy</a>
+<a class="font-label-sm text-label-sm text-on-secondary-fixed-variant hover:underline transition-all" href="#">Terms of Service</a>
+<a class="font-label-sm text-label-sm text-on-secondary-fixed-variant hover:underline transition-all" href="#">Help Center</a>
+<a class="font-label-sm text-label-sm text-on-secondary-fixed-variant hover:underline transition-all" href="#">Contact Support</a>
+</div>
+<p class="font-label-sm text-label-sm text-on-secondary-fixed-variant">© 2024 GigFlow Freelance Solutions. All rights reserved.</p>
+</div>
+</footer>
+<script>
+        // Simple interactivity for demonstration
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                if (btn.innerText.includes('Optimize')) {
+                    const textarea = document.getElementById('job-description');
+                    textarea.value = "AI-Powered Optimization in progress... (Simulated)";
+                    setTimeout(() => {
+                        textarea.value = "Our team is looking for a senior-level machine learning engineer with specialized experience in Large Language Model (LLM) implementation. Specifically, we require expertise in developing Retrieval-Augmented Generation (RAG) architectures to process internal documentation sets of over 50,000 pages. The ideal candidate will have 5+ years of Python experience and a strong background in vector databases like Pinecone or Weaviate.";
+                    }, 800);
+                }
+            });
+        });
+    </script>
+</body></html>

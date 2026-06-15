@@ -1,0 +1,411 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Contract Workspace - Revision Flow</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-bright": "#f7f9fb",
+                      "primary-fixed": "#e2dfff",
+                      "background": "#f7f9fb",
+                      "surface-container-high": "#e6e8ea",
+                      "tertiary": "#41485e",
+                      "on-tertiary": "#ffffff",
+                      "surface": "#f7f9fb",
+                      "on-background": "#191c1e",
+                      "on-primary-fixed-variant": "#3323cc",
+                      "on-error": "#ffffff",
+                      "tertiary-container": "#586076",
+                      "primary-container": "#4f46e5",
+                      "surface-container": "#eceef0",
+                      "secondary-fixed-dim": "#b7c8e1",
+                      "surface-dim": "#d8dadc",
+                      "surface-variant": "#e0e3e5",
+                      "secondary-container": "#d0e1fb",
+                      "on-secondary-fixed": "#0b1c30",
+                      "on-secondary-container": "#54647a",
+                      "on-tertiary-fixed": "#131b2e",
+                      "primary": "#3525cd",
+                      "tertiary-fixed": "#dae2fd",
+                      "secondary-fixed": "#d3e4fe",
+                      "error-container": "#ffdad6",
+                      "tertiary-fixed-dim": "#bec6e0",
+                      "on-tertiary-fixed-variant": "#3f465c",
+                      "on-surface": "#191c1e",
+                      "surface-container-low": "#f2f4f6",
+                      "on-surface-variant": "#464555",
+                      "on-primary-container": "#dad7ff",
+                      "surface-tint": "#4d44e3",
+                      "on-tertiary-container": "#d4dbf5",
+                      "on-secondary-fixed-variant": "#38485d",
+                      "surface-container-highest": "#e0e3e5",
+                      "inverse-on-surface": "#eff1f3",
+                      "on-error-container": "#93000a",
+                      "primary-fixed-dim": "#c3c0ff",
+                      "on-primary-fixed": "#0f0069",
+                      "surface-container-lowest": "#ffffff",
+                      "error": "#ba1a1a",
+                      "on-secondary": "#ffffff",
+                      "secondary": "#505f76",
+                      "outline-variant": "#c7c4d8",
+                      "inverse-surface": "#2d3133",
+                      "inverse-primary": "#c3c0ff",
+                      "outline": "#777587",
+                      "on-primary": "#ffffff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "16": "4rem",
+                      "2": "0.5rem",
+                      "1": "0.25rem",
+                      "gutter": "1rem",
+                      "margin-desktop": "2rem",
+                      "margin-mobile": "1rem",
+                      "3": "0.75rem",
+                      "container-max": "1280px",
+                      "6": "1.5rem",
+                      "4": "1rem",
+                      "8": "2rem",
+                      "12": "3rem",
+                      "base": "0.25rem"
+              },
+              "fontFamily": {
+                      "label-sm": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "h2": [
+                              "Inter"
+                      ],
+                      "h1-mobile": [
+                              "Inter"
+                      ],
+                      "h2-mobile": [
+                              "Inter"
+                      ],
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "h3": [
+                              "Inter"
+                      ],
+                      "h1": [
+                              "Inter"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "label-sm": [
+                              "0.75rem",
+                              {
+                                      "lineHeight": "1",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-lg": [
+                              "1.125rem",
+                              {
+                                      "lineHeight": "1.75",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "h2": [
+                              "2.25rem",
+                              {
+                                      "lineHeight": "1.3",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "h1-mobile": [
+                              "2.25rem",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "h2-mobile": [
+                              "1.875rem",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-sm": [
+                              "0.875rem",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "1rem",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "h3": [
+                              "1.5rem",
+                              {
+                                      "lineHeight": "1.4",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "h1": [
+                              "3rem",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-md": [
+                              "0.875rem",
+                              {
+                                      "lineHeight": "1",
+                                      "fontWeight": "500"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .material-symbols-outlined {
+          font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+      </style>
+</head>
+<body class="bg-surface-bright text-on-background min-h-screen flex flex-col font-body-md antialiased">
+<!-- TopNavBar -->
+<nav class="bg-surface-container-lowest border-b border-outline-variant w-full flex-none">
+<div class="flex justify-between items-center w-full px-margin-desktop max-w-container-max mx-auto h-16">
+<div class="flex items-center gap-8">
+<span class="font-h3 text-h3 font-bold text-primary">Precision Hire</span>
+<div class="hidden md:flex items-center gap-6">
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Dashboard</a>
+<a class="font-body-sm text-body-sm text-primary border-b-2 border-primary pb-1" href="#">Projects</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Talent</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Analytics</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden lg:block w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+<input class="w-full pl-9 pr-3 py-1.5 bg-surface border border-outline-variant rounded font-body-sm text-body-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary placeholder:text-on-surface-variant" placeholder="Search..." type="text">
+</div>
+<button class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors">Help</button>
+<button class="bg-primary text-on-primary font-label-md text-label-md px-4 py-2 rounded hover:bg-primary/90 transition-colors">Create Project</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant ml-2">
+<img alt="User profile settings" class="w-full h-full object-cover" data-alt="A professional headshot of a corporate user, male, wearing a neutral business shirt. The background is a soft, blurred office environment. Lighting is clear, bright, and flat, suitable for a modern enterprise application profile picture. Minimalist corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAt0xXLa-SceHnyiF1_P6Dxdjw9yop-xnZaaoZYiA9y3udP6JHqN1t1FU-H1LXsVIUD6SC1MvBTxeKKFTUrJVjX8niQnTbexE3p_T1bOk5fedHy4remaXKPhuqLJZsYN1AVFGSCAxeCVMGVk0e1AycTouc19ov5aufYzsK_ghTJAhdhPfnGp83FhnxnoXZAF60rRLTy4U3Eoz3xLBtQt1Sk4d-8kkR5nBEp4A4rUBnSdbYtCfR67E81SqqTuMyXc3uGq1EzJv24Jz4">
+</div>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 w-full max-w-container-max mx-auto px-margin-desktop py-8 md:py-12">
+<!-- Page Header -->
+<header class="mb-8">
+<div class="flex flex-col md:flex-row md:items-start justify-between gap-4">
+<div>
+<div class="flex items-center gap-3 mb-2">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Contract WR-2024-89</span>
+<span class="bg-surface-container-high text-on-surface font-label-sm text-label-sm px-2 py-1 rounded">In Progress</span>
+</div>
+<h1 class="font-h2 text-h2 text-on-background">Enterprise Platform Redesign</h1>
+</div>
+<div class="flex gap-3">
+<button class="px-4 py-2 bg-surface-container-lowest border border-outline-variant text-on-surface font-label-md text-label-md rounded flex items-center gap-2 hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+                        Message Expert
+                    </button>
+</div>
+</div>
+</header>
+<!-- Two Column Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Left Column: Timeline & Milestones -->
+<div class="lg:col-span-8 flex flex-col gap-6">
+<h2 class="font-h3 text-h3 text-on-background mb-2">Milestones &amp; Deliverables</h2>
+<!-- Milestone 1: Completed -->
+<div class="relative pl-8">
+<!-- Timeline Line -->
+<div class="absolute left-[11px] top-8 bottom-[-24px] w-[2px] bg-outline-variant"></div>
+<!-- Timeline Node -->
+<div class="absolute left-0 top-6 w-6 h-6 rounded-full bg-surface-container-lowest border-2 border-outline-variant flex items-center justify-center z-10">
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant">check</span>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded p-6 opacity-75">
+<div class="flex justify-between items-start mb-4">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block mb-1">Milestone 1</span>
+<h3 class="font-body-lg text-body-lg font-medium text-on-surface">Discovery &amp; Requirements Gathering</h3>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant bg-surface-container px-2 py-1 rounded">Completed &amp; Paid</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Initial project scoping, stakeholder interviews, and finalization of technical requirements document.</p>
+</div>
+</div>
+<!-- Milestone 2: Active Revision Flow (The Focus) -->
+<div class="relative pl-8">
+<!-- Timeline Line (partial, stops here) -->
+<div class="absolute left-[11px] top-8 h-full w-[2px] bg-outline-variant border-dashed"></div>
+<!-- Timeline Node Active -->
+<div class="absolute left-0 top-6 w-6 h-6 rounded-full bg-surface-container-lowest border-2 border-primary flex items-center justify-center z-10">
+<div class="w-2 h-2 bg-primary rounded-full"></div>
+</div>
+<!-- Card wrapper with slight visual emphasis for the active state -->
+<div class="bg-surface-container-lowest border-2 border-primary/20 rounded shadow-sm overflow-hidden transition-all">
+<!-- Milestone Info -->
+<div class="p-6">
+<div class="flex justify-between items-start mb-4">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block mb-1">Milestone 2</span>
+<div class="flex items-center gap-3">
+<h3 class="font-body-lg text-body-lg font-medium text-on-surface">High-Fidelity Wireframes</h3>
+<!-- Visual Hint: Revision Requested / Preparing -->
+<span class="bg-error-container text-on-error-container font-label-sm text-label-sm px-2 py-1 rounded flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-weight="fill">edit_document</span>
+                                            Drafting Revision
+                                        </span>
+</div>
+</div>
+<span class="font-label-md text-label-md text-on-surface">$4,500.00</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-6">Delivery of complete Figma prototypes covering all primary user flows for the core platform experience.</p>
+<!-- Submitted Files Section (Context) -->
+<div class="bg-surface border border-outline-variant rounded p-3 flex items-center justify-between mb-6">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 bg-surface-container-highest rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">bia</span>
+</div>
+<div>
+<p class="font-body-sm text-body-sm font-medium text-on-surface">Core_Flows_v1.fig</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Submitted Oct 24, 2024</p>
+</div>
+</div>
+<button class="font-label-sm text-label-sm text-primary hover:underline">Review in Browser</button>
+</div>
+</div>
+<!-- Active Revision Input Area (Expanded) -->
+<div class="bg-surface-container-low border-t border-outline-variant p-6">
+<div class="mb-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">assignment_return</span>
+<label class="font-label-md text-label-md font-bold text-on-surface" for="revision-feedback">Feedback for Expert (Required)</label>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4">Provide clear, actionable feedback on what needs to be changed before you can approve this milestone.</p>
+<textarea class="w-full bg-surface-container-lowest border border-outline-variant rounded p-3 font-body-sm text-body-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary placeholder:text-on-surface-variant resize-none" id="revision-feedback" placeholder="Describe the changes needed..." rows="5"></textarea>
+<!-- Formatting toolbar simulation (Enterprise feel) -->
+<div class="flex items-center gap-2 mt-2 px-1 text-on-surface-variant">
+<button class="p-1 hover:bg-surface-container-highest rounded transition-colors"><span class="material-symbols-outlined text-[18px]">format_bold</span></button>
+<button class="p-1 hover:bg-surface-container-highest rounded transition-colors"><span class="material-symbols-outlined text-[18px]">format_italic</span></button>
+<button class="p-1 hover:bg-surface-container-highest rounded transition-colors"><span class="material-symbols-outlined text-[18px]">format_list_bulleted</span></button>
+<div class="w-px h-4 bg-outline-variant mx-1"></div>
+<button class="p-1 hover:bg-surface-container-highest rounded transition-colors flex items-center gap-1 font-label-sm text-label-sm"><span class="material-symbols-outlined text-[18px]">attach_file</span> Attach File</button>
+</div>
+<div class="flex justify-end gap-3 mt-6 pt-4 border-t border-outline-variant">
+<button class="px-4 py-2 bg-transparent border border-transparent text-on-surface-variant font-label-md text-label-md rounded hover:bg-surface-container-highest transition-colors">
+                                    Cancel
+                                </button>
+<button class="px-4 py-2 bg-primary text-on-primary font-label-md text-label-md rounded hover:bg-primary/90 transition-colors shadow-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">send</span>
+                                    Submit Revision Request
+                                </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Milestone 3: Pending -->
+<div class="relative pl-8 mt-2">
+<!-- Timeline Node Locked -->
+<div class="absolute left-0 top-6 w-6 h-6 rounded-full bg-surface border-2 border-outline-variant flex items-center justify-center z-10">
+<span class="material-symbols-outlined text-[14px] text-outline">lock</span>
+</div>
+<div class="bg-surface border border-outline-variant border-dashed rounded p-6 opacity-60">
+<div class="flex justify-between items-start">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block mb-1">Milestone 3</span>
+<h3 class="font-body-lg text-body-lg font-medium text-on-surface-variant">Design System Delivery</h3>
+</div>
+<span class="font-label-sm text-label-sm text-outline px-2 py-1">Locked</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Sidebar -->
+<div class="lg:col-span-4">
+<div class="bg-surface-container-lowest border border-outline-variant rounded sticky top-24">
+<!-- Expert Info -->
+<div class="p-6 border-b border-outline-variant">
+<h4 class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-4">Engaged Expert</h4>
+<div class="flex items-center gap-3">
+<img alt="Expert Profile" class="w-12 h-12 rounded bg-surface-container-highest object-cover" data-alt="A professional headshot of a female design expert. She is wearing a dark structured blazer over a light shirt. The background is a clean, modern studio setting with soft natural light. The expression is confident and approachable, fitting for a premium enterprise platform profile." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbSlMm9mLJVGXp4d9b-6jpoQedpJx4GRxIwJKClAG6EYFgCiIT2wjm25CPVPcWZr4OmAPrr4r9VLXs0soUapHF26M18iBRN6dDyMIbDSClZlrbdy8QWmyBoD-oiRKSA8o6qHpzzMAa1g3cCHHmmKikfdiKP5gWW5uTiVpXkil22T_v74pVPgglNR2P7tVLHfawgY-DJ6pPCc4gY9tUMTP4ILg6-sxcVe5AN4i2FkHdwCwUxSFYWplGdEfu2nfwluu3tOaKp2lL2sE">
+<div>
+<p class="font-body-md text-body-md font-medium text-on-surface">Sarah Jenkins</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Lead Product Designer</p>
+</div>
+</div>
+</div>
+<!-- Contract Summary -->
+<div class="p-6 bg-surface-bright">
+<h4 class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-4">Contract Details</h4>
+<dl class="space-y-4">
+<div class="flex justify-between items-center border-b border-outline-variant pb-2">
+<dt class="font-body-sm text-body-sm text-on-surface-variant">Total Value</dt>
+<dd class="font-body-sm text-body-sm font-medium text-on-surface">$12,000.00</dd>
+</div>
+<div class="flex justify-between items-center border-b border-outline-variant pb-2">
+<dt class="font-body-sm text-body-sm text-on-surface-variant">Amount Paid</dt>
+<dd class="font-body-sm text-body-sm font-medium text-on-surface">$3,000.00</dd>
+</div>
+<div class="flex justify-between items-center border-b border-outline-variant pb-2">
+<dt class="font-body-sm text-body-sm text-on-surface-variant">Amount in Escrow</dt>
+<dd class="font-body-sm text-body-sm font-medium text-on-surface">$4,500.00</dd>
+</div>
+<div class="flex justify-between items-center">
+<dt class="font-body-sm text-body-sm text-on-surface-variant">Target Completion</dt>
+<dd class="font-body-sm text-body-sm font-medium text-on-surface">Nov 15, 2024</dd>
+</div>
+</dl>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-low border-t border-outline-variant mt-auto">
+<div class="w-full py-8 px-margin-desktop max-w-container-max mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+<span class="font-label-md text-label-md font-bold text-secondary">Precision Hire</span>
+<div class="flex flex-wrap justify-center gap-6">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:underline hover:text-primary transition-all duration-200" href="#">Privacy Policy</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:underline hover:text-primary transition-all duration-200" href="#">Terms of Service</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:underline hover:text-primary transition-all duration-200" href="#">Help Center</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:underline hover:text-primary transition-all duration-200" href="#">Security</a>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">© 2024 Precision Hire Enterprise. All rights reserved.</span>
+</div>
+</footer>
+</body></html>

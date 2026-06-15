@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Marketplace Admin - Service Review</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary-container": "#dad7ff",
+                    "on-primary": "#ffffff",
+                    "tertiary-container": "#586076",
+                    "on-surface-variant": "#464555",
+                    "tertiary-fixed-dim": "#bec6e0",
+                    "surface-tint": "#4d44e3",
+                    "secondary": "#505f76",
+                    "on-secondary": "#ffffff",
+                    "surface-bright": "#f7f9fb",
+                    "surface-variant": "#e0e3e5",
+                    "error": "#ba1a1a",
+                    "surface-container": "#eceef0",
+                    "primary-container": "#4f46e5",
+                    "secondary-fixed-dim": "#b7c8e1",
+                    "primary-fixed": "#e2dfff",
+                    "on-surface": "#191c1e",
+                    "on-tertiary-container": "#d4dbf5",
+                    "on-error-container": "#93000a",
+                    "background": "#f7f9fb",
+                    "on-secondary-fixed": "#0b1c30",
+                    "on-error": "#ffffff",
+                    "inverse-primary": "#c3c0ff",
+                    "surface-dim": "#d8dadc",
+                    "surface-container-low": "#f2f4f6",
+                    "surface": "#f7f9fb",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-container": "#d0e1fb",
+                    "secondary-fixed": "#d3e4fe",
+                    "outline": "#777587",
+                    "surface-container-highest": "#e0e3e5",
+                    "on-secondary-fixed-variant": "#38485d",
+                    "on-secondary-container": "#54647a",
+                    "tertiary-fixed": "#dae2fd",
+                    "primary-fixed-dim": "#c3c0ff",
+                    "surface-container-high": "#e6e8ea",
+                    "on-tertiary": "#ffffff",
+                    "on-background": "#191c1e",
+                    "primary": "#3525cd",
+                    "outline-variant": "#c7c4d8",
+                    "on-tertiary-fixed": "#131b2e",
+                    "inverse-on-surface": "#eff1f3",
+                    "error-container": "#ffdad6",
+                    "on-primary-fixed-variant": "#3323cc",
+                    "on-tertiary-fixed-variant": "#3f465c",
+                    "on-primary-fixed": "#0f0069",
+                    "inverse-surface": "#2d3133",
+                    "tertiary": "#41485e"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "12": "3rem",
+                    "margin-mobile": "1rem",
+                    "6": "1.5rem",
+                    "8": "2rem",
+                    "gutter": "1rem",
+                    "container-max": "1280px",
+                    "1": "0.25rem",
+                    "margin-desktop": "2rem",
+                    "3": "0.75rem",
+                    "2": "0.5rem",
+                    "16": "4rem",
+                    "base": "0.25rem",
+                    "4": "1rem"
+            },
+            "fontFamily": {
+                    "h2": ["Inter"],
+                    "body-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "h3": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "label-md": ["Inter"],
+                    "h1": ["Inter"],
+                    "h2-mobile": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "h1-mobile": ["Inter"]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: #f7f9fb; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #c7c4d8; border-radius: 10px; }
+    </style>
+</head>
+<body class="text-on-background bg-background min-h-screen flex">
+<!-- Side Navigation Shell -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-surface-container-low border-r border-outline-variant flex flex-col py-6 z-50">
+<div class="px-6 mb-8">
+<h1 class="font-h3 text-h3 font-black text-primary">Admin Panel</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant tracking-wider uppercase mt-1">High Security Zone</p>
+</div>
+<nav class="flex-1 space-y-1 px-3">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-highest transition-all duration-150 ease-in-out font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">group</span>
+                Users
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-secondary-container text-on-secondary-container font-bold transition-all duration-150 ease-in-out font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">gavel</span>
+                Job Moderation
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-highest transition-all duration-150 ease-in-out font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">settings_suggest</span>
+                Configuration
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-highest transition-all duration-150 ease-in-out font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+                Audit Logs
+            </a>
+</nav>
+<div class="px-3 space-y-1 border-t border-outline-variant pt-6">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-highest transition-all duration-150 ease-in-out font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">help_outline</span>
+                Support
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-error hover:bg-error-container/20 transition-all duration-150 ease-in-out font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">logout</span>
+                Sign Out
+            </a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-64 flex-1 flex flex-col h-screen overflow-hidden">
+<!-- Top App Bar -->
+<header class="h-16 flex justify-between items-center px-8 w-full bg-surface-container-lowest border-b border-outline-variant shrink-0">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-outline cursor-pointer hover:text-primary transition-colors">arrow_back</span>
+<h2 class="font-h3 text-h3 font-bold text-primary">Service Review: Custom RAG Chatbot Development</h2>
+<span class="bg-primary-container/10 text-primary-container text-[10px] px-2 py-0.5 rounded font-bold border border-primary-container/20 tracking-widest uppercase">Pending Review</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative max-w-xs">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container text-body-sm font-body-sm rounded-full border-none focus:ring-2 focus:ring-primary w-64" placeholder="Search moderation history..." type="text"/>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-outline cursor-pointer hover:bg-surface-container-high p-2 rounded-full transition-colors">notifications</span>
+<span class="material-symbols-outlined text-outline cursor-pointer hover:bg-surface-container-high p-2 rounded-full transition-colors">settings</span>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+<img alt="Administrator profile avatar" data-alt="A professional headshot of a corporate administrator in a sleek modern office environment. The lighting is bright and even, casting a professional and trustworthy glow. The individual is dressed in a crisp dark blazer, and the background features a blurred, minimalist tech-focused workplace with subtle glass partitions and blue-toned accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAj-9UWAQGKJt8deSgb5nwild3PtJvyIgwoCQ2eDbVWMAGiMmlEEO3AJCn5DsQd76xX7FB4MXtl2XN7kjalwXt44tiKyFat43ehblqCdcBgm1pjnitOAbZArHtO1ovq-DfrMLazUxU5J5l-RLVBP1NqdqRvSkR0e4WVOIeyAcDx5p8jTut-fAUctYLfSSWXnMuWoHMcRfWCtfzmKI7IsBdOnNZe8hcYu4ypT1RKb7okjAbhCZVjOiWrVERg6JV4ucLqeMHKWPfCvYw"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Content Grid -->
+<div class="flex-1 overflow-hidden grid grid-cols-12 gap-0">
+<!-- Left Column: Service Details (Scrollable) -->
+<section class="col-span-8 overflow-y-auto custom-scrollbar bg-surface px-8 py-8 border-r border-outline-variant">
+<div class="max-w-4xl mx-auto space-y-8">
+<!-- Section: Basic Information -->
+<div class="bg-surface-container-lowest border border-outline-variant p-6 rounded-xl">
+<h3 class="font-label-md text-label-md text-primary uppercase tracking-widest mb-4">Basic Information</h3>
+<div class="grid grid-cols-2 gap-x-12 gap-y-6">
+<div>
+<label class="block text-xs font-bold text-outline uppercase mb-1">Service Title</label>
+<p class="font-body-md text-body-md text-on-surface">Custom RAG Chatbot Development for Enterprise</p>
+</div>
+<div>
+<label class="block text-xs font-bold text-outline uppercase mb-1">Category</label>
+<p class="font-body-md text-body-md text-on-surface">AI &amp; Machine Learning / NLP</p>
+</div>
+<div class="col-span-2">
+<label class="block text-xs font-bold text-outline uppercase mb-1">Brief Description</label>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Scalable, enterprise-grade Retrieval Augmented Generation (RAG) systems designed to query internal documentation with high precision and security compliance.</p>
+</div>
+</div>
+</div>
+<!-- Section: Detailed Description -->
+<div class="bg-surface-container-lowest border border-outline-variant p-6 rounded-xl">
+<h3 class="font-label-md text-label-md text-primary uppercase tracking-widest mb-4">Implementation Scope</h3>
+<div class="prose prose-sm max-w-none text-on-surface-variant font-body-md">
+<p class="mb-4"><strong>Custom RAG Implementation for Enterprise Data:</strong> This service focuses on bridging the gap between static LLMs and dynamic company knowledge. I implement multi-stage retrieval pipelines that include:</p>
+<ul class="list-disc pl-5 space-y-2 mb-4">
+<li>Hybrid search (Semantic + Keyword) for maximum recall.</li>
+<li>Advanced chunking strategies (Semantic chunking, recursive character splitting).</li>
+<li>Re-ranking modules using Cross-Encoders to ensure top-tier relevance.</li>
+<li>Context window optimization for long-form document processing.</li>
+</ul>
+<p>All implementations prioritize data privacy and are ready for SOC2 compliant environments.</p>
+</div>
+</div>
+<!-- Section: Technology Stack -->
+<div class="bg-surface-container-lowest border border-outline-variant p-6 rounded-xl">
+<h3 class="font-label-md text-label-md text-primary uppercase tracking-widest mb-4">Technology Stack</h3>
+<div class="flex flex-wrap gap-3">
+<span class="px-3 py-1.5 bg-secondary-container text-on-secondary-container text-xs font-bold rounded border border-outline-variant">Python</span>
+<span class="px-3 py-1.5 bg-secondary-container text-on-secondary-container text-xs font-bold rounded border border-outline-variant">LangChain</span>
+<span class="px-3 py-1.5 bg-secondary-container text-on-secondary-container text-xs font-bold rounded border border-outline-variant">Pinecone</span>
+<span class="px-3 py-1.5 bg-secondary-container text-on-secondary-container text-xs font-bold rounded border border-outline-variant">OpenAI API</span>
+<span class="px-3 py-1.5 bg-secondary-container text-on-secondary-container text-xs font-bold rounded border border-outline-variant">Docker</span>
+<span class="px-3 py-1.5 bg-secondary-container text-on-secondary-container text-xs font-bold rounded border border-outline-variant">AWS</span>
+</div>
+</div>
+<!-- Section: Deliverables -->
+<div class="bg-surface-container-lowest border border-outline-variant p-6 rounded-xl">
+<h3 class="font-label-md text-label-md text-primary uppercase tracking-widest mb-4">Deliverables</h3>
+<div class="grid grid-cols-2 gap-4">
+<div class="flex items-start gap-3 p-3 border border-outline-variant rounded bg-surface-container-low">
+<span class="material-symbols-outlined text-primary">code</span>
+<div>
+<p class="font-body-sm font-bold text-on-surface">Production-ready code</p>
+<p class="text-[11px] text-on-surface-variant">Fully commented modular Python repository.</p>
+</div>
+</div>
+<div class="flex items-start gap-3 p-3 border border-outline-variant rounded bg-surface-container-low">
+<span class="material-symbols-outlined text-primary">description</span>
+<div>
+<p class="font-body-sm font-bold text-on-surface">Architecture documentation</p>
+<p class="text-[11px] text-on-surface-variant">Detailed PDF mapping the RAG flow and data schemas.</p>
+</div>
+</div>
+<div class="flex items-start gap-3 p-3 border border-outline-variant rounded bg-surface-container-low">
+<span class="material-symbols-outlined text-primary">api</span>
+<div>
+<p class="font-body-sm font-bold text-on-surface">REST API Endpoints</p>
+<p class="text-[11px] text-on-surface-variant">FastAPI or Flask wrapper for easy integration.</p>
+</div>
+</div>
+<div class="flex items-start gap-3 p-3 border border-outline-variant rounded bg-surface-container-low">
+<span class="material-symbols-outlined text-primary">security</span>
+<div>
+<p class="font-body-sm font-bold text-on-surface">Security Audit Log</p>
+<p class="text-[11px] text-on-surface-variant">Initial scan for prompt injection vulnerabilities.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Right Column: Audit & Action -->
+<section class="col-span-4 bg-surface-container-low flex flex-col p-6 space-y-6 overflow-y-auto custom-scrollbar">
+<!-- Expert Profile Summary -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 shadow-sm">
+<div class="flex items-center gap-4 mb-4">
+<div class="w-12 h-12 rounded-full overflow-hidden">
+<img alt="Expert Profile" data-alt="A portrait of a male software engineer, Alex Chen, in a professional tech environment. He has a friendly but focused expression, wearing a high-quality navy polo shirt. The background is a brightly lit modern office with clean lines, minimalist furniture, and a large window showing a subtle city skyline in daylight. The aesthetic is clean, professional, and corporate." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3qCBWbWA_TtmXqHhGWHyy-4MNYxX7kml6BeTZRoY5X4fUwilH7ZK9kzqWSrGafl28m2Tz2KUchwQ74GBPzmWkgQwgKtINMeTR_uAknbw961FqwAozgk-5v3LSmP-8Jvso2DVy1Ru53hudcrfBUAF23M7dFdf0CSR-q1JF02PgamIHcEkwjR4LQbBdj-k57cNuxJ7i0nQegnUmyHPiBlER1wNwnfIy-mbxfhykxU-psvJpg2wGY_tJaXc-tih0p0d25cgc_xXA2MU"/>
+</div>
+<div>
+<h4 class="font-label-md text-label-md font-bold text-on-surface">Alex Chen</h4>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="text-[11px] font-bold text-primary uppercase tracking-tighter">Verified Expert</span>
+</div>
+</div>
+<div class="ml-auto text-right">
+<p class="text-xs text-outline font-bold">Success Rate</p>
+<p class="text-h3 font-h3 text-on-surface">98%</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 py-3 border-t border-outline-variant mt-2">
+<div>
+<p class="text-[10px] text-outline font-bold uppercase">Member Since</p>
+<p class="text-xs font-bold text-on-surface">Oct 2022</p>
+</div>
+<div>
+<p class="text-[10px] text-outline font-bold uppercase">Jobs Completed</p>
+<p class="text-xs font-bold text-on-surface">142</p>
+</div>
+</div>
+</div>
+<!-- Pricing & Scope -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 shadow-sm">
+<div class="space-y-4">
+<div class="flex justify-between items-center">
+<span class="text-xs font-bold text-outline uppercase">Project Price</span>
+<span class="text-body-md font-bold text-on-surface">$2,000</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-xs font-bold text-outline uppercase">Pricing Model</span>
+<span class="text-body-sm text-on-surface-variant">Fixed Price</span>
+</div>
+<div class="flex justify-between items-center pt-3 border-t border-outline-variant">
+<span class="text-xs font-bold text-outline uppercase">Duration</span>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">calendar_today</span>
+<span class="text-body-sm font-bold text-on-surface">14 days</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Compliance Checklist -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 shadow-sm">
+<h3 class="font-label-md text-label-md font-bold text-on-surface mb-4">Compliance Checklist</h3>
+<div class="space-y-3">
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-5 h-5 rounded border-outline text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-body-sm text-on-surface-variant group-hover:text-on-surface transition-colors">Policy Alignment</span>
+<span class="material-symbols-outlined ml-auto text-sm text-outline group-hover:text-primary transition-colors">info</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input checked="" class="w-5 h-5 rounded border-outline text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-body-sm text-on-surface-variant group-hover:text-on-surface transition-colors">Spam Detection</span>
+<span class="material-symbols-outlined ml-auto text-sm text-outline group-hover:text-primary transition-colors">info</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-5 h-5 rounded border-outline text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-body-sm text-on-surface-variant group-hover:text-on-surface transition-colors">No Misleading Claims</span>
+<span class="material-symbols-outlined ml-auto text-sm text-outline group-hover:text-primary transition-colors">info</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input checked="" class="w-5 h-5 rounded border-outline text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-body-sm text-on-surface-variant group-hover:text-on-surface transition-colors">Technical Feasibility</span>
+<span class="material-symbols-outlined ml-auto text-sm text-outline group-hover:text-primary transition-colors">info</span>
+</label>
+</div>
+</div>
+<!-- Action Panel -->
+<div class="mt-auto pt-4 space-y-3">
+<button class="w-full h-12 bg-primary text-on-primary font-bold rounded-lg hover:brightness-110 active:opacity-90 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">publish</span>
+                        Approve &amp; Publish
+                    </button>
+<div class="grid grid-cols-2 gap-3">
+<button class="h-10 border border-outline text-on-surface-variant font-bold rounded-lg hover:bg-surface-container-high active:bg-surface-variant transition-all text-sm flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+                            Clarification
+                        </button>
+<button class="h-10 border border-error text-error font-bold rounded-lg hover:bg-error-container/20 active:bg-error-container/40 transition-all text-sm flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[18px]">block</span>
+                            Reject
+                        </button>
+</div>
+<p class="text-[10px] text-center text-outline font-bold uppercase tracking-widest mt-2">Internal moderation ID: REV-8821-X9</p>
+</div>
+</section>
+</div>
+</main>
+<script>
+        // Micro-interactions for administrative clarity
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const parent = this.closest('label');
+                if (this.checked) {
+                    parent.querySelector('.text-body-sm').classList.add('line-through', 'opacity-50');
+                } else {
+                    parent.querySelector('.text-body-sm').classList.remove('line-through', 'opacity-50');
+                }
+            });
+        });
+
+        // Initialize state visuals
+        document.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
+            cb.closest('label').querySelector('.text-body-sm').classList.add('line-through', 'opacity-50');
+        });
+    </script>
+</body></html>

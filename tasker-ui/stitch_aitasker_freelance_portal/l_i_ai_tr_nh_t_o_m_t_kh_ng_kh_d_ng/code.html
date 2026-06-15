@@ -1,0 +1,307 @@
+<!DOCTYPE html><html lang="vi"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Aitasker - Tạo Dịch Vụ Mới (Lỗi AI)</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-container": "#586076",
+                        "on-surface-variant": "#464555",
+                        "on-primary": "#ffffff",
+                        "on-primary-container": "#dad7ff",
+                        "surface-variant": "#e0e3e5",
+                        "surface-bright": "#f7f9fb",
+                        "secondary": "#505f76",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed-dim": "#bec6e0",
+                        "surface-tint": "#4d44e3",
+                        "on-error-container": "#93000a",
+                        "background": "#f7f9fb",
+                        "on-tertiary-container": "#d4dbf5",
+                        "on-surface": "#191c1e",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "primary-fixed": "#e2dfff",
+                        "primary-container": "#4f46e5",
+                        "surface-container": "#eceef0",
+                        "error": "#ba1a1a",
+                        "surface": "#f7f9fb",
+                        "surface-dim": "#d8dadc",
+                        "surface-container-low": "#f2f4f6",
+                        "inverse-primary": "#c3c0ff",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed": "#0b1c30",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "on-secondary-container": "#54647a",
+                        "secondary-fixed": "#d3e4fe",
+                        "outline": "#777587",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-container": "#d0e1fb",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-high": "#e6e8ea",
+                        "tertiary-fixed": "#dae2fd",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "on-tertiary-fixed-variant": "#3f465c",
+                        "on-primary-fixed": "#0f0069",
+                        "on-primary-fixed-variant": "#3323cc",
+                        "inverse-on-surface": "#eff1f3",
+                        "error-container": "#ffdad6",
+                        "primary": "#3525cd",
+                        "outline-variant": "#c7c4d8",
+                        "on-tertiary-fixed": "#131b2e",
+                        "on-background": "#191c1e",
+                        "tertiary": "#41485e",
+                        "inverse-surface": "#2d3133"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "8": "2rem",
+                        "container-max": "1280px",
+                        "1": "0.25rem",
+                        "gutter": "1rem",
+                        "margin-mobile": "1rem",
+                        "6": "1.5rem",
+                        "12": "3rem",
+                        "4": "1rem",
+                        "margin-desktop": "2rem",
+                        "3": "0.75rem",
+                        "base": "0.25rem",
+                        "2": "0.5rem",
+                        "16": "4rem"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "h2-mobile": ["Inter"],
+                        "h1-mobile": ["Inter"],
+                        "body-md": ["Inter"],
+                        "h2": ["Inter"],
+                        "label-md": ["Inter"],
+                        "h1": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "h3": ["Inter"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["1.125rem", { "lineHeight": "1.75", "fontWeight": "400" }],
+                        "h2-mobile": ["1.875rem", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "h1-mobile": ["2.25rem", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "body-md": ["1rem", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "h2": ["2.25rem", { "lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "label-md": ["0.875rem", { "lineHeight": "1", "fontWeight": "500" }],
+                        "h1": ["3rem", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-sm": ["0.75rem", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "h3": ["1.5rem", { "lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-sm": ["0.875rem", { "lineHeight": "1.5", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom scrollbar for textareas */
+        textarea::-webkit-scrollbar {
+            width: 8px;
+        }
+        textarea::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        textarea::-webkit-scrollbar-thumb {
+            background-color: #c7c4d8;
+            border-radius: 4px;
+        }
+        /* Toast animation */
+        @keyframes slideDown {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .toast-enter {
+            animation: slideDown 0.3s ease-out forwards;
+        }
+        /* Pulse for disabled AI button */
+        @keyframes faintPulse {
+            0% { opacity: 0.5; }
+            50% { opacity: 0.7; }
+            100% { opacity: 0.5; }
+        }
+        .animate-faint-pulse {
+            animation: faintPulse 2s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col antialiased">
+<!-- TopAppBar Component (from JSON - Semantic suppression applied because this is a transactional/creation task, but instructions say "hide shell to prioritize canvas" if transactional. However, JSON provided TopAppBar. We will render it as a minimal anchor, but since it's a specific instruction to hide on transactional pages, we will provide a simplified top bar with a 'Back' action to fit the context) -->
+<header class="bg-surface-container-lowest border-b border-outline-variant w-full sticky top-0 z-40">
+<div class="flex justify-between items-center w-full px-margin-desktop h-16 max-w-container-max mx-auto">
+<div class="flex items-center gap-4">
+<button aria-label="Go back" class="text-on-surface-variant hover:text-primary transition-colors duration-200 cursor-pointer flex items-center justify-center w-10 h-10 rounded-full hover:bg-surface-container-low">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<div class="text-h3 font-h3 font-bold text-primary">Aitasker</div>
+<span class="text-on-surface-variant mx-2 hidden md:inline">/</span>
+<span class="text-label-md font-label-md text-on-surface hidden md:inline">Tạo Dịch Vụ Mới</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-primary transition-colors duration-200 text-label-md font-label-md hidden sm:block">Lưu nháp</button>
+</div>
+</div>
+</header>
+<!-- Error Toast Notification -->
+<div class="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-md px-4 toast-enter" id="ai-error-toast">
+<div class="bg-error-container border border-error rounded-DEFAULT shadow-sm flex items-start p-4 gap-3">
+<span class="material-symbols-outlined text-error fill shrink-0 mt-0.5">error</span>
+<div class="flex-1">
+<p class="text-label-md font-label-md text-on-error-container mb-1">AI generator is currently busy.</p>
+<p class="text-body-sm font-body-sm text-on-error-container opacity-90">Trình tạo AI hiện đang bận. Vui lòng nhập mô tả thủ công.</p>
+</div>
+<button class="text-on-error-container hover:opacity-70 transition-opacity shrink-0 cursor-pointer p-1" onclick="document.getElementById('ai-error-toast').style.display='none'">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+</div>
+<!-- Main Canvas -->
+<main class="flex-1 w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-8 md:py-12 flex flex-col items-center">
+<div class="w-full max-w-3xl">
+<!-- Header Section -->
+<div class="mb-8">
+<h1 class="text-h1-mobile md:text-h1 font-h1-mobile md:font-h1 text-on-surface mb-2">Chi Tiết Dịch Vụ</h1>
+<p class="text-body-lg font-body-lg text-on-surface-variant">Cung cấp thông tin chi tiết về dịch vụ của bạn để thu hút khách hàng.</p>
+</div>
+<!-- Bento Grid Form Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Basic Info Card (Left Column, Span 8) -->
+<div class="md:col-span-8 bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+<h2 class="text-h3 font-h3 text-on-surface mb-6 border-b border-surface-container-high pb-4">Thông Tin Cơ Bản</h2>
+<div class="space-y-6">
+<!-- Title Input -->
+<div>
+<label class="block text-label-sm font-label-sm text-on-surface-variant mb-2" for="service-title">TIÊU ĐỀ DỊCH VỤ</label>
+<input class="w-full h-10 px-4 bg-surface-bright border border-outline-variant rounded-DEFAULT text-body-md font-body-md text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-shadow" id="service-title" placeholder="Vd: Thiết kế logo chuyên nghiệp..." type="text" value="Thiết kế UI/UX ứng dụng di động">
+</div>
+<!-- Description Area with AI Error State -->
+<div>
+<div class="flex justify-between items-end mb-2">
+<label class="block text-label-sm font-label-sm text-on-surface-variant" for="service-description">MÔ TẢ CHI TIẾT</label>
+<!-- AI Action Button (Disabled/Error State) -->
+<button class="flex items-center gap-2 px-3 py-1.5 bg-surface-container-low border border-outline-variant rounded-DEFAULT cursor-not-allowed opacity-60 transition-colors group relative overflow-hidden" disabled="" title="Trình tạo AI hiện đang bận" type="button">
+<span class="material-symbols-outlined text-error text-[18px]">warning</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">AI Tối ưu hóa</span>
+<!-- Decorative faint pulse behind disabled button -->
+<div class="absolute inset-0 bg-error/5 animate-faint-pulse"></div>
+</button>
+</div>
+<div class="relative">
+<textarea class="w-full p-4 bg-surface-bright border border-error rounded-DEFAULT text-body-md font-body-md text-on-surface focus:outline-none focus:ring-2 focus:ring-error focus:border-transparent transition-shadow resize-y" id="service-description" placeholder="Mô tả chi tiết những gì bạn sẽ cung cấp, quy trình làm việc, và tại sao khách hàng nên chọn bạn..." rows="8">Tôi cung cấp dịch vụ thiết kế UI/UX chuyên nghiệp cho các ứng dụng di động. Với hơn 5 năm kinh nghiệm, tôi cam kết mang lại thiết kế hiện đại, dễ sử dụng và đáp ứng mục tiêu kinh doanh của bạn.
+
+Dịch vụ bao gồm:
+- Phân tích yêu cầu và người dùng
+- Wireframes &amp; Prototypes
+- Thiết kế giao diện (UI) chi tiết
+</textarea>
+<!-- Validation subtle text -->
+<div class="mt-2 flex justify-between items-center text-label-sm font-label-sm text-error">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">info</span> Vui lòng tự hoàn thiện mô tả do sự cố máy chủ AI.</span>
+<span class="text-outline">350 / 2000</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Settings Card (Right Column, Span 4) -->
+<div class="md:col-span-4 space-y-6">
+<!-- Media Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+<h2 class="text-label-md font-label-md text-on-surface font-bold mb-4">Hình Ảnh &amp; Video</h2>
+<div class="border-2 border-dashed border-outline-variant rounded-DEFAULT bg-surface-bright p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-surface-container-low hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-[32px] text-tertiary-container mb-2">cloud_upload</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant mb-1">Kéo thả file vào đây</span>
+<span class="text-label-sm font-label-sm text-outline">hoặc <span class="text-primary hover:underline">Duyệt file</span></span>
+<span class="text-[10px] text-outline mt-2">PNG, JPG, MP4 lên đến 50MB</span>
+</div>
+</div>
+<!-- Category & Pricing -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+<h2 class="text-label-md font-label-md text-on-surface font-bold mb-4">Phân Loại</h2>
+<div class="space-y-4">
+<div>
+<label class="block text-label-sm font-label-sm text-on-surface-variant mb-1">DANH MỤC</label>
+<div class="relative">
+<select class="w-full h-10 pl-3 pr-8 bg-surface-bright border border-outline-variant rounded-DEFAULT text-body-sm font-body-sm text-on-surface appearance-none focus:outline-none focus:ring-2 focus:ring-primary">
+<option>Thiết kế &amp; Đồ họa</option>
+<option>Lập trình &amp; Công nghệ</option>
+<option>Viết lạch &amp; Dịch thuật</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-2 text-on-surface-variant pointer-events-none">expand_more</span>
+</div>
+</div>
+<div>
+<label class="block text-label-sm font-label-sm text-on-surface-variant mb-1">GIÁ KHỞI ĐIỂM (VND)</label>
+<div class="relative">
+<span class="absolute left-3 top-2.5 text-on-surface-variant">₫</span>
+<input class="w-full h-10 pl-8 pr-4 bg-surface-bright border border-outline-variant rounded-DEFAULT text-body-sm font-body-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary" type="text" value="2,000,000">
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Actions -->
+<div class="mt-8 flex justify-end gap-4 border-t border-outline-variant pt-6">
+<button class="h-10 px-6 bg-surface-container-lowest text-on-surface border border-outline-variant rounded-DEFAULT text-label-md font-label-md hover:bg-surface-container-low transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1">
+                    Hủy
+                </button>
+<button class="h-10 px-6 bg-primary text-on-primary rounded-DEFAULT text-label-md font-label-md hover:bg-primary-container hover:text-on-primary-container transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1 flex items-center gap-2">
+                    Lưu &amp; Tiếp tục
+                    <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</main>
+<!-- Footer Component (from JSON) -->
+<footer class="bg-surface-container-lowest border-t border-outline-variant w-full mt-auto">
+<div class="flex flex-col md:flex-row justify-between items-center w-full px-margin-desktop py-8 max-w-container-max mx-auto gap-4">
+<div class="font-label-md text-label-md font-bold text-on-surface">
+                Aitasker
+            </div>
+<nav class="flex gap-6">
+<a class="text-on-surface-variant hover:text-on-surface text-label-sm font-label-sm hover:underline transition-all cursor-pointer" href="#">Liên hệ</a>
+<a class="text-on-surface-variant hover:text-on-surface text-label-sm font-label-sm hover:underline transition-all cursor-pointer" href="#">Câu hỏi thường gặp</a>
+<a class="text-on-surface-variant hover:text-on-surface text-label-sm font-label-sm hover:underline transition-all cursor-pointer" href="#">Tuyển dụng</a>
+</nav>
+<div class="text-body-sm font-body-sm text-on-surface-variant">
+                © 2024 Aitasker. Tất cả quyền được bảo lưu.
+            </div>
+</div>
+</footer>
+<script>
+        // Simple auto-dismiss for toast after 8 seconds to ensure visibility but not permanent blockage
+        setTimeout(() => {
+            const toast = document.getElementById('ai-error-toast');
+            if(toast) {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(-20px)';
+                toast.style.transition = 'all 0.5s ease';
+                setTimeout(() => toast.style.display = 'none', 500);
+            }
+        }, 8000);
+    </script>
+</body></html>

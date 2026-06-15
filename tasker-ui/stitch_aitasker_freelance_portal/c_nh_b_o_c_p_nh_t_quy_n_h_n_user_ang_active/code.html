@@ -1,0 +1,47 @@
+<div
+  class="relative bg-surface-container-lowest rounded-xl border border-outline-variant shadow-lg w-full max-w-md overflow-hidden transform transition-all"
+>
+  <!-- Warning Header Pattern -->
+  <div class="h-2 bg-error"></div>
+  <div class="p-6">
+    <!-- Icon and Title -->
+    <div class="flex items-start gap-4">
+      <div
+        class="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-full bg-error-container text-on-error-container"
+      >
+        <span class="material-symbols-outlined text-2xl" data-icon="warning"
+          >warning</span
+        >
+      </div>
+      <div class="flex-1 mt-1">
+        <h2 class="font-h3 text-h3 text-on-surface mb-2" id="modal-title">
+          Xác nhận thay đổi quyền hạn
+        </h2>
+        <!-- Main Warning Message -->
+        <div
+          class="bg-surface-container rounded-lg p-4 mb-6 border border-surface-container-high"
+        >
+          <p class="font-body-sm text-body-sm text-on-surface-variant">
+            User is currently active. Updating permissions will require the user
+            to re-login to apply changes.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- Actions -->
+    <div class="mt-2 flex flex-col-reverse sm:flex-row justify-end gap-3">
+      <button
+        class="inline-flex justify-center items-center h-10 px-4 py-2 border border-outline font-label-md text-label-md rounded-DEFAULT text-on-surface bg-surface-container-lowest hover:bg-surface-container-low focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface-container-lowest transition-colors w-full sm:w-auto"
+        type="button"
+      >
+        Cancel
+      </button>
+      <button
+        class="inline-flex justify-center items-center h-10 px-4 py-2 border border-transparent font-label-md text-label-md rounded-DEFAULT text-on-error bg-error hover:bg-on-error-container focus:outline-none focus:ring-2 focus:ring-error focus:ring-offset-2 focus:ring-offset-surface-container-lowest transition-colors w-full sm:w-auto"
+        type="button"
+      >
+        Confirm & Force Re-login
+      </button>
+    </div>
+  </div>
+</div>
