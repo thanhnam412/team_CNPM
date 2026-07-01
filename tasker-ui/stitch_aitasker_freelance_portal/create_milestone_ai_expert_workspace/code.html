@@ -1,0 +1,417 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>New Milestone - Workspace AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-low": "#f2f4f6",
+                      "on-primary-fixed-variant": "#3323cc",
+                      "inverse-primary": "#c3c0ff",
+                      "on-primary": "#ffffff",
+                      "surface-bright": "#f7f9fb",
+                      "secondary-container": "#d0e1fb",
+                      "on-secondary-fixed-variant": "#38485d",
+                      "surface-dim": "#d8dadc",
+                      "on-secondary-container": "#54647a",
+                      "on-tertiary": "#ffffff",
+                      "primary-fixed": "#e2dfff",
+                      "inverse-surface": "#2d3133",
+                      "inverse-on-surface": "#eff1f3",
+                      "error-container": "#ffdad6",
+                      "on-primary-fixed": "#0f0069",
+                      "on-error": "#ffffff",
+                      "on-secondary-fixed": "#0b1c30",
+                      "outline": "#777587",
+                      "tertiary-container": "#586076",
+                      "on-surface-variant": "#464555",
+                      "on-primary-container": "#dad7ff",
+                      "surface-container-high": "#e6e8ea",
+                      "secondary": "#505f76",
+                      "primary-container": "#4f46e5",
+                      "on-tertiary-fixed": "#131b2e",
+                      "outline-variant": "#c7c4d8",
+                      "on-background": "#191c1e",
+                      "on-surface": "#191c1e",
+                      "secondary-fixed-dim": "#b7c8e1",
+                      "tertiary-fixed-dim": "#bec6e0",
+                      "secondary-fixed": "#d3e4fe",
+                      "on-tertiary-container": "#d4dbf5",
+                      "surface-variant": "#e0e3e5",
+                      "surface-container-highest": "#e0e3e5",
+                      "surface-tint": "#4d44e3",
+                      "tertiary-fixed": "#dae2fd",
+                      "background": "#f7f9fb",
+                      "error": "#ba1a1a",
+                      "on-secondary": "#ffffff",
+                      "on-error-container": "#93000a",
+                      "primary": "#3525cd",
+                      "surface": "#f7f9fb",
+                      "surface-container": "#eceef0",
+                      "primary-fixed-dim": "#c3c0ff",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary-fixed-variant": "#3f465c",
+                      "tertiary": "#41485e"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "container-max": "1280px",
+                      "base": "0.25rem",
+                      "6": "1.5rem",
+                      "3": "0.75rem",
+                      "2": "0.5rem",
+                      "1": "0.25rem",
+                      "gutter": "1rem",
+                      "4": "1rem",
+                      "8": "2rem",
+                      "margin-mobile": "1rem",
+                      "12": "3rem",
+                      "margin-desktop": "2rem",
+                      "16": "4rem"
+              },
+              "fontFamily": {
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "h1": [
+                              "Inter"
+                      ],
+                      "label-sm": [
+                              "Inter"
+                      ],
+                      "h1-mobile": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "h2-mobile": [
+                              "Inter"
+                      ],
+                      "h3": [
+                              "Inter"
+                      ],
+                      "h2": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "body-md": [
+                              "1rem",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-md": [
+                              "0.875rem",
+                              {
+                                      "lineHeight": "1",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-sm": [
+                              "0.875rem",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "h1": [
+                              "3rem",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-sm": [
+                              "0.75rem",
+                              {
+                                      "lineHeight": "1",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "h1-mobile": [
+                              "2.25rem",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "1.125rem",
+                              {
+                                      "lineHeight": "1.75",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "h2-mobile": [
+                              "1.875rem",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "h3": [
+                              "1.5rem",
+                              {
+                                      "lineHeight": "1.4",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "h2": [
+                              "2.25rem",
+                              {
+                                      "lineHeight": "1.3",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        body { background-color: theme('colors.background'); color: theme('colors.on-background'); }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+</head>
+<body class="font-body-md text-body-md text-on-background bg-background min-h-screen flex flex-col md:flex-row">
+<!-- SideNavBar (Web Only) -->
+<aside class="hidden md:flex h-screen w-64 fixed left-0 top-0 z-50 bg-surface-container-low dark:bg-surface-container-highest border-r border-outline-variant flex-col p-4 gap-2">
+<div class="mb-8 flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined" data-icon="lightbulb" data-weight="fill" style="font-variation-settings: 'FILL' 1;">lightbulb</span>
+</div>
+<div>
+<h2 class="text-h3 font-h3 text-primary dark:text-primary-fixed-dim m-0">AI Vision Pro</h2>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Active Project</p>
+</div>
+</div>
+<nav class="flex-1 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors font-label-md text-label-md scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                Overview
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary font-bold font-label-md text-label-md scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="flag">flag</span>
+                Milestones
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors font-label-md text-label-md scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+                Payments
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors font-label-md text-label-md scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+                Deliverables
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors font-label-md text-label-md scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="forum">forum</span>
+                Chat
+            </a>
+</nav>
+<div class="mt-auto border-t border-outline-variant pt-4 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors font-label-md text-label-md scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+                Help Center
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors font-label-md text-label-md scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+                Log Out
+            </a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-64 flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-40 bg-surface-bright dark:bg-inverse-surface border-b border-outline-variant dark:border-outline flat no shadows">
+<div class="flex justify-between items-center px-gutter py-2 w-full max-w-container-max mx-auto">
+<div class="flex items-center gap-4">
+<!-- Mobile Menu Button -->
+<button class="md:hidden p-2 rounded-full hover:bg-surface-container-high text-on-surface-variant transition-colors cursor-pointer transition-all duration-200">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="text-h3 font-h3 text-primary dark:text-primary-fixed-dim m-0">Workspace AI</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="hidden md:flex items-center gap-2 px-4 py-2 bg-primary text-on-primary rounded-lg font-label-md text-label-md hover:bg-primary-container transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="add">add</span>
+                        New Milestone
+                    </button>
+<div class="flex items-center gap-2">
+<button class="p-2 rounded-full text-on-surface-variant hover:bg-surface-container-high hover:text-primary-container dark:hover:text-primary-fixed transition-colors cursor-pointer transition-all duration-200">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 rounded-full text-on-surface-variant hover:bg-surface-container-high hover:text-primary-container dark:hover:text-primary-fixed transition-colors cursor-pointer transition-all duration-200">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest overflow-hidden border border-outline-variant ml-2">
+<img alt="Expert Profile Avatar" class="w-full h-full object-cover" data-alt="A professional headshot of an AI expert in a modern, brightly lit office environment. The lighting is soft and natural, emphasizing a clean, corporate aesthetic. The overall mood is confident and approachable, utilizing a color palette of crisp whites, subtle grays, and professional navy tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7oj5ny9lLFciEoItd4ljBR4QhAm4sxGvr_B5lojWiAaEAYMg9kGH5zrrxf8gmoJQrnUP6TW27UIW8MeExkGBwjFEs1-QtMzYLssuvzuqInzg-IeS-A1H_HgnmRwWsAZr_3TEBBVvOCHd-FYl9IDv8ug6YvQq8lkcyP9tLjtNBtracnJ7hA001wl6TVLVjy16P6WgWb3l5QHvtOg7_bL5FBMnV2oUHgGs9o0mXlqXnZx02wbXinMzrEzr8Zh0Y7cBwLD3XOQRWQmg">
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Page Content -->
+<div class="flex-1 overflow-y-auto p-gutter md:p-margin-desktop bg-background">
+<div class="max-w-4xl mx-auto">
+<div class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<nav class="flex items-center gap-2 text-on-surface-variant font-body-sm text-body-sm mb-2">
+<a class="hover:text-primary transition-colors" href="#">Projects</a>
+<span class="material-symbols-outlined text-[14px]" data-icon="chevron_right">chevron_right</span>
+<a class="hover:text-primary transition-colors" href="#">AI Vision Pro</a>
+<span class="material-symbols-outlined text-[14px]" data-icon="chevron_right">chevron_right</span>
+<span class="text-on-surface">New Milestone</span>
+</nav>
+<h1 class="font-h2 md:font-h2 text-h2-mobile md:text-h2 text-on-surface">Create Milestone</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Define the scope, deliverables, and payment terms for the next phase.</p>
+</div>
+<!-- Context Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-3 flex items-center gap-4 shadow-sm">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Client</span>
+<span class="font-body-sm text-body-sm text-on-surface font-medium">TechCorp</span>
+</div>
+<div class="w-px h-8 bg-outline-variant"></div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Status</span>
+<span class="font-label-sm text-label-sm text-surface-tint bg-secondary-fixed rounded-full px-2 py-0.5 mt-0.5 inline-flex w-fit">Negotiating</span>
+</div>
+</div>
+</div>
+<!-- Form Canvas -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+<form class="p-6 md:p-8 flex flex-col gap-6">
+<!-- Section: Basic Info -->
+<div>
+<h3 class="font-h3 text-h3 text-on-surface mb-4 pb-2 border-b border-outline-variant/50">1. Definition</h3>
+<div class="grid grid-cols-1 gap-6">
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface flex items-center gap-1" for="milestone-name">
+                                        Milestone Name <span class="text-error">*</span>
+</label>
+<input class="w-full h-10 px-3 bg-surface border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-shadow placeholder:text-outline" id="milestone-name" placeholder="e.g., Data Ingestion Pipeline" type="text">
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface flex items-center gap-1" for="objective">
+                                        Objective <span class="text-error">*</span>
+</label>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-1">Briefly describe the goal of this milestone.</p>
+<textarea class="w-full p-3 bg-surface border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-shadow resize-y placeholder:text-outline" id="objective" placeholder="Establish the foundational data architecture required for model training..." rows="3"></textarea>
+</div>
+</div>
+</div>
+<!-- Section: Scope -->
+<div class="mt-4">
+<h3 class="font-h3 text-h3 text-on-surface mb-4 pb-2 border-b border-outline-variant/50">2. Scope &amp; Criteria</h3>
+<div class="grid grid-cols-1 gap-6">
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface flex items-center gap-1">
+                                        Deliverables <span class="text-error">*</span>
+</label>
+<div class="flex flex-col gap-3 bg-surface p-4 rounded-lg border border-outline-variant">
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-outline mt-0.5 text-[20px]" data-icon="drag_indicator">drag_indicator</span>
+<input class="flex-1 h-9 px-3 bg-surface-container-lowest border border-outline-variant rounded font-body-sm text-body-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary" placeholder="API Integration Script" type="text" value="API Integration Script">
+<button class="p-1.5 text-on-surface-variant hover:text-error hover:bg-error-container rounded transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="close">close</span>
+</button>
+</div>
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-outline mt-0.5 text-[20px]" data-icon="drag_indicator">drag_indicator</span>
+<input class="flex-1 h-9 px-3 bg-surface-container-lowest border border-outline-variant rounded font-body-sm text-body-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Data Schema Documentation" type="text" value="Data Schema Documentation">
+<button class="p-1.5 text-on-surface-variant hover:text-error hover:bg-error-container rounded transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="close">close</span>
+</button>
+</div>
+<button class="flex items-center gap-2 text-primary font-label-sm text-label-sm hover:underline mt-2 w-fit px-2 py-1 rounded hover:bg-primary/5 transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="add">add</span> Add Deliverable
+                                        </button>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface flex items-center gap-1" for="acceptance">
+                                        Acceptance Criteria <span class="text-error">*</span>
+</label>
+<textarea class="w-full p-3 bg-surface border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-shadow resize-y placeholder:text-outline" id="acceptance" placeholder="- System must handle 10,000 requests/sec
+- Latency under 50ms
+- 90% test coverage" rows="4"></textarea>
+</div>
+</div>
+</div>
+<!-- Section: Terms -->
+<div class="mt-4">
+<h3 class="font-h3 text-h3 text-on-surface mb-4 pb-2 border-b border-outline-variant/50">3. Terms</h3>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface flex items-center gap-1" for="deadline">
+                                        Deadline <span class="text-error">*</span>
+</label>
+<div class="relative">
+<input class="w-full h-10 pl-3 pr-10 bg-surface border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-shadow appearance-none" id="deadline" type="date">
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface flex items-center gap-1" for="payment">
+                                        Payment Amount <span class="text-error">*</span>
+</label>
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant font-body-md text-body-md">$</span>
+<input class="w-full h-10 pl-7 pr-3 bg-surface border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-shadow" id="payment" min="0" placeholder="0.00" step="100" type="number">
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface flex items-center gap-1" for="revisions">
+                                        Revision Limit
+                                    </label>
+<div class="relative">
+<select class="w-full h-10 pl-3 pr-10 bg-surface border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-shadow appearance-none" id="revisions">
+<option value="1">1 Revision</option>
+<option selected="" value="2">2 Revisions</option>
+<option value="3">3 Revisions</option>
+<option value="unlimited">Unlimited</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+</div>
+</div>
+</form>
+<!-- Form Actions -->
+<div class="bg-surface-container-low px-6 py-4 border-t border-outline-variant flex items-center justify-end gap-3">
+<button class="px-4 py-2 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface font-label-md text-label-md hover:bg-surface-container-low transition-colors shadow-sm" type="button">
+                            Cancel
+                        </button>
+<button class="px-6 py-2 rounded-lg bg-primary text-on-primary font-label-md text-label-md hover:bg-primary-container transition-colors shadow-sm flex items-center gap-2" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="check">check</span>
+                            Create Milestone
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

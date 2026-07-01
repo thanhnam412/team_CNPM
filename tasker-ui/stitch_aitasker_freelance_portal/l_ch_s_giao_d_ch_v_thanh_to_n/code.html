@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Transaction History - Precision Hire</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                            "surface-bright": "#f7f9fb",
+                            "on-tertiary-container": "#d4dbf5",
+                            "primary-fixed": "#e2dfff",
+                            "primary-container": "#4f46e5",
+                            "error-container": "#ffdad6",
+                            "inverse-primary": "#c3c0ff",
+                            "on-primary-container": "#dad7ff",
+                            "surface-tint": "#4d44e3",
+                            "secondary-fixed-dim": "#b7c8e1",
+                            "on-secondary": "#ffffff",
+                            "on-primary-fixed-variant": "#3323cc",
+                            "outline": "#777587",
+                            "on-tertiary-fixed": "#131b2e",
+                            "on-error-container": "#93000a",
+                            "background": "#f7f9fb",
+                            "on-surface": "#191c1e",
+                            "surface-dim": "#d8dadc",
+                            "primary": "#3525cd",
+                            "outline-variant": "#c7c4d8",
+                            "on-tertiary-fixed-variant": "#3f465c",
+                            "error": "#ba1a1a",
+                            "on-background": "#191c1e",
+                            "tertiary-fixed": "#dae2fd",
+                            "on-secondary-fixed": "#0b1c30",
+                            "surface-container": "#eceef0",
+                            "tertiary-fixed-dim": "#bec6e0",
+                            "surface-container-lowest": "#ffffff",
+                            "surface-container-high": "#e6e8ea",
+                            "inverse-on-surface": "#eff1f3",
+                            "secondary": "#505f76",
+                            "primary-fixed-dim": "#c3c0ff",
+                            "surface-container-low": "#f2f4f6",
+                            "tertiary": "#41485e",
+                            "surface-container-highest": "#e0e3e5",
+                            "on-surface-variant": "#464555",
+                            "on-tertiary": "#ffffff",
+                            "on-secondary-fixed-variant": "#38485d",
+                            "on-secondary-container": "#54647a",
+                            "on-primary": "#ffffff",
+                            "secondary-container": "#d0e1fb",
+                            "surface-variant": "#e0e3e5",
+                            "on-error": "#ffffff",
+                            "inverse-surface": "#2d3133",
+                            "tertiary-container": "#586076",
+                            "surface": "#f7f9fb",
+                            "secondary-fixed": "#d3e4fe",
+                            "on-primary-fixed": "#0f0069"
+                    },
+                    "borderRadius": {
+                            "DEFAULT": "0.25rem",
+                            "lg": "0.5rem",
+                            "xl": "0.75rem",
+                            "full": "9999px"
+                    },
+                    "spacing": {
+                            "12": "3rem",
+                            "container-max": "1280px",
+                            "margin-mobile": "1rem",
+                            "margin-desktop": "2rem",
+                            "3": "0.75rem",
+                            "8": "2rem",
+                            "4": "1rem",
+                            "gutter": "1rem",
+                            "16": "4rem",
+                            "base": "0.25rem",
+                            "2": "0.5rem",
+                            "6": "1.5rem",
+                            "1": "0.25rem"
+                    },
+                    "fontFamily": {
+                            "h1": ["Inter"],
+                            "body-sm": ["Inter"],
+                            "label-sm": ["Inter"],
+                            "h2-mobile": ["Inter"],
+                            "body-md": ["Inter"],
+                            "body-lg": ["Inter"],
+                            "h3": ["Inter"],
+                            "h2": ["Inter"],
+                            "label-md": ["Inter"],
+                            "h1-mobile": ["Inter"]
+                    },
+                    "fontSize": {
+                            "h1": ["3rem", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                            "body-sm": ["0.875rem", {"lineHeight": "1.5", "fontWeight": "400"}],
+                            "label-sm": ["0.75rem", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                            "h2-mobile": ["1.875rem", {"lineHeight": "1.3", "fontWeight": "600"}],
+                            "body-md": ["1rem", {"lineHeight": "1.5", "fontWeight": "400"}],
+                            "body-lg": ["1.125rem", {"lineHeight": "1.75", "fontWeight": "400"}],
+                            "h3": ["1.5rem", {"lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                            "h2": ["2.25rem", {"lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                            "label-md": ["0.875rem", {"lineHeight": "1", "fontWeight": "500"}],
+                            "h1-mobile": ["2.25rem", {"lineHeight": "1.2", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        /* Monospace for IDs */
+        .mono {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+
+        /* Subtle scrollbar for table */
+        .table-container::-webkit-scrollbar {
+            height: 6px;
+        }
+        .table-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .table-container::-webkit-scrollbar-thumb {
+            background-color: #c7c4d8;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md">
+<!-- TopNavBar Shared Component -->
+<header class="bg-surface-container-lowest border-b border-outline-variant w-full relative z-30">
+<div class="flex justify-between items-center w-full px-margin-desktop max-w-container-max mx-auto h-16">
+<!-- Left: Logo & Search -->
+<div class="flex items-center gap-8">
+<a class="font-h3 text-h3 font-bold text-primary flex items-center gap-2" href="#">
+<span class="material-symbols-outlined fill text-primary text-2xl">hexagon</span>
+                    Precision Hire
+                </a>
+<div class="hidden lg:flex items-center bg-surface-container-low rounded px-3 py-1.5 border border-outline-variant focus-within:ring-2 focus-within:ring-primary-container focus-within:border-primary-container transition-all">
+<span class="material-symbols-outlined text-on-surface-variant text-sm mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-sm w-48 text-on-surface p-0 placeholder:text-on-surface-variant" placeholder="Search..." type="text"/>
+</div>
+</div>
+<!-- Middle: Navigation -->
+<nav class="hidden md:flex items-center gap-6 h-full">
+<a class="h-full flex flex-col justify-center font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Dashboard</a>
+<a class="h-full flex flex-col justify-center font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Projects</a>
+<a class="h-full flex flex-col justify-center font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Talent</a>
+<!-- Active Item -->
+<a class="h-full flex flex-col justify-center font-body-sm text-body-sm text-primary border-b-2 border-primary pb-1 opacity-80 transition-opacity" href="#">Analytics</a>
+</nav>
+<!-- Right: Actions -->
+<div class="flex items-center gap-4">
+<button class="hidden md:flex items-center justify-center font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors">
+                    Help
+                </button>
+<button class="hidden sm:flex items-center justify-center h-10 px-4 bg-primary text-on-primary rounded font-label-md text-label-md hover:bg-primary-container transition-colors">
+                    Create Project
+                </button>
+<button class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant hover:border-primary transition-colors flex-shrink-0">
+<img alt="User profile settings" class="w-full h-full object-cover" data-alt="A professional headshot of a person looking directly at the camera. The background is a clean, neutral studio gray, enhancing a corporate and trustworthy aesthetic. The lighting is soft and even, typical of modern professional profile photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQj3K6u5WIvqE4WmX6dYKBbkTBjGiWeZxQh0FXfC_DcsVesaWQUK6nM8LVsqHzfwygSm1WqXYVddJPbjhY0VtAit2HLfRHSbu0vhWWQnvYrusZPNCFGP4o3T9KI074uvqZA2JTsPv0RJ2rrTUtzAkjGVVCNuEuWge-xWKKSHSRYFP4rovrekRH7bmlNB3NrvmEJ2RvAhRJwESrdAod8VNvnYaob0eojhGGPAHSc6oFP5LxTU2ibILyRpJBgloGQfDpyCIa5G0xJkU"/>
+</button>
+<!-- Mobile Menu Toggle -->
+<button class="md:hidden text-on-surface-variant p-1">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow w-full px-margin-mobile md:px-margin-desktop py-8 max-w-container-max mx-auto flex flex-col gap-8 relative">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+<div>
+<h1 class="font-h2 text-h2 text-on-surface">Transaction History</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Review all financial activity across your projects.</p>
+</div>
+<div class="flex gap-2 w-full md:w-auto">
+<button class="flex-1 md:flex-none flex items-center justify-center gap-2 h-10 px-4 bg-surface-container-lowest border border-outline text-on-surface rounded font-label-md text-label-md hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-lg">download</span>
+                    Export CSV
+                </button>
+</div>
+</div>
+<!-- Summary Card (Bento/Glass vibe but using flat-plus enterprise style) -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<!-- Total Spent Card -->
+<div class="col-span-1 md:col-span-1 bg-surface-container-lowest border border-outline-variant rounded-lg p-6 relative overflow-hidden group">
+<!-- Decorative subtle gradient background -->
+<div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-50 z-0"></div>
+<div class="relative z-10">
+<div class="flex justify-between items-start mb-4">
+<h2 class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Total Spent (2024)</h2>
+<span class="material-symbols-outlined text-outline">account_balance_wallet</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-h1 text-h1 text-on-surface">$142,850</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">.00</span>
+</div>
+<div class="mt-4 flex items-center gap-2 font-label-sm text-label-sm text-secondary">
+<span class="material-symbols-outlined text-sm text-primary">trending_up</span>
+<span>+12% vs last year</span>
+</div>
+</div>
+</div>
+<!-- Escrow Card -->
+<div class="col-span-1 md:col-span-1 bg-surface-container-lowest border border-outline-variant rounded-lg p-6 relative overflow-hidden">
+<div class="relative z-10">
+<div class="flex justify-between items-start mb-4">
+<h2 class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Currently in Escrow</h2>
+<span class="material-symbols-outlined text-outline">lock</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-h2 text-h2 text-on-surface">$18,400</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">.00</span>
+</div>
+<div class="mt-4 flex items-center gap-2 font-label-sm text-label-sm text-on-surface-variant">
+<span>Across 3 active projects</span>
+</div>
+</div>
+</div>
+<!-- Refunds Card -->
+<div class="col-span-1 md:col-span-1 bg-surface-container-lowest border border-outline-variant rounded-lg p-6 relative overflow-hidden">
+<div class="relative z-10">
+<div class="flex justify-between items-start mb-4">
+<h2 class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Total Refunds</h2>
+<span class="material-symbols-outlined text-outline">receipt_long</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-h2 text-h2 text-on-surface">$4,250</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">.00</span>
+</div>
+<div class="mt-4 flex items-center gap-2 font-label-sm text-label-sm text-on-surface-variant">
+<span>2 transactions</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Data Table Section -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-lg flex flex-col relative z-20">
+<!-- Table Toolbar / Filter Bar -->
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 border-b border-outline-variant gap-4 bg-surface-bright rounded-t-lg">
+<div class="flex items-center gap-2">
+<div class="relative inline-block text-left">
+<!-- Active Filter Button -->
+<button class="flex items-center justify-center gap-2 h-8 px-3 bg-primary-container text-on-primary-container border border-primary-container rounded font-label-sm text-label-sm transition-colors ring-2 ring-primary-container/20">
+<span class="material-symbols-outlined text-sm">filter_list</span>
+                            Filters (2)
+                        </button>
+<!-- Dropdown Menu (Simulated Open State for prompt requirement) -->
+<div class="origin-top-left absolute left-0 mt-2 w-64 rounded-lg bg-surface-container-lowest border border-outline-variant shadow-[0_4px_12px_rgba(0,0,0,0.08)] ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
+<div aria-orientation="vertical" class="py-2" role="menu">
+<div class="px-4 py-2 border-b border-outline-variant">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Timeframe</span>
+<div class="mt-2 flex items-center">
+<input checked="" class="h-4 w-4 rounded border-outline text-primary focus:ring-primary-container" id="filter-time" type="checkbox"/>
+<label class="ml-2 block font-body-sm text-body-sm text-on-surface" for="filter-time">Last 30 Days</label>
+</div>
+<div class="mt-2 flex items-center">
+<input class="h-4 w-4 rounded border-outline text-primary focus:ring-primary-container" id="filter-time-2" type="checkbox"/>
+<label class="ml-2 block font-body-sm text-body-sm text-on-surface" for="filter-time-2">Year to Date</label>
+</div>
+</div>
+<div class="px-4 py-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Type</span>
+<div class="mt-2 flex items-center">
+<input checked="" class="h-4 w-4 rounded border-outline text-primary focus:ring-primary-container" id="filter-type" type="checkbox"/>
+<label class="ml-2 block font-body-sm text-body-sm text-on-surface" for="filter-type">Refunds</label>
+</div>
+<div class="mt-2 flex items-center">
+<input class="h-4 w-4 rounded border-outline text-primary focus:ring-primary-container" id="filter-type-2" type="checkbox"/>
+<label class="ml-2 block font-body-sm text-body-sm text-on-surface" for="filter-type-2">Escrow Funded</label>
+</div>
+</div>
+<div class="px-4 py-2 bg-surface-bright border-t border-outline-variant flex justify-end gap-2">
+<button class="font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface">Clear</button>
+<button class="font-label-sm text-label-sm text-primary hover:text-primary-container">Apply</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Active Filter Chips -->
+<div class="hidden md:flex items-center gap-2">
+<span class="inline-flex items-center gap-1 bg-surface-container-high px-2 py-1 rounded font-label-sm text-label-sm text-on-surface">
+                            Last 30 Days
+                            <button class="material-symbols-outlined text-[14px] text-on-surface-variant hover:text-on-surface">close</button>
+</span>
+<span class="inline-flex items-center gap-1 bg-surface-container-high px-2 py-1 rounded font-label-sm text-label-sm text-on-surface">
+                            Refunds
+                            <button class="material-symbols-outlined text-[14px] text-on-surface-variant hover:text-on-surface">close</button>
+</span>
+</div>
+</div>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+<input class="w-full sm:w-64 h-8 pl-9 pr-3 py-1 bg-surface-container-lowest border border-outline-variant rounded font-body-sm text-body-sm focus:ring-2 focus:ring-primary-container focus:border-primary-container placeholder:text-on-surface-variant" placeholder="Search ID or description..." type="text"/>
+</div>
+</div>
+<!-- Table Container -->
+<div class="overflow-x-auto table-container">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-outline-variant bg-surface-bright">
+<th class="px-4 py-3 font-label-sm text-label-sm text-on-surface-variant uppercase whitespace-nowrap">Date</th>
+<th class="px-4 py-3 font-label-sm text-label-sm text-on-surface-variant uppercase whitespace-nowrap">Transaction ID</th>
+<th class="px-4 py-3 font-label-sm text-label-sm text-on-surface-variant uppercase">Description</th>
+<th class="px-4 py-3 font-label-sm text-label-sm text-on-surface-variant uppercase whitespace-nowrap">Type</th>
+<th class="px-4 py-3 font-label-sm text-label-sm text-on-surface-variant uppercase text-right whitespace-nowrap">Amount</th>
+<th class="px-4 py-3 font-label-sm text-label-sm text-on-surface-variant uppercase text-right whitespace-nowrap">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<!-- Row 1: Refund -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-4 py-3 font-body-sm text-body-sm text-on-surface whitespace-nowrap">Oct 24, 2024</td>
+<td class="px-4 py-3 font-body-sm text-body-sm text-on-surface-variant mono text-xs">TXN-8A9B2C4</td>
+<td class="px-4 py-3 font-body-sm text-body-sm text-on-surface max-w-[200px] truncate" title="Refund for overpayment on Design System Project">Refund for overpayment on Design System Project</td>
+<td class="px-4 py-3 whitespace-nowrap">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full font-label-sm text-label-sm bg-[#e6f4ea] text-[#137333] border border-[#ceead6]">
+                                    Refund
+                                </span>
+</td>
+<td class="px-4 py-3 font-body-sm text-body-sm text-on-surface text-right font-medium whitespace-nowrap">+$1,250.00</td>
+<td class="px-4 py-3 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1 rounded hover:bg-surface-container-highest cursor-pointer invoice-btn">
+<span class="material-symbols-outlined text-xl">download</span>
+</button>
+</td>
+</tr>
+<!-- Row 2: Escrow -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-4 py-3 font-body-sm text-body-sm text-on-surface whitespace-nowrap">Oct 21, 2024</td>
+<td class="px-4 py-3 font-body-sm text-body-sm text-on-surface-variant mono text-xs">TXN-3F5D9E1</td>
+<td class="px-4 py-3 font-body-sm text-body-sm text-on-surface max-w-[200px] truncate" title="Milestone 1: Backend Architecture">Milestone 1: Backend Architecture</td>
+<td class="px-4 py-3 whitespace-nowrap">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full font-label-sm text-label-sm bg-surface-container-highest text-on-surface border border-outline-variant">
+                                    Funded Escrow
+                                </span>
+</td>
+<td class="px-4 py-3 font-body-sm text-body-sm text-on-surface text-right whitespace-nowrap">-$5,000.00</td>
+<td class="px-4 py-3 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1 rounded hover:bg-surface-container-highest cursor-pointer invoice-btn">
+<span class="material-symbols-outlined text-xl">download</span>
+</button>
+</td>
+</tr>
+<!-- Row 3: Release -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-4 py-3 font-body-sm text-body-sm text-on-surface whitespace-nowrap">Oct 18, 2024</td>
+<td class="px-4 py-3 font-body-sm text-body-sm text-on-surface-variant mono text-xs">TXN-7C2A1F8</td>
+<td class="px-4 py-3 font-body-sm text-body-sm text-on-surface max-w-[200px] truncate" title="Milestone 3 Release: UI Implementation">Milestone 3 Release: UI Implementation</td>
+<td class="px-4 py-3 whitespace-nowrap">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full font-label-sm text-label-sm bg-primary-fixed text-on-primary-fixed border border-primary-fixed-dim">
+                                    Release
+                                </span>
+</td>
+<td class="px-4 py-3 font-body-sm text-body-sm text-on-surface text-right whitespace-nowrap">-$3,500.00</td>
+<td class="px-4 py-3 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1 rounded hover:bg-surface-container-highest cursor-pointer invoice-btn">
+<span class="material-symbols-outlined text-xl">download</span>
+</button>
+</td>
+</tr>
+<!-- Row 4: Refund -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-4 py-3 font-body-sm text-body-sm text-on-surface whitespace-nowrap">Oct 15, 2024</td>
+<td class="px-4 py-3 font-body-sm text-body-sm text-on-surface-variant mono text-xs">TXN-1B4D7E9</td>
+<td class="px-4 py-3 font-body-sm text-body-sm text-on-surface max-w-[200px] truncate" title="Cancellation Refund - Project Alpha">Cancellation Refund - Project Alpha</td>
+<td class="px-4 py-3 whitespace-nowrap">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full font-label-sm text-label-sm bg-[#e6f4ea] text-[#137333] border border-[#ceead6]">
+                                    Refund
+                                </span>
+</td>
+<td class="px-4 py-3 font-body-sm text-body-sm text-on-surface text-right font-medium whitespace-nowrap">+$3,000.00</td>
+<td class="px-4 py-3 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1 rounded hover:bg-surface-container-highest cursor-pointer invoice-btn">
+<span class="material-symbols-outlined text-xl">download</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="px-4 py-3 border-t border-outline-variant bg-surface-bright rounded-b-lg flex items-center justify-between">
+<div class="font-body-sm text-body-sm text-on-surface-variant">
+                    Showing <span class="font-medium text-on-surface">1</span> to <span class="font-medium text-on-surface">4</span> of <span class="font-medium text-on-surface">42</span> results
+                </div>
+<div class="flex gap-1">
+<button class="p-1 rounded border border-outline-variant text-outline hover:bg-surface-container-highest disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+</button>
+<button class="p-1 rounded border border-outline-variant text-on-surface hover:bg-surface-container-highest">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer Shared Component -->
+<footer class="bg-surface-container-low border-t border-outline-variant w-full mt-auto relative z-10">
+<div class="w-full py-8 px-margin-desktop max-w-container-max mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+<div class="font-label-md text-label-md font-bold text-secondary">
+<span class="flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">hexagon</span>
+                    Precision Hire
+                </span>
+</div>
+<div class="flex flex-wrap justify-center gap-6">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:underline hover:text-primary transition-all duration-200" href="#">Privacy Policy</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:underline hover:text-primary transition-all duration-200" href="#">Terms of Service</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:underline hover:text-primary transition-all duration-200" href="#">Help Center</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:underline hover:text-primary transition-all duration-200" href="#">Security</a>
+</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant">
+                © 2024 Precision Hire Enterprise. All rights reserved.
+            </div>
+</div>
+</footer>
+<!-- Success Toast (Initially visible for prompt requirement, normally hidden) -->
+<div class="fixed bottom-6 right-6 z-50 flex items-center gap-3 bg-surface-container-lowest border border-[#ceead6] shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-lg px-4 py-3 transform transition-all duration-300 translate-y-0 opacity-100" id="success-toast">
+<div class="w-8 h-8 rounded-full bg-[#e6f4ea] flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[#137333] text-sm">check</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Invoice downloaded successfully.</p>
+</div>
+<button class="ml-4 text-on-surface-variant hover:text-on-surface p-1" onclick="document.getElementById('success-toast').style.display='none'">
+<span class="material-symbols-outlined text-sm">close</span>
+</button>
+</div>
+<!-- Simple interaction script for demo -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const btns = document.querySelectorAll('.invoice-btn');
+            const toast = document.getElementById('success-toast');
+            
+            // Hide toast initially, let prompt require it visible so we show it default, 
+            // but add click logic anyway
+            btns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    toast.style.display = 'flex';
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translateY(10px)';
+                    
+                    setTimeout(() => {
+                        toast.style.transition = 'all 0.3s ease';
+                        toast.style.opacity = '1';
+                        toast.style.transform = 'translateY(0)';
+                    }, 10);
+
+                    // Auto hide after 3s
+                    setTimeout(() => {
+                        toast.style.opacity = '0';
+                        toast.style.transform = 'translateY(10px)';
+                        setTimeout(() => {
+                            toast.style.display = 'none';
+                        }, 300);
+                    }, 3000);
+                });
+            });
+        });
+    </script>
+</body></html>

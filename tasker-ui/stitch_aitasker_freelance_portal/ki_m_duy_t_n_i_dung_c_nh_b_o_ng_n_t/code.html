@@ -1,0 +1,239 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Write a Review - Moderation State</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "primary": "#3525cd",
+                      "tertiary-fixed": "#dae2fd",
+                      "background": "#f7f9fb",
+                      "on-surface": "#191c1e",
+                      "secondary-fixed-dim": "#b7c8e1",
+                      "on-secondary-fixed-variant": "#38485d",
+                      "surface-container-highest": "#e0e3e5",
+                      "on-primary-fixed-variant": "#3323cc",
+                      "surface": "#f7f9fb",
+                      "primary-fixed-dim": "#c3c0ff",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "on-primary-fixed": "#0f0069",
+                      "error": "#ba1a1a",
+                      "secondary-fixed": "#d3e4fe",
+                      "secondary-container": "#d0e1fb",
+                      "surface-container-low": "#f2f4f6",
+                      "on-error-container": "#93000a",
+                      "primary-fixed": "#e2dfff",
+                      "surface-container": "#eceef0",
+                      "on-tertiary-container": "#d4dbf5",
+                      "inverse-on-surface": "#eff1f3",
+                      "on-secondary-fixed": "#0b1c30",
+                      "on-primary-container": "#dad7ff",
+                      "on-tertiary-fixed": "#131b2e",
+                      "on-surface-variant": "#464555",
+                      "tertiary-fixed-dim": "#bec6e0",
+                      "tertiary-container": "#586076",
+                      "secondary": "#505f76",
+                      "on-secondary-container": "#54647a",
+                      "surface-variant": "#e0e3e5",
+                      "surface-tint": "#4d44e3",
+                      "surface-container-high": "#e6e8ea",
+                      "on-background": "#191c1e",
+                      "tertiary": "#41485e",
+                      "inverse-primary": "#c3c0ff",
+                      "error-container": "#ffdad6",
+                      "inverse-surface": "#2d3133",
+                      "outline": "#777587",
+                      "on-tertiary-fixed-variant": "#3f465c",
+                      "on-secondary": "#ffffff",
+                      "on-primary": "#ffffff",
+                      "on-error": "#ffffff",
+                      "primary-container": "#4f46e5",
+                      "surface-bright": "#f7f9fb",
+                      "surface-dim": "#d8dadc",
+                      "outline-variant": "#c7c4d8"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-mobile": "1rem",
+                      "container-max": "1280px",
+                      "6": "1.5rem",
+                      "4": "1rem",
+                      "16": "4rem",
+                      "gutter": "1rem",
+                      "margin-desktop": "2rem",
+                      "8": "2rem",
+                      "base": "0.25rem",
+                      "3": "0.75rem",
+                      "2": "0.5rem",
+                      "1": "0.25rem",
+                      "12": "3rem"
+              },
+              "fontFamily": {
+                      "h2": ["Inter"],
+                      "body-md": ["Inter"],
+                      "h1": ["Inter"],
+                      "h1-mobile": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "label-md": ["Inter"],
+                      "h3": ["Inter"],
+                      "h2-mobile": ["Inter"]
+              },
+              "fontSize": {
+                      "h2": ["2.25rem", {"lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                      "body-md": ["1rem", {"lineHeight": "1.5", "fontWeight": "400"}],
+                      "h1": ["3rem", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "h1-mobile": ["2.25rem", {"lineHeight": "1.2", "fontWeight": "700"}],
+                      "body-sm": ["0.875rem", {"lineHeight": "1.5", "fontWeight": "400"}],
+                      "body-lg": ["1.125rem", {"lineHeight": "1.75", "fontWeight": "400"}],
+                      "label-sm": ["0.75rem", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                      "label-md": ["0.875rem", {"lineHeight": "1", "fontWeight": "500"}],
+                      "h3": ["1.5rem", {"lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "h2-mobile": ["1.875rem", {"lineHeight": "1.3", "fontWeight": "600"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+          font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background antialiased min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="bg-surface border-b border-outline-variant sticky top-0 z-50">
+<div class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto h-16">
+<div class="flex items-center gap-8">
+<a class="font-h3 text-h3 font-bold text-primary" href="#">Aitasker</a>
+<nav class="hidden md:flex gap-6">
+<a class="font-body-md text-body-md text-secondary hover:text-primary transition-colors duration-200 cursor-pointer active:opacity-80" href="#">Projects</a>
+<a class="font-body-md text-body-md text-secondary hover:text-primary transition-colors duration-200 cursor-pointer active:opacity-80" href="#">Talent</a>
+<a class="font-body-md text-body-md text-secondary hover:text-primary transition-colors duration-200 cursor-pointer active:opacity-80" href="#">Messages</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex items-center gap-4">
+<button class="text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+<button class="text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</div>
+<div class="flex items-center gap-3 ml-4 border-l border-outline-variant pl-4">
+<a class="hidden md:block font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 cursor-pointer" href="#">Sign In</a>
+<a class="font-label-md text-label-md bg-primary text-on-primary px-4 py-2 rounded hover:bg-primary-fixed-dim hover:text-on-primary-fixed transition-colors duration-200 cursor-pointer active:opacity-80" href="#">Post a Project</a>
+<button class="w-8 h-8 rounded-full bg-surface-container-highest border border-outline overflow-hidden hidden md:block">
+<img alt="User profile avatar" class="w-full h-full object-cover" data-alt="A professional headshot of a person looking at the camera, wearing a neat shirt. The background is slightly blurred. The lighting is soft and natural, suitable for a corporate profile picture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2XApyu7JXArNBs_LmKwCm3qGezhgMmtSKiCcIiPSRr8pS7Um1dNQaO4XnYII4dk9xi9BsxwVhsMX_TJKJRt06FvjJ4hxvjPacN7miQ8pRHdAG11TfzZdBdhnl7supeUNskQ6e6Bnyu9TTdRMym-Ud5K1I7G_Xxrm8OjmSyikxXHFDSos98npct1L-nIExDskM1-pYRVflhy5GYuAGJ_sx15TwSjsOQfVIbGA9hun7RhbbbIKHMaGudSdRAkNzqbb_Krz8smQRlag">
+</button>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex items-center justify-center p-margin-mobile md:p-margin-desktop">
+<div class="w-full max-w-2xl">
+<!-- Contextual Header -->
+<div class="mb-8">
+<button class="flex items-center text-secondary hover:text-primary transition-colors mb-4 group">
+<span class="material-symbols-outlined mr-2 text-[18px] group-hover:-translate-x-1 transition-transform" data-icon="arrow_back">arrow_back</span>
+<span class="font-label-md text-label-md">Back to Talent Profile</span>
+</button>
+<h1 class="font-h2-mobile md:font-h2 text-h2-mobile md:text-h2 text-on-surface mb-2">Write a Review</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Share your experience working with this freelancer to help the community.</p>
+</div>
+<!-- Review Card -->
+<div class="bg-surface-container-lowest border border-outline rounded-lg p-6">
+<div class="mb-6 flex items-start gap-4">
+<img alt="Freelancer Avatar" class="w-12 h-12 rounded-full object-cover border border-outline-variant" data-alt="A professional portrait of a woman smiling, suitable for a professional networking site profile. She is wearing business casual attire. The background is a clean, modern office setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJnyLB_3i3XpVhSqAY8r9m6khWWwEvXjbfBbJ1SmPvR_E0kb-Iw2Fcz4Qwa3wuyUUz9Q2i1WTW090OKqJwfbYtMx_QKgsJ8a48s1h7OQ_47c2KQqy1nIiOiPiteEfKTKKGz8LZjcABkV4I4dqWpX178htG78kAx4HSzAYq6CCxM1_vmS9Cw3UyBKr9KkSuqovJXFDiVq-1HVnX1ycgQeundgbYVl08vhYuCBT_LjusiTcnRxEawdPhWw75yBAgyQtFgTBR3YU4ggw">
+<div>
+<h3 class="font-label-md text-label-md text-on-surface font-semibold">Reviewing Sarah Jenkins</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Senior UX Designer</p>
+</div>
+</div>
+<form>
+<!-- Rating Section -->
+<div class="mb-6">
+<label class="block font-label-md text-label-md text-on-surface mb-2">Overall Rating</label>
+<div class="flex gap-1">
+<span class="material-symbols-outlined text-primary cursor-pointer" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary cursor-pointer" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary cursor-pointer" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary cursor-pointer" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-outline-variant cursor-pointer" data-icon="star">star</span>
+</div>
+</div>
+<!-- Review Text Area (Moderation State) -->
+<div class="mb-8">
+<label class="block font-label-md text-label-md text-on-surface mb-2 flex justify-between" for="review-text">
+<span>Your Review</span>
+<span class="text-error">Required</span>
+</label>
+<div class="relative">
+<textarea class="w-full bg-surface border border-error rounded focus:ring-2 focus:ring-error focus:border-error focus:outline-none p-4 font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant resize-y" id="review-text" placeholder="Describe your experience..." rows="6">The work was mostly fine, but the communication was an absolute nightmare. I would honestly say dealing with her was a completely retarded experience from start to finish.</textarea>
+<!-- Content Warning Icon Overlay -->
+<div class="absolute top-4 right-4 text-error">
+<span class="material-symbols-outlined" data-icon="warning" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+</div>
+<!-- Inline Error Message -->
+<div class="mt-2 flex items-start gap-2 bg-error-container p-3 rounded border border-error/20">
+<span class="material-symbols-outlined text-error text-[20px]" data-icon="info" style="font-variation-settings: 'FILL' 1;">info</span>
+<p class="font-body-sm text-body-sm text-on-error-container">
+<strong class="font-semibold">Content Flagged:</strong> Please keep your review professional and adhere to community guidelines. We detected language that violates our respectful communication policy.
+                            </p>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex justify-end gap-4 border-t border-outline-variant pt-6 mt-6">
+<button class="px-4 py-2 font-label-md text-label-md border border-outline text-on-surface rounded hover:bg-surface-container-highest transition-colors" type="button">
+                            Cancel
+                        </button>
+<!-- Disabled Submit Button -->
+<button class="px-4 py-2 font-label-md text-label-md bg-surface-variant text-on-surface-variant rounded cursor-not-allowed opacity-70 flex items-center gap-2" disabled="" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="block">block</span>
+                            Submit Review
+                        </button>
+</div>
+</form>
+</div>
+<div class="mt-6 text-center">
+<a class="font-body-sm text-body-sm text-secondary hover:text-primary transition-colors underline" href="#">Review our Community Guidelines</a>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-low border-t border-outline-variant mt-auto">
+<div class="flex flex-col md:flex-row justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-8 max-w-container-max mx-auto gap-6 md:gap-0">
+<div class="font-h3 text-h3 font-bold text-on-surface">Aitasker</div>
+<nav class="flex flex-wrap justify-center gap-6">
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors duration-200 cursor-pointer" href="#">Privacy Policy</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors duration-200 cursor-pointer" href="#">Terms of Service</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors duration-200 cursor-pointer" href="#">Support Center</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors duration-200 cursor-pointer" href="#">Contact Us</a>
+</nav>
+<div class="font-label-md text-label-md text-on-surface-variant">
+                © 2024 Aitasker Inc. All rights reserved.
+            </div>
+</div>
+</footer>
+</body></html>

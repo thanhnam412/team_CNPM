@@ -1,0 +1,409 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Workspace AI - Milestone Submission</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container": "#eceef0",
+                    "on-tertiary-container": "#d4dbf5",
+                    "inverse-on-surface": "#eff1f3",
+                    "on-secondary-fixed": "#0b1c30",
+                    "on-primary-container": "#dad7ff",
+                    "on-tertiary-fixed": "#131b2e",
+                    "error": "#ba1a1a",
+                    "secondary-fixed": "#d3e4fe",
+                    "secondary-container": "#d0e1fb",
+                    "surface-container-low": "#f2f4f6",
+                    "on-error-container": "#93000a",
+                    "primary-fixed": "#e2dfff",
+                    "surface-container-highest": "#e0e3e5",
+                    "on-primary-fixed-variant": "#3323cc",
+                    "surface": "#f7f9fb",
+                    "primary-fixed-dim": "#c3c0ff",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "on-primary-fixed": "#0f0069",
+                    "primary": "#3525cd",
+                    "tertiary-fixed": "#dae2fd",
+                    "background": "#f7f9fb",
+                    "on-surface": "#191c1e",
+                    "secondary-fixed-dim": "#b7c8e1",
+                    "on-secondary-fixed-variant": "#38485d",
+                    "on-tertiary-fixed-variant": "#3f465c",
+                    "on-secondary": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "on-error": "#ffffff",
+                    "primary-container": "#4f46e5",
+                    "surface-bright": "#f7f9fb",
+                    "surface-dim": "#d8dadc",
+                    "outline-variant": "#c7c4d8",
+                    "inverse-primary": "#c3c0ff",
+                    "error-container": "#ffdad6",
+                    "inverse-surface": "#2d3133",
+                    "outline": "#777587",
+                    "on-secondary-container": "#54647a",
+                    "surface-variant": "#e0e3e5",
+                    "surface-tint": "#4d44e3",
+                    "surface-container-high": "#e6e8ea",
+                    "on-background": "#191c1e",
+                    "tertiary": "#41485e",
+                    "on-surface-variant": "#464555",
+                    "tertiary-fixed-dim": "#bec6e0",
+                    "tertiary-container": "#586076",
+                    "secondary": "#505f76"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "4": "1rem",
+                    "6": "1.5rem",
+                    "margin-mobile": "1rem",
+                    "container-max": "1280px",
+                    "3": "0.75rem",
+                    "2": "0.5rem",
+                    "12": "3rem",
+                    "1": "0.25rem",
+                    "8": "2rem",
+                    "base": "0.25rem",
+                    "margin-desktop": "2rem",
+                    "gutter": "1rem",
+                    "16": "4rem"
+            },
+            "fontFamily": {
+                    "h2-mobile": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "label-md": ["Inter"],
+                    "h3": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "h1-mobile": ["Inter"],
+                    "h1": ["Inter"],
+                    "body-md": ["Inter"],
+                    "h2": ["Inter"]
+            },
+            "fontSize": {
+                    "h2-mobile": ["1.875rem", { "lineHeight": "1.3", "fontWeight": "600" }],
+                    "label-sm": ["0.75rem", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                    "label-md": ["0.875rem", { "lineHeight": "1", "fontWeight": "500" }],
+                    "h3": ["1.5rem", { "lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                    "body-sm": ["0.875rem", { "lineHeight": "1.5", "fontWeight": "400" }],
+                    "body-lg": ["1.125rem", { "lineHeight": "1.75", "fontWeight": "400" }],
+                    "h1-mobile": ["2.25rem", { "lineHeight": "1.2", "fontWeight": "700" }],
+                    "h1": ["3rem", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                    "body-md": ["1rem", { "lineHeight": "1.5", "fontWeight": "400" }],
+                    "h2": ["2.25rem", { "lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "600" }]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+          font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.filled {
+          font-variation-settings: 'FILL' 1;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c7c4d8;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #777587;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md antialiased min-h-screen flex">
+<!-- SideNavBar -->
+<nav class="bg-surface-container-low dark:bg-surface-container-highest border-r border-outline-variant h-screen w-64 fixed left-0 top-0 z-50 flex flex-col p-4 gap-2 hidden md:flex">
+<!-- Header -->
+<div class="mb-6 px-2 flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-primary-container text-on-primary-container flex items-center justify-center font-bold text-h3 flex-shrink-0">
+                AI
+            </div>
+<div>
+<div class="font-h3 text-h3 text-primary dark:text-primary-fixed-dim truncate">AI Vision Pro</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant">Active Project</div>
+</div>
+</div>
+<!-- Navigation Links -->
+<div class="flex-1 flex flex-col gap-1 overflow-y-auto">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Overview</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary rounded-lg font-bold scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">flag</span>
+<span class="font-label-md text-label-md">Milestones</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label-md text-label-md">Payments</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-md text-label-md">Deliverables</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">forum</span>
+<span class="font-label-md text-label-md">Chat</span>
+</a>
+</div>
+<!-- Footer Links -->
+<div class="mt-auto pt-4 border-t border-outline-variant flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-md text-label-md">Help Center</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-md text-label-md">Log Out</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-64 flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="bg-surface-bright dark:bg-inverse-surface w-full top-0 sticky z-40 border-b border-outline-variant dark:border-outline flat no shadows">
+<div class="flex justify-between items-center px-gutter py-2 w-full max-w-container-max mx-auto h-16">
+<!-- Mobile Menu Button -->
+<button class="md:hidden p-2 text-on-surface-variant hover:bg-surface-container rounded-full transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<!-- Search (Left aligned as per JSON) -->
+<div class="flex-1 flex items-center gap-4 ml-2 md:ml-0">
+<div class="relative w-full max-w-md hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" style="font-size: 20px;">search</span>
+<input class="w-full h-10 pl-10 pr-4 bg-surface-container rounded-full border-none focus:ring-2 focus:ring-primary text-body-sm placeholder:text-on-surface-variant" placeholder="Search milestones, files..." type="text">
+</div>
+</div>
+<!-- Right Actions -->
+<div class="flex items-center gap-2">
+<button class="hidden sm:flex items-center gap-2 px-4 h-10 bg-primary text-on-primary rounded-lg font-label-md hover:bg-primary-container hover:text-on-primary-container transition-colors">
+<span class="material-symbols-outlined" style="font-size: 18px;">add</span>
+                        New Milestone
+                    </button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container hover:text-primary-container rounded-full transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full border-2 border-surface-bright"></span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container hover:text-primary-container rounded-full transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="ml-2 w-8 h-8 rounded-full overflow-hidden border border-outline-variant cursor-pointer">
+<img alt="Expert Profile Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSGqI4gbc458LzJJzwtLbJbh0XqFLt5BCXSqem6JgQ1w2tQPOQr6Z18R3BXnPJibanltdbsnb9yyhult6NVcgCddcp8ET9lXZH65zXEJZ-vMzCxj87K6Scb9zYSCfjuLyAUGZUSO_GP3-PDiDJ1Qut1YT_5YLrJAvgZphAdlw-wf_exEVoCYo009el7oo8yff-CJiNW7OC4u8w8Kuz6SwSVJ_8k1XAPpy3_puFaDYeRbJeCiMULpjYXlV64uPQAmGGtwlBYFQZvIE">
+</div>
+</div>
+</div>
+</header>
+<!-- Canvas -->
+<div class="flex-1 p-margin-mobile md:p-margin-desktop max-w-container-max mx-auto w-full flex flex-col lg:flex-row gap-6">
+<!-- Main Form Column -->
+<div class="flex-1 flex flex-col gap-6">
+<!-- Page Header -->
+<div>
+<div class="flex items-center gap-2 text-on-surface-variant font-label-sm mb-2">
+<a class="hover:text-primary" href="#">Milestones</a>
+<span class="material-symbols-outlined" style="font-size: 14px;">chevron_right</span>
+<span>Milestone 2</span>
+</div>
+<h1 class="font-h2-mobile md:font-h2 text-h2-mobile md:text-h2 text-on-background mb-1">Submit Deliverables</h1>
+<p class="text-on-surface-variant font-body-md text-body-md">Upload and configure delivery options for 'Core Engine Development'.</p>
+</div>
+<!-- Submission Mode Toggle -->
+<div class="bg-surface rounded-xl border border-outline-variant p-1 flex gap-1 self-start w-full sm:w-auto">
+<button class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 h-10 bg-surface-container-highest text-on-background rounded-lg font-label-md shadow-sm border border-outline-variant/50 transition-all">
+<span class="material-symbols-outlined filled" style="font-size: 18px;">cloud_upload</span>
+                        Public Transfer
+                    </button>
+<button class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 h-10 text-on-surface-variant hover:bg-surface-container rounded-lg font-label-md transition-all">
+<span class="material-symbols-outlined" style="font-size: 18px;">lock</span>
+                        Private Delivery
+                    </button>
+<button class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 h-10 text-on-surface-variant hover:bg-surface-container rounded-lg font-label-md transition-all">
+<span class="material-symbols-outlined" style="font-size: 18px;">description</span>
+                        Contract Only
+                    </button>
+</div>
+<!-- Active Section: Public Transfer -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 flex flex-col gap-6">
+<h2 class="font-h3 text-h3 text-on-background">Public Transfer Assets</h2>
+<!-- File Upload Zone -->
+<div class="border-2 border-dashed border-outline-variant rounded-xl p-8 flex flex-col items-center justify-center text-center bg-surface-container-low hover:bg-surface-container transition-colors cursor-pointer group">
+<div class="w-16 h-16 rounded-full bg-primary-fixed flex items-center justify-center text-primary mb-4 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" style="font-size: 32px;">upload_file</span>
+</div>
+<h3 class="font-label-md text-label-md text-on-background mb-1">Click to upload or drag and drop</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-sm">ZIP, RAR, PDF, DOCX, or direct code files. Maximum file size 500MB.</p>
+<button class="mt-4 px-4 h-8 border border-outline text-on-surface rounded-lg font-label-sm hover:bg-surface-variant transition-colors">
+                            Browse Files
+                        </button>
+</div>
+<!-- Uploaded Files List (Simulated) -->
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between p-3 border border-outline-variant rounded-lg bg-surface">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">folder_zip</span>
+<div>
+<p class="font-label-md text-label-md text-on-background">core_engine_v1.0.zip</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">24.5 MB • 100% uploaded</p>
+</div>
+</div>
+<button class="p-1 text-on-surface-variant hover:text-error hover:bg-error-container rounded transition-colors">
+<span class="material-symbols-outlined" style="font-size: 20px;">delete</span>
+</button>
+</div>
+<div class="flex items-center justify-between p-3 border border-outline-variant rounded-lg bg-surface">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-error">picture_as_pdf</span>
+<div>
+<p class="font-label-md text-label-md text-on-background">API_Documentation.pdf</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">1.2 MB • 100% uploaded</p>
+</div>
+</div>
+<button class="p-1 text-on-surface-variant hover:text-error hover:bg-error-container rounded transition-colors">
+<span class="material-symbols-outlined" style="font-size: 20px;">delete</span>
+</button>
+</div>
+</div>
+<!-- Notes to Client -->
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-background" for="notes">Notes to Client <span class="text-on-surface-variant font-normal">(Optional)</span></label>
+<textarea class="w-full p-3 bg-surface border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-body-sm text-body-sm resize-y" id="notes" placeholder="Briefly describe the implementation details, how to run the code, or any known limitations..." rows="4"></textarea>
+</div>
+</div>
+</div>
+<!-- Sidebar Column -->
+<div class="w-full lg:w-80 flex flex-col gap-6">
+<!-- Milestone Details Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden">
+<div class="p-4 border-b border-outline-variant bg-surface-container-low flex justify-between items-center">
+<h3 class="font-label-md text-label-md text-on-background font-bold">Milestone Details</h3>
+<span class="px-2 py-1 bg-secondary-container text-on-secondary-container rounded font-label-sm text-[10px] uppercase tracking-wider">In Progress</span>
+</div>
+<div class="p-4 flex flex-col gap-4">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">Milestone Name</p>
+<p class="font-body-sm text-body-sm text-on-background font-medium">Core Engine Development</p>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">Due Date</p>
+<p class="font-body-sm text-body-sm text-on-background flex items-center gap-1">
+<span class="material-symbols-outlined" style="font-size: 16px;">calendar_today</span>
+                                Oct 24, 2023
+                            </p>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">Amount</p>
+<p class="font-body-sm text-body-sm text-on-background font-medium">$4,500.00 USD</p>
+</div>
+</div>
+</div>
+<!-- Acceptance Criteria Checklist -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden">
+<div class="p-4 border-b border-outline-variant bg-surface-container-low">
+<h3 class="font-label-md text-label-md text-on-background font-bold">Acceptance Criteria</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Ensure these are met before submitting.</p>
+</div>
+<div class="p-4 flex flex-col gap-3">
+<label class="flex items-start gap-3 cursor-pointer group">
+<div class="w-5 h-5 rounded border border-outline-variant flex items-center justify-center mt-0.5 group-hover:border-primary transition-colors bg-primary border-primary">
+<span class="material-symbols-outlined text-on-primary" style="font-size: 14px;">check</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-background flex-1">Dockerized application environment</span>
+</label>
+<label class="flex items-start gap-3 cursor-pointer group">
+<div class="w-5 h-5 rounded border border-outline-variant flex items-center justify-center mt-0.5 group-hover:border-primary transition-colors bg-primary border-primary">
+<span class="material-symbols-outlined text-on-primary" style="font-size: 14px;">check</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-background flex-1">Basic NLP processing pipeline established</span>
+</label>
+<label class="flex items-start gap-3 cursor-pointer group">
+<div class="w-5 h-5 rounded border border-outline-variant flex items-center justify-center mt-0.5 group-hover:border-primary transition-colors">
+<!-- Unchecked -->
+</div>
+<span class="font-body-sm text-body-sm text-on-background flex-1">API endpoints documented and tested</span>
+</label>
+<label class="flex items-start gap-3 cursor-pointer group">
+<div class="w-5 h-5 rounded border border-outline-variant flex items-center justify-center mt-0.5 group-hover:border-primary transition-colors">
+<!-- Unchecked -->
+</div>
+<span class="font-body-sm text-body-sm text-on-background flex-1">Code coverage &gt; 80%</span>
+</label>
+</div>
+</div>
+</div>
+</div>
+<!-- Action Footer -->
+<div class="mt-auto border-t border-outline-variant bg-surface-container-lowest sticky bottom-0 z-30 p-4">
+<div class="max-w-container-max mx-auto flex items-center justify-end gap-3">
+<button class="px-6 h-10 border border-outline text-on-surface rounded-lg font-label-md hover:bg-surface-variant transition-colors">
+                    Save Draft
+                </button>
+<button class="px-6 h-10 bg-primary text-on-primary rounded-lg font-label-md hover:bg-primary-container hover:text-on-primary-container transition-colors shadow-sm flex items-center gap-2">
+                    Submit for Review
+                    <span class="material-symbols-outlined" style="font-size: 18px;">send</span>
+</button>
+</div>
+</div>
+</main>
+<!-- Script for interactive elements (Toggle demo) -->
+<script>
+        // Simple script to handle visual toggle states (just for demo purposes)
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleButtons = document.querySelectorAll('.bg-surface.rounded-xl button');
+            
+            toggleButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Reset all
+                    toggleButtons.forEach(b => {
+                        b.className = 'flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 h-10 text-on-surface-variant hover:bg-surface-container rounded-lg font-label-md transition-all';
+                        const icon = b.querySelector('.material-symbols-outlined');
+                        if(icon) icon.classList.remove('filled');
+                    });
+                    
+                    // Set active
+                    btn.className = 'flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 h-10 bg-surface-container-highest text-on-background rounded-lg font-label-md shadow-sm border border-outline-variant/50 transition-all';
+                    const activeIcon = btn.querySelector('.material-symbols-outlined');
+                    if(activeIcon) activeIcon.classList.add('filled');
+                });
+            });
+            
+            // Checklist interaction
+            const checkboxes = document.querySelectorAll('.group .w-5');
+            checkboxes.forEach(box => {
+                box.parentElement.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if(box.classList.contains('bg-primary')) {
+                        box.classList.remove('bg-primary', 'border-primary');
+                        box.innerHTML = '';
+                    } else {
+                        box.classList.add('bg-primary', 'border-primary');
+                        box.innerHTML = '<span class="material-symbols-outlined text-on-primary" style="font-size: 14px;">check</span>';
+                    }
+                });
+            });
+        });
+    </script>
+</body></html>

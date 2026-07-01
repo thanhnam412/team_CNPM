@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Reject Expert Application</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-tint": "#4d44e3",
+                        "on-tertiary-container": "#d4dbf5",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "on-primary-container": "#dad7ff",
+                        "surface-container-highest": "#e0e3e5",
+                        "inverse-on-surface": "#eff1f3",
+                        "secondary-fixed": "#d3e4fe",
+                        "error-container": "#ffdad6",
+                        "surface-container-low": "#f2f4f6",
+                        "on-surface-variant": "#464555",
+                        "tertiary-fixed-dim": "#bec6e0",
+                        "on-tertiary-fixed-variant": "#3f465c",
+                        "on-surface": "#191c1e",
+                        "tertiary-fixed": "#dae2fd",
+                        "outline": "#777587",
+                        "on-primary": "#ffffff",
+                        "secondary": "#505f76",
+                        "outline-variant": "#c7c4d8",
+                        "inverse-surface": "#2d3133",
+                        "on-secondary": "#ffffff",
+                        "inverse-primary": "#c3c0ff",
+                        "surface-container-lowest": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-error-container": "#93000a",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "on-primary-fixed": "#0f0069",
+                        "tertiary-container": "#586076",
+                        "primary-container": "#4f46e5",
+                        "on-error": "#ffffff",
+                        "on-background": "#191c1e",
+                        "on-primary-fixed-variant": "#3323cc",
+                        "surface-container-high": "#e6e8ea",
+                        "surface": "#f7f9fb",
+                        "tertiary": "#41485e",
+                        "on-tertiary": "#ffffff",
+                        "surface-bright": "#f7f9fb",
+                        "primary-fixed": "#e2dfff",
+                        "background": "#f7f9fb",
+                        "primary": "#3525cd",
+                        "on-secondary-container": "#54647a",
+                        "on-tertiary-fixed": "#131b2e",
+                        "on-secondary-fixed": "#0b1c30",
+                        "surface-variant": "#e0e3e5",
+                        "secondary-container": "#d0e1fb",
+                        "surface-container": "#eceef0",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "surface-dim": "#d8dadc"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "1rem",
+                        "margin-mobile": "1rem",
+                        "margin-desktop": "2rem",
+                        "1": "0.25rem",
+                        "2": "0.5rem",
+                        "16": "4rem",
+                        "12": "3rem",
+                        "base": "0.25rem",
+                        "8": "2rem",
+                        "4": "1rem",
+                        "3": "0.75rem",
+                        "container-max": "1280px",
+                        "6": "1.5rem"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "h2": ["Inter"],
+                        "h1-mobile": ["Inter"],
+                        "h2-mobile": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "h3": ["Inter"],
+                        "h1": ["Inter"],
+                        "label-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["0.75rem", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "body-lg": ["1.125rem", { "lineHeight": "1.75", "fontWeight": "400" }],
+                        "h2": ["2.25rem", { "lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "h1-mobile": ["2.25rem", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "h2-mobile": ["1.875rem", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "body-sm": ["0.875rem", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "body-md": ["1rem", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "h3": ["1.5rem", { "lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "h1": ["3rem", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-md": ["0.875rem", { "lineHeight": "1", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-image: radial-gradient(circle at 10% 20%, rgb(238, 238, 238) 0%, rgb(220, 224, 226) 90%);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface h-screen w-screen overflow-hidden flex items-center justify-center p-4 antialiased text-on-surface">
+<div class="fixed inset-0 z-40 bg-on-surface/30 backdrop-blur-[4px] transition-opacity"></div>
+<div class="relative z-50 w-full max-w-2xl bg-surface-container-lowest rounded-xl border border-outline-variant shadow-[0_8px_30px_rgb(0,0,0,0.08)] flex flex-col max-h-[921px]">
+<div class="flex items-center justify-between px-6 py-5 border-b border-outline-variant bg-surface-container-lowest rounded-t-xl">
+<div class="flex items-center gap-3">
+<div class="flex items-center justify-center w-10 h-10 rounded-full bg-error-container text-on-error-container">
+<span class="material-symbols-outlined">block</span>
+</div>
+<div>
+<h2 class="font-h3 text-h3 text-on-surface">Reject Application</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Provide clear, actionable feedback for the expert.</p>
+</div>
+</div>
+<button aria-label="Close modal" class="text-on-surface-variant hover:text-on-surface transition-colors p-2 rounded-full hover:bg-surface-container-low">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="p-6 overflow-y-auto flex-1 flex flex-col gap-6">
+<div class="flex items-center gap-4 p-4 rounded-lg bg-surface border border-outline-variant">
+<img alt="Applicant profile picture" class="w-12 h-12 rounded-full object-cover border border-outline-variant" data-alt="A professional headshot of a female software engineer with short hair, wearing a dark blazer over a light shirt, smiling confidently in a bright, modern office environment. The lighting is soft and natural, emphasizing a trustworthy and competent demeanor." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7eigsDNstd2hhRy18A0M7YWg0Owx8n8rMurqt9PVH60URN_7zHbYF-NYqj_wtxARmFdRjzAdBWmW0OpObItAXE263gmZT95M0S9QFO9ly40rq2ZwINs0YqgUYR-GFaO5JHWhy6FxewOef2c9QRACzxkroDatxz_iz4ptLO2keIBdBUSoG5QnsmtkhZK_w7_PlGX1bwIBoefwGt6IrWVyYY5a6wBFCNy-PZHXMry6hrrO1xj77S6eI5owkCFGXQ2xLo6Mznysr6Oc"/>
+<div>
+<h3 class="font-label-md text-label-md text-on-surface font-semibold">Sarah Jenkins</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Senior Data Scientist Application</p>
+</div>
+<a class="ml-auto font-label-sm text-label-sm text-primary hover:underline flex items-center gap-1" href="#">
+                    View Full Profile <span class="material-symbols-outlined" style="font-size: 14px;">arrow_outward</span>
+</a>
+</div>
+<div>
+<label class="font-label-md text-label-md text-on-surface block mb-3">Primary Reason for Rejection <span class="text-error">*</span></label>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+<label class="relative flex cursor-pointer rounded-lg border bg-surface-container-lowest p-4 shadow-sm focus:outline-none border-primary ring-1 ring-primary bg-primary/5">
+<input checked="" class="sr-only" name="rejection_reason" type="radio" value="portfolio"/>
+<span class="flex flex-1">
+<span class="flex flex-col">
+<span class="block font-label-md text-label-md text-on-surface">Insufficient Portfolio</span>
+<span class="mt-1 flex items-center font-body-sm text-body-sm text-on-surface-variant">Lack of relevant recent projects.</span>
+</span>
+</span>
+<span class="material-symbols-outlined text-primary ml-3 h-6 w-6" style="font-variation-settings: 'FILL' 1;">radio_button_checked</span>
+</label>
+<label class="relative flex cursor-pointer rounded-lg border border-outline-variant bg-surface-container-lowest p-4 shadow-sm focus:outline-none hover:bg-surface-container-low transition-colors">
+<input class="sr-only" name="rejection_reason" type="radio" value="experience"/>
+<span class="flex flex-1">
+<span class="flex flex-col">
+<span class="block font-label-md text-label-md text-on-surface">Unverifiable Experience</span>
+<span class="mt-1 flex items-center font-body-sm text-body-sm text-on-surface-variant">Unable to confirm past roles.</span>
+</span>
+</span>
+<span class="material-symbols-outlined text-outline ml-3 h-6 w-6">radio_button_unchecked</span>
+</label>
+<label class="relative flex cursor-pointer rounded-lg border border-outline-variant bg-surface-container-lowest p-4 shadow-sm focus:outline-none hover:bg-surface-container-low transition-colors">
+<input class="sr-only" name="rejection_reason" type="radio" value="skills"/>
+<span class="flex flex-1">
+<span class="flex flex-col">
+<span class="block font-label-md text-label-md text-on-surface">Skills Misalignment</span>
+<span class="mt-1 flex items-center font-body-sm text-body-sm text-on-surface-variant">Does not meet core requirements.</span>
+</span>
+</span>
+<span class="material-symbols-outlined text-outline ml-3 h-6 w-6">radio_button_unchecked</span>
+</label>
+<label class="relative flex cursor-pointer rounded-lg border border-outline-variant bg-surface-container-lowest p-4 shadow-sm focus:outline-none hover:bg-surface-container-low transition-colors">
+<input class="sr-only" name="rejection_reason" type="radio" value="other"/>
+<span class="flex flex-1">
+<span class="flex flex-col">
+<span class="block font-label-md text-label-md text-on-surface">Other</span>
+<span class="mt-1 flex items-center font-body-sm text-body-sm text-on-surface-variant">Specify in detailed feedback.</span>
+</span>
+</span>
+<span class="material-symbols-outlined text-outline ml-3 h-6 w-6">radio_button_unchecked</span>
+</label>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-end">
+<label class="font-label-md text-label-md text-on-surface" for="detailed_feedback">Detailed Explanation <span class="text-error">*</span></label>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Minimum 50 characters</span>
+</div>
+<div class="relative">
+<textarea class="block w-full rounded-lg border border-outline-variant bg-surface-container-lowest px-4 py-3 font-body-md text-body-md text-on-surface shadow-sm focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none resize-y placeholder:text-outline" id="detailed_feedback" placeholder="Provide constructive feedback outlining specifically what was lacking or why the application was not accepted at this time..." rows="5"></textarea>
+</div>
+<div class="mt-2 flex items-start gap-2 p-3 rounded-md bg-secondary-container text-on-secondary-container">
+<span class="material-symbols-outlined text-on-secondary-container" style="font-size: 20px;">info</span>
+<p class="font-body-sm text-body-sm">
+<strong>Transparency Notice:</strong> The reason and explanation provided above will be sent directly to the applicant to help them improve future submissions. Please maintain a professional and constructive tone.
+                    </p>
+</div>
+</div>
+</div>
+<div class="px-6 py-4 border-t border-outline-variant bg-surface-container-low flex justify-end gap-3 rounded-b-xl">
+<button class="px-5 py-2.5 rounded-lg border border-outline-variant bg-surface-container-lowest font-label-md text-label-md text-on-surface font-semibold hover:bg-surface-container transition-colors focus:ring-2 focus:ring-primary focus:outline-none" type="button">
+                Cancel
+            </button>
+<button class="px-5 py-2.5 rounded-lg bg-error font-label-md text-label-md text-on-error font-semibold hover:bg-on-error-container transition-colors shadow-sm focus:ring-2 focus:ring-error focus:ring-offset-2 focus:outline-none flex items-center gap-2" type="button">
+<span class="material-symbols-outlined" style="font-size: 18px;">send</span>
+                Confirm Rejection
+            </button>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,357 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Job Published Successfully - AITasker Enterprise</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary": "#505f76",
+                      "inverse-surface": "#2d3133",
+                      "error": "#ba1a1a",
+                      "on-error": "#ffffff",
+                      "on-primary-fixed": "#0f0069",
+                      "on-secondary-container": "#54647a",
+                      "surface-variant": "#e0e3e5",
+                      "tertiary": "#41485e",
+                      "surface-container-high": "#e6e8ea",
+                      "on-tertiary-fixed-variant": "#3f465c",
+                      "surface-container-lowest": "#ffffff",
+                      "primary": "#3525cd",
+                      "on-secondary": "#ffffff",
+                      "outline-variant": "#c7c4d8",
+                      "inverse-primary": "#c3c0ff",
+                      "tertiary-fixed-dim": "#bec6e0",
+                      "primary-fixed-dim": "#c3c0ff",
+                      "background": "#f7f9fb",
+                      "on-secondary-fixed-variant": "#38485d",
+                      "on-primary-fixed-variant": "#3323cc",
+                      "surface-tint": "#4d44e3",
+                      "outline": "#777587",
+                      "on-error-container": "#93000a",
+                      "tertiary-fixed": "#dae2fd",
+                      "on-secondary-fixed": "#0b1c30",
+                      "secondary-container": "#d0e1fb",
+                      "on-background": "#191c1e",
+                      "on-surface": "#191c1e",
+                      "secondary-fixed-dim": "#b7c8e1",
+                      "surface-container-highest": "#e0e3e5",
+                      "primary-fixed": "#e2dfff",
+                      "surface-container": "#eceef0",
+                      "error-container": "#ffdad6",
+                      "on-surface-variant": "#464555",
+                      "surface-container-low": "#f2f4f6",
+                      "on-tertiary-container": "#d4dbf5",
+                      "primary-container": "#4f46e5",
+                      "on-tertiary": "#ffffff",
+                      "on-tertiary-fixed": "#131b2e",
+                      "tertiary-container": "#586076",
+                      "surface": "#f7f9fb",
+                      "on-primary": "#ffffff",
+                      "surface-bright": "#f7f9fb",
+                      "surface-dim": "#d8dadc",
+                      "on-primary-container": "#dad7ff",
+                      "inverse-on-surface": "#eff1f3",
+                      "secondary-fixed": "#d3e4fe"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "6": "1.5rem",
+                      "4": "1rem",
+                      "container-max": "1280px",
+                      "8": "2rem",
+                      "3": "0.75rem",
+                      "16": "4rem",
+                      "12": "3rem",
+                      "margin-mobile": "1rem",
+                      "base": "0.25rem",
+                      "gutter": "1rem",
+                      "1": "0.25rem",
+                      "2": "0.5rem",
+                      "margin-desktop": "2rem"
+              },
+              "fontFamily": {
+                      "h1": ["Inter"],
+                      "h2-mobile": ["Inter"],
+                      "body-md": ["Inter"],
+                      "h2": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "h1-mobile": ["Inter"],
+                      "label-md": ["Inter"],
+                      "h3": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "label-sm": ["Inter"]
+              },
+              "fontSize": {
+                      "h1": ["3rem", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "h2-mobile": ["1.875rem", {"lineHeight": "1.3", "fontWeight": "600"}],
+                      "body-md": ["1rem", {"lineHeight": "1.5", "fontWeight": "400"}],
+                      "h2": ["2.25rem", {"lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                      "body-sm": ["0.875rem", {"lineHeight": "1.5", "fontWeight": "400"}],
+                      "h1-mobile": ["2.25rem", {"lineHeight": "1.2", "fontWeight": "700"}],
+                      "label-md": ["0.875rem", {"lineHeight": "1", "fontWeight": "500"}],
+                      "h3": ["1.5rem", {"lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "body-lg": ["1.125rem", {"lineHeight": "1.75", "fontWeight": "400"}],
+                      "label-sm": ["0.75rem", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500"}]
+              }
+            },
+          },
+        }
+      </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #f7f9fb; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            vertical-align: middle;
+        }
+        .confetti-canvas {
+            pointer-events: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 50;
+        }
+      </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col">
+<!-- TopNavBar (Shared Component) -->
+<header class="w-full top-0 sticky bg-surface dark:bg-on-background border-b border-outline-variant dark:border-outline z-40">
+<div class="flex justify-between items-center h-16 px-margin-desktop max-w-container-max mx-auto">
+<div class="flex items-center gap-8">
+<span class="text-h3 font-h3 font-bold text-primary dark:text-primary-fixed">AITasker Enterprise</span>
+<nav class="hidden md:flex gap-6 items-center">
+<a class="font-body-md text-body-md text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed transition-colors duration-200 ease-in-out" href="#">Dashboard</a>
+<a class="font-body-md text-body-md text-primary dark:text-primary-fixed border-b-2 border-primary dark:border-primary-fixed pb-1" href="#">My Jobs</a>
+<a class="font-body-md text-body-md text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed transition-colors duration-200 ease-in-out" href="#">Experts</a>
+<a class="font-body-md text-body-md text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed transition-colors duration-200 ease-in-out" href="#">Analytics</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined p-2 text-on-surface-variant hover:bg-surface-container-low rounded-full transition-colors">notifications</button>
+<button class="material-symbols-outlined p-2 text-on-surface-variant hover:bg-surface-container-low rounded-full transition-colors">settings</button>
+<div class="h-8 w-8 rounded-full bg-primary-container flex items-center justify-center overflow-hidden">
+<img alt="User profile avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmW47xVLx80viGHghQZadc5RyXST6mdvtk70sfzySQKgom9mB7njzLWCe-bpn9kK5aeF5DinPG-9MBplTjHNjerrtvcEYQKRv-orY7OluZfci551x7Zu5UQLID5JOq66in84dPM33mS7lDYQ4ubUw6-X1_GK1hfSglaZIgr9inGecx_lUFPgmvheDajSjsXnlK4YM3_nlTBKLun8B_JvAxl3hFsYInC2T52wGb5u7aQAPp9f00doli5Z7LzWX1-gSUDneqsAqivvk">
+</div>
+</div>
+</div>
+</header>
+<main class="flex-grow flex flex-col items-center py-12 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto w-full">
+<!-- Success Header -->
+<div class="text-center mb-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
+<div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary-container text-on-primary-container mb-6 shadow-sm">
+<span class="material-symbols-outlined text-[40px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<h1 class="font-h1 text-h1 text-on-background mb-4">Job Published!</h1>
+<p class="font-body-lg text-body-lg text-secondary max-w-xl mx-auto">
+                Excellent! Your project has been broadcast to our elite network of AI experts.
+            </p>
+</div>
+<!-- Bento Layout Content -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 w-full">
+<!-- Summary Card (Left Column) -->
+<div class="lg:col-span-7 flex flex-col gap-6">
+<div class="bg-surface border border-outline-variant rounded-xl p-8 transition-all hover:border-primary">
+<div class="flex justify-between items-start mb-6">
+<div>
+<span class="inline-block px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm mb-3">STATUS: OPEN</span>
+<h2 class="font-h2 text-h2 text-on-surface">Need AI chatbot</h2>
+</div>
+<div class="text-right">
+<p class="font-label-sm text-label-sm text-secondary uppercase tracking-wider mb-1">Total Budget</p>
+<p class="font-h3 text-h3 text-primary font-bold">$5000</p>
+</div>
+</div>
+<div class="flex flex-wrap gap-3 mb-8">
+<span class="flex items-center gap-2 px-4 py-2 bg-surface-container rounded-lg border border-outline-variant font-label-md text-label-md">
+<span class="material-symbols-outlined text-primary text-sm">bolt</span> NLP Engine
+                        </span>
+<span class="flex items-center gap-2 px-4 py-2 bg-surface-container rounded-lg border border-outline-variant font-label-md text-label-md">
+<span class="material-symbols-outlined text-primary text-sm">bolt</span> Python
+                        </span>
+<span class="flex items-center gap-2 px-4 py-2 bg-surface-container rounded-lg border border-outline-variant font-label-md text-label-md">
+<span class="material-symbols-outlined text-primary text-sm">bolt</span> UI Design
+                        </span>
+</div>
+<div class="h-[1px] w-full bg-outline-variant mb-8"></div>
+<div class="flex flex-col md:flex-row gap-4">
+<button class="flex-1 bg-primary text-on-primary font-label-md text-label-md py-4 px-6 rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">visibility</span> View Job Post
+                        </button>
+<button class="flex-1 border border-primary text-primary font-label-md text-label-md py-4 px-6 rounded-lg hover:bg-primary-fixed hover:text-on-primary-fixed-variant transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">person_add</span> Invite Experts
+                        </button>
+</div>
+</div>
+<!-- Next Steps Card -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-8">
+<h3 class="font-h3 text-h3 text-on-surface mb-4 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">timeline</span> Next Steps
+                    </h3>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                        Your job is now visible to verified experts. You will receive proposals soon. We'll notify you as soon as the first expert expresses interest in your project.
+                    </p>
+<div class="mt-6 flex items-center gap-4 text-secondary">
+<div class="flex -space-x-2">
+<img alt="Expert avatar" class="w-8 h-8 rounded-full border-2 border-surface" data-alt="A portrait of a professional AI software engineer in a clean, modern studio setting with soft blue lighting and high-tech equipment in the background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD76ips_WWej8jagLCu2oqfB0WbT2ndsPP9GXi_fzd2kop6kxg4Ghtmm84HjC1giTy1uoHOeDdairOQ6HlhSihnGUCXUDcHLVSEqPZG2FP6eoY2gN-cjWoONmKFeUzeOikUmp7pxb9ZrES1z_WSaUdo-jhFMTZvpGWLdwyn13S5C53RfFVxW7TIdgiFyuqZOvHK8HclCzUTzZUepbMFZBhhaQnThvu53M1rRVT0xToRJGaOxeXkRsVQtYeDZCf5mCl5Xh009JXuzK0">
+<img alt="Expert avatar" class="w-8 h-8 rounded-full border-2 border-surface" data-alt="A portrait of a data scientist specialist looking focused and friendly in a contemporary workspace with minimalist decor and warm natural light." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBH4dOcu41K4Df5gSRQk5UTMhY-ZxtPSNfwzXtcv3_ADbrNYzhXQZkJhDZrSqDSHZpp7aF6fFurXDkmX_HtSnyFMESkflhFrL4DPSwstGmVs4L1kWuqPj_MdFc7ADDCA4YkOiS2n6x8pLnIRfnxgS0c9L4S6oKk3DRuow1M2ffCdAVySsbtIpqWs26OIXPxW3t2GMzm4Krg5tyQR12BzIZWLLuQAzreohi2z9Yhc6_OQ4ZM1nG3h_Hq-jqBUdLhDqFFFi1Uk_-jWBg">
+<img alt="Expert avatar" class="w-8 h-8 rounded-full border-2 border-surface" data-alt="A professional creative UI designer sitting in a bright office environment with architectural elements and vibrant color accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuABiEPUffqBgPefAtlY44gPg9UvhMCpu163af_MiE_kqj34OTVJAl18-Sy6aQv_dO5talIY3LokMRskVQ8aiH38mSOlnjsmsgBHQQ14Ihim9_ay-9_8LyV8NTmSEmIiAfa9wtfHZB4Afghr71DyaGGVVmjewToU4OLV_Nt4RFD9aXSGDWsfaE4wdcsh-IIRAw1Ow5Yf5VrqsGm5T-yGny-x4lemVkqySi0VaZ6aH5m2M1OTJP-QQ8j7NqV1tk_cL09OplhXeBg8zgs">
+</div>
+<span class="font-label-sm text-label-sm">420+ Experts currently online</span>
+</div>
+</div>
+</div>
+<!-- Visualization / Graphic (Right Column) -->
+<div class="lg:col-span-5 flex flex-col gap-6">
+<div class="bg-inverse-surface rounded-xl p-8 h-full min-h-[300px] flex flex-col justify-between relative overflow-hidden group">
+<!-- Subtle pattern overlay -->
+<div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 20px 20px;"></div>
+<div class="relative z-10">
+<h3 class="font-h3 text-h3 text-surface mb-2">Market Reach</h3>
+<p class="font-body-sm text-body-sm text-surface-variant">Real-time engagement metrics for your post</p>
+</div>
+<div class="relative z-10 space-y-6">
+<div class="space-y-2">
+<div class="flex justify-between font-label-sm text-label-sm text-surface-variant uppercase">
+<span>Visibility Score</span>
+<span>98%</span>
+</div>
+<div class="h-2 w-full bg-tertiary rounded-full overflow-hidden">
+<div class="h-full bg-primary-fixed-dim w-[98%] animate-[grow_1.5s_ease-out]"></div>
+</div>
+</div>
+<div class="flex items-center justify-between p-4 bg-tertiary/40 rounded-lg backdrop-blur-sm border border-white/10">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary-fixed-dim">radar</span>
+<span class="font-body-sm text-body-sm text-surface">Active Matching Engine</span>
+</div>
+<span class="w-2 h-2 rounded-full bg-primary-fixed-dim animate-pulse"></span>
+</div>
+</div>
+<button class="relative z-10 mt-8 w-full py-3 bg-white text-inverse-surface font-label-md text-label-md rounded-lg flex items-center justify-center gap-2 hover:bg-surface-variant transition-all">
+<span class="material-symbols-outlined">dashboard</span> Go to Dashboard
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer (Shared Component) -->
+<footer class="w-full mt-auto bg-surface-dim dark:bg-inverse-surface border-t border-outline-variant dark:border-outline">
+<div class="flex justify-between items-center py-6 px-margin-desktop max-w-container-max mx-auto">
+<span class="font-label-sm text-label-sm text-on-surface">© 2024 AITasker Enterprise Solutions. All rights reserved.</span>
+<div class="flex gap-6">
+<a class="font-body-sm text-body-sm text-secondary dark:text-secondary-fixed-dim hover:text-on-surface transition-all opacity-80 hover:opacity-100" href="#">Support</a>
+<a class="font-body-sm text-body-sm text-secondary dark:text-secondary-fixed-dim hover:text-on-surface transition-all opacity-80 hover:opacity-100" href="#">Privacy Policy</a>
+<a class="font-body-sm text-body-sm text-secondary dark:text-secondary-fixed-dim hover:text-on-surface transition-all opacity-80 hover:opacity-100" href="#">Terms of Service</a>
+<a class="font-body-sm text-body-sm text-secondary dark:text-secondary-fixed-dim hover:text-on-surface transition-all opacity-80 hover:opacity-100" href="#">API Documentation</a>
+</div>
+</div>
+</footer>
+<!-- Success Confetti Effect -->
+<canvas class="confetti-canvas" id="confetti"></canvas>
+<script>
+        // Micro-interaction for confetti on load
+        function initConfetti() {
+            const canvas = document.getElementById('confetti');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            let particles = [];
+            const colors = ['#3525cd', '#4f46e5', '#c3c0ff', '#505f76', '#3323cc'];
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = -10;
+                    this.size = Math.random() * 10 + 5;
+                    this.color = colors[Math.floor(Math.random() * colors.length)];
+                    this.speedY = Math.random() * 3 + 2;
+                    this.speedX = Math.random() * 2 - 1;
+                    this.rotation = Math.random() * 360;
+                }
+                update() {
+                    this.y += this.speedY;
+                    this.x += this.speedX;
+                    this.rotation += 2;
+                }
+                draw() {
+                    ctx.save();
+                    ctx.translate(this.x, this.y);
+                    ctx.rotate(this.rotation * Math.PI / 180);
+                    ctx.fillStyle = this.color;
+                    ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size);
+                    ctx.restore();
+                }
+            }
+
+            for (let i = 0; i < 50; i++) {
+                particles.push(new Particle());
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach((p, index) => {
+                    p.update();
+                    p.draw();
+                    if (p.y > canvas.height) {
+                        particles.splice(index, 1);
+                    }
+                });
+                if (particles.length > 0) {
+                    requestAnimationFrame(animate);
+                }
+            }
+            animate();
+        }
+
+        window.addEventListener('load', () => {
+            setTimeout(initConfetti, 300);
+        });
+
+        // Resize handler for canvas
+        window.addEventListener('resize', () => {
+            const canvas = document.getElementById('confetti');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+<style>
+        @keyframes grow {
+            from { width: 0%; }
+            to { width: 98%; }
+        }
+        .animate-in {
+            animation-duration: 0.7s;
+            animation-fill-mode: both;
+        }
+        .fade-in {
+            animation-name: fadeIn;
+        }
+        .slide-in-from-bottom-4 {
+            animation-name: slideInBottom;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideInBottom {
+            from { transform: translateY(1rem); }
+            to { transform: translateY(0); }
+        }
+    </style>
+</body></html>

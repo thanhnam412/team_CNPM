@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aitasker | AI Expert Matching</title>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-bright": "#f7f9fb",
+                    "primary-container": "#4f46e5",
+                    "inverse-on-surface": "#eff1f3",
+                    "error": "#ba1a1a",
+                    "on-error": "#ffffff",
+                    "primary-fixed": "#e2dfff",
+                    "surface-dim": "#d8dadc",
+                    "outline": "#777587",
+                    "secondary": "#505f76",
+                    "inverse-primary": "#c3c0ff",
+                    "on-secondary-container": "#54647a",
+                    "surface-container-highest": "#e0e3e5",
+                    "on-tertiary": "#ffffff",
+                    "primary": "#3525cd",
+                    "on-primary": "#ffffff",
+                    "tertiary-fixed": "#dae2fd",
+                    "outline-variant": "#c7c4d8",
+                    "on-primary-container": "#dad7ff",
+                    "secondary-container": "#d0e1fb",
+                    "on-surface-variant": "#464555",
+                    "on-background": "#191c1e",
+                    "on-secondary-fixed-variant": "#38485d",
+                    "on-tertiary-fixed": "#131b2e",
+                    "on-secondary": "#ffffff",
+                    "background": "#f7f9fb",
+                    "secondary-fixed": "#d3e4fe",
+                    "surface": "#f7f9fb",
+                    "error-container": "#ffdad6",
+                    "surface-container": "#eceef0",
+                    "on-secondary-fixed": "#0b1c30",
+                    "on-error-container": "#93000a",
+                    "surface-tint": "#4d44e3",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-variant": "#e0e3e5",
+                    "on-primary-fixed": "#0f0069",
+                    "on-tertiary-fixed-variant": "#3f465c",
+                    "secondary-fixed-dim": "#b7c8e1",
+                    "primary-fixed-dim": "#c3c0ff",
+                    "surface-container-low": "#f2f4f6",
+                    "surface-container-high": "#e6e8ea",
+                    "on-tertiary-container": "#d4dbf5",
+                    "inverse-surface": "#2d3133",
+                    "on-surface": "#191c1e",
+                    "on-primary-fixed-variant": "#3323cc",
+                    "tertiary": "#41485e",
+                    "tertiary-fixed-dim": "#bec6e0",
+                    "tertiary-container": "#586076"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-desktop": "2rem",
+                    "8": "2rem",
+                    "4": "1rem",
+                    "1": "0.25rem",
+                    "2": "0.5rem",
+                    "12": "3rem",
+                    "16": "4rem",
+                    "container-max": "1280px",
+                    "margin-mobile": "1rem",
+                    "6": "1.5rem",
+                    "gutter": "1rem",
+                    "base": "0.25rem",
+                    "3": "0.75rem"
+            },
+            "fontFamily": {
+                    "h2": ["Inter"],
+                    "label-md": ["Inter"],
+                    "h3": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "h2-mobile": ["Inter"],
+                    "body-md": ["Inter"],
+                    "h1-mobile": ["Inter"],
+                    "h1": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "h2": ["2.25rem", {"lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "label-md": ["0.875rem", {"lineHeight": "1", "fontWeight": "500"}],
+                    "h3": ["1.5rem", {"lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "label-sm": ["0.75rem", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "h2-mobile": ["1.875rem", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "body-md": ["1rem", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "h1-mobile": ["2.25rem", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "h1": ["3rem", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-sm": ["0.875rem", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "body-lg": ["1.125rem", {"lineHeight": "1.75", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        display: inline-block;
+        line-height: 1;
+        vertical-align: middle;
+      }
+      .circular-progress {
+        --percentage: 0;
+        background: radial-gradient(closest-side, white 79%, transparent 80% 100%),
+                    conic-gradient(var(--tw-color-primary) calc(var(--percentage) * 1%), var(--tw-color-surface-container-highest) 0);
+      }
+      body {
+        background-color: #f7f9fb;
+        font-family: 'Inter', sans-serif;
+      }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="bg-surface-container-lowest dark:bg-inverse-surface border-b border-outline-variant dark:border-outline flex justify-between items-center w-full px-margin-desktop h-16 fixed top-0 z-50">
+<div class="flex items-center gap-8">
+<span class="font-h3 text-h3 font-bold text-primary dark:text-primary-fixed-dim">Aitasker</span>
+<nav class="hidden md:flex gap-6">
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors" href="#">Workspaces</a>
+<a class="font-body-md text-body-md text-primary dark:text-primary-fixed-dim border-b-2 border-primary dark:border-primary-fixed-dim font-bold" href="#">Experts</a>
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors" href="#">Mediation</a>
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors" href="#">Quality</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden sm:flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+<span class="material-symbols-outlined text-on-surface-variant">settings</span>
+</div>
+<button class="bg-primary text-on-primary px-4 py-2 rounded font-label-md text-label-md hover:bg-opacity-90 transition-all">Create Task</button>
+<div class="w-8 h-8 rounded-full bg-surface-container-high overflow-hidden border border-outline-variant">
+<img alt="User avatar" class="w-full h-full object-cover" data-alt="A professional close-up headshot of a business executive for a user profile avatar. The lighting is crisp and modern, featuring soft shadows and a neutral gray studio background that emphasizes clarity and professionalism. The individual has a confident yet approachable expression, fitting for an enterprise-level SaaS platform user interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_-Eo532ZP_tweEKKa6SXrRxaZZbyWGDM09C6Z3TEjE8XNd7XRNdkzmwbveuR2vqwgnSSmRnhHB9JDl6PrWfMha1qjlxhQaTSgEKZL6emUeJmHP7wl4o_fOMgT1G_PZfUR-KOrwDYQ8no415hmY9LewctKilO_aUYCBXCiyb-en4xl4EjN02-N1PLkBh38w_YnHdKV0sP-pbC9ZHR2QYKsWZbZ2ATm_li5_EcfAKGKZX0EEI9tPwzMPd2RqWUJU7fq4RAiGnoTnYU"/>
+</div>
+</div>
+</header>
+<div class="flex pt-16 min-h-screen">
+<!-- SideNavBar -->
+<aside class="hidden lg:flex flex-col h-[calc(100vh-4rem)] w-64 fixed left-0 top-16 bg-surface-container-low dark:bg-on-tertiary-fixed border-r border-outline-variant dark:border-outline py-6 px-4">
+<div class="mb-8">
+<div class="flex items-center gap-3 mb-1">
+<div class="w-10 h-10 bg-primary-container rounded-lg flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined">enterprise</span>
+</div>
+<div>
+<h2 class="font-label-md text-label-md font-bold text-on-surface dark:text-inverse-on-surface">Enterprise Precision</h2>
+<p class="text-[10px] uppercase tracking-wider text-on-surface-variant opacity-70">Active Workspace</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 duration-150">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary rounded-lg font-bold" href="#">
+<span class="material-symbols-outlined">folder_shared</span>
+<span class="font-label-md text-label-md">Evidence</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">verified_user</span>
+<span class="font-label-md text-label-md">Auto Quality</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">star_rate</span>
+<span class="font-label-md text-label-md">Reputation</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">leaderboard</span>
+<span class="font-label-md text-label-md">Analytics</span>
+</a>
+</nav>
+<div class="mt-auto space-y-4">
+<button class="w-full py-2 bg-surface-container-high text-primary font-bold rounded-lg font-label-md text-label-md hover:bg-primary hover:text-white transition-all">Invite Team</button>
+<div class="pt-4 border-t border-outline-variant space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">help_outline</span>
+<span class="font-label-md text-label-md">Help Center</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-md text-label-md">Log Out</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 lg:ml-64 p-margin-mobile md:p-margin-desktop overflow-y-auto">
+<!-- Header Section -->
+<section class="mb-8">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<nav class="flex items-center gap-2 text-on-surface-variant font-label-sm text-label-sm mb-2">
+<span>Projects</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span>Need AI Chatbot</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-primary font-bold">Matching</span>
+</nav>
+<h1 class="font-h2 text-h2 text-on-surface">Top Matches for Your Project</h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl mt-2">
+                            Our AI engine has analyzed 4,500+ experts against your requirements for <span class="font-bold text-on-surface">RAG Implementation, Python Backend, and Enterprise API Security</span>.
+                        </p>
+</div>
+<div class="flex gap-2">
+<button class="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded hover:bg-surface-container-low transition-all font-label-md text-label-md">
+<span class="material-symbols-outlined">tune</span>
+                            Refine Filters
+                        </button>
+</div>
+</div>
+</section>
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-8">
+<!-- Experts List -->
+<div class="xl:col-span-8 space-y-4">
+<!-- Expert Card 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant p-6 flex flex-col md:flex-row gap-6 hover:border-primary-container transition-all group">
+<!-- AI Match Ring -->
+<div class="flex flex-col items-center justify-center space-y-2 shrink-0">
+<div class="relative w-20 h-20">
+<svg class="w-full h-full" viewbox="0 0 36 36">
+<path class="text-surface-container-highest" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3"></path>
+<path class="text-primary" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="98, 100" stroke-linecap="round" stroke-width="3"></path>
+<text class="font-bold text-[8px] fill-on-surface text-center" text-anchor="middle" x="18" y="20.35">98%</text>
+</svg>
+</div>
+<span class="font-label-sm text-label-sm uppercase tracking-tighter text-primary font-bold">AI Match</span>
+</div>
+<!-- Expert Info -->
+<div class="flex-1">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-4">
+<img alt="Expert Avatar" class="w-12 h-12 rounded-full border border-outline-variant bg-surface-container-low" data-alt="A professional studio portrait of a senior artificial intelligence engineer in their late 30s. The expert is wearing modern casual business attire and has an intelligent, focused gaze. The background is a sophisticated dark office interior with subtle bokeh lighting from computer monitors, creating a high-tech yet corporate professional atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5gSmWO7TPyuaNlhIrAJfxNggWG255jPD1gh_UnilZRXS8pyTKiZVPLydEpV79WeVSJJpbCD9OLhaKUrjSW3tqfsSqTQpDdjYeOLXjZHKw8RcRGGCoNoQlOsCf9mUZrBgfTMyNJlVLTIcKRTvjQxyiWKUtQMUn4Z3r1I3UVo-tKOFGVSmjNpP0J3UAxz5kMkvmaWNdn9uDtDJ6rH23l7R24UHLxbNJ8ih3SOIFwS9BRsJ3AS5-8BHW2GI3PzoNTXfQrcfkp-i76vA"/>
+<div>
+<div class="flex items-center gap-2">
+<h3 class="font-h3 text-[1.125rem] font-bold text-on-surface">Dr. Helena Vörösmarty</h3>
+<span class="material-symbols-outlined text-primary text-[18px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Lead AI Architect • Spec. LLM &amp; RAG</p>
+</div>
+</div>
+<div class="text-right">
+<div class="flex items-center justify-end gap-1 text-primary">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-bold font-label-md text-label-md">4.98</span>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">142 Jobs Done</p>
+</div>
+</div>
+<!-- Match Factors -->
+<div class="grid grid-cols-3 gap-4 mt-6 py-4 border-y border-outline-variant border-opacity-50">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">Skill Match</p>
+<div class="w-full bg-surface-container-highest h-1.5 rounded-full">
+<div class="bg-primary h-1.5 rounded-full" style="width: 100%;"></div>
+</div>
+<span class="font-label-sm text-label-sm font-bold mt-1 inline-block">100% (RAG, Python)</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">Budget Align</p>
+<div class="w-full bg-surface-container-highest h-1.5 rounded-full">
+<div class="bg-primary h-1.5 rounded-full" style="width: 92%;"></div>
+</div>
+<span class="font-label-sm text-label-sm font-bold mt-1 inline-block">92% Match</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">Availability</p>
+<span class="flex items-center gap-1 font-label-sm text-label-sm font-bold text-on-surface">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+                                        Immediate
+                                    </span>
+</div>
+</div>
+<!-- Tags & Actions -->
+<div class="mt-6 flex flex-wrap items-center justify-between gap-4">
+<div class="flex gap-2">
+<span class="px-2 py-1 bg-surface-container-low border border-outline-variant rounded font-label-sm text-label-sm">Vector DBs</span>
+<span class="px-2 py-1 bg-surface-container-low border border-outline-variant rounded font-label-sm text-label-sm">LangChain</span>
+<span class="px-2 py-1 bg-surface-container-low border border-outline-variant rounded font-label-sm text-label-sm">FastAPI</span>
+</div>
+<div class="flex gap-3">
+<button class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors">View Profile</button>
+<button class="bg-primary text-on-primary px-4 py-2 rounded font-label-md text-label-md shadow-sm hover:shadow-md transition-all">Invite to Project</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Expert Card 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant p-6 flex flex-col md:flex-row gap-6 hover:border-primary-container transition-all group">
+<div class="flex flex-col items-center justify-center space-y-2 shrink-0">
+<div class="relative w-20 h-20">
+<svg class="w-full h-full" viewbox="0 0 36 36">
+<path class="text-surface-container-highest" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3"></path>
+<path class="text-primary" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="87, 100" stroke-linecap="round" stroke-width="3"></path>
+<text class="font-bold text-[8px] fill-on-surface text-center" text-anchor="middle" x="18" y="20.35">87%</text>
+</svg>
+</div>
+<span class="font-label-sm text-label-sm uppercase tracking-tighter text-on-surface-variant">AI Match</span>
+</div>
+<div class="flex-1">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-4">
+<img alt="Expert Avatar" class="w-12 h-12 rounded-full border border-outline-variant bg-surface-container-low" data-alt="A professional portrait of a tech-savvy software engineer in their late 20s. The lighting is high-key and clean, with a focus on a bright, modern corporate aesthetic. The background is a minimalist coworking space with light wood textures and soft, diffused natural light coming from large windows. The overall mood is approachable, efficient, and modern." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBduw5BRQTFpMB7goAbnYJR-TjKyiA39QgX2yauVcKceuL8ha3XUGWtwyDDbfdsKbuyFBdOk5zKzCKCoLPvhHlo9ix_Oq7tP4jkomIm1TSnJKr8EY4UWvR-3rdukBUFZKW6eDK7hfgJsTC2YtKOyjaRzXgbso_VhujKksSNjnkZZSJhOeR0wLQcMmLMrF9qiXFWCwhxPrdTKLxoO6VldzoXlo5tdzuQuYSxGM5PtaNCWGUDhUiBYUnIyjRnlmXs90lzOz7BpteFDjs"/>
+<div>
+<div class="flex items-center gap-2">
+<h3 class="font-h3 text-[1.125rem] font-bold text-on-surface">Marcus Chen</h3>
+<span class="material-symbols-outlined text-primary text-[18px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">NLP Specialist • Full-Stack AI Engineer</p>
+</div>
+</div>
+<div class="text-right">
+<div class="flex items-center justify-end gap-1 text-primary">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-bold font-label-md text-label-md">4.85</span>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">89 Jobs Done</p>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-4 mt-6 py-4 border-y border-outline-variant border-opacity-50">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">Skill Match</p>
+<div class="w-full bg-surface-container-highest h-1.5 rounded-full">
+<div class="bg-primary h-1.5 rounded-full" style="width: 85%;"></div>
+</div>
+<span class="font-label-sm text-label-sm font-bold mt-1 inline-block">85% (Python, API)</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">Budget Align</p>
+<div class="w-full bg-surface-container-highest h-1.5 rounded-full">
+<div class="bg-primary h-1.5 rounded-full" style="width: 95%;"></div>
+</div>
+<span class="font-label-sm text-label-sm font-bold mt-1 inline-block">95% Match</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">Availability</p>
+<span class="flex items-center gap-1 font-label-sm text-label-sm font-bold text-on-surface">
+<span class="w-2 h-2 rounded-full bg-yellow-500"></span>
+                                        Next Week
+                                    </span>
+</div>
+</div>
+<div class="mt-6 flex flex-wrap items-center justify-between gap-4">
+<div class="flex gap-2">
+<span class="px-2 py-1 bg-surface-container-low border border-outline-variant rounded font-label-sm text-label-sm">OpenAI API</span>
+<span class="px-2 py-1 bg-surface-container-low border border-outline-variant rounded font-label-sm text-label-sm">PyTorch</span>
+</div>
+<div class="flex gap-3">
+<button class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors">View Profile</button>
+<button class="bg-primary text-on-primary px-4 py-2 rounded font-label-md text-label-md shadow-sm hover:shadow-md transition-all">Invite to Project</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Expert Card 3 -->
+<div class="bg-surface-container-lowest border border-outline-variant p-6 flex flex-col md:flex-row gap-6 hover:border-primary-container transition-all group">
+<div class="flex flex-col items-center justify-center space-y-2 shrink-0">
+<div class="relative w-20 h-20">
+<svg class="w-full h-full" viewbox="0 0 36 36">
+<path class="text-surface-container-highest" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3"></path>
+<path class="text-primary" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="82, 100" stroke-linecap="round" stroke-width="3"></path>
+<text class="font-bold text-[8px] fill-on-surface text-center" text-anchor="middle" x="18" y="20.35">82%</text>
+</svg>
+</div>
+<span class="font-label-sm text-label-sm uppercase tracking-tighter text-on-surface-variant">AI Match</span>
+</div>
+<div class="flex-1">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-4">
+<img alt="Expert Avatar" class="w-12 h-12 rounded-full border border-outline-variant bg-surface-container-low" data-alt="A crisp, professional headshot of a female technology consultant in a bright, modern studio. She is dressed in smart business casual attire, projecting expertise and reliability. The background is a soft blue-tinted gradient, providing a clean and clinical look suitable for a high-end enterprise software application." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBy3EbW4COWw8Fpq3e6XnAa9N_YgLWGJvIf3Wly5LE6OagEZCJh524Lq7qXdQ4RUWQ0hhNgpPywFuYScJWMQHj8JRC4avXi-cKfLAEDw9BHb8_JSlOL3r6VmbG9ytwi5srS5fbPkMhNhgTfQrTZjX78Bz1ZpjNNLXK0OMfJR-ezKSKxP4iX9OKEdTl4cxd_gvzAMFs0nkUgtIRQGKRtVuebNKKwWgEwLpnJFy7A0NcqhLmJjTvcujMqKeopP8AaXZXCXOXEyzTS2RM"/>
+<div>
+<div class="flex items-center gap-2">
+<h3 class="font-h3 text-[1.125rem] font-bold text-on-surface">Sasha Belov</h3>
+<span class="material-symbols-outlined text-primary text-[18px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Data Scientist • Pipeline Engineer</p>
+</div>
+</div>
+<div class="text-right">
+<div class="flex items-center justify-end gap-1 text-primary">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-bold font-label-md text-label-md">4.72</span>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">211 Jobs Done</p>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-4 mt-6 py-4 border-y border-outline-variant border-opacity-50">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">Skill Match</p>
+<div class="w-full bg-surface-container-highest h-1.5 rounded-full">
+<div class="bg-primary h-1.5 rounded-full" style="width: 78%;"></div>
+</div>
+<span class="font-label-sm text-label-sm font-bold mt-1 inline-block">78% (Python Expert)</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">Budget Align</p>
+<div class="w-full bg-surface-container-highest h-1.5 rounded-full">
+<div class="bg-primary h-1.5 rounded-full" style="width: 100%;"></div>
+</div>
+<span class="font-label-sm text-label-sm font-bold mt-1 inline-block">100% Match</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">Availability</p>
+<span class="flex items-center gap-1 font-label-sm text-label-sm font-bold text-on-surface">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+                                        Immediate
+                                    </span>
+</div>
+</div>
+<div class="mt-6 flex flex-wrap items-center justify-between gap-4">
+<div class="flex gap-2">
+<span class="px-2 py-1 bg-surface-container-low border border-outline-variant rounded font-label-sm text-label-sm">ETL Pipelines</span>
+<span class="px-2 py-1 bg-surface-container-low border border-outline-variant rounded font-label-sm text-label-sm">AWS SageMaker</span>
+</div>
+<div class="flex gap-3">
+<button class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors">View Profile</button>
+<button class="bg-primary text-on-primary px-4 py-2 rounded font-label-md text-label-md shadow-sm hover:shadow-md transition-all">Invite to Project</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Sidebar Matching Logic -->
+<aside class="xl:col-span-4">
+<div class="sticky top-24 space-y-6">
+<!-- AI Logic Card -->
+<div class="bg-surface-container-lowest border border-outline-variant p-6 rounded-lg">
+<div class="flex items-center gap-3 mb-4">
+<div class="p-2 bg-primary-fixed rounded-lg text-primary">
+<span class="material-symbols-outlined">psychology</span>
+</div>
+<h3 class="font-h3 text-[1.125rem] font-bold text-on-surface">Matching Logic</h3>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-6 leading-relaxed">
+                                Our Enterprise Precision™ engine calculates scores based on three core dimensions of candidate viability.
+                            </p>
+<div class="space-y-4">
+<div class="flex gap-4">
+<div class="w-1 bg-primary rounded"></div>
+<div>
+<p class="font-label-md text-label-md font-bold text-on-surface">Technical Accuracy</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Validated skills in RAG, Pinecone, and OpenAI API orchestration through code-base analysis.</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="w-1 bg-secondary rounded"></div>
+<div>
+<p class="font-label-md text-label-md font-bold text-on-surface">Performance Data</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Historical project success rates on high-security enterprise chatbots with 4.5+ average rating.</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="w-1 bg-outline-variant rounded"></div>
+<div>
+<p class="font-label-md text-label-md font-bold text-on-surface">Economic Alignment</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Matching of expert hourly/fixed rates against your defined $5k - $12k project budget.</p>
+</div>
+</div>
+</div>
+<button class="w-full mt-8 py-3 text-center border-t border-outline-variant font-label-md text-label-md text-primary hover:bg-surface-container-low transition-all">
+                                See Full Engine Report
+                            </button>
+</div>
+<!-- Project Summary Card -->
+<div class="bg-surface-container-low p-6 rounded-lg border border-outline-variant border-dashed">
+<div class="flex items-center justify-between mb-4">
+<h4 class="font-label-md text-label-md font-bold text-on-surface">Project Scope</h4>
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">edit</span>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between text-body-sm">
+<span class="text-on-surface-variant">Budget:</span>
+<span class="font-bold">$8,500 - $12,000</span>
+</div>
+<div class="flex justify-between text-body-sm">
+<span class="text-on-surface-variant">Timeline:</span>
+<span class="font-bold">4-6 Weeks</span>
+</div>
+<div class="flex justify-between text-body-sm">
+<span class="text-on-surface-variant">Location:</span>
+<span class="font-bold">Remote (Global)</span>
+</div>
+</div>
+</div>
+<!-- Promotion/Trust Card -->
+<div class="relative overflow-hidden bg-primary p-6 rounded-lg text-on-primary">
+
+<div class="relative z-10">
+<h4 class="font-label-md text-label-md font-bold mb-2">Need a faster start?</h4>
+<p class="font-body-sm text-body-sm opacity-90 mb-4">Aitasker Expert-on-Demand can assign a Lead Architect to your project within 4 hours.</p>
+<button class="bg-on-primary text-primary px-4 py-2 rounded font-label-md text-label-md font-bold w-full">Talk to an Account Manager</button>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</main>
+</div>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest dark:bg-inverse-surface border-t border-outline-variant dark:border-outline mt-12 w-full">
+<div class="flex justify-between items-center px-margin-desktop py-8 w-full max-w-container-max mx-auto">
+<div class="flex flex-col gap-2">
+<span class="font-label-md text-label-md font-black text-on-surface">Aitasker</span>
+<p class="font-label-sm text-label-sm text-on-surface-variant">© 2024 Aitasker Enterprise Precision. All rights reserved.</p>
+</div>
+<div class="hidden md:flex gap-8">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Security</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Compliance</a>
+</div>
+</div>
+</footer>
+<script>
+        // Micro-interactions for hover states
+        document.querySelectorAll('.group').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-2px)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0px)';
+            });
+        });
+    </script>
+</body></html>

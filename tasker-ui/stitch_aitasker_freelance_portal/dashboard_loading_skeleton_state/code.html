@@ -1,0 +1,368 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Enterprise Precision - Dashboard Loading</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "primary-fixed": "#e2dfff",
+                      "tertiary": "#41485e",
+                      "on-secondary": "#ffffff",
+                      "tertiary-container": "#586076",
+                      "surface-variant": "#e0e3e5",
+                      "on-secondary-fixed": "#0b1c30",
+                      "on-background": "#191c1e",
+                      "surface-tint": "#4d44e3",
+                      "on-tertiary-container": "#d4dbf5",
+                      "on-error-container": "#93000a",
+                      "surface-container": "#eceef0",
+                      "primary": "#3525cd",
+                      "background": "#f7f9fb",
+                      "on-surface-variant": "#464555",
+                      "surface-container-low": "#f2f4f6",
+                      "secondary-fixed-dim": "#b7c8e1",
+                      "on-tertiary-fixed": "#131b2e",
+                      "surface-bright": "#f7f9fb",
+                      "on-primary": "#ffffff",
+                      "secondary-fixed": "#d3e4fe",
+                      "outline-variant": "#c7c4d8",
+                      "primary-container": "#4f46e5",
+                      "error": "#ba1a1a",
+                      "surface-container-lowest": "#ffffff",
+                      "inverse-primary": "#c3c0ff",
+                      "surface": "#f7f9fb",
+                      "on-primary-fixed-variant": "#3323cc",
+                      "on-secondary-fixed-variant": "#38485d",
+                      "on-secondary-container": "#54647a",
+                      "primary-fixed-dim": "#c3c0ff",
+                      "surface-container-high": "#e6e8ea",
+                      "on-tertiary-fixed-variant": "#3f465c",
+                      "on-error": "#ffffff",
+                      "on-surface": "#191c1e",
+                      "on-primary-fixed": "#0f0069",
+                      "outline": "#777587",
+                      "inverse-on-surface": "#eff1f3",
+                      "secondary": "#505f76",
+                      "inverse-surface": "#2d3133",
+                      "tertiary-fixed-dim": "#bec6e0",
+                      "surface-dim": "#d8dadc",
+                      "surface-container-highest": "#e0e3e5",
+                      "on-primary-container": "#dad7ff",
+                      "tertiary-fixed": "#dae2fd",
+                      "error-container": "#ffdad6",
+                      "secondary-container": "#d0e1fb",
+                      "on-tertiary": "#ffffff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "2": "0.5rem",
+                      "container-max": "1280px",
+                      "12": "3rem",
+                      "margin-desktop": "2rem",
+                      "6": "1.5rem",
+                      "16": "4rem",
+                      "8": "2rem",
+                      "gutter": "1rem",
+                      "base": "0.25rem",
+                      "3": "0.75rem",
+                      "margin-mobile": "1rem",
+                      "4": "1rem",
+                      "1": "0.25rem"
+              },
+              "fontFamily": {
+                      "h1-mobile": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "label-md": ["Inter"],
+                      "h1": ["Inter"],
+                      "body-md": ["Inter"],
+                      "h2": ["Inter"],
+                      "h3": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "h2-mobile": ["Inter"]
+              },
+              "fontSize": {
+                      "h1-mobile": ["2.25rem", { "lineHeight": "1.2", "fontWeight": "700" }],
+                      "label-sm": ["0.75rem", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                      "label-md": ["0.875rem", { "lineHeight": "1", "fontWeight": "500" }],
+                      "h1": ["3rem", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                      "body-md": ["1rem", { "lineHeight": "1.5", "fontWeight": "400" }],
+                      "h2": ["2.25rem", { "lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                      "h3": ["1.5rem", { "lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                      "body-sm": ["0.875rem", { "lineHeight": "1.5", "fontWeight": "400" }],
+                      "body-lg": ["1.125rem", { "lineHeight": "1.75", "fontWeight": "400" }],
+                      "h2-mobile": ["1.875rem", { "lineHeight": "1.3", "fontWeight": "600" }]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        @keyframes shimmer {
+            0% {
+                background-position: -1000px 0;
+            }
+            100% {
+                background-position: 1000px 0;
+            }
+        }
+        
+        .skeleton-shimmer {
+            animation: shimmer 2s infinite linear;
+            background: linear-gradient(to right, #e6e8ea 4%, #f2f4f6 25%, #e6e8ea 36%);
+            background-size: 1000px 100%;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen flex antialiased">
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col h-screen w-64 fixed left-0 top-0 border-r border-outline-variant bg-surface-container-low py-6 px-4 z-20">
+<div class="mb-8 px-2 flex items-center space-x-3">
+<div class="w-10 h-10 rounded-lg skeleton-shimmer"></div>
+<div class="flex-1 space-y-2">
+<div class="h-4 w-3/4 rounded skeleton-shimmer"></div>
+<div class="h-3 w-1/2 rounded skeleton-shimmer"></div>
+</div>
+</div>
+<div class="flex-1 space-y-1">
+<!-- Navigation Items Skeletons -->
+<div class="flex items-center space-x-3 px-3 py-2 rounded-lg skeleton-shimmer opacity-80">
+<div class="w-5 h-5 rounded-full bg-surface-container"></div>
+<div class="h-4 w-2/3 rounded bg-surface-container"></div>
+</div>
+<div class="flex items-center space-x-3 px-3 py-2 rounded-lg">
+<div class="w-5 h-5 rounded-full skeleton-shimmer"></div>
+<div class="h-4 w-1/2 rounded skeleton-shimmer"></div>
+</div>
+<div class="flex items-center space-x-3 px-3 py-2 rounded-lg">
+<div class="w-5 h-5 rounded-full skeleton-shimmer"></div>
+<div class="h-4 w-3/4 rounded skeleton-shimmer"></div>
+</div>
+<div class="flex items-center space-x-3 px-3 py-2 rounded-lg">
+<div class="w-5 h-5 rounded-full skeleton-shimmer"></div>
+<div class="h-4 w-2/3 rounded skeleton-shimmer"></div>
+</div>
+<div class="flex items-center space-x-3 px-3 py-2 rounded-lg">
+<div class="w-5 h-5 rounded-full skeleton-shimmer"></div>
+<div class="h-4 w-1/2 rounded skeleton-shimmer"></div>
+</div>
+</div>
+<div class="mt-auto space-y-1">
+<div class="flex items-center space-x-3 px-3 py-2 rounded-lg">
+<div class="w-5 h-5 rounded-full skeleton-shimmer"></div>
+<div class="h-4 w-2/3 rounded skeleton-shimmer"></div>
+</div>
+<div class="flex items-center space-x-3 px-3 py-2 rounded-lg">
+<div class="w-5 h-5 rounded-full skeleton-shimmer"></div>
+<div class="h-4 w-1/2 rounded skeleton-shimmer"></div>
+</div>
+</div>
+</nav>
+<!-- Main Content Wrapper -->
+<div class="flex-1 md:ml-64 flex flex-col min-h-screen">
+<!-- TopNavBar -->
+<header class="h-16 flex justify-between items-center w-full px-margin-desktop border-b border-outline-variant bg-surface-container-lowest z-10 sticky top-0">
+<div class="flex items-center space-x-6">
+<!-- Mobile Menu Toggle Skeleton -->
+<div class="md:hidden w-6 h-6 rounded skeleton-shimmer"></div>
+<!-- Brand Skeleton -->
+<div class="h-6 w-32 rounded skeleton-shimmer"></div>
+<!-- Nav Links Skeletons (Desktop) -->
+<div class="hidden lg:flex items-center space-x-6 ml-8">
+<div class="h-4 w-20 rounded skeleton-shimmer"></div>
+<div class="h-4 w-16 rounded skeleton-shimmer"></div>
+<div class="h-4 w-24 rounded skeleton-shimmer"></div>
+<div class="h-4 w-16 rounded skeleton-shimmer"></div>
+</div>
+</div>
+<div class="flex items-center space-x-4">
+<div class="h-8 w-24 rounded skeleton-shimmer hidden sm:block"></div>
+<div class="w-8 h-8 rounded-full skeleton-shimmer"></div>
+<div class="w-8 h-8 rounded-full skeleton-shimmer"></div>
+<div class="w-8 h-8 rounded-full skeleton-shimmer"></div>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="flex-1 p-margin-mobile md:p-margin-desktop w-full max-w-container-max mx-auto space-y-8">
+<!-- Page Header -->
+<div class="space-y-2">
+<div class="h-4 w-32 rounded skeleton-shimmer"></div>
+<div class="h-8 w-64 rounded skeleton-shimmer"></div>
+</div>
+<!-- Summary Cards Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 space-y-4">
+<div class="flex justify-between items-start">
+<div class="h-4 w-24 rounded skeleton-shimmer"></div>
+<div class="w-8 h-8 rounded-full skeleton-shimmer"></div>
+</div>
+<div class="h-10 w-32 rounded skeleton-shimmer"></div>
+<div class="h-3 w-40 rounded skeleton-shimmer"></div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 space-y-4">
+<div class="flex justify-between items-start">
+<div class="h-4 w-20 rounded skeleton-shimmer"></div>
+<div class="w-8 h-8 rounded-full skeleton-shimmer"></div>
+</div>
+<div class="h-10 w-24 rounded skeleton-shimmer"></div>
+<div class="h-3 w-32 rounded skeleton-shimmer"></div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 space-y-4">
+<div class="flex justify-between items-start">
+<div class="h-4 w-28 rounded skeleton-shimmer"></div>
+<div class="w-8 h-8 rounded-full skeleton-shimmer"></div>
+</div>
+<div class="h-10 w-36 rounded skeleton-shimmer"></div>
+<div class="h-3 w-48 rounded skeleton-shimmer"></div>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 space-y-4 hidden lg:block">
+<div class="flex justify-between items-start">
+<div class="h-4 w-20 rounded skeleton-shimmer"></div>
+<div class="w-8 h-8 rounded-full skeleton-shimmer"></div>
+</div>
+<div class="h-10 w-28 rounded skeleton-shimmer"></div>
+<div class="h-3 w-36 rounded skeleton-shimmer"></div>
+</div>
+</div>
+<!-- Complex Layout Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Main Data Card (Takes 2 columns on large screens) -->
+<div class="lg:col-span-2 bg-surface-container-lowest border border-outline-variant rounded-lg flex flex-col">
+<div class="p-6 border-b border-outline-variant flex justify-between items-center">
+<div class="h-6 w-48 rounded skeleton-shimmer"></div>
+<div class="h-8 w-24 rounded skeleton-shimmer"></div>
+</div>
+<div class="p-0">
+<!-- Table Header Skeleton -->
+<div class="grid grid-cols-4 gap-4 px-6 py-3 border-b border-outline-variant bg-surface-container-low">
+<div class="h-4 w-20 rounded skeleton-shimmer"></div>
+<div class="h-4 w-24 rounded skeleton-shimmer"></div>
+<div class="h-4 w-16 rounded skeleton-shimmer"></div>
+<div class="h-4 w-12 rounded skeleton-shimmer text-right"></div>
+</div>
+<!-- Table Rows Skeletons -->
+<div class="divide-y divide-outline-variant">
+<!-- Row 1 -->
+<div class="grid grid-cols-4 gap-4 px-6 py-4 items-center">
+<div class="flex items-center space-x-3">
+<div class="w-8 h-8 rounded-full skeleton-shimmer"></div>
+<div class="h-4 w-24 rounded skeleton-shimmer"></div>
+</div>
+<div class="h-4 w-32 rounded skeleton-shimmer"></div>
+<div class="h-5 w-16 rounded-full skeleton-shimmer"></div>
+<div class="h-4 w-10 rounded skeleton-shimmer justify-self-end"></div>
+</div>
+<!-- Row 2 -->
+<div class="grid grid-cols-4 gap-4 px-6 py-4 items-center">
+<div class="flex items-center space-x-3">
+<div class="w-8 h-8 rounded-full skeleton-shimmer"></div>
+<div class="h-4 w-20 rounded skeleton-shimmer"></div>
+</div>
+<div class="h-4 w-28 rounded skeleton-shimmer"></div>
+<div class="h-5 w-20 rounded-full skeleton-shimmer"></div>
+<div class="h-4 w-12 rounded skeleton-shimmer justify-self-end"></div>
+</div>
+<!-- Row 3 -->
+<div class="grid grid-cols-4 gap-4 px-6 py-4 items-center">
+<div class="flex items-center space-x-3">
+<div class="w-8 h-8 rounded-full skeleton-shimmer"></div>
+<div class="h-4 w-32 rounded skeleton-shimmer"></div>
+</div>
+<div class="h-4 w-24 rounded skeleton-shimmer"></div>
+<div class="h-5 w-16 rounded-full skeleton-shimmer"></div>
+<div class="h-4 w-8 rounded skeleton-shimmer justify-self-end"></div>
+</div>
+<!-- Row 4 -->
+<div class="grid grid-cols-4 gap-4 px-6 py-4 items-center">
+<div class="flex items-center space-x-3">
+<div class="w-8 h-8 rounded-full skeleton-shimmer"></div>
+<div class="h-4 w-28 rounded skeleton-shimmer"></div>
+</div>
+<div class="h-4 w-36 rounded skeleton-shimmer"></div>
+<div class="h-5 w-24 rounded-full skeleton-shimmer"></div>
+<div class="h-4 w-10 rounded skeleton-shimmer justify-self-end"></div>
+</div>
+<!-- Row 5 -->
+<div class="grid grid-cols-4 gap-4 px-6 py-4 items-center">
+<div class="flex items-center space-x-3">
+<div class="w-8 h-8 rounded-full skeleton-shimmer"></div>
+<div class="h-4 w-20 rounded skeleton-shimmer"></div>
+</div>
+<div class="h-4 w-20 rounded skeleton-shimmer"></div>
+<div class="h-5 w-16 rounded-full skeleton-shimmer"></div>
+<div class="h-4 w-12 rounded skeleton-shimmer justify-self-end"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Secondary Content Column -->
+<div class="space-y-6">
+<!-- Activity Feed Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+<div class="h-6 w-32 rounded skeleton-shimmer mb-6"></div>
+<div class="space-y-6">
+<!-- Item 1 -->
+<div class="flex space-x-4">
+<div class="w-10 h-10 rounded-full skeleton-shimmer flex-shrink-0"></div>
+<div class="flex-1 space-y-2 py-1">
+<div class="h-4 w-full rounded skeleton-shimmer"></div>
+<div class="h-3 w-2/3 rounded skeleton-shimmer"></div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="flex space-x-4">
+<div class="w-10 h-10 rounded-full skeleton-shimmer flex-shrink-0"></div>
+<div class="flex-1 space-y-2 py-1">
+<div class="h-4 w-5/6 rounded skeleton-shimmer"></div>
+<div class="h-3 w-1/2 rounded skeleton-shimmer"></div>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="flex space-x-4">
+<div class="w-10 h-10 rounded-full skeleton-shimmer flex-shrink-0"></div>
+<div class="flex-1 space-y-2 py-1">
+<div class="h-4 w-full rounded skeleton-shimmer"></div>
+<div class="h-3 w-3/4 rounded skeleton-shimmer"></div>
+</div>
+</div>
+<!-- Item 4 -->
+<div class="flex space-x-4">
+<div class="w-10 h-10 rounded-full skeleton-shimmer flex-shrink-0"></div>
+<div class="flex-1 space-y-2 py-1">
+<div class="h-4 w-3/4 rounded skeleton-shimmer"></div>
+<div class="h-3 w-1/3 rounded skeleton-shimmer"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Mini Chart/Graph Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+<div class="h-6 w-40 rounded skeleton-shimmer mb-6"></div>
+<div class="h-40 w-full rounded skeleton-shimmer mb-4"></div>
+<div class="flex justify-between items-center">
+<div class="h-4 w-16 rounded skeleton-shimmer"></div>
+<div class="h-4 w-16 rounded skeleton-shimmer"></div>
+<div class="h-4 w-16 rounded skeleton-shimmer"></div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

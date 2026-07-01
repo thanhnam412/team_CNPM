@@ -1,0 +1,201 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Request Revision</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed": "#dae2fd",
+                    "on-primary-fixed-variant": "#3323cc",
+                    "surface-dim": "#d8dadc",
+                    "background": "#f7f9fb",
+                    "on-background": "#191c1e",
+                    "on-tertiary-fixed": "#131b2e",
+                    "on-secondary": "#ffffff",
+                    "secondary-fixed": "#d3e4fe",
+                    "on-tertiary-fixed-variant": "#3f465c",
+                    "surface-bright": "#f7f9fb",
+                    "on-tertiary-container": "#d4dbf5",
+                    "surface-container-high": "#e6e8ea",
+                    "tertiary-container": "#586076",
+                    "on-error": "#ffffff",
+                    "surface-container-low": "#f2f4f6",
+                    "tertiary-fixed-dim": "#bec6e0",
+                    "on-primary": "#ffffff",
+                    "tertiary": "#41485e",
+                    "on-secondary-fixed": "#0b1c30",
+                    "inverse-on-surface": "#eff1f3",
+                    "surface-tint": "#4d44e3",
+                    "on-surface-variant": "#464555",
+                    "secondary-fixed-dim": "#b7c8e1",
+                    "on-secondary-fixed-variant": "#38485d",
+                    "inverse-primary": "#c3c0ff",
+                    "surface": "#f7f9fb",
+                    "on-tertiary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "error": "#ba1a1a",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-container": "#54647a",
+                    "surface-variant": "#e0e3e5",
+                    "surface-container-highest": "#e0e3e5",
+                    "secondary": "#505f76",
+                    "secondary-container": "#d0e1fb",
+                    "surface-container": "#eceef0",
+                    "primary-container": "#4f46e5",
+                    "outline": "#777587",
+                    "primary-fixed": "#e2dfff",
+                    "on-surface": "#191c1e",
+                    "inverse-surface": "#2d3133",
+                    "primary-fixed-dim": "#c3c0ff",
+                    "on-primary-fixed": "#0f0069",
+                    "on-primary-container": "#dad7ff",
+                    "primary": "#3525cd",
+                    "outline-variant": "#c7c4d8",
+                    "on-error-container": "#93000a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "1rem",
+                    "2": "0.5rem",
+                    "container-max": "1280px",
+                    "8": "2rem",
+                    "16": "4rem",
+                    "1": "0.25rem",
+                    "base": "0.25rem",
+                    "6": "1.5rem",
+                    "4": "1rem",
+                    "margin-desktop": "2rem",
+                    "margin-mobile": "1rem",
+                    "3": "0.75rem",
+                    "12": "3rem"
+            },
+            "fontFamily": {
+                    "h1-mobile": ["Inter"],
+                    "h3": ["Inter"],
+                    "h2": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "h1": ["Inter"],
+                    "label-md": ["Inter"],
+                    "h2-mobile": ["Inter"],
+                    "body-md": ["Inter"]
+            },
+            "fontSize": {
+                    "h1-mobile": ["2.25rem", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "h3": ["1.5rem", {"lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "h2": ["2.25rem", {"lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "body-sm": ["0.875rem", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "body-lg": ["1.125rem", {"lineHeight": "1.75", "fontWeight": "400"}],
+                    "label-sm": ["0.75rem", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "h1": ["3rem", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-md": ["0.875rem", {"lineHeight": "1", "fontWeight": "500"}],
+                    "h2-mobile": ["1.875rem", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "body-md": ["1rem", {"lineHeight": "1.5", "fontWeight": "400"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom subtle scrollbar for the textarea */
+        textarea::-webkit-scrollbar {
+            width: 6px;
+        }
+        textarea::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        textarea::-webkit-scrollbar-thumb {
+            background-color: #c7c4d8; /* outline-variant */
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<!-- Note: Navigation shell is suppressed per the Semantic Shell Mandate for Task-Focused/Transactional screens -->
+<body class="bg-surface-dim min-h-screen flex items-center justify-center p-4 md:p-8 relative overflow-hidden">
+<!-- Subtle background pattern for depth without clutter -->
+<div class="absolute inset-0 z-0 opacity-20 pointer-events-none" style="background-image: radial-gradient(#777587 1px, transparent 1px); background-size: 24px 24px;"></div>
+<!-- Modal Container -->
+<main class="w-full max-w-2xl bg-surface-container-lowest border border-outline-variant rounded-xl shadow-[0_8px_32px_rgba(0,0,0,0.06)] z-10 flex flex-col overflow-hidden transition-all duration-300">
+<!-- Header -->
+<header class="px-6 py-5 border-b border-surface-variant flex items-center justify-between bg-surface-container-lowest">
+<h1 class="font-h3 text-h3 text-on-surface m-0">Request Milestone Revision</h1>
+<button aria-label="Close modal" class="text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-full p-2 transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</header>
+<!-- Body -->
+<div class="p-6 md:p-8 flex flex-col gap-8 bg-surface-container-lowest overflow-y-auto max-h-[716px]">
+<!-- Reference Info: Acceptance Criteria -->
+<section class="flex flex-col gap-3">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]" data-icon="assignment_turned_in">assignment_turned_in</span>
+<h2 class="font-label-md text-label-md text-on-surface-variant">Reference: Acceptance Criteria</h2>
+</div>
+<div class="bg-surface-container-low border border-outline-variant rounded-lg p-5 flex flex-col gap-4">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-outline mt-0.5" data-icon="check_circle">check_circle</span>
+<div>
+<p class="font-body-md text-body-md text-on-surface font-medium">Data Ingestion Pipeline</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">System successfully connects to primary SQL database and syncs daily records.</p>
+</div>
+</div>
+<div class="w-full h-px bg-outline-variant/50"></div>
+<!-- Highlighting the problematic criteria conceptually related to the placeholder -->
+<div class="flex items-start gap-3 relative">
+<div class="absolute -left-3 top-2 w-1 h-1 rounded-full bg-primary-container"></div>
+<span class="material-symbols-outlined text-outline mt-0.5" data-icon="radio_button_unchecked">radio_button_unchecked</span>
+<div>
+<p class="font-body-md text-body-md text-on-surface font-medium">Document Parsing Module</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Chatbot must be able to read, extract text, and answer questions based on uploaded PDF documents up to 10MB.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Input Field -->
+<section class="flex flex-col gap-3">
+<label class="font-label-md text-label-md text-on-surface flex items-center justify-between" for="revision-reason">
+                    Reason for Revision
+                    <span class="font-body-sm text-body-sm text-outline font-normal">Required</span>
+</label>
+<div class="relative">
+<textarea class="w-full bg-surface border border-outline-variant rounded-lg p-4 font-body-md text-body-md text-on-surface focus:ring-2 focus:ring-primary-container focus:border-primary outline-none transition-shadow resize-y" id="revision-reason" name="revision-reason" placeholder="e.g., Chatbot chưa xử lý PDF..." required="" rows="6"></textarea>
+<div class="absolute bottom-4 right-4 text-outline font-body-sm text-body-sm pointer-events-none">
+<span class="material-symbols-outlined" data-icon="edit_note">edit_note</span>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Please be as specific as possible to help the team address the issues quickly.</p>
+</section>
+</div>
+<!-- Actions / Footer -->
+<footer class="px-6 py-5 border-t border-surface-variant bg-surface-container flex flex-col-reverse md:flex-row justify-end gap-3 md:gap-4 items-center">
+<button class="w-full md:w-auto px-5 py-2.5 border border-outline text-on-surface-variant bg-surface-container-lowest rounded font-label-md hover:bg-surface-container transition-colors focus:outline-none focus:ring-2 focus:ring-outline-variant focus:ring-offset-2 focus:ring-offset-surface-container" type="button">
+                Cancel
+            </button>
+<button class="w-full md:w-auto px-6 py-2.5 bg-primary text-on-primary rounded font-label-md hover:bg-on-primary-fixed-variant transition-colors flex justify-center items-center gap-2 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface-container" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="send" style="font-variation-settings: 'FILL' 1;">send</span>
+                Send Revision Request
+            </button>
+</footer>
+</main>
+</body></html>

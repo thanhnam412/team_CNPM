@@ -1,0 +1,400 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Aitasker - My Postings</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#41485e",
+                        "secondary-container": "#d0e1fb",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "tertiary-container": "#586076",
+                        "surface": "#f7f9fb",
+                        "surface-container-high": "#e6e8ea",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#bec6e0",
+                        "on-secondary-container": "#54647a",
+                        "background": "#f7f9fb",
+                        "on-tertiary-container": "#d4dbf5",
+                        "surface-tint": "#4d44e3",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-fixed": "#131b2e",
+                        "on-primary-container": "#dad7ff",
+                        "secondary-fixed": "#d3e4fe",
+                        "inverse-surface": "#2d3133",
+                        "on-background": "#191c1e",
+                        "surface-dim": "#d8dadc",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error": "#ffffff",
+                        "surface-variant": "#e0e3e5",
+                        "primary-container": "#4f46e5",
+                        "primary": "#3525cd",
+                        "on-secondary": "#ffffff",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-tertiary-fixed-variant": "#3f465c",
+                        "surface-container-low": "#f2f4f6",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "on-primary-fixed": "#0f0069",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#c3c0ff",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "on-surface": "#191c1e",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed": "#0b1c30",
+                        "surface-container": "#eceef0",
+                        "surface-bright": "#f7f9fb",
+                        "secondary": "#505f76",
+                        "outline": "#777587",
+                        "primary-fixed": "#e2dfff",
+                        "on-primary-fixed-variant": "#3323cc",
+                        "on-surface-variant": "#464555",
+                        "tertiary-fixed": "#dae2fd",
+                        "outline-variant": "#c7c4d8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "1rem",
+                        "4": "1rem",
+                        "16": "4rem",
+                        "container-max": "1280px",
+                        "8": "2rem",
+                        "12": "3rem",
+                        "gutter": "1rem",
+                        "1": "0.25rem",
+                        "3": "0.75rem",
+                        "margin-desktop": "2rem",
+                        "6": "1.5rem",
+                        "base": "0.25rem",
+                        "2": "0.5rem"
+                    },
+                    "fontFamily": {
+                        "h2-mobile": ["Inter"],
+                        "h3": ["Inter"],
+                        "h1": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "h1-mobile": ["Inter"],
+                        "h2": ["Inter"]
+                    },
+                    "fontSize": {
+                        "h2-mobile": ["1.875rem", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "h3": ["1.5rem", { "lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "h1": ["3rem", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-sm": ["0.875rem", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "label-sm": ["0.75rem", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "label-md": ["0.875rem", { "lineHeight": "1", "fontWeight": "500" }],
+                        "body-md": ["1rem", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "body-lg": ["1.125rem", { "lineHeight": "1.75", "fontWeight": "400" }],
+                        "h1-mobile": ["2.25rem", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "h2": ["2.25rem", { "lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .toast-enter {
+            animation: slideDown 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md text-body-md antialiased">
+<!-- Success Toast -->
+<div class="fixed top-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 bg-[#e8f5e9] border border-[#c8e6c9] text-[#2e7d32] px-6 py-4 rounded-lg shadow-sm toast-enter" id="success-toast">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-body-md text-body-md font-medium">Job posted successfully! Status: Open</span>
+<button class="ml-4 p-1 hover:bg-[#c8e6c9] rounded-full transition-colors" onclick="document.getElementById('success-toast').remove()">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- TopNavBar -->
+<nav class="bg-surface dark:bg-background full-width top-0 sticky border-b border-outline-variant dark:border-tertiary z-40">
+<div class="flex justify-between items-center px-margin-desktop py-4 max-w-container-max mx-auto">
+<!-- Brand & Navigation Container -->
+<div class="flex items-center gap-12">
+<!-- Brand -->
+<div class="font-h3 text-h3 font-bold text-primary dark:text-primary-fixed-dim">
+                    Aitasker
+                </div>
+<!-- Desktop Navigation Links -->
+<div class="hidden md:flex items-center gap-8">
+<a class="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed-dim transition-colors cursor-pointer active:opacity-80" href="#">
+                        Find Talent
+                    </a>
+<a class="text-primary dark:text-primary-fixed-dim border-b-2 border-primary dark:border-primary-fixed-dim pb-1 hover:text-primary dark:hover:text-primary-fixed-dim transition-colors cursor-pointer active:opacity-80" href="#">
+                        My Postings
+                    </a>
+<a class="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed-dim transition-colors cursor-pointer active:opacity-80" href="#">
+                        Messages
+                    </a>
+<a class="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed-dim transition-colors cursor-pointer active:opacity-80" href="#">
+                        Payments
+                    </a>
+</div>
+</div>
+<!-- Trailing Actions -->
+<div class="flex items-center gap-6">
+<!-- Search (Placeholder for "on_left" logic - omitting actual input for precision styling unless needed) -->
+<!-- Primary Action -->
+<button class="hidden md:flex items-center justify-center h-10 px-4 bg-primary text-on-primary rounded font-label-md text-label-md hover:bg-primary-container transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                    Post a Job
+                </button>
+<!-- Icon Actions -->
+<div class="flex items-center gap-4 text-secondary dark:text-secondary-fixed-dim">
+<button class="hover:text-primary transition-colors cursor-pointer active:opacity-80 relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="hover:text-primary transition-colors cursor-pointer active:opacity-80">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-grow w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-8 md:py-12 flex flex-col gap-8">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+<div>
+<h1 class="font-h2 text-h2 text-on-background mb-2">My Postings</h1>
+<p class="font-body-md text-body-md text-secondary">Manage and track the status of your current and past job listings.</p>
+</div>
+<div class="flex items-center gap-3 w-full md:w-auto">
+<div class="relative flex-grow md:w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary text-[20px]">search</span>
+<input class="w-full h-10 pl-10 pr-4 bg-surface rounded border border-outline-variant text-on-surface font-body-sm text-body-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="Search postings..." type="text">
+</div>
+<button class="flex items-center justify-center h-10 px-4 bg-surface rounded border border-outline-variant text-on-surface hover:bg-surface-variant transition-colors font-label-md text-label-md gap-2 whitespace-nowrap">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+                    Filter
+                </button>
+</div>
+</div>
+<!-- Dashboard Analytics Snippet -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+<div class="bg-surface border border-outline-variant rounded-lg p-6 flex flex-col gap-2">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-wider">Active Postings</span>
+<div class="flex items-end gap-2">
+<span class="font-h2 text-h2 text-on-surface">4</span>
+<span class="font-body-sm text-body-sm text-[#2e7d32] flex items-center mb-1"><span class="material-symbols-outlined text-[16px]">arrow_upward</span> 1</span>
+</div>
+</div>
+<div class="bg-surface border border-outline-variant rounded-lg p-6 flex flex-col gap-2">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-wider">Total Views</span>
+<div class="flex items-end gap-2">
+<span class="font-h2 text-h2 text-on-surface">1,204</span>
+<span class="font-body-sm text-body-sm text-[#2e7d32] flex items-center mb-1"><span class="material-symbols-outlined text-[16px]">arrow_upward</span> 12%</span>
+</div>
+</div>
+<div class="bg-surface border border-outline-variant rounded-lg p-6 flex flex-col gap-2">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-wider">New Proposals</span>
+<div class="flex items-end gap-2">
+<span class="font-h2 text-h2 text-on-surface">28</span>
+</div>
+</div>
+<div class="bg-surface border border-outline-variant rounded-lg p-6 flex flex-col gap-2 justify-center items-center bg-primary-container/5 border-primary/20">
+<button class="text-primary font-label-md text-label-md flex items-center gap-2 hover:underline">
+<span class="material-symbols-outlined">add_circle</span>
+                    Create New Draft
+                </button>
+</div>
+</div>
+<!-- Job Postings List (Bento-ish structured list) -->
+<div class="flex flex-col gap-4">
+<!-- Highlighted New Posting -->
+<div class="bg-surface-container-lowest border border-primary/30 rounded-xl p-6 relative overflow-hidden flex flex-col md:flex-row gap-6 items-start shadow-sm transition-all hover:border-primary/50">
+<!-- Subtle highlight indicator -->
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
+<div class="flex-grow flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div class="flex flex-col gap-1">
+<h3 class="font-h3 text-h3 text-on-surface">Senior Full Stack Engineer</h3>
+<div class="flex items-center gap-3 text-secondary font-body-sm text-body-sm">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">location_on</span> Remote, US</span>
+<span>•</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">schedule</span> Full-time</span>
+<span>•</span>
+<span>Posted just now</span>
+</div>
+</div>
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full font-label-sm text-label-sm bg-[#e8f5e9] text-[#2e7d32] border border-[#c8e6c9]">
+                            Open
+                        </span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-3xl line-clamp-2">
+                        We are looking for an experienced Full Stack Engineer to lead the development of our core enterprise application platform. You will be responsible for architecting robust scalable solutions using React, Node.js, and PostgreSQL.
+                    </p>
+<div class="flex flex-wrap gap-2 mt-2">
+<span class="px-3 py-1 bg-surface-container rounded-md font-label-sm text-label-sm text-secondary">React</span>
+<span class="px-3 py-1 bg-surface-container rounded-md font-label-sm text-label-sm text-secondary">Node.js</span>
+<span class="px-3 py-1 bg-surface-container rounded-md font-label-sm text-label-sm text-secondary">PostgreSQL</span>
+<span class="px-3 py-1 bg-surface-container rounded-md font-label-sm text-label-sm text-secondary">TypeScript</span>
+</div>
+</div>
+<!-- Metrics & Actions -->
+<div class="flex flex-row md:flex-col items-center md:items-end justify-between w-full md:w-auto min-w-[140px] gap-4 border-t md:border-t-0 md:border-l border-outline-variant pt-4 md:pt-0 md:pl-6">
+<div class="flex flex-row md:flex-col gap-4 md:gap-2 w-full">
+<div class="flex flex-col">
+<span class="font-h3 text-h3 text-on-surface">0</span>
+<span class="font-label-sm text-label-sm text-secondary">Proposals</span>
+</div>
+<div class="flex flex-col">
+<span class="font-h3 text-h3 text-on-surface">0</span>
+<span class="font-label-sm text-label-sm text-secondary">Views</span>
+</div>
+</div>
+<button class="h-8 px-4 bg-surface text-secondary border border-outline-variant rounded font-label-md text-label-md hover:bg-surface-variant transition-colors whitespace-nowrap">
+                        Manage Job
+                    </button>
+</div>
+</div>
+<!-- Older Posting -->
+<div class="bg-surface border border-outline-variant rounded-xl p-6 flex flex-col md:flex-row gap-6 items-start hover:border-outline transition-colors">
+<div class="flex-grow flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div class="flex flex-col gap-1">
+<h3 class="font-h3 text-h3 text-on-surface">UX/UI Designer for Mobile App</h3>
+<div class="flex items-center gap-3 text-secondary font-body-sm text-body-sm">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">location_on</span> Remote, Global</span>
+<span>•</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">contract</span> Contract</span>
+<span>•</span>
+<span>Posted 3 days ago</span>
+</div>
+</div>
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full font-label-sm text-label-sm bg-[#e8f5e9] text-[#2e7d32] border border-[#c8e6c9]">
+                            Open
+                        </span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-3xl line-clamp-2">
+                        Seeking a talented UI/UX designer to revamp our existing mobile application interface. The ideal candidate will have strong experience in Material Design principles and creating high-fidelity prototypes in Figma.
+                    </p>
+</div>
+<!-- Metrics & Actions -->
+<div class="flex flex-row md:flex-col items-center md:items-end justify-between w-full md:w-auto min-w-[140px] gap-4 border-t md:border-t-0 md:border-l border-outline-variant pt-4 md:pt-0 md:pl-6">
+<div class="flex flex-row md:flex-col gap-4 md:gap-2 w-full">
+<div class="flex flex-col">
+<span class="font-h3 text-h3 text-primary">12</span>
+<span class="font-label-sm text-label-sm text-secondary">Proposals</span>
+</div>
+<div class="flex flex-col">
+<span class="font-h3 text-h3 text-on-surface">145</span>
+<span class="font-label-sm text-label-sm text-secondary">Views</span>
+</div>
+</div>
+<button class="h-8 px-4 bg-primary text-on-primary rounded font-label-md text-label-md hover:bg-primary-container transition-colors whitespace-nowrap">
+                        Review (3)
+                    </button>
+</div>
+</div>
+<!-- Closed Posting -->
+<div class="bg-surface-container-low border border-outline-variant/50 rounded-xl p-6 flex flex-col md:flex-row gap-6 items-start opacity-75">
+<div class="flex-grow flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div class="flex flex-col gap-1">
+<h3 class="font-h3 text-h3 text-on-surface line-through decoration-outline-variant">Backend API Developer</h3>
+<div class="flex items-center gap-3 text-secondary font-body-sm text-body-sm">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">location_on</span> New York, NY</span>
+<span>•</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">schedule</span> Full-time</span>
+<span>•</span>
+<span>Closed 2 weeks ago</span>
+</div>
+</div>
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full font-label-sm text-label-sm bg-surface-container-high text-secondary border border-outline-variant">
+                            Closed
+                        </span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-3xl line-clamp-1">
+                        Need an experienced Python developer to build robust REST APIs for our internal analytics dashboard integration.
+                    </p>
+</div>
+<!-- Metrics & Actions -->
+<div class="flex flex-row md:flex-col items-center md:items-end justify-between w-full md:w-auto min-w-[140px] gap-4 border-t md:border-t-0 md:border-l border-outline-variant pt-4 md:pt-0 md:pl-6">
+<div class="flex flex-row md:flex-col gap-4 md:gap-2 w-full">
+<div class="flex flex-col">
+<span class="font-h3 text-h3 text-secondary">45</span>
+<span class="font-label-sm text-label-sm text-secondary">Proposals</span>
+</div>
+<div class="flex flex-col">
+<span class="font-h3 text-h3 text-secondary">890</span>
+<span class="font-label-sm text-label-sm text-secondary">Views</span>
+</div>
+</div>
+<button class="h-8 px-4 bg-transparent text-secondary border border-transparent hover:bg-surface-variant rounded font-label-md text-label-md transition-colors whitespace-nowrap flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">content_copy</span>
+                        Duplicate
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-low dark:bg-tertiary full-width border-t border-outline-variant dark:border-tertiary-container mt-auto">
+<div class="flex flex-col md:flex-row justify-between items-center px-margin-desktop py-8 max-w-container-max mx-auto gap-4">
+<!-- Copyright -->
+<div class="font-body-sm text-body-sm text-secondary dark:text-on-secondary-container">
+                © 2024 Aitasker Inc. All rights reserved.
+            </div>
+<!-- Links -->
+<div class="flex flex-wrap justify-center gap-6">
+<a class="font-body-sm text-body-sm text-secondary dark:text-on-secondary-container hover:underline transition-all cursor-pointer" href="#">
+                    Terms of Service
+                </a>
+<a class="font-body-sm text-body-sm text-secondary dark:text-on-secondary-container hover:underline transition-all cursor-pointer" href="#">
+                    Privacy Policy
+                </a>
+<a class="font-body-sm text-body-sm text-secondary dark:text-on-secondary-container hover:underline transition-all cursor-pointer" href="#">
+                    Help Center
+                </a>
+<a class="font-body-sm text-body-sm text-secondary dark:text-on-secondary-container hover:underline transition-all cursor-pointer" href="#">
+                    Accessibility
+                </a>
+</div>
+<!-- Brand Logo (Right side on desktop) -->
+<div class="font-h3 text-h3 font-bold text-on-surface dark:text-on-tertiary-container">
+                Aitasker
+            </div>
+</div>
+</footer>
+<script>
+        // Simple script to automatically hide toast after a few seconds, enhancing the UI prototype feel
+        setTimeout(() => {
+            const toast = document.getElementById('success-toast');
+            if (toast) {
+                toast.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                toast.style.opacity = '0';
+                toast.style.transform = 'translate(-50%, -100%)';
+                setTimeout(() => toast.remove(), 500);
+            }
+        }, 5000);
+    </script>
+</body></html>

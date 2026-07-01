@@ -1,0 +1,311 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Review Milestone Change - AI Project Workspace</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#131b2e",
+                        "surface-variant": "#e0e3e5",
+                        "surface-container-low": "#f2f4f6",
+                        "secondary": "#505f76",
+                        "on-primary-fixed": "#0f0069",
+                        "outline": "#777587",
+                        "surface-container": "#eceef0",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed": "#d3e4fe",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-primary": "#c3c0ff",
+                        "on-error-container": "#93000a",
+                        "surface-tint": "#4d44e3",
+                        "surface-container-high": "#e6e8ea",
+                        "primary-container": "#4f46e5",
+                        "primary": "#3525cd",
+                        "tertiary": "#41485e",
+                        "on-primary-container": "#dad7ff",
+                        "background": "#f7f9fb",
+                        "on-secondary": "#ffffff",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-tertiary-container": "#d4dbf5",
+                        "on-primary-fixed-variant": "#3323cc",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed-variant": "#3f465c",
+                        "primary-fixed": "#e2dfff",
+                        "on-surface": "#191c1e",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-background": "#191c1e",
+                        "surface-bright": "#f7f9fb",
+                        "error-container": "#ffdad6",
+                        "inverse-surface": "#2d3133",
+                        "on-surface-variant": "#464555",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "on-secondary-fixed": "#0b1c30",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "tertiary-fixed-dim": "#bec6e0",
+                        "tertiary-fixed": "#dae2fd",
+                        "tertiary-container": "#586076",
+                        "on-primary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "secondary-container": "#d0e1fb",
+                        "surface-dim": "#d8dadc",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "outline-variant": "#c7c4d8",
+                        "surface": "#f7f9fb",
+                        "on-secondary-container": "#54647a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "8": "2rem",
+                        "container-max": "1280px",
+                        "3": "0.75rem",
+                        "margin-desktop": "2rem",
+                        "6": "1.5rem",
+                        "16": "4rem",
+                        "gutter": "1rem",
+                        "12": "3rem",
+                        "2": "0.5rem",
+                        "margin-mobile": "1rem",
+                        "1": "0.25rem",
+                        "4": "1rem",
+                        "base": "0.25rem"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter", "sans-serif"],
+                        "body-sm": ["Inter", "sans-serif"],
+                        "h2-mobile": ["Inter", "sans-serif"],
+                        "h1": ["Inter", "sans-serif"],
+                        "h3": ["Inter", "sans-serif"],
+                        "body-md": ["Inter", "sans-serif"],
+                        "label-md": ["Inter", "sans-serif"],
+                        "h1-mobile": ["Inter", "sans-serif"],
+                        "body-lg": ["Inter", "sans-serif"],
+                        "h2": ["Inter", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["0.75rem", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "body-sm": ["0.875rem", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "h2-mobile": ["1.875rem", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "h1": ["3rem", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "h3": ["1.5rem", { "lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-md": ["1rem", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "label-md": ["0.875rem", { "lineHeight": "1", "fontWeight": "500" }],
+                        "h1-mobile": ["2.25rem", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "body-lg": ["1.125rem", { "lineHeight": "1.75", "fontWeight": "400" }],
+                        "h2": ["2.25rem", { "lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col">
+<!-- TopNavBar (Shared Component) -->
+<header class="bg-surface dark:bg-on-background w-full h-16 border-b border-outline-variant dark:border-outline flat no shadows font-h3 text-h3 font-body-md text-body-md">
+<div class="flex justify-between items-center px-6 w-full max-w-container-max mx-auto h-full">
+<div class="flex items-center gap-4">
+<span class="font-h3 text-h3 font-bold text-primary dark:text-primary-fixed">AI Project Workspace</span>
+</div>
+<!-- Navigation Links (Hidden on mobile) -->
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-colors cursor-pointer duration-200 active:scale-95 px-3 py-2 rounded-md" href="#">Dashboard</a>
+<a class="text-primary dark:text-primary-fixed border-b-2 border-primary hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-colors cursor-pointer duration-200 active:scale-95 px-3 py-2" href="#">Milestones</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-colors cursor-pointer duration-200 active:scale-95 px-3 py-2 rounded-md" href="#">Projects</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="hidden md:flex bg-primary text-on-primary hover:bg-primary-container px-4 h-[40px] items-center justify-center rounded-DEFAULT font-label-md text-label-md transition-colors">Create Project</button>
+<div class="flex items-center gap-2">
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-low rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-low rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<img alt="User profile" class="w-8 h-8 rounded-full border border-outline-variant object-cover ml-2" data-alt="A professional headshot of a person, used as a user profile picture in a modern web application interface. The lighting is soft and flattering, suitable for a corporate or creative workspace setting. The image should be cropped as a circle, fitting perfectly into a small avatar placeholder." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHbHJE_Rg_XgOYXneJo6XfANToElnEY_B9QgrFPODCdCqVd62Atu6ofCEJQpHzNgINE0Bd4U1F5RqJ8YROh1sPwicJt7S2kbZtFQF8LzIwMuNKY2cC14HtgqEmg5KrcKaI0x8Ra0zhavHTDxzKIz1zTrG7fEQ0JR48hOb8KTHkXg6WJ6TL0f3L28SRUfRaJAATU20Jh2GYVFXP-YC2kA-00PErWp_iy4DRPi21Jog8qCwTSOi4z1SxxPn_RqquiJu8rKTBFebUr60">
+</div>
+</div>
+</div>
+</header>
+<div class="flex flex-1 max-w-container-max mx-auto w-full">
+<!-- SideNavBar (Shared Component) - Hidden on mobile -->
+<aside class="hidden md:flex flex-col h-[calc(100vh-64px)] w-64 sticky top-16 left-0 bg-surface-container-low dark:bg-surface-container-highest border-r border-outline-variant dark:border-outline py-6 px-4 font-label-md text-label-md">
+<div class="mb-8 px-2 flex items-center gap-3">
+<div class="w-10 h-10 rounded-DEFAULT bg-primary-container flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined">rocket_launch</span>
+</div>
+<div>
+<h2 class="font-bold text-on-surface">Project Alpha</h2>
+<p class="text-on-surface-variant text-[12px]">Enterprise AI Solution</p>
+</div>
+</div>
+<nav class="flex-1 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-container transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                    Overview
+                </a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-container transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+                    Contracts
+                </a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary font-bold transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="event_available" data-weight="fill" style="font-variation-settings: 'FILL' 1;">event_available</span>
+                    Milestones
+                </a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-container transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="folder">folder</span>
+                    Files
+                </a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-container transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+                    Team
+                </a>
+</nav>
+<div class="mt-auto flex flex-col gap-1 pt-4 border-t border-outline-variant">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+                    Help Center
+                </a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="support_agent">support_agent</span>
+                    Support
+                </a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 p-margin-mobile md:p-margin-desktop overflow-y-auto">
+<div class="max-w-4xl mx-auto">
+<!-- Page Header -->
+<div class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<div class="flex items-center gap-2 text-on-surface-variant mb-2 font-label-md text-label-md">
+<span class="material-symbols-outlined text-[16px]">arrow_back</span>
+<a class="hover:underline" href="#">Back to Milestones</a>
+</div>
+<h1 class="font-h2-mobile text-h2-mobile md:font-h2 md:text-h2 text-on-surface">Review Milestone Change</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">Proposed modifications to "Phase 2: Model Training"</p>
+</div>
+<div class="flex gap-3">
+<button class="h-[40px] px-4 border border-outline text-on-surface hover:bg-surface-container-low rounded-DEFAULT font-label-md text-label-md transition-colors">Decline</button>
+<button class="h-[40px] px-4 bg-primary text-on-primary hover:bg-primary-container rounded-DEFAULT font-label-md text-label-md transition-colors">Approve Change</button>
+</div>
+</div>
+<!-- Comparison Layout -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 relative">
+<!-- Center Divider Line (Desktop only) -->
+<div class="hidden md:block absolute left-1/2 top-0 bottom-0 w-[1px] bg-outline-variant transform -translate-x-1/2 z-0"></div>
+<div class="hidden md:flex absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-surface border border-outline-variant items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">compare_arrows</span>
+</div>
+<!-- Original Column -->
+<div class="bg-surface border border-outline-variant rounded-lg p-6 relative z-10 flex flex-col gap-6">
+<div class="border-b border-outline-variant pb-4">
+<h2 class="font-h3 text-h3 text-on-surface flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-outline"></span>
+                                Original Milestone
+                            </h2>
+</div>
+<div class="flex flex-col gap-4">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider block mb-1">Milestone Name</span>
+<p class="font-body-md text-body-md text-on-surface">Phase 2: Model Training</p>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider block mb-1">Description</span>
+<p class="font-body-md text-body-md text-on-surface">Complete the initial training of the LLM on the provided enterprise dataset. Ensure a baseline accuracy of 85% on the validation set.</p>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container-low p-3 rounded-DEFAULT border border-outline-variant line-through opacity-70">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider block mb-1">Deadline</span>
+<p class="font-body-md text-body-md text-on-surface font-semibold">Jan 10, 2024</p>
+</div>
+<div class="bg-surface-container-low p-3 rounded-DEFAULT border border-outline-variant line-through opacity-70">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider block mb-1">Payment</span>
+<p class="font-body-md text-body-md text-on-surface font-semibold">$5,000.00</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Proposed Column -->
+<div class="bg-surface border border-outline-variant rounded-lg p-6 relative z-10 flex flex-col gap-6 shadow-sm border-t-4 border-t-primary">
+<div class="border-b border-outline-variant pb-4 flex justify-between items-center">
+<h2 class="font-h3 text-h3 text-on-surface flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+                                Proposed Changes
+                            </h2>
+<span class="bg-secondary-container text-on-secondary-container font-label-sm text-label-sm px-2 py-1 rounded-full">Pending Review</span>
+</div>
+<div class="flex flex-col gap-4">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider block mb-1">Milestone Name</span>
+<p class="font-body-md text-body-md text-on-surface">Phase 2: Model Training</p>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider block mb-1">Description</span>
+<p class="font-body-md text-body-md text-on-surface">Complete the initial training of the LLM on the provided enterprise dataset. Ensure a baseline accuracy of 85% on the validation set. <span class="bg-surface-container-high px-1 rounded text-on-surface">Includes integration with new API endpoints.</span></p>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-primary-fixed/20 p-3 rounded-DEFAULT border border-primary-fixed-dim relative">
+<div class="absolute -top-2 -right-2 bg-surface border border-outline-variant rounded-full w-5 h-5 flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px] text-primary">edit</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-wider block mb-1">New Deadline</span>
+<p class="font-body-md text-body-md text-on-surface font-semibold text-primary">Jan 20, 2024</p>
+</div>
+<div class="bg-primary-fixed/20 p-3 rounded-DEFAULT border border-primary-fixed-dim relative">
+<div class="absolute -top-2 -right-2 bg-surface border border-outline-variant rounded-full w-5 h-5 flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px] text-primary">edit</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-wider block mb-1">New Payment</span>
+<p class="font-body-md text-body-md text-on-surface font-semibold text-primary">$5,500.00</p>
+</div>
+</div>
+</div>
+<!-- Justification Message -->
+<div class="mt-auto pt-4 border-t border-outline-variant">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider block mb-2">Message from Proposer</span>
+<div class="bg-surface-container-low p-4 rounded-DEFAULT border border-outline-variant text-body-sm font-body-sm text-on-surface italic">
+                                "Requesting an extension and budget bump due to the additional scope added last week regarding the new API integration requirements. This ensures we maintain the 85% accuracy target."
+                            </div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Footer (Shared Component) -->
+<footer class="bg-surface-container-lowest dark:bg-on-background w-full py-8 mt-auto border-t border-outline-variant dark:border-outline flat no shadows font-label-sm text-label-sm text-on-surface-variant dark:text-surface-variant">
+<div class="flex flex-col md:flex-row justify-between items-center px-8 max-w-container-max mx-auto">
+<div class="font-h3 text-h3 mb-4 md:mb-0 text-primary dark:text-primary-fixed">
+                AI Workspace Inc.
+            </div>
+<div class="flex items-center gap-6 mb-4 md:mb-0">
+<a class="hover:text-primary dark:hover:text-primary-fixed transition-colors duration-200 hover:opacity-80" href="#">Privacy Policy</a>
+<a class="hover:text-primary dark:hover:text-primary-fixed transition-colors duration-200 hover:opacity-80" href="#">Terms of Service</a>
+<a class="hover:text-primary dark:hover:text-primary-fixed transition-colors duration-200 hover:opacity-80" href="#">Legal</a>
+<a class="hover:text-primary dark:hover:text-primary-fixed transition-colors duration-200 hover:opacity-80" href="#">Help Center</a>
+</div>
+<div class="text-on-surface-variant dark:text-surface-variant">
+                © 2024 AI Workspace Inc. All rights reserved.
+            </div>
+</div>
+</footer>
+</body></html>

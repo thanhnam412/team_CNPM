@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Submit Proposal | ResolvSafe AI Expert</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fb;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 1.5rem;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid #c7c4d8;
+        }
+        .sidebar-sticky {
+            position: sticky;
+            top: 5rem;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-dim": "#d8dadc",
+                        "on-primary-fixed-variant": "#3323cc",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "tertiary-fixed": "#dae2fd",
+                        "secondary-fixed": "#d3e4fe",
+                        "surface-container": "#eceef0",
+                        "surface-container-highest": "#e0e3e5",
+                        "tertiary-container": "#586076",
+                        "inverse-surface": "#2d3133",
+                        "tertiary": "#41485e",
+                        "outline": "#777587",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "error": "#ba1a1a",
+                        "on-secondary": "#ffffff",
+                        "surface-variant": "#e0e3e5",
+                        "surface-tint": "#4d44e3",
+                        "primary-container": "#4f46e5",
+                        "on-tertiary-fixed-variant": "#3f465c",
+                        "on-secondary-fixed": "#0b1c30",
+                        "surface-container-high": "#e6e8ea",
+                        "surface-bright": "#f7f9fb",
+                        "secondary-container": "#d0e1fb",
+                        "on-primary": "#ffffff",
+                        "primary": "#3525cd",
+                        "surface": "#f7f9fb",
+                        "on-background": "#191c1e",
+                        "on-surface": "#191c1e",
+                        "on-secondary-container": "#54647a",
+                        "error-container": "#ffdad6",
+                        "secondary": "#505f76",
+                        "on-tertiary-fixed": "#131b2e",
+                        "on-surface-variant": "#464555",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed": "#e2dfff",
+                        "surface-container-low": "#f2f4f6",
+                        "on-primary-container": "#dad7ff",
+                        "on-error": "#ffffff",
+                        "background": "#f7f9fb",
+                        "on-tertiary-container": "#d4dbf5",
+                        "on-primary-fixed": "#0f0069",
+                        "inverse-primary": "#c3c0ff",
+                        "outline-variant": "#c7c4d8",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed-dim": "#bec6e0"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "12": "3rem",
+                        "gutter": "1rem",
+                        "6": "1.5rem",
+                        "3": "0.75rem",
+                        "margin-desktop": "2rem",
+                        "4": "1rem",
+                        "16": "4rem",
+                        "1": "0.25rem",
+                        "container-max": "1280px",
+                        "margin-mobile": "1rem",
+                        "base": "0.25rem",
+                        "2": "0.5rem",
+                        "8": "2rem"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "h3": ["Inter"],
+                        "h2": ["Inter"],
+                        "h1": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-sm": ["0.875rem", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "label-md": ["0.875rem", {"lineHeight": "1", "fontWeight": "500"}],
+                        "h3": ["1.5rem", {"lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "h2": ["2.25rem", {"lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "h1": ["3rem", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-sm": ["0.75rem", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "body-md": ["1rem", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "body-lg": ["1.125rem", {"lineHeight": "1.75", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- TopNavBar -->
+<nav class="bg-surface border-b border-outline-variant flex justify-between items-center w-full px-margin-desktop max-w-container-max mx-auto h-16 sticky top-0 z-50">
+<div class="flex items-center gap-8">
+<span class="text-h3 font-h3 font-bold text-primary">ResolvSafe</span>
+<div class="hidden md:flex items-center gap-6">
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Dashboard</a>
+<a class="font-body-md text-body-md text-primary border-b-2 border-primary pb-1" href="#">Active Cases</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">History</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Support</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant cursor-pointer">notifications</button>
+<button class="material-symbols-outlined text-on-surface-variant cursor-pointer">help_outline</button>
+<img alt="Mediator Profile" class="w-8 h-8 rounded-full border border-outline-variant" data-alt="A professional headshot of a senior AI architect in a modern corporate setting. The expert has a focused, reliable expression, wearing a tailored navy blazer against a softly blurred, high-end office background with clean architectural lines. The lighting is bright and professional, emphasizing institutional trust and technical mastery." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVVhzs2JNXa7qgS7m9V8ICCIGm1oFG3ZTuSv_mCLqHm2pGz3S4chuQeOpDW78rwRiNDXA7Rci8q7BFjxLPh3R5-VsaDvbQ7HOhLTtRFpG-_nc10TWou0gMnBtIMO5wBDNN4U4dIZhhKQazRNtnS1CKA2A2JSBUNPgCNVJ9FSD5o1-qvwJxLdbAnzALnnye-nYHv0UXZtp6I1sycOw4Lo5eTjdESO1_TjX7PSOpydw0IwBzAT9uBUYt0a2MauLX4F_jubMiC1oSEuk"/>
+</div>
+</nav>
+<main class="max-w-container-max mx-auto px-margin-desktop py-8">
+<header class="mb-12">
+<h1 class="font-h2 text-h2 text-on-surface mb-2">Submit Proposal</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Configure your technical approach and financial terms for the AI Chatbot project.</p>
+</header>
+<div class="bento-grid">
+<!-- Left Column: Form Sections -->
+<div class="col-span-12 lg:col-span-8 space-y-8">
+<!-- Section 2: Technical Approach -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary">psychology</span>
+<h2 class="font-h3 text-h3">Technical Approach &amp; Solution</h2>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4">Detail your architecture, stack, and how you plan to solve the client's problem.</p>
+<textarea class="w-full bg-surface-container-low border border-outline-variant rounded-lg p-4 font-body-md text-body-md focus:ring-2 focus:ring-primary focus:outline-none transition-all" placeholder="e.g. Implementation of a RAG system using LangChain, Pinecone vector store, and GPT-4 API for context-aware responses..." rows="8"></textarea>
+</section>
+<!-- Section 3: Milestone Planning -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+<div class="flex justify-between items-center mb-6">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">account_tree</span>
+<h2 class="font-h3 text-h3">Milestone Planning</h2>
+</div>
+<button class="flex items-center gap-2 text-primary font-label-md hover:bg-primary-container/10 px-3 py-1 rounded transition-colors" onclick="addMilestone()">
+<span class="material-symbols-outlined text-sm">add</span> Add Milestone
+                        </button>
+</div>
+<div class="space-y-4" id="milestone-container">
+<!-- Dynamic Milestone Row 1 -->
+<div class="grid grid-cols-12 gap-4 p-4 border border-outline-variant rounded-lg bg-surface-bright group relative">
+<div class="col-span-12 md:col-span-5">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Title</label>
+<input class="w-full border-outline-variant rounded bg-surface-container-lowest font-body-md text-body-md px-3 py-2" type="text" value="Data preparation"/>
+</div>
+<div class="col-span-6 md:col-span-3">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Amount (USD)</label>
+<div class="relative">
+<span class="absolute left-3 top-2 text-on-surface-variant">$</span>
+<input class="w-full border-outline-variant rounded bg-surface-container-lowest font-body-md text-body-md pl-7 pr-3 py-2" type="number" value="1500"/>
+</div>
+</div>
+<div class="col-span-6 md:col-span-4">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Due Date</label>
+<input class="w-full border-outline-variant rounded bg-surface-container-lowest font-body-md text-body-md px-3 py-2" type="date" value="2024-11-15"/>
+</div>
+<div class="col-span-12">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Description</label>
+<input class="w-full border-outline-variant rounded bg-surface-container-lowest font-body-md text-body-md px-3 py-2" type="text" value="Initial cleaning and vectorization of documentation set."/>
+</div>
+</div>
+<!-- Dynamic Milestone Row 2 -->
+<div class="grid grid-cols-12 gap-4 p-4 border border-outline-variant rounded-lg bg-surface-bright group relative">
+<div class="col-span-12 md:col-span-5">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Title</label>
+<input class="w-full border-outline-variant rounded bg-surface-container-lowest font-body-md text-body-md px-3 py-2" type="text" value="Development"/>
+</div>
+<div class="col-span-6 md:col-span-3">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Amount (USD)</label>
+<div class="relative">
+<span class="absolute left-3 top-2 text-on-surface-variant">$</span>
+<input class="w-full border-outline-variant rounded bg-surface-container-lowest font-body-md text-body-md pl-7 pr-3 py-2" type="number" value="2500"/>
+</div>
+</div>
+<div class="col-span-6 md:col-span-4">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Due Date</label>
+<input class="w-full border-outline-variant rounded bg-surface-container-lowest font-body-md text-body-md px-3 py-2" type="date" value="2024-12-10"/>
+</div>
+<div class="col-span-12">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Description</label>
+<input class="w-full border-outline-variant rounded bg-surface-container-lowest font-body-md text-body-md px-3 py-2" type="text" value="Core chatbot logic and API integration."/>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 4: Project Pricing & Timeline -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+<div>
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary">payments</span>
+<h2 class="font-h3 text-h3">Total Bid Amount</h2>
+</div>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 text-h3 text-on-surface-variant font-h3">$</span>
+<input class="w-full border-outline-variant rounded-lg bg-surface-container-low font-h2 text-h2 pl-10 pr-4 py-4 text-primary focus:ring-primary" type="number" value="5000"/>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-2">Includes service fees and platform insurance.</p>
+</div>
+<div>
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary">schedule</span>
+<h2 class="font-h3 text-h3">Estimated Duration</h2>
+</div>
+<select class="w-full border-outline-variant rounded-lg bg-surface-container-low font-h3 text-h3 px-4 py-4 focus:ring-primary">
+<option>3 weeks</option>
+<option>1 month</option>
+<option>2 months</option>
+<option>3 months+</option>
+</select>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-2">Based on the current milestone roadmap.</p>
+</div>
+</section>
+<!-- Section 5: Relevant Experience -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-primary">workspace_premium</span>
+<h2 class="font-h3 text-h3">Relevant Experience</h2>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="border border-primary bg-primary-fixed/30 rounded-lg p-4 flex items-start gap-3 cursor-pointer">
+<div class="bg-primary-container text-white p-2 rounded">
+<span class="material-symbols-outlined">auto_awesome</span>
+</div>
+<div>
+<h4 class="font-label-md text-label-md">Financial Advisor Bot</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Llama-3 + RAG architecture</p>
+</div>
+<span class="material-symbols-outlined text-primary ml-auto">check_circle</span>
+</div>
+<div class="border border-outline-variant hover:border-primary transition-colors rounded-lg p-4 flex items-start gap-3 cursor-pointer">
+<div class="bg-surface-container-highest text-on-surface-variant p-2 rounded">
+<span class="material-symbols-outlined">description</span>
+</div>
+<div>
+<h4 class="font-label-md text-label-md">Legal Doc Parser</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Custom OCR &amp; Entity Extraction</p>
+</div>
+</div>
+</div>
+<button class="mt-6 font-label-md text-primary hover:underline flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">link</span> Link more portfolio items
+                    </button>
+</section>
+<!-- Section 6: Actions -->
+<div class="flex flex-col sm:flex-row items-center gap-4 pt-8">
+<button class="w-full sm:w-auto px-12 py-4 bg-primary text-white font-label-md text-body-md rounded-lg shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all">
+                        Submit Proposal
+                    </button>
+<button class="w-full sm:w-auto px-8 py-4 border border-outline text-on-surface font-label-md text-body-md rounded-lg hover:bg-surface-container-low transition-all">
+                        Save Draft
+                    </button>
+<p class="font-body-sm text-body-sm text-on-surface-variant ml-0 sm:ml-auto">
+                        Your bid will be locked until the client reviews it.
+                    </p>
+</div>
+</div>
+<!-- Right Column: Sticky Job Brief -->
+<aside class="col-span-12 lg:col-span-4">
+<div class="sidebar-sticky space-y-6">
+<div class="glass-card rounded-lg p-6 shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<span class="bg-primary-container text-white px-2 py-0.5 rounded font-label-sm text-label-sm uppercase tracking-wider">Reference Brief</span>
+<span class="material-symbols-outlined text-on-surface-variant">info</span>
+</div>
+<h3 class="font-h3 text-h3 mb-4">Need AI chatbot</h3>
+<div class="space-y-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-secondary-container">payments</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Budget</p>
+<p class="font-label-md text-label-md">$5,000.00 Fixed</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-secondary-container">calendar_today</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Timeline</p>
+<p class="font-label-md text-label-md">1 to 3 months</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-secondary-container">shield</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Escrow Protection</p>
+<p class="font-label-md text-label-md">Enabled</p>
+</div>
+</div>
+</div>
+<div class="mt-8 pt-6 border-t border-outline-variant">
+<h4 class="font-label-md text-label-md mb-2">Required Skills</h4>
+<div class="flex flex-wrap gap-2">
+<span class="bg-surface-container-highest text-on-surface-variant px-2 py-1 rounded font-label-sm text-label-sm">Python</span>
+<span class="bg-surface-container-highest text-on-surface-variant px-2 py-1 rounded font-label-sm text-label-sm">LangChain</span>
+<span class="bg-surface-container-highest text-on-surface-variant px-2 py-1 rounded font-label-sm text-label-sm">OpenAI API</span>
+<span class="bg-surface-container-highest text-on-surface-variant px-2 py-1 rounded font-label-sm text-label-sm">Pinecone</span>
+</div>
+</div>
+<div class="mt-6">
+<img alt="AI Visualization" class="w-full rounded-lg h-32 object-cover opacity-80" data-alt="A futuristic, high-resolution visualization of neural network pathways glowing with deep blue and indigo light. The aesthetic is clean and corporate, representing advanced artificial intelligence architecture. Subtle white data points float across the screen, creating a sense of technical precision and modern digital innovation." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB45-Q2LXnOLJ_tO9wMWOjAtCyLoZiZqBnq5yAWX8vcw9_vRIxBh3J0ZOWL7hASR-B9RfMe0nUbi1q_6-3FH5pHGn27DFLlXa3-vIZiqoruQQl_yuglasoRGO9QH3PnrfO5C-1kQrL0JeaUdtt-Nqkg27PnIQBBj_mPUuR7Z7Mji8vPvwshNOVnqmbZw03GM350B3-p-1NB8a25MuqaXjwW23uyR731RhamrVZNMBGBrdv2sN2PLQVBXRpjS7shsnJQLl9eXXzrB5U"/>
+</div>
+</div>
+<div class="bg-surface-container-low border border-outline-variant rounded-lg p-6">
+<h4 class="font-label-md text-label-md mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">tips_and_updates</span>
+                            Proposal Tips
+                        </h4>
+<ul class="space-y-3 font-body-sm text-body-sm text-on-surface-variant">
+<li>• Break down costs into clear, logical milestones.</li>
+<li>• Highlight similar AI agents you've deployed.</li>
+<li>• Be specific about the LLM models you plan to use.</li>
+</ul>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-highest border-t border-outline-variant mt-16">
+<div class="w-full py-6 px-margin-desktop flex flex-col md:flex-row justify-between items-center max-w-container-max mx-auto gap-4">
+<span class="font-label-sm text-label-sm font-bold text-on-surface">© 2024 Freelance Platform Security &amp; Compliance Division</span>
+<div class="flex gap-6">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:underline decoration-primary" href="#">Terms of Service</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:underline decoration-primary" href="#">Privacy Policy</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:underline decoration-primary" href="#">Dispute Rules</a>
+</div>
+</div>
+</footer>
+<script>
+        function addMilestone() {
+            const container = document.getElementById('milestone-container');
+            const index = container.children.length + 1;
+            const milestoneHtml = `
+                <div class="grid grid-cols-12 gap-4 p-4 border border-outline-variant rounded-lg bg-surface-bright group relative opacity-0 translate-y-4 transition-all duration-300" style="opacity: 1; transform: translateY(0);">
+                    <div class="col-span-12 md:col-span-5">
+                        <label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Title</label>
+                        <input type="text" placeholder="Milestone ${index}" class="w-full border-outline-variant rounded bg-surface-container-lowest font-body-md text-body-md px-3 py-2">
+                    </div>
+                    <div class="col-span-6 md:col-span-3">
+                        <label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Amount (USD)</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-2 text-on-surface-variant">$</span>
+                            <input type="number" class="w-full border-outline-variant rounded bg-surface-container-lowest font-body-md text-body-md pl-7 pr-3 py-2">
+                        </div>
+                    </div>
+                    <div class="col-span-6 md:col-span-4">
+                        <label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Due Date</label>
+                        <input type="date" class="w-full border-outline-variant rounded bg-surface-container-lowest font-body-md text-body-md px-3 py-2">
+                    </div>
+                    <div class="col-span-12">
+                        <label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Description</label>
+                        <input type="text" placeholder="Details about this phase..." class="w-full border-outline-variant rounded bg-surface-container-lowest font-body-md text-body-md px-3 py-2">
+                    </div>
+                    <button class="absolute -top-2 -right-2 bg-error text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity" onclick="this.parentElement.remove()">
+                        <span class="material-symbols-outlined text-xs">close</span>
+                    </button>
+                </div>
+            `;
+            const div = document.createElement('div');
+            div.innerHTML = milestoneHtml;
+            container.appendChild(div.firstElementChild);
+        }
+    </script>
+</body></html>

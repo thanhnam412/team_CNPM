@@ -1,0 +1,335 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>User Restoration Success - Aegis AI Admin</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface": "#f7f9fb",
+                        "error-container": "#ffdad6",
+                        "surface-container": "#eceef0",
+                        "on-secondary-fixed": "#0b1c30",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed": "#d3e4fe",
+                        "on-primary-fixed": "#0f0069",
+                        "on-tertiary-fixed-variant": "#3f465c",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "surface-tint": "#4d44e3",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-variant": "#e0e3e5",
+                        "on-tertiary-container": "#d4dbf5",
+                        "inverse-surface": "#2d3133",
+                        "on-surface": "#191c1e",
+                        "on-primary-fixed-variant": "#3323cc",
+                        "surface-container-low": "#f2f4f6",
+                        "surface-container-high": "#e6e8ea",
+                        "tertiary-fixed-dim": "#bec6e0",
+                        "tertiary-container": "#586076",
+                        "tertiary": "#41485e",
+                        "surface-bright": "#f7f9fb",
+                        "primary-container": "#4f46e5",
+                        "inverse-on-surface": "#eff1f3",
+                        "primary-fixed": "#e2dfff",
+                        "surface-dim": "#d8dadc",
+                        "outline": "#777587",
+                        "secondary": "#505f76",
+                        "error": "#ba1a1a",
+                        "on-error": "#ffffff",
+                        "primary": "#3525cd",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed": "#dae2fd",
+                        "outline-variant": "#c7c4d8",
+                        "inverse-primary": "#c3c0ff",
+                        "on-secondary-container": "#54647a",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-tertiary": "#ffffff",
+                        "secondary-container": "#d0e1fb",
+                        "on-surface-variant": "#464555",
+                        "on-background": "#191c1e",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "on-tertiary-fixed": "#131b2e",
+                        "on-secondary": "#ffffff",
+                        "background": "#f7f9fb",
+                        "on-primary-container": "#dad7ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "0.25rem",
+                        "gutter": "1rem",
+                        "3": "0.75rem",
+                        "12": "3rem",
+                        "2": "0.5rem",
+                        "margin-desktop": "2rem",
+                        "8": "2rem",
+                        "4": "1rem",
+                        "1": "0.25rem",
+                        "16": "4rem",
+                        "margin-mobile": "1rem",
+                        "6": "1.5rem",
+                        "container-max": "1280px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "h1-mobile": ["Inter"],
+                        "h1": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "h3": ["Inter"],
+                        "h2": ["Inter"],
+                        "h2-mobile": ["Inter"],
+                        "label-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["1rem", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "body-lg": ["1.125rem", { "lineHeight": "1.75", "fontWeight": "400" }],
+                        "h1-mobile": ["2.25rem", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "h1": ["3rem", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-sm": ["0.875rem", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "label-md": ["0.875rem", { "lineHeight": "1", "fontWeight": "500" }],
+                        "h3": ["1.5rem", { "lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "h2": ["2.25rem", { "lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "h2-mobile": ["1.875rem", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "label-sm": ["0.75rem", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md flex min-h-screen">
+<!-- SideNavBar -->
+<nav class="bg-surface-container-low border-r border-outline-variant h-screen w-64 fixed left-0 top-0 flex flex-col p-4 gap-2 z-40 hidden md:flex">
+<div class="mb-8 px-2 flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">shield</span>
+</div>
+<div>
+<h1 class="font-h3 text-h3 text-primary" style="font-size: 1.125rem;">Aegis AI</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">System Admin</p>
+</div>
+</div>
+<div class="flex-1 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-4 py-3 bg-secondary-container text-on-secondary-container rounded-lg font-label-md text-label-md transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">group</span>
+                Users
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant/50 rounded-lg font-label-md text-label-md transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">gavel</span>
+                Job Moderation
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant/50 rounded-lg font-label-md text-label-md transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">settings_input_component</span>
+                Configuration
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant/50 rounded-lg font-label-md text-label-md transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">history_edu</span>
+                Audit Logs
+            </a>
+</div>
+<div class="mt-auto flex flex-col gap-1 border-t border-outline-variant pt-4">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant/50 rounded-lg font-label-md text-label-md transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">help</span>
+                Support
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant/50 rounded-lg font-label-md text-label-md transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">logout</span>
+                Sign Out
+            </a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 md:ml-64 flex flex-col min-h-screen relative">
+<!-- TopAppBar -->
+<header class="bg-surface border-b border-outline-variant flex items-center justify-between px-margin-desktop sticky top-0 z-50 w-full h-16">
+<div class="flex items-center gap-4">
+<button class="md:hidden text-on-surface hover:bg-surface-container-low p-2 rounded-full transition-colors cursor-pointer active:opacity-80">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h2 class="font-h3 text-h3 font-bold text-primary hidden md:block">User Management</h2>
+</div>
+<div class="flex items-center gap-2">
+<button class="text-on-surface-variant hover:bg-surface-container-low p-2 rounded-full transition-colors cursor-pointer active:opacity-80">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:bg-surface-container-low p-2 rounded-full transition-colors cursor-pointer active:opacity-80">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-container-high border border-outline-variant overflow-hidden ml-2">
+<img alt="Administrator profile avatar" class="w-full h-full object-cover" data-alt="A professional headshot of a middle-aged male administrator in a modern office setting. He is wearing a crisp blue dress shirt, looking confidently at the camera. The lighting is bright and even, casting soft shadows, typical of a corporate corporate light-mode application." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJ9hBg-YFLRwaYFSUHWIndy2NKoJmjkh5A8jvavs9n_lYDKlr0U-FrvecApLQ4hs03QuP-LtqJVENsk2kc4zvdXFx0_qm_o9BmC7AttEHWIuSe8q6mdwJ6JFvxufjBU8IXqv7ujYxD0GXGnBEr4cZdxY16MTQtjSj7ojFHMBfaanz7N3AulNPvw9nPu3EzzPS3oMPcmrxCo6UrYajsb6vxCPgtInXzmPBb1HDbIEtQmKMEeW89exGbp9I45Sq9vKbZlzFyzzK567w">
+</div>
+</div>
+</header>
+<!-- Page Canvas -->
+<main class="flex-1 p-margin-mobile md:p-margin-desktop max-w-container-max mx-auto w-full flex flex-col gap-8">
+<!-- Breadcrumbs & Actions -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<div class="flex items-center gap-2 text-on-surface-variant font-label-md text-label-md">
+<a class="hover:text-primary transition-colors" href="#">Users</a>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="text-on-surface">Eleanor Vance</span>
+</div>
+<button class="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-container-low transition-colors w-fit">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+                    Back to List
+                </button>
+</div>
+<!-- Success Banner -->
+<div class="bg-secondary-container text-on-secondary-container border border-secondary-fixed-dim rounded-lg p-4 flex items-start gap-4 shadow-sm animate-[fadeIn_0.5s_ease-out]">
+<div class="mt-0.5 text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="flex-1">
+<h3 class="font-label-md text-label-md font-bold mb-1">User Access Restored</h3>
+<p class="font-body-sm text-body-sm text-on-secondary-container/80">Eleanor Vance's account suspension has been lifted. Full access to the platform has been re-established and all pending jobs have been unpaused.</p>
+</div>
+<button class="text-on-secondary-container/60 hover:text-on-secondary-container transition-colors">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Left Column: Identity & Status (1/3 width) -->
+<div class="flex flex-col gap-6 lg:col-span-1">
+<!-- User Profile Card -->
+<div class="bg-surface border border-outline-variant rounded-lg p-6 flex flex-col items-center text-center relative overflow-hidden">
+<!-- Decorative background element -->
+<div class="absolute top-0 left-0 w-full h-24 bg-surface-container-low border-b border-outline-variant z-0"></div>
+<div class="relative z-10 w-24 h-24 rounded-full border-4 border-surface bg-surface-container-highest overflow-hidden mb-4 shadow-sm">
+<img alt="User Avatar" class="w-full h-full object-cover" data-alt="A portrait of a young female professional, smiling warmly. She has dark hair tied back and is wearing a light grey sweater. The background is a softly blurred office environment, lit by natural daylight to maintain a clean, trustworthy aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDaXSexH1fFZgLvcvrp65r8lqrcLt14bqrg88zXgMjox7J4kyDO3x6gy56uyNS4js1rOldpeGmht_rDoSWz0DsFaVUTznEaQoeShnFjxcvj2fF8jDYRxcaUtQIDT1QZ1sciFBPgGsFulpUQq8MHx4mtS321L1NXoWOjCG6KvMWBBtIZqt1pXMEs9KmxVqNg55t6EwL-R9oYlrglHyIJiWFGyptQ92jRRAYQ7KhSAqOVcrLj3y3Sa7AWM_Zgw5KOhSQLaGI0UPCPEmE">
+</div>
+<h2 class="font-h3 text-h3 text-on-surface mb-1 relative z-10">Eleanor Vance</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4 relative z-10">ID: USR-88392-EV</p>
+<div class="flex items-center gap-2 px-3 py-1.5 bg-primary-fixed text-on-primary-fixed-variant rounded-full border border-primary-fixed-dim relative z-10">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-label-sm text-label-sm font-bold tracking-wide uppercase">Active</span>
+</div>
+<div class="w-full border-t border-outline-variant mt-6 pt-4 flex flex-col gap-3 text-left relative z-10">
+<div class="flex items-center gap-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">mail</span>
+<span class="font-body-sm text-body-sm">e.vance@example.com</span>
+</div>
+<div class="flex items-center gap-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+<span class="font-body-sm text-body-sm">Joined Oct 12, 2023</span>
+</div>
+</div>
+</div>
+<!-- Quick Actions Card -->
+<div class="bg-surface border border-outline-variant rounded-lg p-6">
+<h3 class="font-label-md text-label-md text-on-surface mb-4 pb-2 border-b border-outline-variant">Administrative Actions</h3>
+<div class="flex flex-col gap-2">
+<button class="flex items-center justify-between px-4 py-2 border border-outline-variant rounded-lg text-on-surface hover:bg-surface-container-low transition-colors font-body-sm text-body-sm w-full">
+<span>Force Password Reset</span>
+<span class="material-symbols-outlined text-[18px]">key</span>
+</button>
+<button class="flex items-center justify-between px-4 py-2 border border-outline-variant rounded-lg text-on-surface hover:bg-surface-container-low transition-colors font-body-sm text-body-sm w-full">
+<span>Adjust Permissions</span>
+<span class="material-symbols-outlined text-[18px]">tune</span>
+</button>
+<button class="flex items-center justify-between px-4 py-2 border border-error-container text-error rounded-lg hover:bg-error-container/20 transition-colors font-body-sm text-body-sm w-full mt-2">
+<span>Re-Suspend User</span>
+<span class="material-symbols-outlined text-[18px]">block</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Right Column: Audit Log & Details (2/3 width) -->
+<div class="lg:col-span-2 flex flex-col gap-6">
+<!-- Auto-Generated Audit Log Card -->
+<div class="bg-surface border border-outline-variant rounded-lg flex flex-col h-full overflow-hidden">
+<div class="p-6 border-b border-outline-variant flex items-center justify-between bg-surface-container-lowest">
+<h3 class="font-h3 text-h3 text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">history</span>
+                                User History Log
+                            </h3>
+<button class="text-primary hover:text-primary-fixed-dim transition-colors font-label-sm text-label-sm uppercase tracking-wider">
+                                Export Log
+                            </button>
+</div>
+<div class="flex-1 p-6 flex flex-col relative">
+<!-- Timeline vertical line -->
+<div class="absolute left-[39px] top-6 bottom-6 w-px bg-outline-variant z-0 hidden sm:block"></div>
+<div class="flex flex-col gap-6 relative z-10">
+<!-- Highlighted Restoration Entry -->
+<div class="flex gap-4 relative group">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary shadow-[0_0_0_4px_theme(colors.surface)] z-10 shrink-0 mt-1">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">restore</span>
+</div>
+<div class="flex-1 bg-surface-container-low border border-primary-fixed-dim rounded-lg p-4 shadow-sm transition-all duration-200">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+<div class="flex items-center gap-2">
+<span class="font-label-md text-label-md text-on-surface font-bold">Account Restored</span>
+<span class="px-2 py-0.5 bg-surface border border-outline-variant rounded text-label-sm font-label-sm text-on-surface-variant">System Auto-Log</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">schedule</span>
+                                                Just now
+                                            </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-3">User account status transitioned from <span class="line-through text-error/70">Suspended</span> to <strong class="text-primary">Active</strong>.</p>
+<div class="flex items-center gap-2 bg-surface p-2 rounded border border-outline-variant/50 w-fit">
+<div class="w-5 h-5 rounded-full bg-secondary overflow-hidden shrink-0">
+<img alt="Admin" class="w-full h-full object-cover" data-alt="Same administrative headshot as header, serving as a thumbnail reference." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWEVz3ooDrYCZ7gfwNQOt0Yc6PvXLS26LnXLeU-MTYb7mlnpj0_pUcUSBUAYR5zSrybit0vrqTFztCktV16HsxL2-aLxJJlJaBJ5TJHmaMP6a4KI52jZ031-wlXwRUyWzmRe3xdMYOeLMdaE_lBz-9Rxzitl6TU783L2ezUSsi2Bng8NzWivcidZl6SEoQ1zLUzeBh7xwgedkQ6LsEw85JHN0AbqmipPQUS72wMt6c6L-rxmXDA2g3MSsQ_D7nxzF4CfpzDcKFtQY">
+</div>
+<span class="font-label-sm text-label-sm text-on-surface">Action by: <strong>Admin (SYS-01)</strong></span>
+</div>
+</div>
+</div>
+<!-- Previous Entry (Suspension) -->
+<div class="flex gap-4 relative">
+<div class="w-8 h-8 rounded-full bg-surface border border-outline-variant flex items-center justify-center text-on-surface-variant shadow-[0_0_0_4px_theme(colors.surface)] z-10 shrink-0 mt-1">
+<span class="material-symbols-outlined text-[16px]">block</span>
+</div>
+<div class="flex-1 pb-4">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-1">
+<span class="font-label-md text-label-md text-on-surface">Account Suspended</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Oct 24, 2023 • 14:32</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Manual suspension applied. Reason provided: "Violation of automated scraping limits."</p>
+</div>
+</div>
+<!-- Older Entry -->
+<div class="flex gap-4 relative">
+<div class="w-8 h-8 rounded-full bg-surface border border-outline-variant flex items-center justify-center text-on-surface-variant shadow-[0_0_0_4px_theme(colors.surface)] z-10 shrink-0 mt-1">
+<span class="material-symbols-outlined text-[16px]">warning</span>
+</div>
+<div class="flex-1 pb-4">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-1">
+<span class="font-label-md text-label-md text-on-surface">Warning Issued</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Oct 22, 2023 • 09:15</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Automated system warning triggered for unusually high API request volume.</p>
+</div>
+</div>
+</div>
+<div class="mt-4 pt-4 border-t border-outline-variant text-center">
+<button class="font-label-md text-label-md text-primary hover:text-primary-fixed-dim transition-colors flex items-center justify-center gap-1 w-full">
+                                    Load Older History <span class="material-symbols-outlined text-[18px]">expand_more</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AITasker Workspace Chat</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed-dim": "#c3c0ff",
+                        "inverse-surface": "#2d3133",
+                        "tertiary": "#41485e",
+                        "surface-tint": "#4d44e3",
+                        "on-primary-fixed": "#0f0069",
+                        "surface-variant": "#e0e3e5",
+                        "on-secondary": "#ffffff",
+                        "tertiary-container": "#586076",
+                        "surface-dim": "#d8dadc",
+                        "surface": "#f7f9fb",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "secondary-fixed": "#d3e4fe",
+                        "outline-variant": "#c7c4d8",
+                        "on-error-container": "#93000a",
+                        "surface-container-low": "#f2f4f6",
+                        "primary": "#3525cd",
+                        "outline": "#777587",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-tertiary-fixed": "#131b2e",
+                        "on-surface": "#191c1e",
+                        "secondary": "#505f76",
+                        "primary-fixed": "#e2dfff",
+                        "surface-container-high": "#e6e8ea",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#3f465c",
+                        "on-secondary-container": "#54647a",
+                        "background": "#f7f9fb",
+                        "surface-container": "#eceef0",
+                        "on-background": "#191c1e",
+                        "on-tertiary-container": "#d4dbf5",
+                        "on-primary-fixed-variant": "#3323cc",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "on-secondary-fixed": "#0b1c30",
+                        "error": "#ba1a1a",
+                        "on-surface-variant": "#464555",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-container": "#d0e1fb",
+                        "on-error": "#ffffff",
+                        "primary-container": "#4f46e5",
+                        "tertiary-fixed": "#dae2fd",
+                        "on-primary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#bec6e0",
+                        "surface-bright": "#f7f9fb",
+                        "on-primary-container": "#dad7ff",
+                        "inverse-primary": "#c3c0ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "16": "4rem",
+                        "base": "0.25rem",
+                        "margin-desktop": "2rem",
+                        "2": "0.5rem",
+                        "3": "0.75rem",
+                        "8": "2rem",
+                        "1": "0.25rem",
+                        "gutter": "1rem",
+                        "4": "1rem",
+                        "container-max": "1280px",
+                        "margin-mobile": "1rem",
+                        "12": "3rem",
+                        "6": "1.5rem"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "h2-mobile": ["Inter"],
+                        "h2": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "h1": ["Inter"],
+                        "label-md": ["Inter"],
+                        "h3": ["Inter"],
+                        "h1-mobile": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["1.125rem", { "lineHeight": "1.75", "fontWeight": "400" }],
+                        "body-sm": ["0.875rem", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "h2-mobile": ["1.875rem", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "h2": ["2.25rem", { "lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "body-md": ["1rem", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "label-sm": ["0.75rem", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "h1": ["3rem", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-md": ["0.875rem", { "lineHeight": "1", "fontWeight": "500" }],
+                        "h3": ["1.5rem", { "lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "h1-mobile": ["2.25rem", { "lineHeight": "1.2", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md h-screen w-full overflow-hidden flex flex-col antialiased">
+<!-- TopAppBar -->
+<header class="bg-surface-container-lowest dark:bg-inverse-surface border-b border-outline-variant dark:border-outline flex items-center justify-between px-6 py-3 w-full shrink-0 relative z-10 docked full-width top-0 flat no shadows">
+<div class="flex items-center gap-4">
+<h1 class="text-h3 font-h3 font-bold text-primary dark:text-primary-fixed-dim">HireSync Workspace</h1>
+</div>
+<div class="flex-1 max-w-xl mx-8 hidden md:block">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-full py-2 pl-10 pr-4 text-body-sm font-body-sm focus:ring-2 focus:ring-primary dark:focus:ring-primary-fixed focus:outline-none transition-all placeholder-outline" placeholder="Search..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant dark:text-on-secondary-fixed-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-all focus:ring-2 focus:ring-primary dark:focus:ring-primary-fixed rounded-full p-2">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant dark:text-on-secondary-fixed-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-all focus:ring-2 focus:ring-primary dark:focus:ring-primary-fixed rounded-full p-2">
+<span class="material-symbols-outlined">history</span>
+</button>
+<button class="text-on-surface-variant dark:text-on-secondary-fixed-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-all focus:ring-2 focus:ring-primary dark:focus:ring-primary-fixed rounded-full p-2">
+<span class="material-symbols-outlined">info</span>
+</button>
+<div class="h-6 w-px bg-outline-variant mx-2 hidden sm:block"></div>
+<button class="hidden sm:block text-label-md font-label-md text-on-surface-variant dark:text-on-secondary-fixed-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-all focus:ring-2 focus:ring-primary dark:focus:ring-primary-fixed px-3 py-2 rounded-DEFAULT">Support</button>
+<button class="bg-primary text-on-primary font-label-md text-label-md h-10 px-4 rounded-DEFAULT hover:opacity-90 transition-opacity focus:ring-2 focus:ring-offset-2 focus:ring-primary dark:focus:ring-primary-fixed">Hire Candidate</button>
+<img alt="User Profile" class="w-8 h-8 rounded-full border border-outline-variant cursor-pointer ml-2" data-alt="A professional headshot of a person, used as an avatar. The image should be a close-up portrait with soft, studio lighting, set against a neutral, light-colored background to fit a modern corporate software interface. The individual should appear approachable and professional." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnADLQNh23-T7U6ffosSsyNUGMec2CfVXp2cbTJ6OP_JjeRkXuPS3jkeNDd4Brcdw4nJ-d7L5tGHDtlVDdu9oWiCEt5ORMl3fE_-l17NDliAp8PmJROtuqKJVBgFr6RCs8KrqT9FEQFsJhKtpEgiRZ0AV1oT8i3ycDpH_7ebPmJfBns_YhK8KD62Xme-a1yseZeMbKeSEBml-3hRz7S8hx5_q7xZzr85S_I98zjazawPM2lKj0TwBs_hRyaO3B__QFFoUiSIqNOnw"/>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- SideNavBar -->
+<nav class="bg-surface-container-lowest dark:bg-inverse-surface border-r border-outline-variant dark:border-outline h-screen w-64 flex-shrink-0 flex flex-col py-6 flat no shadows hidden md:flex z-10">
+<div class="px-6 mb-8 flex items-center gap-3">
+<div class="w-10 h-10 bg-primary-container rounded flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-primary-container">work</span>
+</div>
+<div class="overflow-hidden">
+<div class="text-label-md font-label-md text-primary dark:text-primary-fixed-dim truncate font-bold">HireSync Enterprise</div>
+<div class="text-label-sm font-label-sm text-secondary dark:text-secondary-fixed-dim truncate">Workspace Admin</div>
+</div>
+</div>
+<div class="px-4 mb-6">
+<button class="w-full bg-surface-container border border-outline-variant text-on-surface font-label-md text-label-md h-10 px-4 rounded-DEFAULT hover:bg-surface-variant transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                    New Chat
+                </button>
+</div>
+<div class="flex-1 overflow-y-auto flex flex-col gap-1 px-3">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed-dim hover:bg-surface-container dark:hover:bg-surface-variant transition-colors duration-150 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-primary dark:text-primary-fixed-dim font-bold border-r-4 border-primary dark:border-primary-fixed-dim bg-primary-container/10 transition-colors duration-150 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">chat_bubble</span>
+<span class="font-body-md text-body-md">Messages</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed-dim hover:bg-surface-container dark:hover:bg-surface-variant transition-colors duration-150 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-body-md text-body-md">Candidates</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed-dim hover:bg-surface-container dark:hover:bg-surface-variant transition-colors duration-150 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined">assignment</span>
+<span class="font-body-md text-body-md">Projects</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed-dim hover:bg-surface-container dark:hover:bg-surface-variant transition-colors duration-150 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</div>
+<div class="mt-auto px-3 pt-4 border-t border-outline-variant dark:border-outline flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed-dim hover:bg-surface-container dark:hover:bg-surface-variant transition-colors duration-150 cursor-pointer" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-body-sm text-body-sm">Help</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed-dim hover:bg-surface-container dark:hover:bg-surface-variant transition-colors duration-150 cursor-pointer" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-body-sm text-body-sm">Logout</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area - 3 Pane Layout -->
+<main class="flex-1 flex overflow-hidden bg-background">
+<!-- Left Pane: Active Chats -->
+<div class="w-80 flex-shrink-0 bg-surface-container-lowest border-r border-outline-variant flex flex-col hidden lg:flex">
+<div class="p-4 border-b border-outline-variant">
+<h2 class="text-h3 font-h3 text-on-surface">Active Chats</h2>
+</div>
+<div class="flex-1 overflow-y-auto">
+<!-- Chat Item 1 (Active) -->
+<div class="p-4 border-b border-surface-variant bg-surface cursor-pointer hover:bg-surface-container-low transition-colors">
+<div class="flex items-start justify-between mb-1">
+<div class="flex items-center gap-3">
+<div class="relative">
+<img alt="Alex Mercer" class="w-10 h-10 rounded-full border border-outline-variant" data-alt="Professional headshot of a male professional, short hair, looking slightly smiling. The image should be well-lit with soft studio lighting against a minimal grey background, suitable for a corporate communication app avatar." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBsEWlD-gXFA_cTtEhqvPeB6oSdBBlr-aFfTqQNjSB0HnaPoP7cdyo2cpBI2Ah9hXrWq8b9bxQSwQxABYwByGLGHvCCoXKER2uQOrjDB9KWlm5eq4qSgYgMeCqVe2SECEyGEvKvgxOV8h_jVsrPeLh9njnbKmkmQjkj7kiMiNMGVeLbX8YT1Al4GjMgaxee3zHBMYpnniPACgyt1uI8t0MKSy-2MIutjp6Ww0Ecq1IphaiFpk6ME4HrZRMmDEHu7DLbk3GZUBY1wM"/>
+<div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-surface rounded-full"></div>
+</div>
+<div>
+<h3 class="font-label-md text-label-md text-on-surface font-semibold">Alex Mercer</h3>
+<p class="font-label-sm text-label-sm text-secondary">Frontend Developer</p>
+</div>
+</div>
+<div class="flex flex-col items-end gap-1">
+<span class="font-label-sm text-label-sm text-secondary">10:42 AM</span>
+<div class="bg-primary-container text-on-primary-container font-label-sm text-[10px] px-1.5 py-0.5 rounded">94% Match</div>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate mt-2 pl-[52px]">I have reviewed the latest wireframes...</p>
+</div>
+<!-- Chat Item 2 -->
+<div class="p-4 border-b border-surface-variant cursor-pointer hover:bg-surface-container-low transition-colors">
+<div class="flex items-start justify-between mb-1">
+<div class="flex items-center gap-3">
+<div class="relative">
+<img alt="Sarah Jenkins" class="w-10 h-10 rounded-full border border-outline-variant" data-alt="Professional headshot of a female professional, with glasses and long hair. The image should be well-lit with soft studio lighting against a minimal grey background, suitable for a corporate communication app avatar." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0uL0jhJzyobXMZO1sDBD-NsYAhwPLwcaBRXteV-Cer0r1HBo6NrO2eghX0AtMsiCH3-qsAMjH9ZKBSCS1ouqdfTkBGDUuS2zCzvoOG6nHpnL3JxpHnUU2G-LuB1MfzY7y08OzN-XmEl_O4x9i97fOT1VDlKqUZb3GqFu2jDhRfvQYaXnnNQ5Jyabh41_FjgylR1mHZg6-JiApfoR5YCDCCgLIrR7f5pmWDQkbXUB8DIEI_kZuSrVOxHH6IMS1-cRjp2bJcx_i5h8"/>
+</div>
+<div>
+<h3 class="font-label-md text-label-md text-on-surface font-semibold">Sarah Jenkins</h3>
+<p class="font-label-sm text-label-sm text-secondary">UX Researcher</p>
+</div>
+</div>
+<div class="flex flex-col items-end gap-1">
+<span class="font-label-sm text-label-sm text-secondary">Yesterday</span>
+<div class="bg-surface-container-high text-on-surface-variant font-label-sm text-[10px] px-1.5 py-0.5 rounded">88% Match</div>
+</div>
+</div>
+<div class="flex items-center justify-between mt-2 pl-[52px]">
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">The user testing results are in...</p>
+<div class="w-2 h-2 bg-primary rounded-full flex-shrink-0 ml-2"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Middle Pane: Main Chat -->
+<div class="flex-1 flex flex-col bg-surface min-w-0">
+<!-- Chat Header -->
+<div class="h-16 border-b border-outline-variant bg-surface-container-lowest flex items-center justify-between px-6 flex-shrink-0">
+<div class="flex items-center gap-4">
+<img alt="Alex Mercer" class="w-8 h-8 rounded-full border border-outline-variant" data-alt="Professional headshot of a male professional, short hair. The image should be well-lit with soft studio lighting against a minimal grey background, suitable for a corporate communication app avatar." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA0qlLkuntMR5-0xEH0fiGPnX1uK-JB6Tpmz144xLj_ZkkwFdgIflUP5JLSp868XRxFJGeRorcEaW_BjDN98wZA28kEdmzXlo2-vX4lEgH-6xgdW5aT7WWJf_mNtMgZwmdD98MecOoOZk6ax7hLpdAf22c8tM4uAJCs_BAo7EIE5KHXuwyguTY7Xz9G1kbDGq2ABcCIefjHBShpBJbj2SrvToatcZsThK-_FzWo3Cx80Q4x65YEiaPe7hSKuCKWOFecYwQv2uQSfmw"/>
+<div>
+<h2 class="font-label-md text-label-md text-on-surface font-semibold">Alex Mercer</h2>
+<p class="font-label-sm text-label-sm text-secondary">Re: E-commerce Platform Redesign</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 text-secondary hover:text-primary transition-colors rounded-full hover:bg-surface-container">
+<span class="material-symbols-outlined text-[20px]">videocam</span>
+</button>
+<button class="p-2 text-secondary hover:text-primary transition-colors rounded-full hover:bg-surface-container">
+<span class="material-symbols-outlined text-[20px]">call</span>
+</button>
+<button class="p-2 text-secondary hover:text-primary transition-colors rounded-full hover:bg-surface-container lg:hidden">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Chat Messages -->
+<div class="flex-1 overflow-y-auto p-6 flex flex-col gap-6">
+<div class="text-center">
+<span class="text-label-sm font-label-sm text-secondary bg-surface-container px-3 py-1 rounded-full">Today, 9:30 AM</span>
+</div>
+<!-- Received Message -->
+<div class="flex items-start gap-3 max-w-2xl">
+<img alt="Alex" class="w-8 h-8 rounded-full flex-shrink-0 mt-1" data-alt="Small avatar image of a male professional, short hair, looking slightly smiling. Soft studio lighting against a minimal grey background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8WArEsgVou-1kDhBjN0HKm72z-PYYMBuo-x2cztJEpBFjyx7QUkHyJUUqnLea6WwuTgBH5gqZFSEOOsCNhGFmETHmT2gpFUPypwl7caA2LANWq8gbToLdRzKw3Yy0QiqL3e2XBhARIWH3hdD8qUpKGp8uQK_zk5WDxkqW8fJcJUyeTOwlf2bIecvezHiSylHmWJYGDH18XrPb1f7iovOSHZFaWAN0RHl4EDrDrTqRTp5ey4P68aIfDTAq_rKl6xAjyRFKAruItO8"/>
+<div class="flex flex-col gap-1">
+<div class="flex items-baseline gap-2">
+<span class="font-label-sm text-label-sm font-medium text-on-surface">Alex Mercer</span>
+<span class="font-label-sm text-label-sm text-secondary text-[10px]">9:35 AM</span>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-3 rounded-lg rounded-tl-none shadow-sm text-body-sm font-body-sm text-on-surface">
+                                I've finished implementing the new cart logic based on the updated designs. I encountered a small issue with the state management during checkout, but I think I have a workaround. Let me know when you have a moment to review the PR.
+                            </div>
+</div>
+</div>
+<!-- Sent Message -->
+<div class="flex items-start gap-3 max-w-2xl self-end flex-row-reverse">
+<img alt="You" class="w-8 h-8 rounded-full flex-shrink-0 mt-1" data-alt="Small avatar image of the user. Professional headshot, soft studio lighting against a minimal grey background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8Ylt4MYHmTMRoBvWOGkKO15DQG14PXe61X9yokfhQ2zIr7NCArA4QrV8gx-qXIqFyxBKcW6lzuYFkbZbcFAq0zS5NTV-qoXOkQs-rUR7tTZKkQyDCG0U5yrJmcuG4Pk3MZpEzibIYw4t75pok_uHG4IBRR6rQ4lxPi6k1XE3p_XHfXB1FivmlJobr38hhyR_SDKUEbzXTtPo8V_s9OHWlb8qXncaWqUpLj9A83v_aRajlqbN5pZEizgAwE_JhLBZKQJNMYqllr4Q"/>
+<div class="flex flex-col gap-1 items-end">
+<div class="flex items-baseline gap-2 flex-row-reverse">
+<span class="font-label-sm text-label-sm font-medium text-on-surface">You</span>
+<span class="font-label-sm text-label-sm text-secondary text-[10px]">10:42 AM</span>
+</div>
+<div class="bg-primary text-on-primary p-3 rounded-lg rounded-tr-none shadow-sm text-body-sm font-body-sm">
+                                I have reviewed the latest wireframes. Let's proceed with Milestone 2.
+                            </div>
+</div>
+</div>
+</div>
+<!-- Chat Input -->
+<div class="p-4 bg-surface-container-lowest border-t border-outline-variant">
+<div class="relative flex items-center bg-surface-container-low border border-outline-variant rounded-lg p-2 focus-within:ring-2 focus-within:ring-primary transition-all">
+<button class="p-2 text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined">attach_file</span>
+</button>
+<input class="flex-1 bg-transparent border-none focus:ring-0 text-body-sm font-body-sm px-2 text-on-surface placeholder-outline" placeholder="Type a message..." type="text"/>
+<button class="p-2 bg-primary text-on-primary rounded-md hover:opacity-90 transition-opacity ml-2">
+<span class="material-symbols-outlined text-[20px]">send</span>
+</button>
+</div>
+<div class="mt-2 text-label-sm font-label-sm text-secondary text-right">
+                        Press Enter to send, Shift+Enter for new line
+                    </div>
+</div>
+</div>
+<!-- Right Pane: Project Details -->
+<div class="w-72 flex-shrink-0 bg-surface-container-lowest border-l border-outline-variant hidden xl:flex flex-col overflow-y-auto">
+<div class="p-6 border-b border-outline-variant flex flex-col items-center text-center">
+<div class="w-16 h-16 bg-tertiary-container rounded-xl flex items-center justify-center mb-4 text-on-tertiary-container">
+<span class="material-symbols-outlined text-[32px]">shopping_cart</span>
+</div>
+<h3 class="font-h3 text-h3 text-on-surface font-semibold">E-commerce Redesign</h3>
+<p class="font-label-sm text-label-sm text-secondary mt-1">Active Project</p>
+</div>
+<div class="p-6 flex flex-col gap-6">
+<div>
+<h4 class="font-label-md text-label-md text-on-surface font-medium uppercase tracking-wider mb-3">Financials</h4>
+<div class="bg-surface-container-low rounded-lg border border-outline-variant p-4 flex flex-col gap-3">
+<div class="flex justify-between items-center">
+<span class="font-body-sm text-body-sm text-secondary">Contract</span>
+<span class="font-body-sm text-body-sm text-on-surface font-semibold">$12,000</span>
+</div>
+<div class="h-px bg-outline-variant w-full"></div>
+<div class="flex justify-between items-center">
+<span class="font-body-sm text-body-sm text-secondary">Escrow</span>
+<span class="font-body-sm text-body-sm text-primary font-semibold">$4,500</span>
+</div>
+</div>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface font-medium uppercase tracking-wider mb-3">Quick Actions</h4>
+<button class="w-full bg-surface border border-outline-variant text-on-surface font-label-md text-label-md h-10 px-4 rounded-DEFAULT hover:bg-surface-container-low transition-colors flex items-center justify-center gap-2 mb-2">
+<span class="material-symbols-outlined text-[18px]">format_list_bulleted</span>
+                            View Milestones
+                        </button>
+<button class="w-full bg-surface border border-outline-variant text-on-surface font-label-md text-label-md h-10 px-4 rounded-DEFAULT hover:bg-surface-container-low transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">description</span>
+                            Contract Details
+                        </button>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface font-medium uppercase tracking-wider mb-3">Tags</h4>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-surface-container text-on-surface-variant text-label-sm font-label-sm rounded border border-outline-variant">React</span>
+<span class="px-2 py-1 bg-surface-container text-on-surface-variant text-label-sm font-label-sm rounded border border-outline-variant">Tailwind</span>
+<span class="px-2 py-1 bg-surface-container text-on-surface-variant text-label-sm font-label-sm rounded border border-outline-variant">UI/UX</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

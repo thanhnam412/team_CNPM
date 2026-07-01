@@ -1,0 +1,535 @@
+<main class="flex-1 md:ml-64 overflow-y-auto p-6 md:p-10">
+  <div class="max-w-container-max mx-auto">
+    <!-- Page Header -->
+    <div
+      class="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-10"
+    >
+      <div>
+        <h1 class="text-3xl font-bold text-on-surface mb-2 tracking-tight">
+          Review Moderation
+        </h1>
+        <p class="text-sm text-on-surface-variant max-w-lg">
+          Monitor, moderate, and manage user reviews to maintain high quality
+          standards across the platform.
+        </p>
+      </div>
+      <div class="flex gap-3">
+        <button
+          class="px-4 py-2 bg-surface-container border border-outline-variant text-on-surface-variant font-semibold text-sm rounded-lg flex items-center gap-2 hover:bg-surface-container-high transition-all"
+        >
+          <span class="material-symbols-outlined text-[18px]"
+            >file_download</span
+          >
+          Export
+        </button>
+        <button
+          class="px-4 py-2 emerald-bg-primary text-on-primary font-semibold text-sm rounded-lg flex items-center gap-2 hover:shadow-md hover:bg-primary-container transition-all"
+        >
+          <span class="material-symbols-outlined text-[18px]">refresh</span>
+          Refresh Queue
+        </button>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 xl:grid-cols-12 gap-8">
+      <!-- Main Table Content -->
+      <div class="xl:col-span-9 space-y-6">
+        <!-- Filters Bar -->
+        <div
+          class="bg-surface-container border border-outline-variant rounded-xl p-4 flex flex-wrap items-center gap-4 shadow-sm"
+        >
+          <div
+            class="flex items-center gap-2 pr-2 border-r border-outline-variant"
+          >
+            <span
+              class="material-symbols-outlined text-on-surface-variant text-[20px]"
+              >filter_alt</span
+            >
+            <span class="text-sm font-semibold text-on-surface">Filters</span>
+          </div>
+          <select
+            class="bg-surface-container-low border border-outline-variant rounded-lg px-3 py-1.5 text-xs font-semibold focus:ring-1 focus:ring-primary focus:border-primary"
+          >
+            <option>Status: All</option>
+            <option>Pending</option>
+            <option>Published</option>
+            <option>Flagged</option>
+          </select>
+          <select
+            class="bg-surface-container-low border border-outline-variant rounded-lg px-3 py-1.5 text-xs font-semibold focus:ring-1 focus:ring-primary focus:border-primary"
+          >
+            <option>Rating: Any</option>
+            <option>5 Stars</option>
+            <option>4 Stars</option>
+            <option>Below 3</option>
+          </select>
+          <div class="relative">
+            <input
+              class="bg-surface-container-low border border-outline-variant rounded-lg pl-3 pr-8 py-1.5 text-xs font-semibold focus:ring-1 focus:ring-primary focus:border-primary"
+              type="date"
+            />
+          </div>
+          <button
+            class="ml-auto text-primary font-semibold text-xs hover:underline decoration-primary/30"
+          >
+            Clear All
+          </button>
+        </div>
+        <!-- Data Table Container -->
+        <div
+          class="bg-surface-container border border-outline-variant rounded-xl overflow-hidden shadow-sm"
+        >
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr
+                  class="bg-surface-container-low border-b border-outline-variant"
+                >
+                  <th
+                    class="px-6 py-4 text-[11px] font-bold text-on-surface-variant uppercase tracking-widest"
+                  >
+                    Reviewer &amp; Expert
+                  </th>
+                  <th
+                    class="px-6 py-4 text-[11px] font-bold text-on-surface-variant uppercase tracking-widest"
+                  >
+                    Service
+                  </th>
+                  <th
+                    class="px-6 py-4 text-[11px] font-bold text-on-surface-variant uppercase tracking-widest"
+                  >
+                    Feedback
+                  </th>
+                  <th
+                    class="px-6 py-4 text-[11px] font-bold text-on-surface-variant uppercase tracking-widest"
+                  >
+                    Status
+                  </th>
+                  <th
+                    class="px-6 py-4 text-[11px] font-bold text-on-surface-variant uppercase tracking-widest text-right"
+                  >
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-outline-variant">
+                <!-- Row 1 -->
+                <tr class="hover:bg-surface-container-low/50 transition-colors">
+                  <td class="px-6 py-5">
+                    <div class="flex flex-col">
+                      <div class="flex items-center gap-2 mb-1">
+                        <span class="text-sm font-bold text-on-surface"
+                          >Alex Rivera</span
+                        >
+                        <span
+                          class="material-symbols-outlined text-[14px] text-on-surface-variant"
+                          >arrow_forward</span
+                        >
+                        <span class="text-sm font-bold text-primary"
+                          >Dr. Sarah Chen</span
+                        >
+                      </div>
+                      <span
+                        class="text-[10px] font-medium text-on-surface-variant tracking-wider"
+                        >C: #4421 • E: #9920</span
+                      >
+                    </div>
+                  </td>
+                  <td class="px-6 py-5">
+                    <div class="text-sm">
+                      <p class="text-on-surface font-semibold">
+                        Estate Compliance Audit
+                      </p>
+                      <p class="text-on-surface-variant text-[11px]">
+                        May 14, 2024
+                      </p>
+                    </div>
+                  </td>
+                  <td class="px-6 py-5 max-w-xs">
+                    <div class="flex items-center gap-0.5 text-primary mb-1.5">
+                      <span
+                        class="material-symbols-outlined text-[14px]"
+                        style="font-variation-settings: &quot;FILL&quot; 1"
+                        >star</span
+                      >
+                      <span
+                        class="material-symbols-outlined text-[14px]"
+                        style="font-variation-settings: &quot;FILL&quot; 1"
+                        >star</span
+                      >
+                      <span
+                        class="material-symbols-outlined text-[14px]"
+                        style="font-variation-settings: &quot;FILL&quot; 1"
+                        >star</span
+                      >
+                      <span
+                        class="material-symbols-outlined text-[14px]"
+                        style="font-variation-settings: &quot;FILL&quot; 1"
+                        >star</span
+                      >
+                      <span
+                        class="material-symbols-outlined text-[14px]"
+                        style="font-variation-settings: &quot;FILL&quot; 1"
+                        >star</span
+                      >
+                    </div>
+                    <p
+                      class="text-xs text-on-surface line-clamp-2 leading-relaxed font-medium"
+                    >
+                      "Sarah was exceptional in handling our complex audit. Very
+                      precise communication..."
+                    </p>
+                  </td>
+                  <td class="px-6 py-5">
+                    <span
+                      class="px-2.5 py-1 rounded-md bg-surface-container-high text-on-surface text-[10px] font-bold uppercase tracking-wider border border-outline-variant"
+                      >Pending</span
+                    >
+                  </td>
+                  <td class="px-6 py-5 text-right space-x-1">
+                    <button
+                      class="p-2 text-primary hover:bg-primary/10 rounded-lg transition-all"
+                      title="Approve"
+                    >
+                      <span class="material-symbols-outlined"
+                        >check_circle</span
+                      >
+                    </button>
+                    <button
+                      class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all"
+                    >
+                      <span class="material-symbols-outlined">more_vert</span>
+                    </button>
+                  </td>
+                </tr>
+                <!-- Row 2 -->
+                <tr class="hover:bg-surface-container-low/50 transition-colors">
+                  <td class="px-6 py-5">
+                    <div class="flex flex-col">
+                      <div class="flex items-center gap-2 mb-1">
+                        <span class="text-sm font-bold text-on-surface"
+                          >Jordan Smyth</span
+                        >
+                        <span
+                          class="material-symbols-outlined text-[14px] text-on-surface-variant"
+                          >arrow_forward</span
+                        >
+                        <span class="text-sm font-bold text-primary"
+                          >Marcus Vane</span
+                        >
+                      </div>
+                      <span
+                        class="text-[10px] font-medium text-on-surface-variant tracking-wider"
+                        >C: #8812 • E: #1024</span
+                      >
+                    </div>
+                  </td>
+                  <td class="px-6 py-5">
+                    <div class="text-sm">
+                      <p class="text-on-surface font-semibold">
+                        Smart Contract Review
+                      </p>
+                      <p class="text-on-surface-variant text-[11px]">
+                        May 12, 2024
+                      </p>
+                    </div>
+                  </td>
+                  <td class="px-6 py-5 max-w-xs">
+                    <div class="flex items-center gap-0.5 text-primary mb-1.5">
+                      <span
+                        class="material-symbols-outlined text-[14px]"
+                        style="font-variation-settings: &quot;FILL&quot; 1"
+                        >star</span
+                      >
+                      <span class="material-symbols-outlined text-[14px]"
+                        >star</span
+                      >
+                      <span class="material-symbols-outlined text-[14px]"
+                        >star</span
+                      >
+                      <span class="material-symbols-outlined text-[14px]"
+                        >star</span
+                      >
+                      <span class="material-symbols-outlined text-[14px]"
+                        >star</span
+                      >
+                    </div>
+                    <p
+                      class="text-xs text-error font-semibold line-clamp-2 leading-relaxed"
+                    >
+                      "Terrible service. The expert didn't show up for the
+                      initial call..."
+                    </p>
+                  </td>
+                  <td class="px-6 py-5">
+                    <span
+                      class="px-2.5 py-1 rounded-md bg-error-container text-on-error-container text-[10px] font-bold uppercase tracking-wider border border-error/20"
+                      >Flagged</span
+                    >
+                  </td>
+                  <td class="px-6 py-5 text-right space-x-1">
+                    <button
+                      class="p-2 text-error hover:bg-error/10 rounded-lg transition-all"
+                      title="Review Flag"
+                    >
+                      <span class="material-symbols-outlined">flag</span>
+                    </button>
+                    <button
+                      class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all"
+                    >
+                      <span class="material-symbols-outlined">more_vert</span>
+                    </button>
+                  </td>
+                </tr>
+                <!-- Row 3 -->
+                <tr class="hover:bg-surface-container-low/50 transition-colors">
+                  <td class="px-6 py-5">
+                    <div class="flex flex-col">
+                      <div class="flex items-center gap-2 mb-1">
+                        <span class="text-sm font-bold text-on-surface"
+                          >Lila Thorne</span
+                        >
+                        <span
+                          class="material-symbols-outlined text-[14px] text-on-surface-variant"
+                          >arrow_forward</span
+                        >
+                        <span class="text-sm font-bold text-primary"
+                          >Aisha B.</span
+                        >
+                      </div>
+                      <span
+                        class="text-[10px] font-medium text-on-surface-variant tracking-wider"
+                        >C: #3391 • E: #7712</span
+                      >
+                    </div>
+                  </td>
+                  <td class="px-6 py-5">
+                    <div class="text-sm">
+                      <p class="text-on-surface font-semibold">
+                        Patent Filing Strategy
+                      </p>
+                      <p class="text-on-surface-variant text-[11px]">
+                        May 11, 2024
+                      </p>
+                    </div>
+                  </td>
+                  <td class="px-6 py-5 max-w-xs">
+                    <div class="flex items-center gap-0.5 text-primary mb-1.5">
+                      <span
+                        class="material-symbols-outlined text-[14px]"
+                        style="font-variation-settings: &quot;FILL&quot; 1"
+                        >star</span
+                      >
+                      <span
+                        class="material-symbols-outlined text-[14px]"
+                        style="font-variation-settings: &quot;FILL&quot; 1"
+                        >star</span
+                      >
+                      <span
+                        class="material-symbols-outlined text-[14px]"
+                        style="font-variation-settings: &quot;FILL&quot; 1"
+                        >star</span
+                      >
+                      <span
+                        class="material-symbols-outlined text-[14px]"
+                        style="font-variation-settings: &quot;FILL&quot; 1"
+                        >star</span
+                      >
+                      <span class="material-symbols-outlined text-[14px]"
+                        >star_half</span
+                      >
+                    </div>
+                    <p
+                      class="text-xs text-on-surface-variant italic line-clamp-2 leading-relaxed"
+                    >
+                      "Deeply knowledgeable. We saved months of back-and-forth
+                      thanks to Aisha's roadmap."
+                    </p>
+                  </td>
+                  <td class="px-6 py-5">
+                    <span
+                      class="px-2.5 py-1 rounded-md bg-primary/5 text-primary text-[10px] font-bold uppercase tracking-wider border border-primary/20"
+                      >Published</span
+                    >
+                  </td>
+                  <td class="px-6 py-5 text-right space-x-1">
+                    <button
+                      class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all"
+                      title="View"
+                    >
+                      <span class="material-symbols-outlined">open_in_new</span>
+                    </button>
+                    <button
+                      class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all"
+                    >
+                      <span class="material-symbols-outlined">more_vert</span>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- Pagination -->
+          <div
+            class="bg-surface-container-low px-6 py-4 border-t border-outline-variant flex items-center justify-between"
+          >
+            <span class="text-xs font-semibold text-on-surface-variant"
+              >Showing <span class="text-on-surface font-bold">1-10</span> of
+              1,284 reviews</span
+            >
+            <div class="flex items-center gap-1.5">
+              <button
+                class="p-1.5 bg-surface-container border border-outline-variant rounded-md hover:bg-surface-container-high disabled:opacity-30 transition-all"
+                disabled=""
+              >
+                <span class="material-symbols-outlined text-[18px]"
+                  >chevron_left</span
+                >
+              </button>
+              <div class="flex gap-1">
+                <button
+                  class="w-8 h-8 flex items-center justify-center emerald-bg-primary text-on-primary rounded-md text-xs font-bold"
+                >
+                  1
+                </button>
+                <button
+                  class="w-8 h-8 flex items-center justify-center hover:bg-surface-container-high rounded-md text-xs font-semibold text-on-surface-variant"
+                >
+                  2
+                </button>
+                <button
+                  class="w-8 h-8 flex items-center justify-center hover:bg-surface-container-high rounded-md text-xs font-semibold text-on-surface-variant"
+                >
+                  3
+                </button>
+                <span class="px-1 text-on-surface-variant self-center"
+                  >...</span
+                >
+                <button
+                  class="w-8 h-8 flex items-center justify-center hover:bg-surface-container-high rounded-md text-xs font-semibold text-on-surface-variant"
+                >
+                  129
+                </button>
+              </div>
+              <button
+                class="p-1.5 bg-surface-container border border-outline-variant rounded-md hover:bg-surface-container-high transition-all"
+              >
+                <span class="material-symbols-outlined text-[18px]"
+                  >chevron_right</span
+                >
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Stats Sidebar -->
+      <div class="xl:col-span-3 space-y-6">
+        <!-- Moderation Snapshot -->
+        <div
+          class="bg-surface-container border border-outline-variant rounded-xl p-6 shadow-sm"
+        >
+          <h3
+            class="text-sm font-bold text-on-surface mb-6 uppercase tracking-wider"
+          >
+            Moderation Stats
+          </h3>
+          <div class="space-y-4">
+            <div
+              class="p-4 bg-surface-container-low rounded-lg border border-outline-variant"
+            >
+              <p
+                class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-1"
+              >
+                Total Pending
+              </p>
+              <div class="flex items-end justify-between">
+                <p class="text-2xl font-bold text-on-surface">1,284</p>
+                <div
+                  class="flex items-center gap-1 text-[11px] text-error font-bold mb-1"
+                >
+                  <span class="material-symbols-outlined text-[14px]"
+                    >trending_up</span
+                  >
+                  12%
+                </div>
+              </div>
+            </div>
+            <div
+              class="p-4 bg-surface-container-low rounded-lg border border-outline-variant"
+            >
+              <p
+                class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-1"
+              >
+                Avg. Platform Rating
+              </p>
+              <div class="flex items-center gap-2">
+                <p class="text-2xl font-bold text-on-surface">4.82</p>
+                <span
+                  class="material-symbols-outlined text-primary text-[20px]"
+                  style="font-variation-settings: &quot;FILL&quot; 1"
+                  >star</span
+                >
+              </div>
+            </div>
+            <div
+              class="p-4 bg-error-container/20 rounded-lg border border-error/20"
+            >
+              <p
+                class="text-[10px] font-bold text-on-error-container uppercase tracking-widest mb-1"
+              >
+                Flagged Reports
+              </p>
+              <p class="text-2xl font-bold text-error">42</p>
+              <p class="text-[10px] text-on-surface-variant mt-2 font-medium">
+                Requires immediate action
+              </p>
+            </div>
+          </div>
+        </div>
+        <!-- Moderator Activity -->
+        <div
+          class="bg-surface-container border border-outline-variant rounded-xl p-6 shadow-sm"
+        >
+          <h4
+            class="text-xs font-bold text-on-surface mb-5 uppercase tracking-widest"
+          >
+            System Health
+          </h4>
+          <div class="space-y-5">
+            <div>
+              <div
+                class="flex items-center justify-between text-xs font-semibold mb-2"
+              >
+                <span class="text-on-surface-variant">Active Moderators</span>
+                <span class="text-on-surface">18/24</span>
+              </div>
+              <div
+                class="w-full bg-surface-container-high rounded-full h-1.5 overflow-hidden"
+              >
+                <div
+                  class="emerald-bg-primary h-1.5 rounded-full"
+                  style="width: 75%"
+                ></div>
+              </div>
+            </div>
+            <div>
+              <div
+                class="flex items-center justify-between text-xs font-semibold mb-2"
+              >
+                <span class="text-on-surface-variant">Queue Completion</span>
+                <span class="text-primary">92%</span>
+              </div>
+              <div
+                class="w-full bg-surface-container-high rounded-full h-1.5 overflow-hidden"
+              >
+                <div
+                  class="emerald-bg-primary h-1.5 rounded-full"
+                  style="width: 92%"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
