@@ -1,194 +1,175 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
+import { usePathname } from "next/navigation";
 
-import { NavMain } from "@/components/nav-main"
-import { NavProjects } from "@/components/nav-projects"
-import { NavUser } from "@/components/nav-user"
-import { TeamSwitcher } from "@/components/team-switcher"
+import { NavMain } from "@/components/nav-main";
+import { NavProjects } from "@/components/nav-projects";
+import { NavUser } from "@/components/nav-user";
+import { TeamSwitcher } from "@/components/team-switcher";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
-} from "@/components/ui/sidebar"
-import { GalleryVerticalEndIcon, AudioLinesIcon, TerminalIcon, TerminalSquareIcon, BotIcon, BookOpenIcon, Settings2Icon, FrameIcon, PieChartIcon, MapIcon } from "lucide-react"
+} from "@/components/ui/sidebar";
+import {
+  LayoutDashboardIcon,
+  BriefcaseIcon,
+  MessageSquareIcon,
+  Settings2Icon,
+  WalletIcon,
+  TargetIcon,
+  SearchIcon,
+  UsersIcon,
+  FolderKanbanIcon,
+  ZapIcon
+} from "lucide-react";
 
-// This is sample data.
-const data = {
+const sharedData = {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+    name: "Admin User",
+    email: "admin@aitasker.com",
+    avatar: "https://i.pravatar.cc/150?u=admin",
   },
   teams: [
     {
-      name: "Acme Inc",
-      logo: (
-        <GalleryVerticalEndIcon
-        />
-      ),
+      name: "AITasker Core",
+      logo: <ZapIcon />,
       plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: (
-        <AudioLinesIcon
-        />
-      ),
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: (
-        <TerminalIcon
-        />
-      ),
-      plan: "Free",
-    },
+    }
   ],
-  navMain: [
-    {
-      title: "Playground",
-      url: "#",
-      icon: (
-        <TerminalSquareIcon
-        />
-      ),
-      isActive: true,
-      items: [
-        {
-          title: "History",
-          url: "#",
-        },
-        {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Models",
-      url: "#",
-      icon: (
-        <BotIcon
-        />
-      ),
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Documentation",
-      url: "#",
-      icon: (
-        <BookOpenIcon
-        />
-      ),
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: (
-        <Settings2Icon
-        />
-      ),
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
-      ],
-    },
-  ],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: (
-        <FrameIcon
-        />
-      ),
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: (
-        <PieChartIcon
-        />
-      ),
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: (
-        <MapIcon
-        />
-      ),
-    },
-  ],
+};
+
+const clientNavMain = [
+  {
+    title: "Command Center",
+    url: "/client",
+    icon: <LayoutDashboardIcon />,
+    isActive: true,
+  },
+  {
+    title: "Projects",
+    url: "/client/projects",
+    icon: <FolderKanbanIcon />,
+    items: [
+      {
+        title: "All Projects",
+        url: "/client/projects",
+      },
+      {
+        title: "Create New Project",
+        url: "/client/projects/new",
+      },
+    ],
+  },
+  {
+    title: "Quick Tasks",
+    url: "/client/quick-tasks",
+    icon: <TargetIcon />,
+    items: [
+      {
+        title: "Browse Tasks",
+        url: "/client/quick-tasks",
+      },
+      {
+        title: "Post a Task",
+        url: "/client/quick-tasks/create",
+      },
+    ]
+  },
+  {
+    title: "Find Experts",
+    url: "/client/experts",
+    icon: <UsersIcon />,
+  },
+  {
+    title: "Finance",
+    url: "/client/finance",
+    icon: <WalletIcon />,
+  },
+  {
+    title: "Messages",
+    url: "/client/messages",
+    icon: <MessageSquareIcon />,
+  },
+  {
+    title: "Settings",
+    url: "/client/settings",
+    icon: <Settings2Icon />,
+  },
+];
+
+const expertNavMain = [
+  {
+    title: "Command Center",
+    url: "/expert",
+    icon: <LayoutDashboardIcon />,
+    isActive: true,
+  },
+  {
+    title: "Find Work",
+    url: "/expert/find-work/tasks",
+    icon: <SearchIcon />,
+    items: [
+      {
+        title: "Quick Tasks",
+        url: "/expert/find-work/tasks",
+      },
+      {
+        title: "Project Milestones",
+        url: "/expert/find-work/milestones",
+      },
+    ],
+  },
+  {
+    title: "My Workspace",
+    url: "/expert/workspace",
+    icon: <BriefcaseIcon />,
+  },
+  {
+    title: "Earnings",
+    url: "/expert/earnings",
+    icon: <WalletIcon />,
+  },
+  {
+    title: "Messages",
+    url: "/expert/messages",
+    icon: <MessageSquareIcon />,
+  },
+  {
+    title: "Settings",
+    url: "/expert/settings",
+    icon: <Settings2Icon />,
+  },
+];
+
+interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
+  isExpert?: boolean;
 }
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({ isExpert = false, ...props }: AppSidebarProps) {
+  const pathname = usePathname();
+  
+  // Auto-detect role based on pathname if not explicitly provided
+  const isExpertRoute = isExpert || pathname.startsWith("/expert");
+  
+  const navMain = isExpertRoute ? expertNavMain : clientNavMain;
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
+        <TeamSwitcher teams={sharedData.teams} />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+        <NavMain items={navMain} />
+        {/* We can hide NavProjects or use it for recent items later if needed */}
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={sharedData.user} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }

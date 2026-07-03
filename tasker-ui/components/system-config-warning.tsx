@@ -81,7 +81,10 @@ export function SystemConfigWarning() {
             ))}
           </ul>
           <div className="mt-3 text-right">
-            <a href="#" className="text-sm font-medium text-primary hover:underline">
+            <a
+              href="#"
+              className="text-sm font-medium text-primary hover:underline"
+            >
               View all 24 projects
             </a>
           </div>

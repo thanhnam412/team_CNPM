@@ -59,29 +59,43 @@ export function AiAutoQualityReport() {
               {/* Build Status */}
               <div className="bg-background p-4 rounded-lg border shadow-sm">
                 <div className="flex justify-between items-start mb-2">
-                  <span className="text-xs font-medium text-muted-foreground">Build Status</span>
+                  <span className="text-xs font-medium text-muted-foreground">
+                    Build Status
+                  </span>
                   <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-500" />
                 </div>
-                <span className="text-sm font-semibold text-foreground">Success</span>
+                <span className="text-sm font-semibold text-foreground">
+                  Success
+                </span>
               </div>
               {/* Tests */}
               <div className="bg-background p-4 rounded-lg border shadow-sm">
                 <div className="flex justify-between items-start mb-2">
-                  <span className="text-xs font-medium text-muted-foreground">Tests</span>
+                  <span className="text-xs font-medium text-muted-foreground">
+                    Tests
+                  </span>
                   <ListChecks className="w-5 h-5 text-green-600 dark:text-green-500" />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-sm font-semibold text-foreground">Pass</span>
-                  <span className="text-xs text-muted-foreground">95% Coverage</span>
+                  <span className="text-sm font-semibold text-foreground">
+                    Pass
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    95% Coverage
+                  </span>
                 </div>
               </div>
               {/* File Integrity */}
               <div className="bg-background p-4 rounded-lg border shadow-sm">
                 <div className="flex justify-between items-start mb-2">
-                  <span className="text-xs font-medium text-muted-foreground">File Integrity</span>
+                  <span className="text-xs font-medium text-muted-foreground">
+                    File Integrity
+                  </span>
                   <FileCheck className="w-5 h-5 text-green-600 dark:text-green-500" />
                 </div>
-                <span className="text-sm font-semibold text-foreground">Files Exist</span>
+                <span className="text-sm font-semibold text-foreground">
+                  Files Exist
+                </span>
               </div>
             </div>
           </div>
@@ -96,10 +110,14 @@ export function AiAutoQualityReport() {
               <div className="flex items-center justify-between p-4 bg-background rounded-lg border shadow-sm">
                 <div className="flex items-center gap-3">
                   <FileText className="w-5 h-5 text-muted-foreground" />
-                  <span className="text-sm font-medium text-foreground">Documentation Status</span>
+                  <span className="text-sm font-medium text-foreground">
+                    Documentation Status
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-medium text-muted-foreground">Exists</span>
+                  <span className="text-xs font-medium text-muted-foreground">
+                    Exists
+                  </span>
                   <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-500" />
                 </div>
               </div>
@@ -108,9 +126,14 @@ export function AiAutoQualityReport() {
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-3">
                     <FileSearch className="w-5 h-5 text-muted-foreground" />
-                    <span className="text-sm font-medium text-foreground">Requirement Analysis</span>
+                    <span className="text-sm font-medium text-foreground">
+                      Requirement Analysis
+                    </span>
                   </div>
-                  <Badge variant="secondary" className="bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900/30 dark:text-green-400 border-transparent">
+                  <Badge
+                    variant="secondary"
+                    className="bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900/30 dark:text-green-400 border-transparent"
+                  >
                     100% Match
                   </Badge>
                 </div>

@@ -29,12 +29,12 @@ import {
 } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  NeoDropdownMenu,
+  NeoDropdownMenuContent,
+  NeoDropdownMenuItem,
+  NeoDropdownMenuSeparator,
+  NeoDropdownMenuTrigger,
+} from "@/components/ui-custom/neo-dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   InputGroup,
@@ -61,38 +61,38 @@ export default function MilestoneReviewPage() {
           <Bell />
         </Button>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger
+        <NeoDropdownMenu>
+          <NeoDropdownMenuTrigger
             render={() => (
               <Button variant="ghost" size="icon">
                 <Settings />
               </Button>
             )}
           />
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem>Settings</DropdownMenuItem>
-            <DropdownMenuItem>Preferences</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Logout</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+          <NeoDropdownMenuContent align="end">
+            <NeoDropdownMenuItem>Settings</NeoDropdownMenuItem>
+            <NeoDropdownMenuItem>Preferences</NeoDropdownMenuItem>
+            <NeoDropdownMenuSeparator />
+            <NeoDropdownMenuItem>Logout</NeoDropdownMenuItem>
+          </NeoDropdownMenuContent>
+        </NeoDropdownMenu>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger>
+        <NeoDropdownMenu>
+          <NeoDropdownMenuTrigger>
             <Avatar>
               <AvatarFallback>A</AvatarFallback>
             </Avatar>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem>Profile</DropdownMenuItem>
-            <DropdownMenuItem>Account Settings</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
+          </NeoDropdownMenuTrigger>
+          <NeoDropdownMenuContent align="end">
+            <NeoDropdownMenuItem>Profile</NeoDropdownMenuItem>
+            <NeoDropdownMenuItem>Account Settings</NeoDropdownMenuItem>
+            <NeoDropdownMenuSeparator />
+            <NeoDropdownMenuItem>
               <LogOut />
               Logout
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+            </NeoDropdownMenuItem>
+          </NeoDropdownMenuContent>
+        </NeoDropdownMenu>
       </header>
 
       <div className="grid grid-cols-1 gap-6 p-4 md:grid-cols-3 grid-rows-[max-content] lg:p-6">

@@ -20,7 +20,6 @@ export function ApproveMilestoneClient() {
   return (
     <main className="flex-1 overflow-y-auto p-4 md:p-8 bg-background">
       <div className="max-w-5xl mx-auto space-y-8">
-        
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
           <div>
@@ -53,10 +52,8 @@ export function ApproveMilestoneClient() {
 
         {/* Bento Grid Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          
           {/* Main Details Column (Takes up 2/3 of the width on large screens) */}
           <div className="lg:col-span-2 space-y-6">
-            
             {/* Definition & Goals Card */}
             <Card className="shadow-sm">
               <CardHeader className="border-b pb-4 mb-4">
@@ -105,22 +102,34 @@ export function ApproveMilestoneClient() {
                     <li className="flex items-start gap-3 p-3.5 rounded-lg bg-muted/40 border">
                       <Braces className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                       <div>
-                        <p className="text-sm font-bold text-foreground mb-0.5">API</p>
-                        <p className="text-sm text-muted-foreground">RESTful endpoints for chatbot interaction.</p>
+                        <p className="text-sm font-bold text-foreground mb-0.5">
+                          API
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          RESTful endpoints for chatbot interaction.
+                        </p>
                       </div>
                     </li>
                     <li className="flex items-start gap-3 p-3.5 rounded-lg bg-muted/40 border">
                       <Code className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                       <div>
-                        <p className="text-sm font-bold text-foreground mb-0.5">Source code</p>
-                        <p className="text-sm text-muted-foreground">Repository access granted via GitHub.</p>
+                        <p className="text-sm font-bold text-foreground mb-0.5">
+                          Source code
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          Repository access granted via GitHub.
+                        </p>
                       </div>
                     </li>
                     <li className="flex items-start gap-3 p-3.5 rounded-lg bg-muted/40 border">
                       <FileText className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                       <div>
-                        <p className="text-sm font-bold text-foreground mb-0.5">Documentation</p>
-                        <p className="text-sm text-muted-foreground">Integration guide and architecture diagram.</p>
+                        <p className="text-sm font-bold text-foreground mb-0.5">
+                          Documentation
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          Integration guide and architecture diagram.
+                        </p>
                       </div>
                     </li>
                   </ul>
@@ -132,13 +141,19 @@ export function ApproveMilestoneClient() {
                   <div className="space-y-3">
                     <div className="flex items-start gap-3 p-2.5 rounded-md hover:bg-muted/50 transition-colors group border border-transparent hover:border-border">
                       <Checkbox id="criteria-1" className="mt-0.5" />
-                      <Label htmlFor="criteria-1" className="text-sm font-medium leading-normal cursor-pointer group-hover:text-primary transition-colors">
+                      <Label
+                        htmlFor="criteria-1"
+                        className="text-sm font-medium leading-normal cursor-pointer group-hover:text-primary transition-colors"
+                      >
                         API works seamlessly with frontend staging environment.
                       </Label>
                     </div>
                     <div className="flex items-start gap-3 p-2.5 rounded-md hover:bg-muted/50 transition-colors group border border-transparent hover:border-border">
                       <Checkbox id="criteria-2" className="mt-0.5" />
-                      <Label htmlFor="criteria-2" className="text-sm font-medium leading-normal cursor-pointer group-hover:text-primary transition-colors">
+                      <Label
+                        htmlFor="criteria-2"
+                        className="text-sm font-medium leading-normal cursor-pointer group-hover:text-primary transition-colors"
+                      >
                         Response time is &lt; 3s under standard load test.
                       </Label>
                     </div>
@@ -150,31 +165,42 @@ export function ApproveMilestoneClient() {
 
           {/* Sidebar Info Panel Column */}
           <div className="space-y-6">
-            
             {/* Financial & Contract Card */}
             <Card className="relative overflow-hidden shadow-sm">
               {/* Subtle decorative gradient */}
               <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-bl-full pointer-events-none"></div>
-              
+
               <CardHeader className="border-b pb-4 mb-4 relative z-10">
                 <CardTitle className="flex items-center gap-2 text-xl">
                   <Gavel className="w-5 h-5 text-primary" />
                   Contract Terms
                 </CardTitle>
               </CardHeader>
-              
+
               <CardContent className="space-y-5 relative z-10">
                 <div className="flex justify-between items-center pb-3 border-b border-dashed">
-                  <span className="text-sm text-muted-foreground font-medium">Deadline</span>
-                  <span className="text-sm font-bold text-foreground">Dec 15, 2024</span>
+                  <span className="text-sm text-muted-foreground font-medium">
+                    Deadline
+                  </span>
+                  <span className="text-sm font-bold text-foreground">
+                    Dec 15, 2024
+                  </span>
                 </div>
                 <div className="flex justify-between items-center pb-3 border-b border-dashed">
-                  <span className="text-sm text-muted-foreground font-medium">Payment Amount</span>
-                  <span className="text-xl font-black text-primary">$5,000.00</span>
+                  <span className="text-sm text-muted-foreground font-medium">
+                    Payment Amount
+                  </span>
+                  <span className="text-xl font-black text-primary">
+                    $5,000.00
+                  </span>
                 </div>
                 <div className="flex justify-between items-center pb-3 border-b border-dashed">
-                  <span className="text-sm text-muted-foreground font-medium">Revision Limit</span>
-                  <span className="text-sm font-bold text-foreground">2 Revisions</span>
+                  <span className="text-sm text-muted-foreground font-medium">
+                    Revision Limit
+                  </span>
+                  <span className="text-sm font-bold text-foreground">
+                    2 Revisions
+                  </span>
                 </div>
 
                 {/* Escrow Impact Alert */}
@@ -187,8 +213,11 @@ export function ApproveMilestoneClient() {
                       </h4>
                       <p className="text-xs text-blue-800 dark:text-blue-300 leading-relaxed">
                         Approving this milestone will secure{" "}
-                        <strong className="font-bold text-blue-950 dark:text-blue-100">$5,000.00</strong>{" "}
-                        in escrow for the Expert. Funds will not be released until final project sign-off.
+                        <strong className="font-bold text-blue-950 dark:text-blue-100">
+                          $5,000.00
+                        </strong>{" "}
+                        in escrow for the Expert. Funds will not be released
+                        until final project sign-off.
                       </p>
                     </div>
                   </div>
@@ -199,7 +228,10 @@ export function ApproveMilestoneClient() {
             {/* Expert Info Mini-Card */}
             <Card className="p-5 flex items-center gap-4 shadow-sm">
               <Avatar className="w-14 h-14 border-2 border-background shadow-sm">
-                <AvatarImage src="https://lh3.googleusercontent.com/aida-public/AB6AXuCy8IPe6Q2Bq1fI3o8zOHAXH7g8xlg-p-kORRgo8EElOD-NOOd2bBqOlTKR-K_GVPuiRmfz9B-Xpe3_sg1OHg6K5jnY3vFvRxmQvDbZm_oYS-tptwBJkSab7py0NopvjXsZdwrY7GNHvYcuug1jwCe_PrNTmSce_VZZR9LG7VVrPhlc96k2AIvdc-tPDVtmYUaf8y3cYjDjXmaFlQ0WRblHGen8yCPSFImLfKDuWZWhJS8HJ9rYJ0OAXaPqTBKHSuEFMOV0HQwZe9I" alt="Elena Rodriguez" />
+                <AvatarImage
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCy8IPe6Q2Bq1fI3o8zOHAXH7g8xlg-p-kORRgo8EElOD-NOOd2bBqOlTKR-K_GVPuiRmfz9B-Xpe3_sg1OHg6K5jnY3vFvRxmQvDbZm_oYS-tptwBJkSab7py0NopvjXsZdwrY7GNHvYcuug1jwCe_PrNTmSce_VZZR9LG7VVrPhlc96k2AIvdc-tPDVtmYUaf8y3cYjDjXmaFlQ0WRblHGen8yCPSFImLfKDuWZWhJS8HJ9rYJ0OAXaPqTBKHSuEFMOV0HQwZe9I"
+                  alt="Elena Rodriguez"
+                />
                 <AvatarFallback>ER</AvatarFallback>
               </Avatar>
               <div>
@@ -214,7 +246,6 @@ export function ApproveMilestoneClient() {
                 </p>
               </div>
             </Card>
-
           </div>
         </div>
       </div>

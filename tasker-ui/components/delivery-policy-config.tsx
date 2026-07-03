@@ -26,7 +26,7 @@ import {
 
 export function DeliveryPolicyConfig() {
   const [deliveryMode, setDeliveryMode] = useState<"platform" | "private">(
-    "platform"
+    "platform",
   );
   const [ackChecked, setAckChecked] = useState(false);
 
@@ -55,7 +55,6 @@ export function DeliveryPolicyConfig() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Column: Configuration */}
         <div className="lg:col-span-2 flex flex-col gap-6">
-          
           {/* Section 1: Delivery Mode Selection */}
           <section className="bg-card border border-border rounded-xl p-6 shadow-sm">
             <h2 className="text-xl font-semibold text-foreground mb-5 flex items-center gap-2">
@@ -81,7 +80,9 @@ export function DeliveryPolicyConfig() {
                     <div className="w-5 h-5 rounded-full border-2 border-muted-foreground/30 flex items-center justify-center peer-checked:border-primary peer-checked:bg-primary transition-colors">
                       <div
                         className={`w-2 h-2 rounded-full bg-primary-foreground transition-opacity ${
-                          deliveryMode === "platform" ? "opacity-100" : "opacity-0"
+                          deliveryMode === "platform"
+                            ? "opacity-100"
+                            : "opacity-0"
                         }`}
                       />
                     </div>
@@ -123,7 +124,9 @@ export function DeliveryPolicyConfig() {
                     <div className="w-5 h-5 rounded-full border-2 border-muted-foreground/30 flex items-center justify-center peer-checked:border-primary peer-checked:bg-primary transition-colors">
                       <div
                         className={`w-2 h-2 rounded-full bg-primary-foreground transition-opacity ${
-                          deliveryMode === "private" ? "opacity-100" : "opacity-0"
+                          deliveryMode === "private"
+                            ? "opacity-100"
+                            : "opacity-0"
                         }`}
                       />
                     </div>

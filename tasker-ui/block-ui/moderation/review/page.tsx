@@ -2,12 +2,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import {
   Table,
@@ -89,7 +84,7 @@ const StarRating = ({
           key={i}
           className={cn(
             "size-4",
-            i < rating ? "fill-primary" : "fill-transparent"
+            i < rating ? "fill-primary" : "fill-transparent",
           )}
         />
       ))}
@@ -168,14 +163,18 @@ export default function ModerationDashboardPage() {
               <CardContent className="space-y-4">
                 <div>
                   <div className="flex items-center justify-between text-sm mb-1.5">
-                    <span className="text-muted-foreground">Active Moderators</span>
+                    <span className="text-muted-foreground">
+                      Active Moderators
+                    </span>
                     <span className="font-medium">18</span>
                   </div>
                   <Progress value={75} />
                 </div>
                 <div>
                   <div className="flex items-center justify-between text-sm mb-1.5">
-                    <span className="text-muted-foreground">Queue Completion</span>
+                    <span className="text-muted-foreground">
+                      Queue Completion
+                    </span>
                     <span className="font-medium text-primary">92%</span>
                   </div>
                   <Progress value={92} className="[&>div]:bg-primary" />
@@ -266,7 +265,7 @@ export default function ModerationDashboardPage() {
                               "text-sm line-clamp-2 italic",
                               item.status === "Flagged"
                                 ? "text-destructive font-semibold"
-                                : "text-foreground"
+                                : "text-foreground",
                             )}
                           >
                             {item.content}
@@ -297,7 +296,11 @@ export default function ModerationDashboardPage() {
                         <TableCell className="text-right space-x-0.5">
                           {item.status === "Published" && (
                             <>
-                              <Button variant="ghost" size="icon" title="Approve">
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                title="Approve"
+                              >
                                 <CheckCircle className="size-5 text-primary" />
                               </Button>
                               <Button variant="ghost" size="icon" title="Flag">
@@ -310,7 +313,11 @@ export default function ModerationDashboardPage() {
                               <Button variant="ghost" size="icon" title="Edit">
                                 <Edit className="size-5" />
                               </Button>
-                              <Button variant="ghost" size="icon" title="Hide Review">
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                title="Hide Review"
+                              >
                                 <EyeOff className="size-5 text-destructive" />
                               </Button>
                             </>
@@ -327,18 +334,39 @@ export default function ModerationDashboardPage() {
               {/* Pagination */}
               <div className="px-6 py-4 border-t flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">
-                  Showing <span className="font-bold">1-3</span> of 1,284 reviews
+                  Showing <span className="font-bold">1-3</span> of 1,284
+                  reviews
                 </span>
                 <div className="flex items-center gap-1.5">
                   <Button variant="outline" size="icon" disabled>
                     <ChevronLeft className="size-4" />
                   </Button>
                   <div className="flex gap-1">
-                    <Button size="icon" className="w-8 h-8 text-sm">1</Button>
-                    <Button variant="ghost" size="icon" className="w-8 h-8 text-sm">2</Button>
-                    <Button variant="ghost" size="icon" className="w-8 h-8 text-sm">3</Button>
+                    <Button size="icon" className="w-8 h-8 text-sm">
+                      1
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="w-8 h-8 text-sm"
+                    >
+                      2
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="w-8 h-8 text-sm"
+                    >
+                      3
+                    </Button>
                     <span className="px-1 self-center">...</span>
-                    <Button variant="ghost" size="icon" className="w-8 h-8 text-sm">321</Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="w-8 h-8 text-sm"
+                    >
+                      321
+                    </Button>
                   </div>
                   <Button variant="outline" size="icon">
                     <ChevronRight className="size-4" />

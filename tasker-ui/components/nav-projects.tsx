@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+  NeoDropdownMenu,
+  NeoDropdownMenuContent,
+  NeoDropdownMenuItem,
+  NeoDropdownMenuSeparator,
+  NeoDropdownMenuTrigger,
+} from "@/components/ui-custom/neo-dropdown-menu";
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -15,19 +15,24 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar"
-import { MoreHorizontalIcon, FolderIcon, ArrowRightIcon, Trash2Icon } from "lucide-react"
+} from "@/components/ui/sidebar";
+import {
+  MoreHorizontalIcon,
+  FolderIcon,
+  ArrowRightIcon,
+  Trash2Icon,
+} from "lucide-react";
 
 export function NavProjects({
   projects,
 }: {
   projects: {
-    name: string
-    url: string
-    icon: React.ReactNode
-  }[]
+    name: string;
+    url: string;
+    icon: React.ReactNode;
+  }[];
 }) {
-  const { isMobile } = useSidebar()
+  const { isMobile } = useSidebar();
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel>Projects</SidebarGroupLabel>
@@ -38,8 +43,8 @@ export function NavProjects({
               {item.icon}
               <span>{item.name}</span>
             </SidebarMenuButton>
-            <DropdownMenu>
-              <DropdownMenuTrigger
+            <NeoDropdownMenu>
+              <NeoDropdownMenuTrigger
                 render={
                   <SidebarMenuAction
                     showOnHover
@@ -47,33 +52,29 @@ export function NavProjects({
                   />
                 }
               >
-                <MoreHorizontalIcon
-                />
+                <MoreHorizontalIcon />
                 <span className="sr-only">More</span>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
+              </NeoDropdownMenuTrigger>
+              <NeoDropdownMenuContent
                 className="w-fit"
                 side={isMobile ? "bottom" : "right"}
                 align={isMobile ? "end" : "start"}
               >
-                <DropdownMenuItem>
-                  <FolderIcon
-                  />
+                <NeoDropdownMenuItem>
+                  <FolderIcon />
                   <span>View Project</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <ArrowRightIcon
-                  />
+                </NeoDropdownMenuItem>
+                <NeoDropdownMenuItem>
+                  <ArrowRightIcon />
                   <span>Share Project</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem variant="destructive">
-                  <Trash2Icon
-                  />
+                </NeoDropdownMenuItem>
+                <NeoDropdownMenuSeparator />
+                <NeoDropdownMenuItem variant="destructive">
+                  <Trash2Icon />
                   <span>Delete Project</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                </NeoDropdownMenuItem>
+              </NeoDropdownMenuContent>
+            </NeoDropdownMenu>
           </SidebarMenuItem>
         ))}
         <SidebarMenuItem>
@@ -84,5 +85,5 @@ export function NavProjects({
         </SidebarMenuItem>
       </SidebarMenu>
     </SidebarGroup>
-  )
+  );
 }

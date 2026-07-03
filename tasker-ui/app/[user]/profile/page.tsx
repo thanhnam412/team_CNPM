@@ -1,8 +1,17 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
+import {
+  NeoCard,
+  NeoCardContent,
+  NeoCardHeader,
+  NeoCardTitle,
+} from "@/components/ui-custom/neo-card";
+import {
+  NeoAvatar,
+  NeoAvatarFallback,
+  NeoAvatarImage,
+} from "@/components/ui-custom/neo-avatar";
+import { NeoBadge } from "@/components/ui-custom/neo-badge";
 import { Separator } from "@/components/ui/separator";
 
 type UserProfileProps = {
@@ -26,42 +35,50 @@ export default function UserProfileCard({ user }: UserProfileProps) {
     avatarUrl: "https://i.pravatar.cc/150?img=12",
   };
   return (
-    <Card className="w-full max-w-md mx-auto">
-      <CardHeader className="flex flex-col items-center text-center space-y-3">
-        <Avatar className="h-20 w-20">
-          <AvatarImage src={user.avatarUrl} alt={user.name} />
-          <AvatarFallback>
+    <NeoCard className="w-full max-w-md mx-auto p-4 bg-[#f8f9fa]">
+      <NeoCardHeader className="flex flex-col items-center text-center space-y-4">
+        <NeoAvatar className="h-24 w-24">
+          <NeoAvatarImage src={user.avatarUrl} alt={user.name} />
+          <NeoAvatarFallback>
             {user.name
-              .split(" ")
+              .split("")
               .map((n) => n[0])
               .join("")
               .toUpperCase()}
-          </AvatarFallback>
-        </Avatar>
+          </NeoAvatarFallback>
+        </NeoAvatar>
 
         <div>
-          <CardTitle className="text-xl">{user.name}</CardTitle>
-          <p className="text-sm text-muted-foreground">@{user.username}</p>
+          <NeoCardTitle className="text-2xl">{user.name}</NeoCardTitle>
+          <p className="text-sm text-muted-foreground font-bold tracking-widest uppercase mt-1">
+            @{user.username}
+          </p>
         </div>
 
-        <Badge variant="secondary">{user.role}</Badge>
-      </CardHeader>
+        <NeoBadge variant="secondary">{user.role}</NeoBadge>
+      </NeoCardHeader>
 
-      <Separator />
+      <div className="h-1 bg-border my-4 w-full"></div>
 
-      <CardContent className="space-y-3 pt-4">
+      <NeoCardContent className="space-y-4 pt-4 border-t-2 mt-4">
         <div className="text-sm">
-          <p className="text-muted-foreground">Email</p>
-          <p className="font-medium">{user.email}</p>
+          <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
+            Email
+          </p>
+          <p className="font-black text-lg">{user.email}</p>
         </div>
 
         {user.bio && (
           <div className="text-sm">
-            <p className="text-muted-foreground">Bio</p>
-            <p className="font-medium leading-relaxed">{user.bio}</p>
+            <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
+              Bio
+            </p>
+            <p className="font-semibold leading-relaxed p-4 bg-white border-2 border-foreground shadow-[2px_2px_0px_0px_var(--foreground)] mt-2">
+              {user.bio}
+            </p>
           </div>
         )}
-      </CardContent>
-    </Card>
+      </NeoCardContent>
+    </NeoCard>
   );
 }
