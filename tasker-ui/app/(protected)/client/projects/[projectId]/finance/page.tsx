@@ -1,5 +1,13 @@
 "use client";
 
+import { useForm } from "@tanstack/react-form";
+import { z } from "zod";
+import { useParams } from "next/navigation";
+import { useState } from "react";
+import { NeoFormField } from "@/components/ui-custom/neo-form-field";
+import { useProjectFinance, useAddProjectFundsMutation } from "@/tanstack/useProjects";
+import { NeoPageHeader } from "@/components/ui-custom/neo-page-header";
+
 import {
   Wallet,
   ArrowDownRight,
@@ -9,80 +17,75 @@ import {
   Plus,
 } from "lucide-react";
 import { NeoButton } from "@/components/ui-custom/neo-button";
-import { cn } from "@/lib/utils";
+import { cn, formatCurrency } from "@/lib/utils";
 
 export default function ProjectFinancePage() {
+  const params = useParams();
+  const projectId = params.projectId as string;
+
+  const { data: financeData, isLoading } = useProjectFinance(projectId);
+
+  const [isAddFundsOpen, setIsAddFundsOpen] = useState(false);
+  const addFundsMutation = useAddProjectFundsMutation(projectId);
+
+  const form = useForm({
+    defaultValues: { amount: 100 },
+    onSubmit: async ({ value }) => {
+      addFundsMutation.mutate(value.amount, {
+        onSuccess: () => {
+          setIsAddFundsOpen(false);
+          form.reset();
+        }
+      });
+    },
+  });
+
   const stats = [
     {
       title: "Total Budget",
-      value: "$10,000",
+      value: formatCurrency(financeData?.budget || 0),
       icon: Wallet,
       color: "text-foreground",
     },
     {
       title: "Escrow (Locked)",
-      value: "$2,500",
+      value: formatCurrency(financeData?.escrow || 0),
       icon: Lock,
       color: "text-[#E1801E]",
     },
     {
       title: "Spent",
-      value: "$4,500",
+      value: formatCurrency(financeData?.spent || 0),
       icon: ArrowUpRight,
       color: "text-destructive",
     },
     {
       title: "Available",
-      value: "$3,000",
+      value: formatCurrency(Number(financeData?.budget || 0) - Number(financeData?.spent || 0) - Number(financeData?.escrow || 0)),
       icon: ArrowDownRight,
       color: "text-primary",
     },
   ];
 
-  const transactions = [
-    {
-      id: "TX-9921",
-      date: "Oct 12, 2026",
-      desc: "Locked Escrow: Label dataset with bounding boxes",
-      type: "escrow",
-      amount: "$1,200",
-      expert: "DataCorp",
-    },
-    {
-      id: "TX-9920",
-      date: "Oct 10, 2026",
-      desc: "Released Escrow: Setup AWS Infrastructure",
-      type: "spent",
-      amount: "$800",
-      expert: "CloudGuru",
-    },
-    {
-      id: "TX-9919",
-      date: "Oct 01, 2026",
-      desc: "Initial Budget Allocation",
-      type: "deposit",
-      amount: "$10,000",
-      expert: "Internal",
-    },
-  ];
+  const transactions = financeData?.transactions || [];
 
   return (
     <div className="p-6 max-w-5xl mx-auto space-y-8 pb-24">
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b-2 border-border pb-6">
-        <div>
-          <h2 className="text-3xl font-heading font-black tracking-widest uppercase flex items-center gap-3">
-            <Wallet className="w-8 h-8 text-primary" /> Financials
-          </h2>
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mt-2">
-            Manage project budget, escrow, and payments
-          </p>
-        </div>
-
-        <NeoButton className="h-12 px-6">
-          <Plus className="w-4 h-4 mr-2" /> Add Funds
-        </NeoButton>
-      </div>
+      <NeoPageHeader
+        variant="transparent"
+        className="mb-2"
+        containerClassName="!px-0 !pt-0 !pb-6"
+        headingTag="h2"
+        title="Financials"
+        icon={<Wallet className="w-8 h-8 text-primary" />}
+        description="Manage project budget, escrow, and payments"
+        rightContent={
+          <NeoButton className="h-12 px-6" onClick={() => setIsAddFundsOpen(true)}>
+            <Plus className="w-4 h-4 mr-2" /> Add Funds
+          </NeoButton>
+        }
+      />
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -159,60 +162,121 @@ export default function ProjectFinancePage() {
         </div>
 
         <div className="divide-y-2 divide-border">
-          {transactions.map((tx) => (
-            <div
-              key={tx.id}
-              className="p-4 px-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:bg-secondary/10 transition-colors"
-            >
-              <div className="flex items-center gap-4">
-                <div
-                  className={cn(
-                    "w-10 h-10 rounded-none border-2 border-border flex items-center justify-center shrink-0",
-                    tx.type === "escrow"
-                      ? "bg-[#E1801E]/20 text-[#E1801E]"
-                      : tx.type === "spent"
-                        ? "bg-destructive/20 text-destructive"
-                        : "bg-primary/20 text-primary",
-                  )}
-                >
-                  {tx.type === "escrow" ? (
-                    <Lock className="w-4 h-4" />
-                  ) : tx.type === "spent" ? (
-                    <ArrowUpRight className="w-4 h-4" />
-                  ) : (
-                    <ArrowDownRight className="w-4 h-4" />
-                  )}
-                </div>
-                <div>
-                  <h4 className="font-bold text-xs uppercase tracking-wider mb-1">
-                    {tx.desc}
-                  </h4>
-                  <div className="flex flex-wrap items-center gap-2 text-[0.625rem] font-bold text-muted-foreground uppercase tracking-widest">
-                    <span>{tx.date}</span>
-                    <span className="hidden sm:inline">•</span>
-                    <span>{tx.id}</span>
+          {isLoading ? (
+            <div className="p-8 text-center text-muted-foreground uppercase text-xs font-bold">
+              Loading transactions...
+            </div>
+          ) : transactions.length === 0 ? (
+            <div className="p-8 text-center text-muted-foreground uppercase text-xs font-bold">
+              No transactions yet.
+            </div>
+          ) : (
+            transactions.map((tx: any) => (
+              <div
+                key={tx.id}
+                className="p-4 px-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:bg-secondary/10 transition-colors"
+              >
+                <div className="flex items-center gap-4">
+                  <div
+                    className={cn(
+                      "w-10 h-10 rounded-none border-2 border-border flex items-center justify-center shrink-0",
+                      tx.type === "ESCROW"
+                        ? "bg-[#E1801E]/20 text-[#E1801E]"
+                        : tx.type === "SPENT" || tx.type === "FEE"
+                          ? "bg-destructive/20 text-destructive"
+                          : "bg-primary/20 text-primary",
+                    )}
+                  >
+                    {tx.type === "ESCROW" ? (
+                      <Lock className="w-4 h-4" />
+                    ) : tx.type === "SPENT" || tx.type === "FEE" ? (
+                      <ArrowUpRight className="w-4 h-4" />
+                    ) : (
+                      <ArrowDownRight className="w-4 h-4" />
+                    )}
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-xs uppercase tracking-wider mb-1">
+                      {tx.desc}
+                    </h4>
+                    <div className="flex flex-wrap items-center gap-2 text-[0.625rem] font-bold text-muted-foreground uppercase tracking-widest">
+                      <span>{new Date(tx.createdAt).toLocaleDateString()}</span>
+                      <span className="hidden sm:inline">•</span>
+                      <span title={tx.id}>{tx.id.split('-')[0]}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end">
-                <span className="text-[0.625rem] font-bold uppercase tracking-widest border-2 border-border px-2 py-0.5 bg-background">
-                  {tx.expert}
-                </span>
-                <span
-                  className={cn(
-                    "font-heading font-black tracking-wider text-sm",
-                    tx.type === "deposit" ? "text-primary" : "text-foreground",
-                  )}
-                >
-                  {tx.type === "deposit" ? "+" : "-"}
-                  {tx.amount}
-                </span>
+                <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end">
+                  <span className="text-[0.625rem] font-bold uppercase tracking-widest border-2 border-border px-2 py-0.5 bg-background">
+                    {tx.source || "System"}
+                  </span>
+                  <span
+                    className={cn(
+                      "font-heading font-black tracking-wider text-sm",
+                      tx.type === "DEPOSIT" || tx.type === "REFUND" || tx.type === "PAYMENT_RECEIVED"
+                        ? "text-primary"
+                        : "text-foreground",
+                    )}
+                  >
+                    {tx.type === "DEPOSIT" || tx.type === "REFUND" || tx.type === "PAYMENT_RECEIVED" ? "+" : "-"}
+                    {formatCurrency(tx.amount)}
+                  </span>
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
+
+      {/* ADD FUNDS MODAL */}
+      {isAddFundsOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="w-full max-w-md bg-card border-4 border-foreground shadow-[8px_8px_0px_0px_var(--foreground)] p-6 animate-in fade-in zoom-in duration-200">
+            <h3 className="font-heading font-black text-xl uppercase tracking-widest mb-2">
+              Add Funds to Project
+            </h3>
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-6">
+              Increase your project's working budget
+            </p>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                form.handleSubmit();
+              }}
+            >
+              <div className="space-y-6">
+                <NeoFormField
+                  form={form}
+                  name="amount"
+                  label="Amount ($)"
+                  type="number"
+                  placeholder="e.g. 500"
+                  validators={{ onChange: z.number().min(1, "Minimum $1") }}
+                />
+              </div>
+              <div className="flex justify-end gap-3 mt-8 border-t-2 border-border pt-6">
+                <NeoButton
+                  variant="outline"
+                  type="button"
+                  onClick={() => setIsAddFundsOpen(false)}
+                >
+                  Cancel
+                </NeoButton>
+                <form.Subscribe
+                  selector={(s) => [s.canSubmit, s.isSubmitting]}
+                  children={([canSubmit, isSubmitting]) => (
+                    <NeoButton type="submit" disabled={!canSubmit || isSubmitting}>
+                      {isSubmitting ? "Processing..." : "Confirm Payment"}
+                    </NeoButton>
+                  )}
+                />
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

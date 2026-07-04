@@ -11,13 +11,22 @@ import {
 import { NeoButton } from "@/components/ui-custom/neo-button";
 import { NeoInput } from "@/components/ui-custom/neo-input";
 import { NeoTextarea } from "@/components/ui-custom/neo-textarea";
-import { cn } from "@/lib/utils";
+import { NeoPageHeader } from "@/components/ui-custom/neo-page-header";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useCreateQuickTaskMutation } from "@/tanstack/useQuickTasks";
+import { useSession } from "next-auth/react";
+import { toast } from "sonner";
 
 export default function CreateQuickTaskPage() {
+  const { data: session } = useSession();
+  const router = useRouter();
+  const [title, setTitle] = useState("");
   const [bounty, setBounty] = useState("");
   const [isSuggesting, setIsSuggesting] = useState(false);
   const [taskContent, setTaskContent] = useState("");
+
+  const createMutation = useCreateQuickTaskMutation();
 
   const handleAutoSuggest = () => {
     if (!taskContent) return;
@@ -28,23 +37,39 @@ export default function CreateQuickTaskPage() {
     }, 1500);
   };
 
+  const handleSubmit = () => {
+    createMutation.mutate(
+      {
+        clientId: session?.user?.id,
+        title,
+        description: taskContent,
+        budget: Number(bounty),
+      },
+      {
+        onSuccess: () => {
+          toast.success("Task launched successfully!");
+          router.push("/client/quick-tasks");
+        },
+        onError: (error: any) => {
+          toast.error(
+            error?.response?.data?.message ||
+              "Failed to create task. Check if your user account is properly synced to the database.",
+          );
+        },
+      }
+    );
+  };
+
   return (
     <div className="flex flex-col h-full w-full bg-background overflow-hidden relative">
       {/* Header */}
-      <div className="bg-[#E1801E] border-b-4 border-foreground p-6 md:p-8 shrink-0 relative z-20">
-        <div className="max-w-3xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="text-white">
-            <h1 className="text-3xl md:text-4xl font-heading font-black tracking-widest uppercase flex items-center gap-3">
-              <Zap className="w-8 h-8 md:w-10 md:h-10 fill-white" /> Post a
-              Quick Task
-            </h1>
-            <p className="text-xs font-bold uppercase tracking-widest mt-2 opacity-90">
-              Got a bug? Need a script? Post it as a Quick Task and get it
-              solved today.
-            </p>
-          </div>
-        </div>
-      </div>
+      <NeoPageHeader
+        variant="solid"
+        className="!bg-[#E1801E]"
+        title="Post a Quick Task"
+        icon={<Zap className="w-8 h-8 md:w-10 md:h-10 fill-white" />}
+        description="Got a bug? Need a script? Post it as a Quick Task and get it solved today."
+      />
 
       <div className="flex-1 overflow-y-auto bg-background p-6 md:p-8">
         <div className="max-w-3xl mx-auto pb-20 space-y-8">
@@ -56,6 +81,8 @@ export default function CreateQuickTaskPage() {
                   Task Title
                 </label>
                 <NeoInput
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
                   placeholder="e.g., Fix CUDA out of memory error in PyTorch"
                   className="focus-visible:border-foreground focus-visible: h-14 text-lg"
                 />
@@ -151,11 +178,25 @@ export default function CreateQuickTaskPage() {
               </NeoButton>
             </Link>
 
-            <Link href="/client/quick-tasks" className="w-full sm:w-auto">
-              <NeoButton className="w-full border-4 bg-[#E1801E] text-white h-16 px-12 text-lg hover:-translate-y-1  active:translate-y-1  flex items-center justify-center">
-                Launch Task <Zap className="w-6 h-6 ml-3 fill-white" />
-              </NeoButton>
-            </Link>
+            <NeoButton
+              className="w-full sm:w-auto border-4 bg-[#E1801E] text-white h-16 px-12 text-lg hover:-translate-y-1 active:translate-y-1 flex items-center justify-center"
+              onClick={handleSubmit}
+              disabled={
+                createMutation.isPending ||
+                !title ||
+                !taskContent ||
+                !bounty ||
+                !session?.user?.id
+              }
+            >
+              {createMutation.isPending ? (
+                "Launching..."
+              ) : (
+                <>
+                  Launch Task <Zap className="w-6 h-6 ml-3 fill-white" />
+                </>
+              )}
+            </NeoButton>
           </div>
         </div>
       </div>

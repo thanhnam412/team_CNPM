@@ -1,0 +1,113 @@
+enum QuickTaskStatus {
+  OPEN
+  IN_PROGRESS
+  REVIEW
+  COMPLETED
+}
+
+enum ProposalStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  WITHDRAWN
+}
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  CANCELLED
+}
+
+model QuickTask {
+  id             String          @id @default(uuid())
+  clientId       String
+  expertId       String?
+  title          String
+  description    String
+  status         QuickTaskStatus @default(OPEN)
+  budget         Decimal         @default(0.0)
+  deadline       DateTime?
+  proposalsCount Int             @default(0)
+  projectId      String?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  client    User       @relation("ClientQuickTasks", fields: [clientId], references: [id], onDelete: Cascade)
+  expert    User?      @relation("ExpertQuickTasks", fields: [expertId], references: [id], onDelete: SetNull)
+  project   Project?   @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  proposals Proposal[]
+  task      Task?
+
+  @@map("quick_tasks")
+}
+
+model Proposal {
+  id            String         @id @default(uuid())
+  quickTaskId   String
+  expertId      String
+  coverLetter   String
+  proposedPrice Decimal
+  estimatedDays Int
+  status        ProposalStatus @default(PENDING)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  quickTask QuickTask @relation(fields: [quickTaskId], references: [id], onDelete: Cascade)
+  expert    User      @relation(fields: [expertId], references: [id], onDelete: Cascade)
+
+  @@map("proposals")
+}
+
+model Bid {
+  id           String         @id @default(uuid())
+  milestoneId  String
+  expertId     String
+  coverLetter  String
+  amount       Decimal
+  contractType String?
+  status       ProposalStatus @default(PENDING)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  milestone Milestone @relation(fields: [milestoneId], references: [id], onDelete: Cascade)
+  expert    User      @relation(fields: [expertId], references: [id], onDelete: Cascade)
+
+  @@map("bids")
+}
+
+model Review {
+  id         String   @id @default(uuid())
+  reviewerId String
+  expertId   String
+  rating     Int
+  feedback   String?
+  taskTitle  String?
+  createdAt  DateTime @default(now())
+
+  reviewer User @relation("ReviewsGiven", fields: [reviewerId], references: [id], onDelete: Cascade)
+  expert   User @relation("ReviewsReceived", fields: [expertId], references: [id], onDelete: Cascade)
+
+  @@map("reviews")
+}
+
+model Invitation {
+  id          String           @id @default(uuid())
+  clientId    String
+  expertId    String
+  projectId   String?
+  taskId      String?
+  milestoneId String?
+  message     String?
+  budget      Decimal?
+  status      InvitationStatus @default(PENDING)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  client    User       @relation("InvitationsSent", fields: [clientId], references: [id], onDelete: Cascade)
+  expert    User       @relation("InvitationsReceived", fields: [expertId], references: [id], onDelete: Cascade)
+  project   Project?   @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  milestone Milestone? @relation(fields: [milestoneId], references: [id], onDelete: SetNull)
+
+  @@map("invitations")
+}

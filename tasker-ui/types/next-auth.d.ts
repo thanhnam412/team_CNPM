@@ -1,18 +1,20 @@
 import "next-auth";
 import "next-auth/jwt";
+import { DefaultSession } from "next-auth";
 
 declare module "next-auth" {
   interface Session {
-    accessToken: string;
+    accessToken?: string;
+    error?: "RefreshAccessTokenError" | "LoginError";
     user: {
       id: string;
       email: string;
-      name: string;
-      role: string;
-    };
+      name?: string;
+      role?: string;
+      avatar?: string;
+    } & DefaultSession["user"];
   }
 
-  // Khai báo lại interface User gốc của NextAuth
   interface User {
     id?: string;
     email?: string | null;
@@ -21,21 +23,24 @@ declare module "next-auth" {
   }
 }
 
-// Giải quyết phần ép kiểu của Adapter bằng cách override lại thuộc tính emailVerified
 declare module "@auth/core/adapters" {
   interface AdapterUser {
-    emailVerified?: Date | string | null; // Biến trường này thành optional bằng dấu ?
+    emailVerified?: Date | string | null;
   }
 }
 
 declare module "next-auth/jwt" {
   interface JWT {
-    accessToken: string;
-    user: {
+    accessToken?: string;
+    refreshToken?: string;
+    accessTokenExpires?: number;
+    error?: "RefreshAccessTokenError" | "LoginError";
+    user?: {
       id: string;
       email: string;
-      name: string;
-      role: string;
+      name?: string;
+      role?: string;
+      avatar?: string;
     };
   }
 }

@@ -1,6 +1,5 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 const neoBadgeVariants = cva(
@@ -30,13 +29,12 @@ const neoBadgeVariants = cva(
 );
 
 export interface NeoBadgeProps
-  extends
-    React.ComponentProps<typeof Badge>,
+  extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof neoBadgeVariants> {}
 
 function NeoBadge({ className, variant, ...props }: NeoBadgeProps) {
   return (
-    <Badge
+    <div
       className={cn(neoBadgeVariants({ variant }), className)}
       {...props}
     />

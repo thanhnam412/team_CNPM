@@ -1,9 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { NeoButton } from "@/components/ui-custom/neo-button";
+import { NeoCard as Card } from "@/components/ui-custom/neo-card";
+import { NeoBadge as Badge } from "@/components/ui-custom/neo-badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   ArrowRight,
@@ -27,6 +28,8 @@ import {
 } from "lucide-react";
 
 export default function HomePage() {
+  const [role, setRole] = useState<"client" | "expert">("client");
+
   return (
     <div className="min-h-screen bg-background text-foreground antialiased selection:bg-primary/20 selection:text-primary">
       {/* 1. Navbar */}
@@ -37,15 +40,19 @@ export default function HomePage() {
             AITasker
           </div>
           <div className="flex items-center gap-2 sm:gap-4">
-            <Button
+            <NeoButton
               variant="outline"
+              asChild
               className="font-mono text-xs uppercase tracking-wider hidden sm:inline-flex"
             >
-              Find Work
-            </Button>
-            <Button className="font-mono text-xs uppercase tracking-wider font-bold shadow-sm">
-              Post a Job
-            </Button>
+              <Link href="/expert">Find Work</Link>
+            </NeoButton>
+            <NeoButton
+              asChild
+              className="font-mono text-xs uppercase tracking-wider font-bold shadow-sm"
+            >
+              <Link href="/client">Post a Job</Link>
+            </NeoButton>
           </div>
         </div>
       </nav>
@@ -68,33 +75,43 @@ export default function HomePage() {
 
             {/* Dual Pill Toggle */}
             <div className="flex justify-center lg:justify-start mb-10">
-              <div className="bg-muted p-1 rounded-full flex gap-1 border">
-                <Button className="rounded-full font-mono text-xs px-6 h-10 shadow-sm">
+              <div className="p-2 flex gap-2 border-2 border-foreground bg-secondary/20 shadow-[4px_4px_0px_0px_var(--foreground)]">
+                <NeoButton
+                  onClick={() => setRole("client")}
+                  variant={role === "client" ? "default" : "ghost"}
+                  className={`h-10 text-xs ${role !== "client" && "opacity-50 hover:opacity-100 border-transparent"}`}
+                >
                   I NEED AI HELP
-                </Button>
-                <Button
-                  variant="ghost"
-                  className="rounded-full font-mono text-xs px-6 h-10 text-muted-foreground hover:text-foreground"
+                </NeoButton>
+                <NeoButton
+                  onClick={() => setRole("expert")}
+                  variant={role === "expert" ? "default" : "ghost"}
+                  className={`h-10 text-xs ${role !== "expert" && "opacity-50 hover:opacity-100 border-transparent"}`}
                 >
                   I AM AN EXPERT
-                </Button>
+                </NeoButton>
               </div>
             </div>
 
             <div className="flex justify-center lg:justify-start">
-              <Button
+              <NeoButton
                 size="lg"
-                className="h-14 px-8 text-lg font-bold gap-2 shadow-lg"
+                asChild
+                className="h-14 px-8 text-lg font-bold gap-2"
               >
-                Post a Job — Free
-                <ArrowRight className="w-5 h-5" />
-              </Button>
+                <Link href={role === "client" ? "/client" : "/expert"}>
+                  {role === "client"
+                    ? "Post a Job — Free"
+                    : "Find Work — Apply Now"}
+                  <ArrowRight className="w-5 h-5 shrink-0" />
+                </Link>
+              </NeoButton>
             </div>
           </div>
 
           {/* Floating AI Card */}
           <div className="lg:w-2/5 relative w-full max-w-md mx-auto lg:max-w-full">
-            <Card className="p-8 border-primary/20 relative overflow-hidden shadow-2xl bg-background/50 backdrop-blur-sm">
+            <Card className="p-8 relative overflow-hidden bg-background/50 backdrop-blur-sm">
               <div className="flex justify-between items-center mb-6">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-primary animate-ping"></div>
@@ -188,27 +205,24 @@ export default function HomePage() {
                 Live opportunities in the AI ecosystem.
               </p>
             </div>
-            <div className="flex gap-1 p-1 bg-muted rounded-lg border">
-              <Button
-                size="sm"
-                className="font-mono text-xs font-bold shadow-sm"
-              >
+            <div className="flex gap-2 p-2 bg-secondary/10 border-2 border-foreground shadow-[2px_2px_0px_0px_var(--foreground)]">
+              <NeoButton size="sm" className="font-mono text-xs font-bold">
                 JOBS
-              </Button>
-              <Button
+              </NeoButton>
+              <NeoButton
                 size="sm"
                 variant="ghost"
-                className="font-mono text-xs text-muted-foreground hover:text-foreground"
+                className="font-mono text-xs opacity-50 hover:opacity-100 border-transparent"
               >
                 SERVICES
-              </Button>
-              <Button
+              </NeoButton>
+              <NeoButton
                 size="sm"
                 variant="ghost"
-                className="font-mono text-xs text-muted-foreground hover:text-foreground"
+                className="font-mono text-xs opacity-50 hover:opacity-100 border-transparent"
               >
                 EXPERT PROFILES
-              </Button>
+              </NeoButton>
             </div>
           </div>
 
@@ -321,7 +335,7 @@ export default function HomePage() {
             Specialized Expertise
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
-            <Card className="p-8 hover:border-primary/50 hover:shadow-md transition-all cursor-pointer">
+            <Card className="p-8 hover:border-primary/50 transition-all cursor-pointer">
               <BrainCircuit
                 className="w-10 h-10 text-primary mb-6"
                 strokeWidth={1.5}
@@ -331,14 +345,14 @@ export default function HomePage() {
                 RAG, Agents, Fine-tuning, Prompt Engineering.
               </p>
             </Card>
-            <Card className="p-8 hover:border-primary/50 hover:shadow-md transition-all cursor-pointer">
+            <Card className="p-8 hover:border-primary/50 transition-all cursor-pointer">
               <Eye className="w-10 h-10 text-primary mb-6" strokeWidth={1.5} />
               <h4 className="text-xl font-bold mb-3">Computer Vision</h4>
               <p className="text-sm text-muted-foreground leading-relaxed">
                 Detection, Segmentation, OCR, Generative Video.
               </p>
             </Card>
-            <Card className="p-8 hover:border-primary/50 hover:shadow-md transition-all cursor-pointer">
+            <Card className="p-8 hover:border-primary/50 transition-all cursor-pointer">
               <Settings
                 className="w-10 h-10 text-primary mb-6"
                 strokeWidth={1.5}
@@ -348,7 +362,7 @@ export default function HomePage() {
                 Deployment, Monitoring, CI/CD for ML pipelines.
               </p>
             </Card>
-            <Card className="p-8 hover:border-primary/50 hover:shadow-md transition-all cursor-pointer">
+            <Card className="p-8 hover:border-primary/50 transition-all cursor-pointer">
               <LineChart
                 className="w-10 h-10 text-primary mb-6"
                 strokeWidth={1.5}
@@ -378,7 +392,7 @@ export default function HomePage() {
               </div>
               <div className="space-y-10 md:space-y-12 border-l-2 border-border pl-8 md:pl-10 ml-4 md:ml-5 relative">
                 <div className="relative">
-                  <span className="absolute -left-[50px] md:-left-[60px] top-0 w-10 h-10 rounded-full bg-background border-2 border-border flex items-center justify-center font-mono font-bold text-primary shadow-sm">
+                  <span className="absolute -left-[50px] md:-left-[60px] top-0 w-10 h-10 rounded-none bg-background border-2 border-foreground flex items-center justify-center font-mono font-bold text-primary shadow-[2px_2px_0px_0px_var(--foreground)]">
                     1
                   </span>
                   <h4 className="text-xl font-bold mb-2">Post with AI Help</h4>
@@ -388,7 +402,7 @@ export default function HomePage() {
                   </p>
                 </div>
                 <div className="relative">
-                  <span className="absolute -left-[50px] md:-left-[60px] top-0 w-10 h-10 rounded-full bg-background border-2 border-border flex items-center justify-center font-mono font-bold text-primary shadow-sm">
+                  <span className="absolute -left-[50px] md:-left-[60px] top-0 w-10 h-10 rounded-none bg-background border-2 border-foreground flex items-center justify-center font-mono font-bold text-primary shadow-[2px_2px_0px_0px_var(--foreground)]">
                     2
                   </span>
                   <h4 className="text-xl font-bold mb-2">Smart Matching</h4>
@@ -398,7 +412,7 @@ export default function HomePage() {
                   </p>
                 </div>
                 <div className="relative">
-                  <span className="absolute -left-[50px] md:-left-[60px] top-0 w-10 h-10 rounded-full bg-background border-2 border-border flex items-center justify-center font-mono font-bold text-primary shadow-sm">
+                  <span className="absolute -left-[50px] md:-left-[60px] top-0 w-10 h-10 rounded-none bg-background border-2 border-foreground flex items-center justify-center font-mono font-bold text-primary shadow-[2px_2px_0px_0px_var(--foreground)]">
                     3
                   </span>
                   <h4 className="text-xl font-bold mb-2">
@@ -410,7 +424,7 @@ export default function HomePage() {
                   </p>
                 </div>
                 <div className="relative">
-                  <span className="absolute -left-[50px] md:-left-[60px] top-0 w-10 h-10 rounded-full bg-background border-2 border-border flex items-center justify-center font-mono font-bold text-primary shadow-sm">
+                  <span className="absolute -left-[50px] md:-left-[60px] top-0 w-10 h-10 rounded-none bg-background border-2 border-foreground flex items-center justify-center font-mono font-bold text-primary shadow-[2px_2px_0px_0px_var(--foreground)]">
                     4
                   </span>
                   <h4 className="text-xl font-bold mb-2">
@@ -439,7 +453,7 @@ export default function HomePage() {
               </div>
               <div className="space-y-10 md:space-y-12 border-l-2 border-border pl-8 md:pl-10 ml-4 md:ml-5 relative">
                 <div className="relative">
-                  <span className="absolute -left-[50px] md:-left-[60px] top-0 w-10 h-10 rounded-full bg-background border-2 border-border flex items-center justify-center font-mono font-bold text-foreground shadow-sm">
+                  <span className="absolute -left-[50px] md:-left-[60px] top-0 w-10 h-10 rounded-none bg-background border-2 border-foreground flex items-center justify-center font-mono font-bold text-foreground shadow-[2px_2px_0px_0px_var(--foreground)]">
                     1
                   </span>
                   <h4 className="text-xl font-bold mb-2">
@@ -451,7 +465,7 @@ export default function HomePage() {
                   </p>
                 </div>
                 <div className="relative">
-                  <span className="absolute -left-[50px] md:-left-[60px] top-0 w-10 h-10 rounded-full bg-background border-2 border-border flex items-center justify-center font-mono font-bold text-foreground shadow-sm">
+                  <span className="absolute -left-[50px] md:-left-[60px] top-0 w-10 h-10 rounded-none bg-background border-2 border-foreground flex items-center justify-center font-mono font-bold text-foreground shadow-[2px_2px_0px_0px_var(--foreground)]">
                     2
                   </span>
                   <h4 className="text-xl font-bold mb-2">
@@ -463,7 +477,7 @@ export default function HomePage() {
                   </p>
                 </div>
                 <div className="relative">
-                  <span className="absolute -left-[50px] md:-left-[60px] top-0 w-10 h-10 rounded-full bg-background border-2 border-border flex items-center justify-center font-mono font-bold text-foreground shadow-sm">
+                  <span className="absolute -left-[50px] md:-left-[60px] top-0 w-10 h-10 rounded-none bg-background border-2 border-foreground flex items-center justify-center font-mono font-bold text-foreground shadow-[2px_2px_0px_0px_var(--foreground)]">
                     3
                   </span>
                   <h4 className="text-xl font-bold mb-2">Expert Workspace</h4>
@@ -473,7 +487,7 @@ export default function HomePage() {
                   </p>
                 </div>
                 <div className="relative">
-                  <span className="absolute -left-[50px] md:-left-[60px] top-0 w-10 h-10 rounded-full bg-background border-2 border-border flex items-center justify-center font-mono font-bold text-foreground shadow-sm">
+                  <span className="absolute -left-[50px] md:-left-[60px] top-0 w-10 h-10 rounded-none bg-background border-2 border-foreground flex items-center justify-center font-mono font-bold text-foreground shadow-[2px_2px_0px_0px_var(--foreground)]">
                     4
                   </span>
                   <h4 className="text-xl font-bold mb-2">Instant Payouts</h4>
@@ -491,7 +505,7 @@ export default function HomePage() {
       {/* 7. Feature Strip */}
       <section className="py-20 bg-background border-b">
         <div className="max-w-7xl mx-auto px-4 md:px-8 grid grid-cols-1 md:grid-cols-3 gap-8">
-          <Card className="p-8 md:p-10 border-t-4 border-t-primary shadow-sm hover:shadow-md transition-shadow">
+          <Card className="p-8 md:p-10 border-t-4 border-t-primary transition-shadow">
             <Sparkles className="w-10 h-10 text-primary mb-6" />
             <h4 className="text-xl font-bold mb-3">AI Job Assistant</h4>
             <p className="text-muted-foreground text-sm leading-relaxed">
@@ -499,7 +513,7 @@ export default function HomePage() {
               technical requirements for experts.
             </p>
           </Card>
-          <Card className="p-8 md:p-10 border-t-4 border-t-foreground shadow-sm hover:shadow-md transition-shadow">
+          <Card className="p-8 md:p-10 border-t-4 border-t-foreground transition-shadow">
             <BrainCircuit className="w-10 h-10 text-foreground mb-6" />
             <h4 className="text-xl font-bold mb-3">Smart Expert Matching</h4>
             <p className="text-muted-foreground text-sm leading-relaxed">
@@ -507,7 +521,7 @@ export default function HomePage() {
               verified project performance.
             </p>
           </Card>
-          <Card className="p-8 md:p-10 border-t-4 border-t-blue-500 shadow-sm hover:shadow-md transition-shadow">
+          <Card className="p-8 md:p-10 border-t-4 border-t-blue-500 transition-shadow">
             <Lock className="w-10 h-10 text-blue-500 mb-6" />
             <h4 className="text-xl font-bold mb-3">
               Escrow &amp; IP Protection
@@ -528,8 +542,8 @@ export default function HomePage() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
             {/* Expert 1 */}
-            <Card className="p-6 flex items-center gap-5 group cursor-pointer hover:border-primary/50 transition-colors shadow-sm">
-              <Avatar className="w-16 h-16 md:w-20 md:h-20 grayscale group-hover:grayscale-0 transition-all duration-300">
+            <Card className="p-6 flex items-center gap-5 group cursor-pointer hover:border-primary/50 transition-colors">
+              <Avatar className="w-16 h-16 md:w-20 md:h-20 grayscale group-hover:grayscale-0 transition-all duration-300 rounded-none border-2 border-foreground shadow-[2px_2px_0px_0px_var(--foreground)]">
                 <AvatarImage
                   src="https://i.pravatar.cc/150?u=alex"
                   alt="Alex K."
@@ -555,8 +569,8 @@ export default function HomePage() {
               </div>
             </Card>
             {/* Expert 2 */}
-            <Card className="p-6 flex items-center gap-5 group cursor-pointer hover:border-primary/50 transition-colors shadow-sm">
-              <Avatar className="w-16 h-16 md:w-20 md:h-20 grayscale group-hover:grayscale-0 transition-all duration-300">
+            <Card className="p-6 flex items-center gap-5 group cursor-pointer hover:border-primary/50 transition-colors">
+              <Avatar className="w-16 h-16 md:w-20 md:h-20 grayscale group-hover:grayscale-0 transition-all duration-300 rounded-none border-2 border-foreground shadow-[2px_2px_0px_0px_var(--foreground)]">
                 <AvatarImage
                   src="https://i.pravatar.cc/150?u=sarah"
                   alt="Sarah L."
@@ -582,8 +596,8 @@ export default function HomePage() {
               </div>
             </Card>
             {/* Expert 3 */}
-            <Card className="p-6 flex items-center gap-5 group cursor-pointer hover:border-primary/50 transition-colors shadow-sm">
-              <Avatar className="w-16 h-16 md:w-20 md:h-20 grayscale group-hover:grayscale-0 transition-all duration-300">
+            <Card className="p-6 flex items-center gap-5 group cursor-pointer hover:border-primary/50 transition-colors">
+              <Avatar className="w-16 h-16 md:w-20 md:h-20 grayscale group-hover:grayscale-0 transition-all duration-300 rounded-none border-2 border-foreground shadow-[2px_2px_0px_0px_var(--foreground)]">
                 <AvatarImage
                   src="https://i.pravatar.cc/150?u=david"
                   alt="David M."
@@ -624,13 +638,13 @@ export default function HomePage() {
               for 12 months when you refer clients or experts.
             </p>
           </div>
-          <Button
+          <NeoButton
             variant="secondary"
             size="lg"
-            className="relative z-10 px-8 md:px-10 py-6 text-lg font-bold shadow-lg hover:bg-secondary/90"
+            className="relative z-10 px-8 md:px-10 py-6 text-lg font-bold"
           >
             Become a Partner
-          </Button>
+          </NeoButton>
           <div className="absolute right-0 top-0 w-1/2 h-full opacity-10 pointer-events-none hidden md:block">
             <Globe className="w-[300px] h-[300px] absolute -right-10 -top-10" />
           </div>
@@ -641,44 +655,48 @@ export default function HomePage() {
       <section className="py-20 md:py-24 bg-background">
         <div className="max-w-7xl mx-auto px-4 md:px-8 grid md:grid-cols-2 gap-8 md:gap-12">
           {/* Client ProjectSpace */}
-          <Card className="relative group cursor-pointer overflow-hidden rounded-2xl p-8 md:p-12 hover:border-primary/50 transition-all shadow-sm">
-            <div className="relative z-10">
-              <span className="font-mono text-[11px] text-primary mb-6 block font-bold tracking-widest uppercase">
-                CLIENT DASHBOARD
-              </span>
-              <h3 className="text-3xl font-bold mb-4 tracking-tight">
-                Your ProjectSpace
-              </h3>
-              <p className="text-muted-foreground mb-8 leading-relaxed max-w-sm">
-                Track milestones, approve deliverables, and communicate with
-                your AI team in a secure, unified environment.
-              </p>
-              <span className="inline-flex items-center gap-2 font-bold text-primary group-hover:gap-4 transition-all">
-                Enter ProjectSpace <ArrowRight className="w-5 h-5" />
-              </span>
-            </div>
-            <div className="absolute -right-20 -bottom-20 w-64 h-64 bg-primary/10 blur-[100px] rounded-full pointer-events-none"></div>
-          </Card>
+          <Link href="/client" className="block">
+            <Card className="relative group cursor-pointer overflow-hidden p-8 md:p-12 hover:border-primary/50 transition-all h-full">
+              <div className="relative z-10">
+                <span className="font-mono text-[11px] text-primary mb-6 block font-bold tracking-widest uppercase">
+                  CLIENT DASHBOARD
+                </span>
+                <h3 className="text-3xl font-bold mb-4 tracking-tight">
+                  Your ProjectSpace
+                </h3>
+                <p className="text-muted-foreground mb-8 leading-relaxed max-w-sm">
+                  Track milestones, approve deliverables, and communicate with
+                  your AI team in a secure, unified environment.
+                </p>
+                <span className="inline-flex items-center gap-2 font-bold text-primary group-hover:gap-4 transition-all">
+                  Enter ProjectSpace <ArrowRight className="w-5 h-5" />
+                </span>
+              </div>
+              <div className="absolute -right-20 -bottom-20 w-64 h-64 bg-primary/10 blur-[100px] rounded-full pointer-events-none"></div>
+            </Card>
+          </Link>
 
           {/* Expert Workspace */}
-          <Card className="relative group cursor-pointer overflow-hidden rounded-2xl p-8 md:p-12 hover:border-foreground/30 transition-all shadow-sm bg-muted/30">
-            <div className="relative z-10">
-              <span className="font-mono text-[11px] text-foreground mb-6 block font-bold tracking-widest uppercase">
-                EXPERT DASHBOARD
-              </span>
-              <h3 className="text-3xl font-bold mb-4 tracking-tight">
-                Your Workspace
-              </h3>
-              <p className="text-muted-foreground mb-8 leading-relaxed max-w-sm">
-                Manage code reviews, access high-performance compute credits,
-                and track your global AI impact.
-              </p>
-              <span className="inline-flex items-center gap-2 font-bold text-foreground group-hover:gap-4 transition-all">
-                Enter Workspace <ArrowRight className="w-5 h-5" />
-              </span>
-            </div>
-            <div className="absolute -right-20 -bottom-20 w-64 h-64 bg-foreground/5 blur-[100px] rounded-full pointer-events-none"></div>
-          </Card>
+          <Link href="/expert" className="block">
+            <Card className="relative group cursor-pointer overflow-hidden p-8 md:p-12 hover:border-foreground/30 transition-all bg-muted/30 h-full">
+              <div className="relative z-10">
+                <span className="font-mono text-[11px] text-foreground mb-6 block font-bold tracking-widest uppercase">
+                  EXPERT DASHBOARD
+                </span>
+                <h3 className="text-3xl font-bold mb-4 tracking-tight">
+                  Your Workspace
+                </h3>
+                <p className="text-muted-foreground mb-8 leading-relaxed max-w-sm">
+                  Manage code reviews, access high-performance compute credits,
+                  and track your global AI impact.
+                </p>
+                <span className="inline-flex items-center gap-2 font-bold text-foreground group-hover:gap-4 transition-all">
+                  Enter Workspace <ArrowRight className="w-5 h-5" />
+                </span>
+              </div>
+              <div className="absolute -right-20 -bottom-20 w-64 h-64 bg-foreground/5 blur-[100px] rounded-full pointer-events-none"></div>
+            </Card>
+          </Link>
         </div>
       </section>
 
@@ -686,7 +704,7 @@ export default function HomePage() {
       <section className="py-20 md:py-24 bg-muted/20 border-t">
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <div className="grid md:grid-cols-2 gap-8 md:gap-12">
-            <Card className="p-8 md:p-12 relative shadow-sm border-border">
+            <Card className="p-8 md:p-12 relative border-foreground">
               <Quote className="w-16 h-16 text-primary/10 absolute top-6 right-8" />
               <p className="text-lg md:text-xl font-medium text-foreground italic mb-10 relative z-10 leading-relaxed">
                 "Finding niche MLOps talent was a nightmare until AITasker. We
@@ -705,7 +723,7 @@ export default function HomePage() {
                 </div>
               </div>
             </Card>
-            <Card className="p-8 md:p-12 relative shadow-sm border-border">
+            <Card className="p-8 md:p-12 relative border-foreground">
               <Quote className="w-16 h-16 text-foreground/5 absolute top-6 right-8" />
               <p className="text-lg md:text-xl font-medium text-foreground italic mb-10 relative z-10 leading-relaxed">
                 "The quality of technical briefs is unmatched. I don't have to

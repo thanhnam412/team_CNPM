@@ -1,7 +1,7 @@
 "use client";
 
 import Icons from "@/components/icon";
-import { Button } from "@/components/ui/button";
+import { NeoButton } from "@/components/ui-custom/neo-button";
 import { BASE_URL } from "@/share/const";
 import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
@@ -33,18 +33,19 @@ export default function SocialSign() {
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <Button variant="outline" onClick={() => handleSocialSignIn("google")}>
+        <NeoButton variant="outline" className="h-12 gap-2" onClick={() => handleSocialSignIn("google")}>
           <Icons.Google />
           Google
-        </Button>
+        </NeoButton>
 
-        <Button
+        <NeoButton
           variant="outline"
+          className="h-12 gap-2"
           onClick={() => handleSocialSignIn("facebook")}
         >
           <Icons.Facebook />
           Facebook
-        </Button>
+        </NeoButton>
       </div>
     </>
   );

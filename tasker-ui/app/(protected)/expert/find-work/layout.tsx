@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Zap, Layers } from "lucide-react";
+import { NeoPageHeader } from "@/components/ui-custom/neo-page-header";
 
 export default function FindWorkLayout({
   children,
@@ -21,16 +22,12 @@ export default function FindWorkLayout({
     <div className="flex flex-col h-full w-full bg-background relative overflow-hidden">
       {/* Header */}
       <div className="shrink-0 border-b-2 border-border bg-card">
-        <div className="px-6 py-6 flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-heading font-black tracking-widest uppercase text-foreground">
-              Find Work
-            </h1>
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mt-1">
-              Browse available tasks and project milestones
-            </p>
-          </div>
-        </div>
+        <NeoPageHeader
+          variant="transparent"
+          className="border-b-0"
+          title="Find Work"
+          description="Browse available tasks and project milestones"
+        />
 
         {/* Navigation Tabs */}
         <div className="px-6 flex items-center gap-2 overflow-x-auto no-scrollbar">

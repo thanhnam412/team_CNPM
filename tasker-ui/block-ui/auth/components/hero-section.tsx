@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
+import { NeoCard, NeoCardContent } from "@/components/ui-custom/neo-card";
 import { Star } from "lucide-react";
 import Image from "next/image";
 import Autoplay from "embla-carousel-autoplay";
@@ -64,7 +64,7 @@ export function HeroSideSection() {
         <CarouselContent>
           {testimonials.map((item, index) => (
             <CarouselItem key={index}>
-              <Card className="overflow-hidden rounded-xl border-0 p-0">
+              <NeoCard className="overflow-hidden p-0 border-4 border-foreground shadow-[8px_8px_0px_0px_var(--foreground)] h-full">
                 <div className="relative aspect-video">
                   <Image
                     src={item.image}
@@ -76,7 +76,7 @@ export function HeroSideSection() {
 
                   <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/40 to-transparent" />
 
-                  <CardContent className="absolute inset-x-0 bottom-0 p-6 text-white">
+                  <NeoCardContent className="absolute inset-x-0 bottom-0 p-6 text-white z-10">
                     <div className="mb-3 flex gap-1">
                       {Array.from({ length: 5 }).map((_, starIndex) => (
                         <Star
@@ -94,9 +94,9 @@ export function HeroSideSection() {
                       <p className="font-semibold">{item.author}</p>
                       <p className="text-sm text-white/75">{item.role}</p>
                     </div>
-                  </CardContent>
+                  </NeoCardContent>
                 </div>
-              </Card>
+              </NeoCard>
             </CarouselItem>
           ))}
         </CarouselContent>

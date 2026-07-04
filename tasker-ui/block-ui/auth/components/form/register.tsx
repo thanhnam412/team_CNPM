@@ -1,23 +1,26 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Eye, Lock, LockKeyhole, Mail, User } from "lucide-react";
+import { ArrowRight, Eye, EyeOff, Lock, LockKeyhole, Mail, User } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { NeoButton } from "@/components/ui-custom/neo-button";
+import { NeoCard, NeoCardContent } from "@/components/ui-custom/neo-card";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
+import { NeoInput } from "@/components/ui-custom/neo-input";
 import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
 import SocialSign from "../social-sign";
 
 export function RegisterForm() {
   const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   return (
     <div className="flex justify-center lg:justify-end">
-      <Card className="w-full max-w-md">
-        <CardContent className="p-8">
+      <NeoCard className="w-full max-w-md">
+        <NeoCardContent className="p-8">
           <div className="mb-8">
             <h2 className="text-2xl font-bold">Đăng ký tài khoản</h2>
 
@@ -33,10 +36,10 @@ export function RegisterForm() {
               <div className="relative">
                 <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
 
-                <Input
+                <NeoInput
                   id="fullname"
                   placeholder="Nhập họ và tên của bạn"
-                  className="pl-10"
+                  className="pl-10 h-12"
                 />
               </div>
             </div>
@@ -47,11 +50,11 @@ export function RegisterForm() {
               <div className="relative">
                 <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
 
-                <Input
+                <NeoInput
                   id="email"
                   type="email"
                   placeholder="example@aitasker.vn"
-                  className="pl-10"
+                  className="pl-10 h-12"
                 />
               </div>
             </div>
@@ -62,21 +65,20 @@ export function RegisterForm() {
               <div className="relative">
                 <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
 
-                <Input
+                <NeoInput
                   id="password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
-                  className="pl-10 pr-10"
+                  className="pl-10 pr-10 h-12"
                 />
 
-                <Button
+                <button
                   type="button"
-                  size="icon"
-                  variant="ghost"
-                  className="absolute right-1 top-1 h-8 w-8"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  <Eye className="h-4 w-4" />
-                </Button>
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
               </div>
             </div>
 
@@ -86,12 +88,20 @@ export function RegisterForm() {
               <div className="relative">
                 <LockKeyhole className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
 
-                <Input
+                <NeoInput
                   id="confirmPassword"
-                  type="password"
+                  type={showConfirmPassword ? "text" : "password"}
                   placeholder="••••••••"
-                  className="pl-10"
+                  className="pl-10 pr-10 h-12"
                 />
+
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
               </div>
             </div>
 
@@ -109,10 +119,10 @@ export function RegisterForm() {
               </Label>
             </div>
 
-            <Button className="w-full">
+            <NeoButton className="w-full h-12 text-xs md:text-sm px-2">
               Tham gia ngay với tư cách Aitasker
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
+              <ArrowRight className="ml-2 h-4 w-4 shrink-0" />
+            </NeoButton>
 
             <SocialSign />
           </form>
@@ -126,8 +136,8 @@ export function RegisterForm() {
               Đăng nhập ngay
             </span>
           </p>
-        </CardContent>
-      </Card>
+        </NeoCardContent>
+      </NeoCard>
     </div>
   );
 }

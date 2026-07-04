@@ -70,7 +70,10 @@ export default function CreateProjectPage() {
                     name={field.name}
                     value={field.state.value}
                     onBlur={field.handleBlur}
-                    onChange={(e) => field.handleChange(e.target.value)}
+                    onChange={(e) => {
+                      console.log(e.target.value);
+                      field.handleChange(e.target.value);
+                    }}
                     placeholder="Enter project name..."
                     className={cn(
                       "h-12 focus-visible: focus-visible:-translate-x-[2px] focus-visible:-translate-y-[2px]",

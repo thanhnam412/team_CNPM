@@ -60,7 +60,7 @@ export default function UserProfileCard({ user }: UserProfileProps) {
 
       <div className="h-1 bg-border my-4 w-full"></div>
 
-      <NeoCardContent className="space-y-4 pt-4 border-t-2 mt-4">
+      <NeoCardContent className="space-y-4 pt-4 mt-4">
         <div className="text-sm">
           <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
             Email

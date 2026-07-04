@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTransactions } from "@/tanstack/useFinance";
 import {
   Wallet,
   ArrowDownRight,
@@ -21,7 +22,7 @@ import {
 } from "lucide-react";
 import { NeoButton } from "@/components/ui-custom/neo-button";
 import { NeoInput } from "@/components/ui-custom/neo-input";
-import { cn } from "@/lib/utils";
+import { cn, formatCurrency } from "@/lib/utils";
 import {
   NeoSelect,
   NeoSelectContent,
@@ -30,6 +31,7 @@ import {
   NeoSelectValue,
 } from "@/components/ui-custom/neo-select";
 import { NeoCheckbox } from "@/components/ui-custom/neo-checkbox";
+import { NeoPageHeader } from "@/components/ui-custom/neo-page-header";
 
 export default function GlobalFinancePage() {
   const [activeTab, setActiveTab] = useState("transactions");
@@ -63,59 +65,9 @@ export default function GlobalFinancePage() {
     },
   ];
 
-  // Mock Transactions
-  const transactions = [
-    {
-      id: "TX-9925",
-      date: "2026-07-02 14:30",
-      desc: "Deposit via Credit Card (ending 4242)",
-      type: "deposit",
-      amount: "$5,000.00",
-      balance: "$12,450.00",
-      status: "Success",
-      source: "System",
-    },
-    {
-      id: "TX-9924",
-      date: "2026-07-01 09:15",
-      desc: "Locked Escrow: Fine-tune Llama-3",
-      type: "escrow",
-      amount: "$500.00",
-      balance: "$7,450.00",
-      status: "Success",
-      source: "Quick Task (QT-2)",
-    },
-    {
-      id: "TX-9923",
-      date: "2026-06-28 16:45",
-      desc: "Released Escrow: Setup AWS Infrastructure",
-      type: "spent",
-      amount: "$800.00",
-      balance: "$7,950.00",
-      status: "Success",
-      source: "Project (PROJ-123)",
-    },
-    {
-      id: "TX-9922",
-      date: "2026-06-25 11:20",
-      desc: "Platform Fee (2.5%)",
-      type: "fee",
-      amount: "$20.00",
-      balance: "$8,750.00",
-      status: "Success",
-      source: "System",
-    },
-    {
-      id: "TX-9921",
-      date: "2026-06-20 08:00",
-      desc: "Refund: Cancelled Task",
-      type: "refund",
-      amount: "$150.00",
-      balance: "$8,770.00",
-      status: "Success",
-      source: "Quick Task (QT-8)",
-    },
-  ];
+  const currentUserId = "user-1";
+
+  const { data: transactions = [], isLoading: isTransactionsLoading } = useTransactions(currentUserId);
 
   const pendingPayouts = [
     {
@@ -175,18 +127,14 @@ export default function GlobalFinancePage() {
   return (
     <div className="flex flex-col h-full w-full bg-background relative overflow-hidden">
       {/* Global Header */}
-      <div className="shrink-0 border-b-2 border-border bg-card relative z-10">
-        <div className="px-6 py-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 max-w-7xl mx-auto w-full">
-          <div>
-            <h1 className="text-3xl font-heading font-black tracking-widest uppercase text-foreground flex items-center gap-3">
-              <Wallet className="w-8 h-8 text-primary" /> Finance Center
-            </h1>
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mt-2">
-              Global overview of your wallets, escrows, and spending
-            </p>
-          </div>
-
-          <div className="flex items-center gap-3 w-full md:w-auto">
+      <NeoPageHeader
+        className="relative z-10"
+        containerClassName="max-w-7xl mx-auto w-full"
+        title="Finance Center"
+        icon={<Wallet className="w-8 h-8 text-primary" />}
+        description="Global overview of your wallets, escrows, and spending"
+        rightContent={
+          <>
             <NeoButton
               variant="outline"
               className="flex-1 md:flex-none h-12 px-6"
@@ -199,9 +147,9 @@ export default function GlobalFinancePage() {
             >
               <Plus className="w-4 h-4 mr-2" /> Deposit Funds
             </NeoButton>
-          </div>
-        </div>
-      </div>
+          </>
+        }
+      />
 
       <div className="flex-1 overflow-y-auto p-6 bg-background relative z-0">
         <div className="max-w-7xl mx-auto space-y-8 pb-24">
@@ -348,72 +296,86 @@ export default function GlobalFinancePage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y-2 divide-border font-semibold text-sm">
-                    {transactions.map((tx) => (
-                      <tr
-                        key={tx.id}
-                        className="hover:bg-secondary/10 transition-colors group cursor-pointer"
-                      >
-                        <td className="p-4 border-r-2 border-border">
-                          <div className="flex flex-col">
-                            <span className="text-xs">
-                              {tx.date.split("")[0]}
-                            </span>
-                            <span className="text-[0.625rem] text-muted-foreground">
-                              {tx.date.split("")[1]}
-                            </span>
-                            <span className="text-[0.625rem] font-bold text-muted-foreground mt-1">
-                              {tx.id}
-                            </span>
-                          </div>
-                        </td>
-                        <td className="p-4 border-r-2 border-border">
-                          <div className="font-bold uppercase tracking-wide text-xs mb-2 group-hover:text-primary transition-colors">
-                            {tx.desc}
-                          </div>
-                          <div className="text-[0.625rem] uppercase tracking-widest px-2 py-0.5 border-2 border-border bg-background inline-block">
-                            {tx.source}
-                          </div>
-                        </td>
-                        <td className="p-4 border-r-2 border-border">
-                          <div
-                            className={cn(
-                              "inline-flex items-center justify-center text-[0.625rem] font-bold uppercase tracking-widest px-2 py-1 border-2 w-24",
-                              tx.type === "deposit"
-                                ? "bg-primary/10 border-primary text-primary"
-                                : tx.type === "escrow"
-                                  ? "bg-[#E1801E]/10 border-[#E1801E] text-[#E1801E]"
-                                  : tx.type === "spent"
-                                    ? "bg-destructive/10 border-destructive text-destructive"
-                                    : "bg-purple-500/10 border-purple-500 text-purple-600",
-                            )}
-                          >
-                            {tx.type}
-                          </div>
-                        </td>
-                        <td className="p-4 border-r-2 border-border text-right">
-                          <span
-                            className={cn(
-                              "font-heading font-black tracking-wider text-base",
-                              tx.type === "deposit" || tx.type === "refund"
-                                ? "text-primary"
-                                : tx.type === "escrow"
-                                  ? "text-[#E1801E]"
-                                  : "text-destructive",
-                            )}
-                          >
-                            {tx.type === "deposit" || tx.type === "refund"
-                              ? "+"
-                              : "-"}
-                            {tx.amount}
-                          </span>
-                        </td>
-                        <td className="p-4 text-right">
-                          <span className="font-heading font-black tracking-wider text-muted-foreground">
-                            {tx.balance}
-                          </span>
+                    {isTransactionsLoading ? (
+                      <tr>
+                        <td colSpan={5} className="p-8 text-center text-muted-foreground uppercase text-xs">
+                          Loading transactions...
                         </td>
                       </tr>
-                    ))}
+                    ) : transactions.length === 0 ? (
+                      <tr>
+                        <td colSpan={5} className="p-8 text-center text-muted-foreground uppercase text-xs">
+                          No transactions found
+                        </td>
+                      </tr>
+                    ) : (
+                      transactions.map((tx: any) => (
+                        <tr
+                          key={tx.id}
+                          className="hover:bg-secondary/10 transition-colors group cursor-pointer"
+                        >
+                          <td className="p-4 border-r-2 border-border">
+                            <div className="flex flex-col">
+                              <span className="text-xs">
+                                {new Date(tx.date || tx.createdAt).toLocaleDateString()}
+                              </span>
+                              <span className="text-[0.625rem] text-muted-foreground">
+                                {new Date(tx.date || tx.createdAt).toLocaleTimeString()}
+                              </span>
+                              <span className="text-[0.625rem] font-bold text-muted-foreground mt-1 truncate max-w-[100px]" title={tx.id}>
+                                {tx.id.split('-')[0]}
+                              </span>
+                            </div>
+                          </td>
+                          <td className="p-4 border-r-2 border-border">
+                            <div className="font-bold uppercase tracking-wide text-xs mb-2 group-hover:text-primary transition-colors">
+                              {tx.desc}
+                            </div>
+                            <div className="text-[0.625rem] uppercase tracking-widest px-2 py-0.5 border-2 border-border bg-background inline-block">
+                              {tx.source || "System"}
+                            </div>
+                          </td>
+                          <td className="p-4 border-r-2 border-border">
+                            <div
+                              className={cn(
+                                "inline-flex items-center justify-center text-[0.625rem] font-bold uppercase tracking-widest px-2 py-1 border-2 w-24",
+                                tx.type === "DEPOSIT"
+                                  ? "bg-primary/10 border-primary text-primary"
+                                  : tx.type === "ESCROW"
+                                    ? "bg-[#E1801E]/10 border-[#E1801E] text-[#E1801E]"
+                                    : tx.type === "SPENT" || tx.type === "FEE"
+                                      ? "bg-destructive/10 border-destructive text-destructive"
+                                      : "bg-purple-500/10 border-purple-500 text-purple-600",
+                              )}
+                            >
+                              {tx.type}
+                            </div>
+                          </td>
+                          <td className="p-4 border-r-2 border-border text-right">
+                            <span
+                              className={cn(
+                                "font-heading font-black tracking-wider text-base",
+                                tx.type === "DEPOSIT" || tx.type === "REFUND" || tx.type === "PAYMENT_RECEIVED"
+                                  ? "text-primary"
+                                  : tx.type === "ESCROW"
+                                    ? "text-[#E1801E]"
+                                    : "text-destructive",
+                              )}
+                            >
+                              {tx.type === "DEPOSIT" || tx.type === "REFUND" || tx.type === "PAYMENT_RECEIVED"
+                                ? "+"
+                                : "-"}
+                              {formatCurrency(tx.amount)}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4">
+                            <div className="font-heading font-black text-right text-foreground">
+                              {formatCurrency(tx.balanceAfter)}
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>

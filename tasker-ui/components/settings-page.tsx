@@ -1,6 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { userService } from "@/services/userService";
 import {
   Settings2,
   User,
@@ -25,17 +28,57 @@ const TABS = [
 ];
 
 export function SettingsPage() {
+  const { data: session } = useSession();
+  const queryClient = useQueryClient();
+  const userId = session?.user?.id;
+
   const [activeTab, setActiveTab] = useState("personal");
-  const [isSaving, setIsSaving] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
-  const handleSave = () => {
-    setIsSaving(true);
-    setTimeout(() => {
-      setIsSaving(false);
+  // Form State
+  const [formData, setFormData] = useState({
+    name: "",
+    title: "",
+    rate: "",
+    bio: "",
+    location: "",
+  });
+
+  // Fetch real profile data
+  const { data: userProfile, isLoading } = useQuery({
+    queryKey: ["user-profile", userId],
+    queryFn: () => userService.getUser(userId as string),
+    enabled: !!userId,
+  });
+
+  // Sync fetched data to local state
+  useEffect(() => {
+    if (userProfile) {
+      setFormData({
+        name: userProfile.name || session?.user?.name || "",
+        title: userProfile.title || "",
+        rate: userProfile.rate || "",
+        bio: userProfile.bio || "",
+        location: userProfile.location || "",
+      });
+    }
+  }, [userProfile, session]);
+
+  const updateMutation = useMutation({
+    mutationFn: (payload: any) => userService.updateProfile(userId as string, payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["user-profile", userId] });
       setShowSuccess(true);
       setTimeout(() => setShowSuccess(false), 3000);
-    }, 1000);
+    }
+  });
+
+  const handleSave = () => {
+    updateMutation.mutate(formData);
+  };
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   return (
@@ -55,7 +98,7 @@ export function SettingsPage() {
 
           <NeoButton
             onClick={handleSave}
-            disabled={isSaving}
+            disabled={updateMutation.isPending || isLoading}
             className={cn(
               "rounded-none border-2 h-12 px-8 uppercase font-black tracking-widest text-sm transition-all",
               showSuccess
@@ -63,7 +106,7 @@ export function SettingsPage() {
                 : "bg-primary border-foreground text-primary-foreground shadow-[4px_4px_0px_0px_var(--foreground)] hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_var(--foreground)] active:translate-y-1 active:shadow-[2px_2px_0px_0px_var(--foreground)]",
             )}
           >
-            {isSaving ? (
+            {updateMutation.isPending ? (
               "Saving..."
             ) : showSuccess ? (
               <>
@@ -113,8 +156,12 @@ export function SettingsPage() {
                     Avatar
                   </h2>
                   <div className="flex items-center gap-6">
-                    <div className="w-24 h-24 border-4 border-foreground bg-primary flex items-center justify-center font-heading font-black text-4xl text-primary-foreground shadow-[4px_4px_0px_0px_var(--foreground)]">
-                      A
+                    <div className="w-24 h-24 border-4 border-foreground bg-primary flex items-center justify-center font-heading font-black text-4xl text-primary-foreground shadow-[4px_4px_0px_0px_var(--foreground)] overflow-hidden">
+                      {session?.user?.image ? (
+                        <img src={session.user.image} alt="Avatar" className="w-full h-full object-cover" />
+                      ) : (
+                        formData.name.charAt(0).toUpperCase() || "U"
+                      )}
                     </div>
                     <div className="flex flex-col gap-2">
                       <NeoButton
@@ -138,22 +185,15 @@ export function SettingsPage() {
                     Basic Details
                   </h2>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="text-[0.625rem] font-black uppercase tracking-widest text-foreground block mb-2">
-                        First Name
+                        Display Name
                       </label>
                       <NeoInput
-                        defaultValue="Alex"
-                        className="rounded-none border-2 border-border shadow-[2px_2px_0px_0px_var(--border)] focus-visible:border-primary focus-visible:shadow-[2px_2px_0px_0px_var(--primary)] font-bold h-12"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-[0.625rem] font-black uppercase tracking-widest text-foreground block mb-2">
-                        Last Name
-                      </label>
-                      <NeoInput
-                        defaultValue="Code"
+                        value={formData.name}
+                        onChange={(e) => handleInputChange("name", e.target.value)}
+                        placeholder="e.g. Alex Code"
                         className="rounded-none border-2 border-border shadow-[2px_2px_0px_0px_var(--border)] focus-visible:border-primary focus-visible:shadow-[2px_2px_0px_0px_var(--primary)] font-bold h-12"
                       />
                     </div>
@@ -164,9 +204,10 @@ export function SettingsPage() {
                       Email Address
                     </label>
                     <NeoInput
-                      defaultValue="alex@expert.com"
-                      type="email"
-                      className="rounded-none border-2 border-border shadow-[2px_2px_0px_0px_var(--border)] focus-visible:border-primary focus-visible:shadow-[2px_2px_0px_0px_var(--primary)] font-bold h-12"
+                      value={session?.user?.email || ""}
+                      readOnly
+                      disabled
+                      className="rounded-none border-2 border-border shadow-[2px_2px_0px_0px_var(--border)] bg-secondary/30 font-bold h-12"
                     />
                   </div>
 
@@ -175,7 +216,9 @@ export function SettingsPage() {
                       Timezone
                     </label>
                     <NeoInput
-                      defaultValue="UTC+07:00 (Indochina Time)"
+                      value={formData.location}
+                      onChange={(e) => handleInputChange("location", e.target.value)}
+                      placeholder="e.g. Remote, UTC+07:00"
                       className="rounded-none border-2 border-border shadow-[2px_2px_0px_0px_var(--border)] focus-visible:border-primary focus-visible:shadow-[2px_2px_0px_0px_var(--primary)] font-bold h-12"
                     />
                   </div>
@@ -203,7 +246,9 @@ export function SettingsPage() {
                       Professional Title
                     </label>
                     <NeoInput
-                      defaultValue="Senior AI / Python Engineer"
+                      value={formData.title}
+                      onChange={(e) => handleInputChange("title", e.target.value)}
+                      placeholder="e.g. Senior AI / Python Engineer"
                       className="rounded-none border-2 border-border shadow-[2px_2px_0px_0px_var(--border)] focus-visible:border-primary focus-visible:shadow-[2px_2px_0px_0px_var(--primary)] font-bold h-12"
                     />
                   </div>
@@ -213,7 +258,9 @@ export function SettingsPage() {
                       Hourly Rate ($)
                     </label>
                     <NeoInput
-                      defaultValue="45"
+                      value={formData.rate}
+                      onChange={(e) => handleInputChange("rate", e.target.value)}
+                      placeholder="45"
                       type="number"
                       className="rounded-none border-2 border-border shadow-[2px_2px_0px_0px_var(--border)] focus-visible:border-primary focus-visible:shadow-[2px_2px_0px_0px_var(--primary)] font-heading font-black text-xl h-12 w-32"
                     />
@@ -224,7 +271,9 @@ export function SettingsPage() {
                       Bio / About Me
                     </label>
                     <NeoTextarea
-                      defaultValue="I am a Senior AI Engineer specializing in Python..."
+                      value={formData.bio}
+                      onChange={(e) => handleInputChange("bio", e.target.value)}
+                      placeholder="I am a Senior AI Engineer specializing in..."
                       className="rounded-none border-2 border-border shadow-[2px_2px_0px_0px_var(--border)] focus-visible:border-primary focus-visible:shadow-[2px_2px_0px_0px_var(--primary)] font-semibold text-sm min-h-[120px]"
                     />
                   </div>

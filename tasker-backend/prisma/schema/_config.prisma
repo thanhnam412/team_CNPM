@@ -1,0 +1,13 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator kysely {
+  provider = "prisma-kysely"
+  output   = "../../src/database"
+  fileName = "types.ts"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}

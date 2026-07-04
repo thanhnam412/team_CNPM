@@ -1,0 +1,107 @@
+enum ProjectRole {
+  CLIENT_ADMIN
+  INTERNAL_TEAM
+  EXPERT
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  REVIEW
+  DONE
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum MilestoneStatus {
+  PENDING
+  ACTIVE
+  REVIEW
+  PAID
+}
+
+model Project {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  budget      Decimal  @default(0.0)
+  spent       Decimal  @default(0.0)
+  escrow      Decimal  @default(0.0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  members      ProjectMember[]
+  tasks        Task[]
+  milestones   Milestone[]
+  transactions Transaction[]
+  quickTasks   QuickTask[]
+  invitations  Invitation[]
+
+  @@map("projects")
+}
+
+model ProjectMember {
+  id        String      @id @default(uuid())
+  projectId String
+  userId    String
+  role      ProjectRole @default(CLIENT_ADMIN)
+  status    String      @default("ACTIVE")
+  rating    Float?
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, userId])
+  @@map("project_members")
+}
+
+model Task {
+  id          String       @id @default(uuid())
+  projectId   String
+  title       String
+  status      TaskStatus   @default(TODO)
+  priority    TaskPriority @default(MEDIUM)
+  assigneeId  String?
+  comments    Int          @default(0)
+  attachments Int          @default(0)
+  milestoneId String?
+  bucket      String?
+  isOutsource Boolean      @default(false)
+  budget      Decimal      @default(0.0)
+  quickTaskId String?      @unique
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  project   Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  assignee  User?      @relation(fields: [assigneeId], references: [id], onDelete: SetNull)
+  milestone Milestone? @relation(fields: [milestoneId], references: [id], onDelete: SetNull)
+  quickTask QuickTask? @relation(fields: [quickTaskId], references: [id], onDelete: SetNull)
+
+  @@map("tasks")
+}
+
+model Milestone {
+  id           String          @id @default(uuid())
+  projectId    String
+  title        String
+  amount       Decimal         @default(0.0)
+  status       MilestoneStatus @default(PENDING)
+  progress     Int             @default(0)
+  dueDate      DateTime?
+  deliverables Json?
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+
+  project     Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  tasks       Task[]
+  bids        Bid[]
+  invitations Invitation[]
+
+  @@map("milestones")
+}

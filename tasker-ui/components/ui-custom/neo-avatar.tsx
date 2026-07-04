@@ -1,47 +1,30 @@
 import * as React from "react";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 
-const NeoAvatar = React.forwardRef<
-  React.ElementRef<typeof Avatar>,
-  React.ComponentPropsWithoutRef<typeof Avatar>
->(({ className, ...props }, ref) => (
-  <Avatar
-    ref={ref}
-    className={cn(
-      "rounded-none border-2 border-foreground shadow-[2px_2px_0px_0px_var(--foreground)]",
-      className,
-    )}
-    {...props}
-  />
-));
-NeoAvatar.displayName = "NeoAvatar";
+interface NeoAvatarProps extends React.HTMLAttributes<HTMLDivElement> {
+  name?: string;
+  size?: "sm" | "default" | "lg";
+}
 
-const NeoAvatarImage = React.forwardRef<
-  React.ElementRef<typeof AvatarImage>,
-  React.ComponentPropsWithoutRef<typeof AvatarImage>
->(({ className, ...props }, ref) => (
-  <AvatarImage
-    ref={ref}
-    className={cn("rounded-none object-cover", className)}
-    {...props}
-  />
-));
-NeoAvatarImage.displayName = "NeoAvatarImage";
+export function NeoAvatar({ name = "U", size = "default", className, ...props }: NeoAvatarProps) {
+  const initial = name ? name.charAt(0).toUpperCase() : "U";
 
-const NeoAvatarFallback = React.forwardRef<
-  React.ElementRef<typeof AvatarFallback>,
-  React.ComponentPropsWithoutRef<typeof AvatarFallback>
->(({ className, ...props }, ref) => (
-  <AvatarFallback
-    ref={ref}
-    className={cn(
-      "rounded-none bg-primary text-primary-foreground font-black uppercase tracking-widest",
-      className,
-    )}
-    {...props}
-  />
-));
-NeoAvatarFallback.displayName = "NeoAvatarFallback";
+  const sizeClasses = {
+    sm: "w-8 h-8 text-xs",
+    default: "w-10 h-10 text-base",
+    lg: "w-14 h-14 text-xl",
+  };
 
-export { NeoAvatar, NeoAvatarImage, NeoAvatarFallback };
+  return (
+    <div
+      className={cn(
+        "border-2 border-foreground bg-primary flex items-center justify-center font-heading font-black text-primary-foreground shrink-0 shadow-[2px_2px_0px_0px_var(--foreground)] uppercase",
+        sizeClasses[size],
+        className
+      )}
+      {...props}
+    >
+      {initial}
+    </div>
+  );
+}

@@ -64,12 +64,25 @@ export class AuthService {
     const user = await this.usersService.findById(payload.sub);
     if (!user) throw new UnauthorizedException("User not found");
 
+    // Tạo accessToken mới
     const access_token = this.jwtService.sign(
       { sub: user.id, email: user.email },
-      { secret: process.env.JWT_SECRET, expiresIn: "15m" },
+      { secret: process.env.JWT_SECRET, expiresIn: "7d" },
     );
 
-    return { access_token };
+    const new_refresh_token = this.jwtService.sign(
+      { sub: user.id },
+      { secret: process.env.JWT_REFRESH_SECRET, expiresIn: "30d" },
+    );
+
+    // Revoke token cũ, lưu token mới
+    await this.usersService.revokeRefreshToken(refreshToken);
+    await this.usersService.saveRefreshToken(user.id, new_refresh_token);
+
+    return {
+      access_token,
+      refresh_token: new_refresh_token, // NextAuth sẽ lưu lại token mới này
+    };
   }
 
   async logout(refreshToken: string) {
@@ -80,12 +93,12 @@ export class AuthService {
   private async issueTokens(userId: string, email: string, device?: string) {
     const access_token = this.jwtService.sign(
       { sub: userId, email },
-      { secret: process.env.JWT_SECRET, expiresIn: "15m" },
+      { secret: process.env.JWT_SECRET, expiresIn: "7d" },
     );
 
     const refresh_token = this.jwtService.sign(
       { sub: userId },
-      { secret: process.env.JWT_REFRESH_SECRET, expiresIn: "7d" },
+      { secret: process.env.JWT_REFRESH_SECRET, expiresIn: "30d" },
     );
 
     try {

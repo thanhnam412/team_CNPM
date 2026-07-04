@@ -27,114 +27,20 @@ import {
 import { NeoCheckbox } from "@/components/ui-custom/neo-checkbox";
 import { cn } from "@/lib/utils";
 import { NeoTextarea } from "@/components/ui-custom/neo-textarea";
+import { NeoPageHeader } from "@/components/ui-custom/neo-page-header";
 import Link from "next/link";
-
-// Mock Data
-const EXPERTS = [
-  {
-    id: "exp_1",
-    name: "Alex_Code",
-    title: "Senior AI / Python Engineer",
-    avatar: "A",
-    rate: "$45/hr",
-    rating: 4.9,
-    reviews: 124,
-    completedTasks: 89,
-    online: true,
-    saved: true,
-    location: "Vietnam (UTC+7)",
-    skills: ["Python", "Scraping", "LLMs", "FastAPI"],
-    badge: "Top Rated",
-  },
-  {
-    id: "exp_2",
-    name: "Data_Wizard_99",
-    title: "Data Scientist & Analytics Expert",
-    avatar: "D",
-    rate: "$60/hr",
-    rating: 5.0,
-    reviews: 42,
-    completedTasks: 35,
-    online: false,
-    saved: false,
-    location: "Singapore (UTC+8)",
-    skills: ["Data Analysis", "Pandas", "SQL", "Tableau"],
-    badge: null,
-  },
-  {
-    id: "exp_3",
-    name: "VisionPro_Studio",
-    title: "Computer Vision Specialist",
-    avatar: "V",
-    rate: "$85/hr",
-    rating: 4.8,
-    reviews: 215,
-    completedTasks: 180,
-    online: true,
-    saved: false,
-    location: "United States (UTC-5)",
-    skills: ["Computer Vision", "PyTorch", "OpenCV", "YOLO"],
-    badge: "Top Rated",
-  },
-  {
-    id: "exp_4",
-    name: "Sarah_Fullstack",
-    title: "Fullstack Web3 Developer",
-    avatar: "S",
-    rate: "$50/hr",
-    rating: 4.7,
-    reviews: 88,
-    completedTasks: 76,
-    online: true,
-    saved: false,
-    location: "Remote",
-    skills: ["React", "Next.js", "Solidity", "Node.js"],
-    badge: null,
-  },
-  {
-    id: "exp_5",
-    name: "PromptMaster_X",
-    title: "AI Prompt Engineer & Consultant",
-    avatar: "P",
-    rate: "$30/hr",
-    rating: 4.9,
-    reviews: 312,
-    completedTasks: 290,
-    online: false,
-    saved: true,
-    location: "Remote",
-    skills: ["Prompt Engineering", "ChatGPT", "Midjourney", "Copywriting"],
-    badge: "Rising Talent",
-  },
-  {
-    id: "exp_6",
-    name: "ML_Ops_Guru",
-    title: "Machine Learning Operations",
-    avatar: "M",
-    rate: "$95/hr",
-    rating: 5.0,
-    reviews: 18,
-    completedTasks: 12,
-    online: true,
-    saved: false,
-    location: "Germany (UTC+1)",
-    skills: ["MLOps", "AWS", "Docker", "Kubernetes"],
-    badge: null,
-  },
-];
+import { useExpertsList } from "@/tanstack/useExperts";
 
 export default function ExpertMarketplacePage() {
-  const [savedExperts, setSavedExperts] = useState<Record<string, boolean>>(
-    EXPERTS.reduce((acc, exp) => ({ ...acc, [exp.id]: exp.saved }), {}),
-  );
+  const { data: experts = [], isLoading } = useExpertsList();
+
+  const [savedExperts, setSavedExperts] = useState<Record<string, boolean>>({});
 
   // Modal State
   const [isInviteOpen, setIsInviteOpen] = useState(false);
-  const [selectedExpert, setSelectedExpert] = useState<
-    (typeof EXPERTS)[0] | null
-  >(null);
+  const [selectedExpert, setSelectedExpert] = useState<any | null>(null);
 
-  const openInviteModal = (expert: (typeof EXPERTS)[0]) => {
+  const openInviteModal = (expert: any) => {
     setSelectedExpert(expert);
     setIsInviteOpen(true);
   };
@@ -146,18 +52,19 @@ export default function ExpertMarketplacePage() {
   return (
     <div className="flex flex-col h-full w-full bg-background overflow-hidden relative">
       {/* Global Header */}
-      <div className="shrink-0 border-b-2 border-border bg-card relative z-20">
-        <div className="px-4 md:px-6 py-6 md:py-8 max-w-7xl mx-auto w-full">
-          <h1 className="text-3xl md:text-4xl font-heading font-black tracking-widest uppercase text-foreground flex items-center gap-3">
-            <Globe className="w-8 h-8 md:w-10 md:h-10 text-primary" /> Expert
-            Marketplace
-          </h1>
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mt-2 max-w-2xl">
+      <NeoPageHeader
+        className="relative z-20"
+        containerClassName="max-w-7xl mx-auto w-full px-4 md:px-6 py-6 md:py-8"
+        title="Expert Marketplace"
+        icon={<Globe className="w-8 h-8 md:w-10 md:h-10 text-primary" />}
+        description={
+          <span className="block max-w-2xl">
             Discover and hire the top 1% of AI and Tech talent globally. Filter
             by skills, rates, and reviews to find the perfect match for your
             project.
-          </p>
-        </div>
+          </span>
+        }
+      />
 
         {/* Sticky Filter Bar */}
         <div className="border-t-2 border-border bg-secondary/30 p-4 sticky top-0">
@@ -229,7 +136,6 @@ export default function ExpertMarketplacePage() {
             </div>
           </div>
         </div>
-      </div>
 
       {/* Main Content Area */}
       <div className="flex-1 overflow-y-auto p-4 md:p-6 bg-background relative z-10">
@@ -237,7 +143,7 @@ export default function ExpertMarketplacePage() {
           {/* Results Info */}
           <div className="flex items-center justify-between mb-6">
             <h2 className="font-heading font-black uppercase tracking-widest text-lg">
-              Showing 142 Experts
+              Showing {experts.length} Experts
             </h2>
             <div className="flex gap-2">
               <NeoButton variant="outline" className="h-8 px-3 text-[0.625rem]">
@@ -248,7 +154,7 @@ export default function ExpertMarketplacePage() {
 
           {/* Grid of Expert Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {EXPERTS.map((expert) => (
+            {experts.map((expert: any) => (
               <div
                 key={expert.id}
                 className="bg-card border-2 border-border shadow-[4px_4px_0px_0px_var(--border)] hover:shadow-[6px_6px_0px_0px_var(--primary)] hover:-translate-y-1 hover:-translate-x-1 transition-all flex flex-col group"
@@ -303,15 +209,15 @@ export default function ExpertMarketplacePage() {
                   <div className="flex items-center justify-between text-sm">
                     <div className="flex items-center gap-1">
                       <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                      <span className="font-black">{expert.rating}</span>
+                      <span className="font-black">{expert.rating || 4.9}</span>
                       <span className="text-[0.625rem] font-bold text-muted-foreground uppercase tracking-widest ml-1">
-                        ({expert.reviews})
+                        ({expert.reviews || 0})
                       </span>
                     </div>
                     <div className="flex items-center gap-1">
                       <CheckCircle2 className="w-4 h-4 text-primary" />
                       <span className="font-black text-primary">
-                        {expert.completedTasks}
+                        {expert.completedTasks || 0}
                       </span>
                       <span className="text-[0.625rem] font-bold text-muted-foreground uppercase tracking-widest ml-1">
                         Tasks
@@ -327,14 +233,14 @@ export default function ExpertMarketplacePage() {
 
                   {/* Skills Tags */}
                   <div className="flex flex-wrap gap-2 mt-auto pt-2">
-                    {expert.skills.map((skill) => (
+                    {Array.isArray(expert.skills) ? expert.skills.map((skill: string) => (
                       <span
                         key={skill}
                         className="bg-secondary/50 border-2 border-border px-2 py-1 text-[0.625rem] font-black uppercase tracking-widest"
                       >
                         {skill}
                       </span>
-                    ))}
+                    )) : null}
                   </div>
                 </div>
 
@@ -479,6 +385,18 @@ export default function ExpertMarketplacePage() {
                 </NeoSelect>
               </div>
 
+              {/* Offer Price */}
+              <div>
+                <label className="text-xs font-bold uppercase tracking-widest text-foreground block mb-2">
+                  Offer Price ($)
+                </label>
+                <NeoInput
+                  type="number"
+                  placeholder="e.g. 500"
+                  className="bg-background h-12"
+                />
+              </div>
+
               {/* Invitation Message */}
               <div>
                 <label className="text-xs font-bold uppercase tracking-widest text-foreground block mb-2 flex items-center gap-2">
@@ -486,7 +404,7 @@ export default function ExpertMarketplacePage() {
                   Message
                 </label>
                 <NeoTextarea
-                  defaultValue={`Hi ${selectedExpert.name},\n\nI came across your profile and was impressed by your skills in ${selectedExpert.skills[0]}. I'd like to invite you to collaborate with us. Let me know if you are available.`}
+                  defaultValue={`Hi ${selectedExpert.name},\n\nI came across your profile and was impressed by your skills. I'd like to invite you to collaborate with us. Let me know if you are available.`}
                   className="min-h-[120px] focus-visible: text-sm font-semibold p-4"
                 />
               </div>

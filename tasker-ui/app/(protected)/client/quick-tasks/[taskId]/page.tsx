@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, use } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -24,100 +24,38 @@ import { NeoInput } from "@/components/ui-custom/neo-input";
 import { NeoTextarea } from "@/components/ui-custom/neo-textarea";
 import { cn } from "@/lib/utils";
 
-// Mock Data
-const TASK_DETAILS = {
-  id: "QT-889",
-  title: "Write a Python script for web scraping",
-  desc: "I need an experienced Python developer to write a web scraping script using BeautifulSoup and Selenium. The script needs to bypass basic Cloudflare protection and extract product names, prices, and image URLs from target e-commerce sites. Data should be exported to CSV. Clean, documented code is required.",
-  tags: ["Python", "Web Scraping", "Selenium"],
-  budget: "$150.00",
-  deadline: "Oct 15, 2026",
-  escrowLocked: false,
-};
-
-const PROPOSALS = [
-  {
-    id: 1,
-    expert: "Alex_Code",
-    rating: 4.9,
-    price: "$120.00",
-    time: "2 Days",
-    cover: "I've built 50+ scrapers using Selenium undetected.",
-  },
-  {
-    id: 2,
-    expert: "DataScrapeInc",
-    rating: 5.0,
-    price: "$150.00",
-    time: "1 Day",
-    cover: "Enterprise-level scraping with proxies included.",
-  },
-];
+import { useQuickTask, useApproveDeliverableMutation } from "@/tanstack/useQuickTasks";
+import { useTaskProposals, useUpdateProposalStatusMutation } from "@/tanstack/useProposals";
 
 export default function QuickTaskDetailsPage({
   params,
 }: {
-  params: { taskId: string };
+  params: Promise<{ taskId: string }>;
 }) {
-  // Mock State: 'open', 'in_progress', 'review', 'completed'
-  const [status, setStatus] = useState<
-    "open" | "in_progress" | "review" | "completed"
-  >("open");
+  const resolvedParams = use(params);
+  const taskId = resolvedParams.taskId;
+
+  const { data: task, isLoading: isTaskLoading } = useQuickTask(taskId);
+  const { data: proposals = [], isLoading: isProposalsLoading } = useTaskProposals(taskId);
+
+  const acceptProposalMutation = useUpdateProposalStatusMutation(taskId);
+  const approveDeliverableMutation = useApproveDeliverableMutation(taskId);
+
   const [chatInput, setChatInput] = useState("");
+
+  if (isTaskLoading) {
+    return <div className="p-8 text-center text-muted-foreground">Loading task details...</div>;
+  }
+
+  if (!task) {
+    return <div className="p-8 text-center text-destructive">Task not found</div>;
+  }
+
+  const status = task.status ? task.status.toLowerCase() : "open";
 
   return (
     <div className="flex flex-col h-full w-full bg-background relative overflow-hidden">
-      {/* Dev Toolbar (For UI Testing only) */}
-      <div className="bg-destructive/10 border-b-2 border-destructive p-2 flex items-center justify-center gap-4 text-xs font-bold uppercase tracking-widest text-destructive shrink-0">
-        <AlertTriangle className="w-4 h-4" />
-        <span>Mock UI State:</span>
-        <div className="flex gap-2">
-          <NeoButton
-            variant={status === "open" ? "default" : "outline"}
-            onClick={() => setStatus("open")}
-            className={cn(
-              "px-2 py-1 h-8 rounded-none text-xs",
-              status === "open" &&
-                "bg-destructive text-destructive-foreground border-destructive",
-            )}
-          >
-            Open
-          </NeoButton>
-          <NeoButton
-            variant={status === "in_progress" ? "default" : "outline"}
-            onClick={() => setStatus("in_progress")}
-            className={cn(
-              "px-2 py-1 h-8 rounded-none text-xs",
-              status === "in_progress" &&
-                "bg-destructive text-destructive-foreground border-destructive",
-            )}
-          >
-            In Progress
-          </NeoButton>
-          <NeoButton
-            variant={status === "review" ? "default" : "outline"}
-            onClick={() => setStatus("review")}
-            className={cn(
-              "px-2 py-1 h-8 rounded-none text-xs",
-              status === "review" &&
-                "bg-destructive text-destructive-foreground border-destructive",
-            )}
-          >
-            Review
-          </NeoButton>
-          <NeoButton
-            variant={status === "completed" ? "default" : "outline"}
-            onClick={() => setStatus("completed")}
-            className={cn(
-              "px-2 py-1 h-8 rounded-none text-xs",
-              status === "completed" &&
-                "bg-destructive text-destructive-foreground border-destructive",
-            )}
-          >
-            Completed
-          </NeoButton>
-        </div>
-      </div>
+      {/* Removed Mock UI Toolbar */}
 
       {/* Main Content Scrollable Area */}
       <div className="flex-1 overflow-y-auto bg-background p-6">
@@ -130,7 +68,7 @@ export default function QuickTaskDetailsPage({
               </NeoButton>
             </Link>
             <span className="text-[0.625rem] font-bold uppercase tracking-widest text-muted-foreground">
-              Quick Tasks / {params.taskId}
+              Quick Tasks / {taskId}
             </span>
           </div>
 
@@ -158,14 +96,14 @@ export default function QuickTaskDetailsPage({
                   <span className="text-[0.625rem] font-bold uppercase tracking-widest text-muted-foreground flex items-center bg-secondary px-2 py-1 border-2 border-border">
                     <Clock className="w-3 h-3 mr-1" />
                     {status === "open"
-                      ? `Deadline: ${TASK_DETAILS.deadline}`
+                      ? `Deadline: ${task.deadline ? new Date(task.deadline).toLocaleDateString() : 'N/A'}`
                       : "Time Left: 2 Days 4 Hrs"}
                   </span>
                 )}
               </div>
 
               <h1 className="text-2xl md:text-3xl font-heading font-black tracking-widest uppercase text-foreground leading-tight">
-                {TASK_DETAILS.title}
+                {task.title}
               </h1>
 
               {status === "open" && (
@@ -205,7 +143,7 @@ export default function QuickTaskDetailsPage({
               ) : (
                 <div>
                   <div className="text-3xl font-heading font-black tracking-wider text-[#E1801E] mb-2">
-                    {TASK_DETAILS.budget}
+                    ${task.budget}
                   </div>
                   <div className="flex items-center gap-1 text-[0.625rem] font-bold uppercase tracking-widest text-[#E1801E] bg-[#E1801E]/10 px-2 py-1 border-2 border-[#E1801E]">
                     <ShieldCheck className="w-3 h-3" /> Locked & Secured
@@ -227,7 +165,7 @@ export default function QuickTaskDetailsPage({
                     Task Description
                   </h3>
                   <p className="text-sm font-semibold text-muted-foreground leading-relaxed">
-                    {TASK_DETAILS.desc}
+                    {task.description}
                   </p>
                 </div>
                 <div>
@@ -235,7 +173,7 @@ export default function QuickTaskDetailsPage({
                     Required Skills
                   </h3>
                   <div className="flex gap-2 flex-wrap">
-                    {TASK_DETAILS.tags.map((tag) => (
+                    {["API Integration", "Web", "General"].map((tag) => (
                       <span
                         key={tag}
                         className="text-xs font-bold uppercase tracking-widest px-3 py-1 border-2 border-border bg-secondary"
@@ -253,12 +191,14 @@ export default function QuickTaskDetailsPage({
                   <h3 className="uppercase tracking-widest font-black text-sm flex items-center justify-between">
                     Proposals
                     <span className="bg-primary text-primary-foreground px-2 py-0.5 text-xs">
-                      2
+                      {proposals.length}
                     </span>
                   </h3>
                 </div>
                 <div className="divide-y-2 divide-border">
-                  {PROPOSALS.map((p) => (
+                  {proposals.length === 0 ? (
+                    <div className="p-4 text-center text-muted-foreground text-xs uppercase">No proposals yet</div>
+                  ) : proposals.map((p: any) => (
                     <div
                       key={p.id}
                       className="p-4 hover:bg-secondary/10 transition-colors"
@@ -266,23 +206,20 @@ export default function QuickTaskDetailsPage({
                       <div className="flex items-start justify-between mb-2">
                         <div>
                           <h4 className="font-bold text-sm uppercase">
-                            {p.expert}
+                            Expert: {p.expertId.substring(0,8)}
                           </h4>
-                          <span className="text-[0.625rem] font-bold text-[#E1801E]">
-                            ★ {p.rating}
-                          </span>
                         </div>
                         <div className="text-right">
                           <div className="font-heading font-black">
-                            {p.price}
+                            ${p.proposedPrice}
                           </div>
                           <div className="text-[0.625rem] font-bold uppercase tracking-widest text-muted-foreground">
-                            {p.time}
+                            {p.estimatedDays} Days
                           </div>
                         </div>
                       </div>
                       <p className="text-xs font-semibold text-muted-foreground italic mb-3 line-clamp-2">
-                        "{p.cover}"
+                        "{p.coverLetter}"
                       </p>
                       <div className="flex gap-2">
                         <NeoButton
@@ -291,7 +228,11 @@ export default function QuickTaskDetailsPage({
                         >
                           Chat
                         </NeoButton>
-                        <NeoButton className="flex-1 text-[0.625rem] h-8">
+                        <NeoButton 
+                          className="flex-1 text-[0.625rem] h-8"
+                          disabled={acceptProposalMutation.isPending}
+                          onClick={() => acceptProposalMutation.mutate(p.id)}
+                        >
                           Accept Bid
                         </NeoButton>
                       </div>
@@ -373,7 +314,7 @@ export default function QuickTaskDetailsPage({
                   Task Details
                 </h3>
                 <p className="text-xs font-semibold text-muted-foreground leading-relaxed mb-4">
-                  {TASK_DETAILS.desc}
+                  {task.description}
                 </p>
 
                 <h3 className="uppercase tracking-widest font-black text-sm border-b-2 border-border pb-4 mb-4 mt-6">
@@ -414,8 +355,12 @@ export default function QuickTaskDetailsPage({
                   >
                     Request Changes
                   </NeoButton>
-                  <NeoButton className="flex-1 md:flex-none text-[0.625rem] h-12 px-6">
-                    Approve & Release Funds
+                  <NeoButton 
+                    className="flex-1 md:flex-none text-[0.625rem] h-12 px-6"
+                    disabled={approveDeliverableMutation.isPending}
+                    onClick={() => approveDeliverableMutation.mutate()}
+                  >
+                    {approveDeliverableMutation.isPending ? "Approving..." : "Approve & Release Funds"}
                   </NeoButton>
                 </div>
               </div>

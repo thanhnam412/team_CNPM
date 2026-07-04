@@ -1,0 +1,54 @@
+enum Role {
+  CLIENT
+  EXPERT
+  ADMIN
+}
+
+model User {
+  id          String   @id @default(uuid())
+  googleId    String   @unique
+  email       String   @unique
+  name        String
+  avatar      String?
+  role        Role     @default(CLIENT)
+  currentRole Role     @default(CLIENT)
+  balance     Decimal  @default(0.0)
+  title       String?
+  bio         String?
+  skills      Json?
+  rate        String?
+  location    String?
+  badge       String?
+  online      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  refreshTokens            RefreshToken[]
+  projectMembers           ProjectMember[]
+  assignedTasks            Task[]
+  transactions             Transaction[]
+  conversationParticipants ConversationParticipant[]
+  messages                 Message[]
+  clientQuickTasks         QuickTask[]               @relation("ClientQuickTasks")
+  expertQuickTasks         QuickTask[]               @relation("ExpertQuickTasks")
+  proposals                Proposal[]
+  bids                     Bid[]
+  reviews                  Review[]                  @relation("ReviewsReceived")
+  reviewsGiven             Review[]                  @relation("ReviewsGiven")
+  sentInvitations          Invitation[]              @relation("InvitationsSent")
+  receivedInvitations      Invitation[]              @relation("InvitationsReceived")
+
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  device    String?
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@map("refresh_tokens")
+}

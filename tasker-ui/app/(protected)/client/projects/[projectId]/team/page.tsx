@@ -8,9 +8,12 @@ import {
   Mail,
   MoreVertical,
   Plus,
+  Trash2,
 } from "lucide-react";
 import { NeoButton } from "@/components/ui-custom/neo-button";
 import { cn } from "@/lib/utils";
+import { useTeam, useUpdateRoleMutation, useRemoveMemberMutation } from "@/tanstack/useTeam";
+import { useParams } from "next/navigation";
 
 interface TeamMember {
   id: string;
@@ -22,43 +25,13 @@ interface TeamMember {
   rating?: number;
 }
 
-const TEAM: TeamMember[] = [
-  {
-    id: "u-1",
-    name: "Nam (You)",
-    role: "Client Admin",
-    email: "nam@company.com",
-    avatar: "N",
-    status: "Active",
-  },
-  {
-    id: "u-2",
-    name: "Sarah TechLead",
-    role: "Internal Team",
-    email: "sarah@company.com",
-    avatar: "S",
-    status: "Active",
-  },
-  {
-    id: "u-3",
-    name: "AI_Vision_Pro",
-    role: "Expert",
-    email: "hidden@aitasker.com",
-    avatar: "A",
-    status: "Active",
-    rating: 4.9,
-  },
-  {
-    id: "u-4",
-    name: "DataSci_Ninja",
-    role: "Expert",
-    email: "pending...",
-    avatar: "D",
-    status: "Pending",
-  },
-];
-
 export default function ProjectTeamPage() {
+  const { projectId } = useParams() as { projectId: string };
+  
+  const { data: team = [], isLoading } = useTeam(projectId);
+  const updateRoleMutation = useUpdateRoleMutation(projectId);
+  const removeMemberMutation = useRemoveMemberMutation(projectId);
+
   return (
     <div className="p-6 max-w-5xl mx-auto space-y-8 pb-24">
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b-2 border-border pb-6">
@@ -85,7 +58,12 @@ export default function ProjectTeamPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {TEAM.map((member) => (
+        {isLoading && (
+          <div className="col-span-full text-center p-8 text-muted-foreground">
+            Loading team...
+          </div>
+        )}
+        {team.map((member) => (
           <div
             key={member.id}
             className="bg-card border-2 border-foreground shadow-[6px_6px_0px_0px_var(--foreground)] flex flex-col hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[4px_4px_0px_0px_var(--foreground)] transition-all group relative overflow-hidden"
@@ -148,11 +126,27 @@ export default function ProjectTeamPage() {
 
             {/* Actions */}
             <div className="border-t-2 border-border bg-secondary/10 p-3 flex justify-between items-center">
-              <NeoButton variant="ghost" className="h-8 px-2 text-[0.625rem]">
-                View Profile
-              </NeoButton>
-              <button className="w-8 h-8 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary/30 transition-colors">
-                <MoreVertical className="w-4 h-4" />
+              <select 
+                className="bg-background border-2 border-border text-[0.625rem] font-bold uppercase tracking-widest px-2 py-1 outline-none focus:border-primary cursor-pointer h-8"
+                value={member.role}
+                onChange={(e) => updateRoleMutation.mutate({ memberId: member.id, role: e.target.value })}
+                disabled={updateRoleMutation.isPending}
+              >
+                <option value="Client Admin">Client Admin</option>
+                <option value="Internal Team">Internal Team</option>
+                <option value="Expert">Expert</option>
+              </select>
+              <button 
+                onClick={() => {
+                  if(confirm("Remove this member from the project?")) {
+                    removeMemberMutation.mutate(member.id);
+                  }
+                }}
+                disabled={removeMemberMutation.isPending}
+                className="w-8 h-8 flex items-center justify-center text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors disabled:opacity-50"
+                title="Remove Member"
+              >
+                <Trash2 className="w-4 h-4" />
               </button>
             </div>
           </div>

@@ -44,11 +44,11 @@ export class UsersService {
     return this.db
       .insertInto("users")
       .values({
+        id: crypto.randomUUID(),
         googleId: input.googleId,
         email: input.email,
         name: input.name,
         avatar: input.avatar ?? null,
-        id: "",
         updatedAt: new Date().toISOString(),
       })
       .returningAll()
@@ -62,11 +62,11 @@ export class UsersService {
     return this.db
       .insertInto("refresh_tokens")
       .values({
+        id: crypto.randomUUID(),
         userId,
         token,
         device: device ?? null,
         expiresAt: expiresAt.toISOString(),
-        id: "",
       })
       .returningAll()
       .executeTakeFirstOrThrow();
@@ -96,5 +96,87 @@ export class UsersService {
       .deleteFrom("refresh_tokens")
       .where("userId", "=", userId)
       .execute();
+  }
+
+  async switchRole(id: string, role: "CLIENT" | "EXPERT") {
+    return this.db
+      .updateTable("users")
+      .set({ currentRole: role, updatedAt: new Date().toISOString() })
+      .where("id", "=", id)
+      .returningAll()
+      .executeTakeFirst();
+  }
+
+  async updateProfile(id: string, data: any) {
+    const updateData: any = { updatedAt: new Date().toISOString() };
+    if (data.name !== undefined) updateData.name = data.name;
+    if (data.avatar !== undefined) updateData.avatar = data.avatar;
+    if (data.title !== undefined) updateData.title = data.title;
+    if (data.bio !== undefined) updateData.bio = data.bio;
+    if (data.rate !== undefined) updateData.rate = data.rate;
+    if (data.location !== undefined) updateData.location = data.location;
+    if (data.skills !== undefined) updateData.skills = data.skills;
+    if (data.online !== undefined) updateData.online = data.online;
+
+    return this.db
+      .updateTable("users")
+      .set(updateData)
+      .where("id", "=", id)
+      .returningAll()
+      .executeTakeFirst();
+  }
+
+  async getPublicProfile(id: string) {
+    const user = await this.db
+      .selectFrom("users")
+      .select([
+        "id",
+        "name",
+        "email",
+        "avatar",
+        "role",
+        "currentRole",
+        "title",
+        "bio",
+        "skills",
+        "rate",
+        "location",
+        "badge",
+        "online",
+        "createdAt",
+      ])
+      .where("id", "=", id)
+      .executeTakeFirst();
+
+    if (!user) return null;
+
+    // Get review stats
+    const reviews = await this.db
+      .selectFrom("reviews")
+      .select(["rating"])
+      .where("expertId", "=", id)
+      .execute();
+
+    const avgRating =
+      reviews.length > 0
+        ? parseFloat(
+            (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1),
+          )
+        : 0;
+
+    // Get completed tasks count
+    const completedTasks = await this.db
+      .selectFrom("tasks")
+      .where("assigneeId", "=", id)
+      .where("status", "=", "DONE")
+      .execute();
+
+    return {
+      ...user,
+      username: user.name?.toLowerCase().replace(/\s+/g, ""),
+      rating: avgRating,
+      reviewCount: reviews.length,
+      completedTasks: completedTasks.length,
+    };
   }
 }

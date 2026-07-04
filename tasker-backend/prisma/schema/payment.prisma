@@ -1,0 +1,28 @@
+enum TransactionType {
+  DEPOSIT
+  ESCROW
+  SPENT
+  FEE
+  REFUND
+  PAYMENT_RECEIVED
+  WITHDRAWAL
+}
+
+model Transaction {
+  id           String          @id @default(uuid())
+  userId       String
+  date         DateTime        @default(now())
+  desc         String
+  type         TransactionType
+  amount       Decimal
+  balanceAfter Decimal
+  status       String          @default("Success")
+  source       String?
+  projectId    String?
+  createdAt    DateTime        @default(now())
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+
+  @@map("transactions")
+}

@@ -1,0 +1,55 @@
+enum ConversationContextType {
+  QUICK_TASK
+  PROJECT
+  DIRECT
+}
+
+enum MessageType {
+  TEXT
+  CODE
+  FILE
+  SYSTEM
+}
+
+model Conversation {
+  id          String                  @id @default(uuid())
+  name        String?
+  isGroup     Boolean                 @default(false)
+  contextType ConversationContextType @default(DIRECT)
+  contextRef  String?
+  createdAt   DateTime                @default(now())
+  updatedAt   DateTime                @updatedAt
+
+  participants ConversationParticipant[]
+  messages     Message[]
+
+  @@map("conversations")
+}
+
+model ConversationParticipant {
+  id             String   @id @default(uuid())
+  conversationId String
+  userId         String
+  joinedAt       DateTime @default(now())
+
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([conversationId, userId])
+  @@map("conversation_participants")
+}
+
+model Message {
+  id             String      @id @default(uuid())
+  conversationId String
+  senderId       String?
+  type           MessageType @default(TEXT)
+  content        String
+  metadata       Json?
+  createdAt      DateTime    @default(now())
+
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender       User?        @relation(fields: [senderId], references: [id], onDelete: SetNull)
+
+  @@map("messages")
+}

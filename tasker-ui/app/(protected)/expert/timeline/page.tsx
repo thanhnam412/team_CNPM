@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { NeoButton } from "@/components/ui-custom/neo-button";
 import { cn } from "@/lib/utils";
+import { NeoPageHeader } from "@/components/ui-custom/neo-page-header";
 
 // Mock Data for Timeline
 const DAYS = [
@@ -98,18 +99,13 @@ export default function ExpertTimelinePage() {
   return (
     <div className="flex flex-col h-full w-full bg-background overflow-hidden relative">
       {/* Header & Toolbar */}
-      <div className="shrink-0 border-b-2 border-border bg-card p-6 z-20 relative">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div>
-            <h1 className="text-2xl md:text-3xl font-heading font-black tracking-widest uppercase flex items-center gap-3">
-              <CalendarDays className="w-6 h-6 md:w-8 md:h-8 text-primary" />{" "}
-              Timeline
-            </h1>
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mt-1">
-              Manage your deadlines and availability.
-            </p>
-          </div>
-
+      <NeoPageHeader
+        className="z-20 relative"
+        containerClassName="max-w-7xl mx-auto w-full p-6 md:p-8"
+        title="Timeline"
+        icon={<CalendarDays className="w-6 h-6 md:w-8 md:h-8 text-primary" />}
+        description="Manage your deadlines and availability."
+        rightContent={
           <div className="flex items-center gap-4 border-2 border-border p-2 bg-secondary/10">
             <div className="flex items-center gap-2 mr-4">
               <Clock className="w-4 h-4 text-primary" />
@@ -131,8 +127,8 @@ export default function ExpertTimelinePage() {
               </NeoButton>
             </div>
           </div>
-        </div>
-      </div>
+        }
+      />
 
       {/* Timeline Grid Area */}
       <div className="flex-1 overflow-auto bg-background p-6">

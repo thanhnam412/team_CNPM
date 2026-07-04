@@ -16,6 +16,7 @@ import {
   Briefcase,
 } from "lucide-react";
 import { NeoButton } from "@/components/ui-custom/neo-button";
+import { NeoCard } from "@/components/ui-custom/neo-card";
 import { NeoInput } from "@/components/ui-custom/neo-input";
 import {
   NeoSelect,
@@ -25,6 +26,8 @@ import {
   NeoSelectValue,
 } from "@/components/ui-custom/neo-select";
 import { cn } from "@/lib/utils";
+import { NeoPageHeader } from "@/components/ui-custom/neo-page-header";
+import { NeoWidgetHeader } from "@/components/ui-custom/neo-widget-header";
 
 // Mock Transaction History
 const TRANSACTIONS = [
@@ -88,18 +91,12 @@ export default function ExpertEarningsPage() {
   return (
     <div className="flex flex-col h-full w-full bg-background overflow-y-auto">
       {/* Header */}
-      <div className="bg-card border-b-2 border-border p-6 md:p-8 shrink-0">
-        <div className="max-w-7xl mx-auto">
-          <h1 className="text-3xl md:text-4xl font-heading font-black tracking-widest uppercase flex items-center gap-3">
-            <Wallet className="w-8 h-8 md:w-10 md:h-10 text-primary" /> Earnings
-            & Payouts
-          </h1>
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mt-2">
-            Manage your available funds, track pending clearances, and withdraw
-            to your accounts.
-          </p>
-        </div>
-      </div>
+      <NeoPageHeader
+        containerClassName="max-w-7xl mx-auto w-full p-6 md:p-8"
+        title="Earnings & Payouts"
+        icon={<Wallet className="w-8 h-8 md:w-10 md:h-10 text-primary" />}
+        description="Manage your available funds, track pending clearances, and withdraw to your accounts."
+      />
 
       <div className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto w-full space-y-8">
         {/* Top Grid: Snapshots & Withdraw */}
@@ -230,14 +227,16 @@ export default function ExpertEarningsPage() {
 
         {/* Transaction History */}
         <div className="bg-card border-2 border-border shadow-[4px_4px_0px_0px_var(--border)] overflow-hidden">
-          <div className="p-4 border-b-2 border-border bg-secondary/10 flex items-center justify-between">
-            <h3 className="font-heading font-black uppercase tracking-widest text-lg flex items-center gap-2">
-              <Receipt className="w-5 h-5 text-primary" /> Transaction History
-            </h3>
-            <NeoButton variant="outline" className="h-8 text-[0.625rem]">
-              Download CSV
-            </NeoButton>
-          </div>
+          <NeoWidgetHeader
+            title="Transaction History"
+            icon={<Receipt className="w-5 h-5 text-primary" />}
+            className="p-4 border-b-2 border-border bg-secondary/10 mb-0"
+            rightContent={
+              <NeoButton variant="outline" className="h-8 text-[0.625rem]">
+                Download CSV
+              </NeoButton>
+            }
+          />
 
           <div className="overflow-x-auto">
             <table className="w-full text-sm text-left">

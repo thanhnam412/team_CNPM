@@ -1,6 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import { useForm } from "@tanstack/react-form";
+import { zodValidator } from "@tanstack/zod-form-adapter";
+import { z } from "zod";
+import { useConversations, useMessagesWithUser, useSendMessageMutation } from "@/tanstack/useMessages";
 import {
   Search,
   MessageSquarePlus,
@@ -122,12 +126,42 @@ const MOCK_MESSAGES = [
 ];
 
 export default function MessagesPage() {
-  const [selectedChat, setSelectedChat] = useState<string | null>("c1");
+  const [selectedChat, setSelectedChat] = useState<string | null>(null);
   const [filter, setFilter] = useState("all");
-  const [chatInput, setChatInput] = useState("");
   const [isInfoOpen, setIsInfoOpen] = useState(true);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const activeConversation = CONVERSATIONS.find((c) => c.id === selectedChat);
+  // Mock User ID
+  const currentUserId = "user-1";
+
+  // Fetch Conversations
+  const { data: conversations = [], isLoading: isConversationsLoading } = useConversations(currentUserId);
+
+  // Fetch Messages for Selected Chat
+  const { data: messages = [], isLoading: isMessagesLoading } = useMessagesWithUser(currentUserId, selectedChat);
+
+  const activeConversation = conversations.find((c: any) => c.id === selectedChat);
+
+  // Send Message Mutation
+  const sendMessageMutation = useSendMessageMutation(currentUserId, selectedChat);
+
+  // TanStack Form for Chat Input
+  const form = useForm({
+    validatorAdapter: zodValidator(),
+    defaultValues: {
+      content: "",
+    },
+    onSubmit: async ({ value }) => {
+      if (!value.content.trim()) return;
+      sendMessageMutation.mutate(value.content);
+      form.reset();
+    },
+  });
+
+  // Scroll to bottom when messages update
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   return (
     <div className="flex h-full w-full bg-background overflow-hidden relative">
@@ -185,79 +219,72 @@ export default function MessagesPage() {
 
         {/* Chat List */}
         <div className="flex-1 overflow-y-auto bg-secondary/5">
-          {CONVERSATIONS.map((chat) => (
-            <div
-              key={chat.id}
-              onClick={() => setSelectedChat(chat.id)}
-              className={cn(
-                "p-4 border-b-2 border-border cursor-pointer transition-all flex flex-col gap-2 relative group",
-                selectedChat === chat.id
-                  ? "bg-primary/10 border-l-4 border-l-primary"
-                  : "bg-card hover:bg-secondary/20 border-l-4 border-l-transparent",
-              )}
-            >
-              {/* Context Tag */}
-              <div className="flex justify-between items-start">
-                <span
-                  className={cn(
-                    "text-[0.625rem] font-black uppercase tracking-widest px-2 py-0.5 border-2",
-                    chat.contextType === "quick_task"
-                      ? "bg-[#E1801E]/10 border-[#E1801E] text-[#E1801E]"
-                      : chat.contextType === "project"
-                        ? "bg-purple-500/10 border-purple-500 text-purple-600"
-                        : "bg-secondary border-border text-muted-foreground",
-                  )}
-                >
-                  {chat.contextType === "direct" ? "Direct" : chat.contextRef}
-                </span>
-                <span className="text-[0.625rem] font-bold text-muted-foreground uppercase">
-                  {chat.time}
-                </span>
-              </div>
-
-              {/* Chat Info */}
-              <div className="flex items-center gap-3">
-                <div className="relative">
-                  <div className="w-10 h-10 border-2 border-border bg-background flex items-center justify-center shrink-0">
-                    {chat.isGroup ? (
-                      <Users className="w-5 h-5 text-muted-foreground" />
-                    ) : (
-                      <User className="w-5 h-5 text-muted-foreground" />
-                    )}
-                  </div>
-                  {chat.online && (
-                    <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-green-500 border-2 border-card rounded-full" />
-                  )}
-                </div>
-
-                <div className="flex-1 min-w-0">
-                  <div className="flex justify-between items-center mb-1">
-                    <h3 className="font-bold text-sm uppercase truncate pr-2 group-hover:text-primary transition-colors">
-                      {chat.name}
-                    </h3>
-                    {chat.unread > 0 && (
-                      <span className="bg-destructive text-destructive-foreground text-[0.625rem] font-black px-1.5 py-0.5 min-w-[1.25rem] text-center border-2 border-destructive shrink-0">
-                        {chat.unread}
-                      </span>
-                    )}
-                  </div>
-                  <p
+          {isConversationsLoading ? (
+            <div className="p-4 text-center text-muted-foreground text-xs uppercase">Loading chats...</div>
+          ) : conversations.length === 0 ? (
+            <div className="p-4 text-center text-muted-foreground text-xs uppercase">No conversations found</div>
+          ) : (
+            conversations.map((chat: any) => (
+              <div
+                key={chat.id}
+                onClick={() => setSelectedChat(chat.id)}
+                className={cn(
+                  "p-4 border-b-2 border-border cursor-pointer transition-all flex flex-col gap-2 relative group",
+                  selectedChat === chat.id
+                    ? "bg-primary/10 border-l-4 border-l-primary"
+                    : "bg-card hover:bg-secondary/20 border-l-4 border-l-transparent",
+                )}
+              >
+                {/* Context Tag */}
+                <div className="flex justify-between items-start">
+                  <span
                     className={cn(
-                      "text-xs truncate font-semibold flex items-center gap-1",
-                      chat.unread > 0
-                        ? "text-foreground"
-                        : "text-muted-foreground",
+                      "text-[0.625rem] font-black uppercase tracking-widest px-2 py-0.5 border-2",
+                      chat.contextType === "QUICK_TASK"
+                        ? "bg-[#E1801E]/10 border-[#E1801E] text-[#E1801E]"
+                        : chat.contextType === "PROJECT"
+                          ? "bg-purple-500/10 border-purple-500 text-purple-600"
+                          : "bg-secondary border-border text-muted-foreground",
                     )}
                   >
-                    {chat.hasAttachment && (
-                      <Paperclip className="w-3 h-3 shrink-0" />
-                    )}
-                    {chat.lastMessage}
-                  </p>
+                    {chat.contextType === "DIRECT" ? "Direct" : chat.contextRef || chat.contextType}
+                  </span>
+                  <span className="text-[0.625rem] font-bold text-muted-foreground uppercase">
+                    {new Date(chat.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </span>
+                </div>
+
+                {/* Chat Info */}
+                <div className="flex items-center gap-3">
+                  <div className="relative">
+                    <div className="w-10 h-10 border-2 border-border bg-background flex items-center justify-center shrink-0">
+                      {chat.isGroup ? (
+                        <Users className="w-5 h-5 text-muted-foreground" />
+                      ) : (
+                        <User className="w-5 h-5 text-muted-foreground" />
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="flex-1 min-w-0">
+                    <div className="flex justify-between items-center mb-1">
+                      <h3 className="font-bold text-sm uppercase truncate pr-2 group-hover:text-primary transition-colors">
+                        {chat.name || "Conversation"}
+                      </h3>
+                    </div>
+                    <p
+                      className={cn(
+                        "text-xs truncate font-semibold flex items-center gap-1",
+                        "text-muted-foreground",
+                      )}
+                    >
+                      {chat.messages?.[0]?.content || "No messages yet"}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
 
@@ -374,168 +401,200 @@ export default function MessagesPage() {
                   </span>
                 </div>
 
-                {MOCK_MESSAGES.map((msg) => {
-                  // Render System Message
-                  if (msg.type === "system") {
+                {isMessagesLoading ? (
+                  <div className="text-center p-8 text-muted-foreground uppercase text-xs">Loading messages...</div>
+                ) : messages.length === 0 ? (
+                  <div className="text-center p-8 text-muted-foreground uppercase text-xs">No messages yet. Send the first one!</div>
+                ) : (
+                  messages.map((msg: any) => {
+                    const isMe = msg.senderId === currentUserId;
+                    
+                    // Render System Message
+                    if (msg.type === "SYSTEM") {
+                      return (
+                        <div key={msg.id} className="flex justify-center my-8">
+                          <div className="border-2 border-dashed border-border px-4 py-2 text-[0.625rem] font-bold uppercase tracking-widest text-muted-foreground bg-background max-w-sm text-center">
+                            {msg.content} <br />
+                            {""}
+                            <span className="text-foreground">{new Date(msg.createdAt).toLocaleTimeString()}</span>
+                          </div>
+                        </div>
+                      );
+                    }
+
+                    // Render Normal / Code / File Messages
                     return (
-                      <div key={msg.id} className="flex justify-center my-8">
-                        <div className="border-2 border-dashed border-border px-4 py-2 text-[0.625rem] font-bold uppercase tracking-widest text-muted-foreground bg-background max-w-sm text-center">
-                          {msg.text} <br />
-                          {""}
-                          <span className="text-foreground">{msg.time}</span>
+                      <div
+                        key={msg.id}
+                        className={cn(
+                          "flex w-full",
+                          isMe ? "justify-end" : "justify-start",
+                        )}
+                      >
+                        <div
+                          className={cn(
+                            "flex gap-3 max-w-[90%] md:max-w-[80%]",
+                            isMe ? "flex-row-reverse" : "flex-row",
+                          )}
+                        >
+                          {/* Avatar (Only for others) */}
+                          {!isMe && (
+                            <div className="w-8 h-8 border-2 border-border bg-card flex items-center justify-center shrink-0 text-xs font-bold uppercase mt-1">
+                              {msg.sender?.name?.charAt(0) || "?"}
+                            </div>
+                          )}
+
+                          <div
+                            className={cn(
+                              "flex flex-col min-w-0",
+                              isMe ? "items-end" : "items-start",
+                            )}
+                          >
+                            {!isMe && (
+                              <span className="text-[0.625rem] font-bold uppercase tracking-widest text-muted-foreground mb-1 ml-1">
+                                {msg.sender?.name || "Unknown"}
+                              </span>
+                            )}
+
+                            {/* Text Bubble */}
+                            {msg.type === "TEXT" && (
+                              <div
+                                className={cn(
+                                  "p-3 md:p-4 border-2 border-foreground shadow-[2px_2px_0px_0px_var(--foreground)]",
+                                  isMe
+                                    ? "bg-primary text-primary-foreground"
+                                    : "bg-card text-foreground",
+                                )}
+                              >
+                                <p className="text-sm font-semibold whitespace-pre-wrap">
+                                  {msg.content}
+                                </p>
+                              </div>
+                            )}
+
+                            {/* Code Block Mockup */}
+                            {msg.type === "CODE" && (
+                              <div className="border-2 border-foreground bg-foreground text-background shadow-[2px_2px_0px_0px_var(--foreground)] w-full max-w-2xl overflow-hidden">
+                                <div className="flex items-center justify-between px-4 py-2 border-b-2 border-border/20 bg-muted/10">
+                                  <span className="text-[0.625rem] font-black uppercase tracking-widest flex items-center gap-2">
+                                    <Terminal className="w-3 h-3" />
+                                    {""}
+                                    {msg.metadata?.language || "code"}
+                                  </span>
+                                  <NeoButton
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-6 w-6"
+                                  >
+                                    <Copy className="w-3 h-3" />
+                                  </NeoButton>
+                                </div>
+                                <div className="p-4 overflow-x-auto text-xs font-mono whitespace-pre text-green-400">
+                                  {msg.content}
+                                </div>
+                              </div>
+                            )}
+
+                            {/* File Attachment Mockup */}
+                            {msg.type === "FILE" && (
+                              <div
+                                className={cn(
+                                  "p-3 md:p-4 border-2 border-foreground shadow-[2px_2px_0px_0px_var(--foreground)] flex items-center gap-4 cursor-pointer hover:bg-secondary/20 transition-colors",
+                                  isMe
+                                    ? "bg-primary/10 border-primary"
+                                    : "bg-card",
+                                )}
+                              >
+                                <div className="w-10 h-10 border-2 border-foreground bg-background flex items-center justify-center shrink-0">
+                                  <FileText className="w-5 h-5 text-foreground" />
+                                </div>
+                                <div>
+                                  <div className="font-bold text-sm truncate max-w-[200px]">
+                                    {msg.metadata?.fileName || "Attachment"}
+                                  </div>
+                                  <div className="text-[0.625rem] font-bold uppercase tracking-widest text-muted-foreground">
+                                    {msg.metadata?.fileSize || "Unknown size"}
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Meta Footer */}
+                            <div className="flex items-center gap-1 mt-1 text-[0.625rem] font-bold uppercase tracking-widest text-muted-foreground">
+                              <span>{new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                              {isMe && (
+                                <span className="ml-1">
+                                  <Check className="w-3 h-3" />
+                                </span>
+                              )}
+                            </div>
+                          </div>
                         </div>
                       </div>
                     );
-                  }
-
-                  // Render Normal / Code / File Messages
-                  return (
-                    <div
-                      key={msg.id}
-                      className={cn(
-                        "flex w-full",
-                        msg.isMe ? "justify-end" : "justify-start",
-                      )}
-                    >
-                      <div
-                        className={cn(
-                          "flex gap-3 max-w-[90%] md:max-w-[80%]",
-                          msg.isMe ? "flex-row-reverse" : "flex-row",
-                        )}
-                      >
-                        {/* Avatar (Only for others) */}
-                        {!msg.isMe && (
-                          <div className="w-8 h-8 border-2 border-border bg-card flex items-center justify-center shrink-0 text-xs font-bold uppercase mt-1">
-                            {msg.senderName?.charAt(0)}
-                          </div>
-                        )}
-
-                        <div
-                          className={cn(
-                            "flex flex-col min-w-0",
-                            msg.isMe ? "items-end" : "items-start",
-                          )}
-                        >
-                          {!msg.isMe && (
-                            <span className="text-[0.625rem] font-bold uppercase tracking-widest text-muted-foreground mb-1 ml-1">
-                              {msg.senderName}
-                            </span>
-                          )}
-
-                          {/* Text Bubble */}
-                          {msg.type === "text" && (
-                            <div
-                              className={cn(
-                                "p-3 md:p-4 border-2 border-foreground shadow-[2px_2px_0px_0px_var(--foreground)]",
-                                msg.isMe
-                                  ? "bg-primary text-primary-foreground"
-                                  : "bg-card text-foreground",
-                              )}
-                            >
-                              <p className="text-sm font-semibold whitespace-pre-wrap">
-                                {msg.text}
-                              </p>
-                            </div>
-                          )}
-
-                          {/* Code Block Mockup */}
-                          {msg.type === "code" && (
-                            <div className="border-2 border-foreground bg-foreground text-background shadow-[2px_2px_0px_0px_var(--foreground)] w-full max-w-2xl overflow-hidden">
-                              <div className="flex items-center justify-between px-4 py-2 border-b-2 border-border/20 bg-muted/10">
-                                <span className="text-[0.625rem] font-black uppercase tracking-widest flex items-center gap-2">
-                                  <Terminal className="w-3 h-3" />
-                                  {""}
-                                  {msg.language}
-                                </span>
-                                <NeoButton
-                                  variant="ghost"
-                                  size="icon"
-                                  className="h-6 w-6"
-                                >
-                                  <Copy className="w-3 h-3" />
-                                </NeoButton>
-                              </div>
-                              <div className="p-4 overflow-x-auto text-xs font-mono whitespace-pre text-green-400">
-                                {msg.code}
-                              </div>
-                            </div>
-                          )}
-
-                          {/* File Attachment Mockup */}
-                          {msg.type === "file" && (
-                            <div
-                              className={cn(
-                                "p-3 md:p-4 border-2 border-foreground shadow-[2px_2px_0px_0px_var(--foreground)] flex items-center gap-4 cursor-pointer hover:bg-secondary/20 transition-colors",
-                                msg.isMe
-                                  ? "bg-primary/10 border-primary"
-                                  : "bg-card",
-                              )}
-                            >
-                              <div className="w-10 h-10 border-2 border-foreground bg-background flex items-center justify-center shrink-0">
-                                <FileText className="w-5 h-5 text-foreground" />
-                              </div>
-                              <div>
-                                <div className="font-bold text-sm truncate max-w-[200px]">
-                                  {msg.fileName}
-                                </div>
-                                <div className="text-[0.625rem] font-bold uppercase tracking-widest text-muted-foreground">
-                                  {msg.fileSize}
-                                </div>
-                              </div>
-                            </div>
-                          )}
-
-                          {/* Meta Footer */}
-                          <div className="flex items-center gap-1 mt-1 text-[0.625rem] font-bold uppercase tracking-widest text-muted-foreground">
-                            <span>{msg.time}</span>
-                            {msg.isMe && (
-                              <span className="ml-1">
-                                {msg.status === "read" ? (
-                                  <CheckCheck className="w-3 h-3 text-primary" />
-                                ) : (
-                                  <Check className="w-3 h-3" />
-                                )}
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
+                  })
+                )}
+                <div ref={messagesEndRef} />
               </div>
 
               {/* Compose Area */}
               <div className="p-4 bg-card border-t-2 border-border shrink-0 z-10">
-                <div className="flex items-end gap-2 md:gap-3 max-w-5xl mx-auto">
-                  <div className="flex flex-col gap-2 shrink-0 pb-1 hidden sm:flex">
-                    <NeoButton
-                      variant="outline"
-                      size="icon"
-                      className="h-10 w-10"
-                      title="Attach File"
-                    >
-                      <Paperclip className="w-4 h-4 text-muted-foreground" />
-                    </NeoButton>
-                  </div>
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    form.handleSubmit();
+                  }}
+                >
+                  <div className="flex items-end gap-2 md:gap-3 max-w-5xl mx-auto">
+                    <div className="flex flex-col gap-2 shrink-0 pb-1 hidden sm:flex">
+                      <NeoButton
+                        type="button"
+                        variant="outline"
+                        size="icon"
+                        className="h-10 w-10"
+                        title="Attach File"
+                      >
+                        <Paperclip className="w-4 h-4 text-muted-foreground" />
+                      </NeoButton>
+                    </div>
 
-                  <div className="flex-1 relative">
-                    <NeoTextarea
-                      value={chatInput}
-                      onChange={(e) => setChatInput(e.target.value)}
-                      placeholder="Type a message... (Markdown supported)"
-                      className="min-h-[52px] max-h-[200px] resize-y focus-visible: text-sm font-semibold p-3"
+                    <div className="flex-1 relative">
+                      <form.Field
+                        name="content"
+                        children={(field) => (
+                          <NeoTextarea
+                            value={field.state.value}
+                            onBlur={field.handleBlur}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter" && !e.shiftKey) {
+                                e.preventDefault();
+                                form.handleSubmit();
+                              }
+                            }}
+                            placeholder="Type a message... (Markdown supported)"
+                            className="min-h-[52px] max-h-[200px] resize-y focus-visible: text-sm font-semibold p-3"
+                          />
+                        )}
+                      />
+                    </div>
+
+                    <form.Subscribe
+                      selector={(state) => [state.values.content, state.isSubmitting]}
+                      children={([content, isSubmitting]) => (
+                        <NeoButton
+                          type="submit"
+                          disabled={!content.trim() || isSubmitting}
+                          className="h-[52px] px-4 md:px-6 shrink-0"
+                        >
+                          <Send className="w-4 h-4 sm:mr-2" />
+                          <span className="hidden sm:inline">Send</span>
+                        </NeoButton>
+                      )}
                     />
                   </div>
-
-                  <NeoButton
-                    disabled={!chatInput.trim()}
-                    className="h-[52px] px-4 md:px-6 shrink-0"
-                  >
-                    <Send className="w-4 h-4 sm:mr-2" />
-                    <span className="hidden sm:inline">Send</span>
-                  </NeoButton>
-                </div>
+                </form>
                 <div className="mt-2 text-center hidden sm:block">
                   <span className="text-[0.625rem] font-bold uppercase tracking-widest text-muted-foreground">
                     Pro Tip: Use{""}

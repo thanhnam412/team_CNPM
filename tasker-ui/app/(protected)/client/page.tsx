@@ -10,36 +10,28 @@ import {
 } from "lucide-react";
 import { NeoButton } from "@/components/ui-custom/neo-button";
 import { NeoCard } from "@/components/ui-custom/neo-card";
+import { NeoPageHeader } from "@/components/ui-custom/neo-page-header";
+import { NeoWidgetHeader } from "@/components/ui-custom/neo-widget-header";
+import { NeoBadge } from "@/components/ui-custom/neo-badge";
+import { NeoAvatar } from "@/components/ui-custom/neo-avatar";
+import { NeoProgress } from "@/components/ui-custom/neo-progress";
 import Link from "next/link";
 
 export default function DashboardOverviewPage() {
   return (
     <div className="flex flex-col h-full w-full bg-background overflow-y-auto">
       {/* Hero Section */}
-      <div className="bg-card border-b-2 border-border p-6 md:p-8 shrink-0 relative overflow-hidden">
-        {/* Decorative elements */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
-
-        <div className="max-w-7xl mx-auto relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
-          <div>
-            <h2 className="text-xs font-black uppercase tracking-widest text-primary mb-2 flex items-center gap-2">
-              <Zap className="w-4 h-4 fill-primary" /> Command Center
-            </h2>
-            <h1 className="text-4xl md:text-5xl font-heading font-black tracking-widest uppercase">
-              Welcome back, <br className="hidden md:block" /> Client_01
-            </h1>
-            <p className="text-sm font-semibold text-muted-foreground uppercase tracking-widest mt-4">
-              Here's what's happening across your projects today.
-            </p>
-          </div>
-
-          <div className="flex gap-3">
-            <Link href="/client/projects/new">
-              <NeoButton className="h-12 px-6">New Project</NeoButton>
-            </Link>
-          </div>
-        </div>
-      </div>
+      <NeoPageHeader
+        containerClassName="max-w-7xl mx-auto w-full p-6 md:p-8"
+        icon={<Zap className="w-8 h-8 md:w-10 md:h-10 text-primary" />}
+        title="Welcome back, Client_01"
+        description="Here's what's happening across your projects today."
+        rightContent={
+          <Link href="/client/projects/new">
+            <NeoButton className="h-12 px-6">New Project</NeoButton>
+          </Link>
+        }
+      />
 
       {/* Main Grid */}
       <div className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto w-full space-y-6">
@@ -47,17 +39,12 @@ export default function DashboardOverviewPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Finance Snapshot */}
           <NeoCard className="lg:col-span-1 p-6 flex flex-col">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="font-heading font-black uppercase tracking-widest text-lg flex items-center gap-2">
-                <Wallet className="w-5 h-5 text-primary" /> Finance
-              </h3>
-              <Link
-                href="/client/finance"
-                className="text-[0.625rem] font-bold uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors flex items-center"
-              >
-                View All <ChevronRight className="w-3 h-3 ml-1" />
-              </Link>
-            </div>
+            <NeoWidgetHeader
+              title="Finance"
+              icon={<Wallet className="w-5 h-5 text-primary" />}
+              href="/client/finance"
+              linkText="View All"
+            />
 
             <div className="space-y-4 flex-1">
               <div>
@@ -130,9 +117,9 @@ export default function DashboardOverviewPage() {
                 >
                   <div>
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-[0.625rem] font-black uppercase tracking-widest bg-secondary px-1.5 py-0.5 border-2 border-border">
+                      <NeoBadge variant="secondary">
                         {item.type}
-                      </span>
+                      </NeoBadge>
                       <span className="text-[0.625rem] font-bold uppercase tracking-widest text-muted-foreground">
                         {item.id}
                       </span>
@@ -157,17 +144,12 @@ export default function DashboardOverviewPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Active Projects Widget */}
           <NeoCard className="p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="font-heading font-black uppercase tracking-widest text-lg flex items-center gap-2">
-                <Briefcase className="w-5 h-5 text-primary" /> Active Projects
-              </h3>
-              <Link
-                href="/client/projects"
-                className="text-[0.625rem] font-bold uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors flex items-center"
-              >
-                View All <ChevronRight className="w-3 h-3 ml-1" />
-              </Link>
-            </div>
+            <NeoWidgetHeader
+              title="Active Projects"
+              icon={<Briefcase className="w-5 h-5 text-primary" />}
+              href="/client/projects"
+              linkText="View All"
+            />
 
             <div className="space-y-6">
               {/* Project 1 */}
@@ -184,16 +166,11 @@ export default function DashboardOverviewPage() {
                       Deadline: Dec 31, 2026
                     </div>
                   </div>
-                  <span className="bg-green-500/10 text-green-600 border-2 border-green-500 px-2 py-0.5 text-[0.625rem] font-black uppercase tracking-widest">
+                  <NeoBadge variant="success">
                     On Track
-                  </span>
+                  </NeoBadge>
                 </div>
-                <div className="h-4 border-2 border-border bg-secondary/30 w-full relative overflow-hidden">
-                  <div
-                    className="absolute inset-y-0 left-0 bg-primary border-r-2 border-border"
-                    style={{ width: "65%" }}
-                  />
-                </div>
+                <NeoProgress value={65} />
                 <div className="flex justify-between text-[0.625rem] font-bold uppercase tracking-widest text-muted-foreground mt-1">
                   <span>Progress: 65%</span>
                   <span>Escrow: $5,000.00</span>
@@ -214,16 +191,11 @@ export default function DashboardOverviewPage() {
                       <AlertTriangle className="w-3 h-3" /> Due in 3 days
                     </div>
                   </div>
-                  <span className="bg-warning/10 text-warning border-2 border-warning px-2 py-0.5 text-[0.625rem] font-black uppercase tracking-widest">
+                  <NeoBadge variant="warning">
                     At Risk
-                  </span>
+                  </NeoBadge>
                 </div>
-                <div className="h-4 border-2 border-border bg-secondary/30 w-full relative overflow-hidden">
-                  <div
-                    className="absolute inset-y-0 left-0 bg-warning border-r-2 border-border"
-                    style={{ width: "85%" }}
-                  />
-                </div>
+                <NeoProgress value={85} variant="warning" />
                 <div className="flex justify-between text-[0.625rem] font-bold uppercase tracking-widest text-muted-foreground mt-1">
                   <span>Progress: 85%</span>
                   <span>Escrow: $3,200.00</span>
@@ -234,18 +206,12 @@ export default function DashboardOverviewPage() {
 
           {/* Urgent Inbox Widget */}
           <NeoCard className="p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="font-heading font-black uppercase tracking-widest text-lg flex items-center gap-2">
-                <MessageSquare className="w-5 h-5 text-primary" /> Unread
-                Messages
-              </h3>
-              <Link
-                href="/client/messages"
-                className="text-[0.625rem] font-bold uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors flex items-center"
-              >
-                Open Inbox <ChevronRight className="w-3 h-3 ml-1" />
-              </Link>
-            </div>
+            <NeoWidgetHeader
+              title="Unread Messages"
+              icon={<MessageSquare className="w-5 h-5 text-primary" />}
+              href="/client/messages"
+              linkText="Open Inbox"
+            />
 
             <div className="space-y-3">
               {[
@@ -266,17 +232,15 @@ export default function DashboardOverviewPage() {
               ].map((chat) => (
                 <Link key={chat.context} href="/client/messages" className="block">
                   <div className="border-2 border-border bg-background p-3 flex gap-3 hover:bg-secondary/10 transition-colors group">
-                    <div className="w-10 h-10 border-2 border-foreground bg-primary flex items-center justify-center font-heading font-black text-primary-foreground shrink-0 shadow-[2px_2px_0px_0px_var(--foreground)]">
-                      {chat.name.charAt(0)}
-                    </div>
+                    <NeoAvatar name={chat.name} />
                     <div className="flex-1 min-w-0">
                       <div className="flex justify-between items-start">
                         <span className="font-bold text-sm uppercase truncate group-hover:text-primary">
                           {chat.name}
                         </span>
-                        <span className="text-[0.625rem] font-black uppercase bg-destructive text-destructive-foreground px-1.5 py-0.5 border-2 border-destructive shrink-0">
+                        <NeoBadge variant="destructive" className="shrink-0">
                           {chat.unread}
-                        </span>
+                        </NeoBadge>
                       </div>
                       <div className="text-xs font-semibold text-muted-foreground truncate mt-0.5">
                         {chat.msg}

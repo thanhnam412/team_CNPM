@@ -1,22 +1,23 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
-
-import { Mail, Lock, Eye } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { NeoCard, NeoCardContent } from "@/components/ui-custom/neo-card";
+import { Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { NeoButton } from "@/components/ui-custom/neo-button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
+import { NeoInput } from "@/components/ui-custom/neo-input";
 import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
 import SocialSign from "../social-sign";
 
 export function LoginForm() {
   const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <div className="flex justify-center lg:justify-end">
-      <Card className="w-full max-w-md">
-        <CardContent className="p-8 md:p-10">
+      <NeoCard className="w-full max-w-md">
+        <NeoCardContent className="p-8 md:p-10">
           <div className="mb-8">
             <h2 className="text-2xl font-bold">Chào mừng trở lại</h2>
             <p className="mt-1 text-sm text-muted-foreground">
@@ -31,11 +32,11 @@ export function LoginForm() {
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
 
-                <Input
+                <NeoInput
                   id="email"
                   type="email"
                   placeholder="example@aitasker.com"
-                  className="pl-10"
+                  className="pl-10 h-12"
                 />
               </div>
             </div>
@@ -43,21 +44,20 @@ export function LoginForm() {
             <div className="relative">
               <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
 
-              <Input
+              <NeoInput
                 id="password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 placeholder="••••••••"
-                className="pl-10 pr-10"
+                className="pl-10 pr-10 h-12"
               />
 
-              <Button
+              <button
                 type="button"
-                variant="ghost"
-                size="icon"
-                className="absolute right-1 top-1/2 h-8 w-8 -translate-y-1/2"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
               >
-                <Eye className="h-4 w-4" />
-              </Button>
+                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
             </div>
 
             <div className="flex items-center space-x-2">
@@ -67,7 +67,7 @@ export function LoginForm() {
               </Label>
             </div>
 
-            <Button className="w-full">Đăng nhập</Button>
+            <NeoButton className="w-full h-12 text-base">Đăng nhập</NeoButton>
           </form>
 
           <SocialSign />
@@ -81,8 +81,8 @@ export function LoginForm() {
               Tham gia ngay
             </span>
           </p>
-        </CardContent>
-      </Card>
+        </NeoCardContent>
+      </NeoCard>
     </div>
   );
 }
