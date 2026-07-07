@@ -15,11 +15,11 @@ import { NeoPageHeader } from "@/components/ui-custom/neo-page-header";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCreateQuickTaskMutation } from "@/tanstack/useQuickTasks";
-import { useSession } from "next-auth/react";
+import { useGetMe } from "@/tanstack/useGetMe";
 import { toast } from "sonner";
 
 export default function CreateQuickTaskPage() {
-  const { data: session } = useSession();
+  const { data: me } = useGetMe();
   const router = useRouter();
   const [title, setTitle] = useState("");
   const [bounty, setBounty] = useState("");
@@ -40,7 +40,7 @@ export default function CreateQuickTaskPage() {
   const handleSubmit = () => {
     createMutation.mutate(
       {
-        clientId: session?.user?.id,
+        clientId: me?.id,
         title,
         description: taskContent,
         budget: Number(bounty),
@@ -56,7 +56,7 @@ export default function CreateQuickTaskPage() {
               "Failed to create task. Check if your user account is properly synced to the database.",
           );
         },
-      }
+      },
     );
   };
 
@@ -186,7 +186,7 @@ export default function CreateQuickTaskPage() {
                 !title ||
                 !taskContent ||
                 !bounty ||
-                !session?.user?.id
+                !me?.id
               }
             >
               {createMutation.isPending ? (

@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { milestoneService } from "@/services/milestoneService";
+import { MilestoneDto } from "@/types/project.dto";
 
 export const useMilestones = (projectId: string) => {
   return useQuery({
@@ -16,79 +17,72 @@ export const useAvailableMilestones = () => {
   });
 };
 
-export const useRequestRevisionMutation = (projectId: string) => {
+export const useCreateMilestoneMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, feedback }: { id: string; feedback: string }) => 
-      milestoneService.requestRevision(projectId, id, feedback),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["milestones", projectId] });
+    mutationFn: ({ projectId, data }: { projectId: string; data: Partial<MilestoneDto> }) =>
+      milestoneService.createMilestone(projectId, data),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["milestones", variables.projectId] });
     },
   });
 };
 
-export const useApproveMilestoneMutation = (projectId: string) => {
+export const useUpdateMilestoneMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => milestoneService.approveMilestone(projectId, id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["milestones", projectId] });
+    mutationFn: ({
+      projectId,
+      milestoneId,
+      data,
+    }: {
+      projectId: string;
+      milestoneId: string;
+      data: Partial<MilestoneDto>;
+    }) => milestoneService.updateMilestone(projectId, milestoneId, data),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["milestones", variables.projectId] });
     },
   });
 };
 
-export const useDeleteMilestoneMutation = (projectId: string) => {
+export const useDeleteMilestoneMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => milestoneService.deleteMilestone(projectId, id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["milestones", projectId] });
+    mutationFn: ({ projectId, milestoneId }: { projectId: string; milestoneId: string }) =>
+      milestoneService.deleteMilestone(projectId, milestoneId),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["milestones", variables.projectId] });
     },
   });
 };
 
-export const useCreateMilestoneMutation = (projectId: string) => {
+export const useSubmitMilestoneMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: any) => milestoneService.createMilestone(projectId, data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["milestones", projectId] });
+    mutationFn: ({
+      projectId,
+      milestoneId,
+      payload,
+    }: {
+      projectId: string;
+      milestoneId: string;
+      payload: unknown;
+    }) => milestoneService.submitMilestone(projectId, milestoneId, payload),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["milestones", variables.projectId] });
     },
   });
 };
 
-export const useSubmitDeliverablesMutation = () => {
+export const usePayMilestoneMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: { projectId: string; milestoneId: string; payload: any }) =>
-      milestoneService.submitDeliverables(data.projectId, data.milestoneId, data.payload),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["expert-tasks"] });
-      // Invalidate specific project milestones if we have them
-      // queryClient.invalidateQueries({ queryKey: ["milestones"] });
-    },
-  });
-};
-
-export const useBidOnMilestoneMutation = () => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (data: { milestoneId: string; payload: any }) =>
-      milestoneService.submitBid(data.milestoneId, data.payload),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["available-milestones"] });
-    },
-  });
-};
-
-export const useAcceptBidMutation = (projectId: string) => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (bidId: string) => milestoneService.acceptBid(bidId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["milestones", projectId] });
-      queryClient.invalidateQueries({ queryKey: ["project-finance", projectId] });
-      queryClient.invalidateQueries({ queryKey: ["project", projectId] });
+    mutationFn: ({ projectId, milestoneId }: { projectId: string; milestoneId: string }) =>
+      milestoneService.payMilestone(projectId, milestoneId),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["milestones", variables.projectId] });
+      queryClient.invalidateQueries({ queryKey: ["projects", variables.projectId, "finance"] });
     },
   });
 };

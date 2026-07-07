@@ -16,15 +16,15 @@ import { NeoBadge } from "@/components/ui-custom/neo-badge";
 import { NeoAvatar } from "@/components/ui-custom/neo-avatar";
 import { NeoProgress } from "@/components/ui-custom/neo-progress";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
+import { useGetMe } from "@/tanstack/useGetMe";
 import { useExpertOverview } from "@/tanstack/useExperts";
 
 export default function ExpertDashboardOverviewPage() {
-  const { data: session } = useSession();
-  const expertId = session?.user?.id;
-  const { data: overview, isLoading } = useExpertOverview(expertId);
+  const { data: me } = useGetMe();
+  const expertId = me?.id;
+  const { data: overview, isLoading } = useExpertOverview(expertId || "");
 
-  const displayName = session?.user?.name || "Expert";
+  const displayName = me?.name || "Expert";
 
   return (
     <div className="flex flex-col h-full w-full bg-background overflow-y-auto">
@@ -60,9 +60,7 @@ export default function ExpertDashboardOverviewPage() {
                   Available to Withdraw
                 </div>
                 <div className="font-heading font-black text-3xl md:text-4xl text-primary">
-                  {overview
-                    ? formatCurrency(overview.finance.availableToWithdraw)
-                    : "$0.00"}
+                  {formatCurrency(me?.wallet?.balance || 0)}
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4 pt-4 border-t-2 border-border border-dashed">
@@ -71,19 +69,15 @@ export default function ExpertDashboardOverviewPage() {
                     In Escrow
                   </div>
                   <div className="font-heading font-black text-lg text-muted-foreground">
-                    {overview
-                      ? formatCurrency(overview.finance.inEscrow)
-                      : "$0.00"}
+                    {formatCurrency(me?.wallet?.escrowBalance || 0)}
                   </div>
                 </div>
                 <div>
                   <div className="text-[0.625rem] font-bold uppercase tracking-widest text-muted-foreground mb-1">
-                    Earned (MTD)
+                    Total Earned
                   </div>
                   <div className="font-heading font-black text-lg">
-                    {overview
-                      ? formatCurrency(overview.finance.earnedMTD)
-                      : "$0.00"}
+                    {formatCurrency(me?.wallet?.totalEarned || 0)}
                   </div>
                 </div>
               </div>
@@ -108,17 +102,15 @@ export default function ExpertDashboardOverviewPage() {
             </div>
 
             <p className="text-sm font-bold text-foreground mb-6">
-              You have {overview?.actionRequired?.length || 0} tasks/milestones
+              You have 0 tasks/milestones
               due soon. Submit your deliverables to release escrow funds.
             </p>
 
             <div className="space-y-3 flex-1">
-              {!overview?.actionRequired?.length && (
                 <div className="text-sm font-semibold text-muted-foreground">
                   No urgent tasks due soon.
                 </div>
-              )}
-              {overview?.actionRequired?.map((item: any, i: number) => (
+              {[]?.map((item: any, i: number) => (
                 <div
                   key={i}
                   className={cn(
@@ -168,12 +160,10 @@ export default function ExpertDashboardOverviewPage() {
             />
 
             <div className="space-y-6">
-              {!overview?.activeWork?.length && (
                 <div className="text-sm font-semibold text-muted-foreground">
                   No active work at the moment.
                 </div>
-              )}
-              {overview?.activeWork?.map((work: any, i: number) => (
+              {[]?.map((work: any, i: number) => (
                 <div key={i}>
                   <div className="flex justify-between items-start mb-2">
                     <div>
@@ -221,12 +211,10 @@ export default function ExpertDashboardOverviewPage() {
             />
 
             <div className="space-y-3">
-              {!overview?.messages?.recentChats?.length && (
                 <div className="text-sm font-semibold text-muted-foreground">
                   No recent messages.
                 </div>
-              )}
-              {overview?.messages?.recentChats?.map((chat: any, i: number) => (
+              {[]?.map((chat: any, i: number) => (
                 <Link key={i} href="/expert/messages" className="block">
                   <div className="border-2 border-border bg-background p-3 flex gap-3 hover:bg-secondary/10 transition-colors group">
                     <NeoAvatar name={chat.senderName} />
@@ -273,12 +261,10 @@ export default function ExpertDashboardOverviewPage() {
           />
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {!overview?.recommendedTasks?.length && (
               <div className="text-sm font-semibold text-muted-foreground col-span-3">
                 No recommended tasks at the moment.
               </div>
-            )}
-            {overview?.recommendedTasks?.map((task: any, i: number) => (
+            {[]?.map((task: any, i: number) => (
               <NeoCard
                 key={i}
                 variant="interactive"

@@ -24,6 +24,6 @@ const NeoTooltipContent = React.forwardRef<
     {...props}
   />
 ));
-NeoTooltipContent.displayName = TooltipContent.displayName;
+NeoTooltipContent.displayName = (TooltipContent as any).displayName;
 
 export { NeoTooltip, NeoTooltipTrigger, NeoTooltipContent, NeoTooltipProvider };

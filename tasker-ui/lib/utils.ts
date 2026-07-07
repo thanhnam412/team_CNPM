@@ -20,3 +20,10 @@ export function formatCurrency(
     maximumFractionDigits: 2,
   }).format(numericAmount);
 }
+
+export function parseDecimalInput(amount: number | string): string {
+  if (!amount) return "0";
+  const numericAmount = typeof amount === "string" ? parseFloat(amount) : amount;
+  if (isNaN(numericAmount)) return "0";
+  return numericAmount.toString();
+}

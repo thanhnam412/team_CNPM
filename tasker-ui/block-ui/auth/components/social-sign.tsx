@@ -6,7 +6,9 @@ import { BASE_URL } from "@/share/const";
 import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 
-export default function SocialSign() {
+import { Suspense } from "react";
+
+function SocialSignInner() {
   const params = useSearchParams();
 
   const handleSocialSignIn = (type: "facebook" | "google") => {
@@ -48,5 +50,13 @@ export default function SocialSign() {
         </NeoButton>
       </div>
     </>
+  );
+}
+
+export default function SocialSign() {
+  return (
+    <Suspense fallback={<div className="grid grid-cols-2 gap-4 mt-8"><div className="h-12 rounded-md bg-muted animate-pulse" /><div className="h-12 rounded-md bg-muted animate-pulse" /></div>}>
+      <SocialSignInner />
+    </Suspense>
   );
 }

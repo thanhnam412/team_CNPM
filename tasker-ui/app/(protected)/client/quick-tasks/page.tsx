@@ -73,7 +73,7 @@ export default function QuickTasksPage() {
         </div>
 
         <div className="flex items-center gap-4 w-full sm:w-auto">
-          <NeoSelect value={filter} onValueChange={setFilter}>
+          <NeoSelect value={filter} onValueChange={(val) => setFilter(val || "all")}>
             <NeoSelectTrigger className="w-full sm:w-48 h-10 text-xs">
               <Filter className="w-4 h-4 mr-2" />
               <NeoSelectValue placeholder="Filter Status" />

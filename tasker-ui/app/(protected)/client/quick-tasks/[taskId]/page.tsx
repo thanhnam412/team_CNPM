@@ -24,8 +24,9 @@ import { NeoInput } from "@/components/ui-custom/neo-input";
 import { NeoTextarea } from "@/components/ui-custom/neo-textarea";
 import { cn } from "@/lib/utils";
 
-import { useQuickTask, useApproveDeliverableMutation } from "@/tanstack/useQuickTasks";
-import { useTaskProposals, useUpdateProposalStatusMutation } from "@/tanstack/useProposals";
+import { useQuickTask, useApproveQuickTaskDeliverableMutation } from "@/tanstack/useQuickTasks";
+import { useQuickTaskProposals, useUpdateProposalStatusMutation } from "@/tanstack/useProposals";
+import { useContracts, useReleaseFundsMutation } from "@/tanstack/useContracts";
 
 export default function QuickTaskDetailsPage({
   params,
@@ -36,10 +37,13 @@ export default function QuickTaskDetailsPage({
   const taskId = resolvedParams.taskId;
 
   const { data: task, isLoading: isTaskLoading } = useQuickTask(taskId);
-  const { data: proposals = [], isLoading: isProposalsLoading } = useTaskProposals(taskId);
+  const { data: proposals = [], isLoading: isProposalsLoading } = useQuickTaskProposals(taskId);
+  const { data: contracts = [] } = useContracts();
 
-  const acceptProposalMutation = useUpdateProposalStatusMutation(taskId);
-  const approveDeliverableMutation = useApproveDeliverableMutation(taskId);
+  const updateProposalMutation = useUpdateProposalStatusMutation();
+  const releaseFundsMutation = useReleaseFundsMutation();
+  
+  const activeContract = contracts.find((c) => c.quickTaskId === taskId);
 
   const [chatInput, setChatInput] = useState("");
 
@@ -211,15 +215,12 @@ export default function QuickTaskDetailsPage({
                         </div>
                         <div className="text-right">
                           <div className="font-heading font-black">
-                            ${p.proposedPrice}
-                          </div>
-                          <div className="text-[0.625rem] font-bold uppercase tracking-widest text-muted-foreground">
-                            {p.estimatedDays} Days
+                            ${p.amount}
                           </div>
                         </div>
                       </div>
                       <p className="text-xs font-semibold text-muted-foreground italic mb-3 line-clamp-2">
-                        "{p.coverLetter}"
+                        "{p.message || 'No cover letter provided'}"
                       </p>
                       <div className="flex gap-2">
                         <NeoButton
@@ -230,10 +231,10 @@ export default function QuickTaskDetailsPage({
                         </NeoButton>
                         <NeoButton 
                           className="flex-1 text-[0.625rem] h-8"
-                          disabled={acceptProposalMutation.isPending}
-                          onClick={() => acceptProposalMutation.mutate(p.id)}
+                          disabled={updateProposalMutation.isPending}
+                          onClick={() => updateProposalMutation.mutate({ proposalId: p.id, status: "ACCEPTED" })}
                         >
-                          Accept Bid
+                          Accept & Hire
                         </NeoButton>
                       </div>
                     </div>
@@ -262,50 +263,59 @@ export default function QuickTaskDetailsPage({
                   </div>
                 </div>
 
-                {/* Chat Area */}
-                <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-secondary/5">
-                  <div className="flex justify-center">
-                    <span className="text-[0.625rem] font-bold uppercase tracking-widest text-muted-foreground bg-secondary px-2 py-1 border-2 border-border">
-                      Escrow locked. Work started.
-                    </span>
+                {activeContract?.status === "DRAFT" ? (
+                  <div className="flex-1 flex flex-col items-center justify-center p-6 text-center">
+                    <Clock className="w-12 h-12 text-[#E1801E] mb-4" />
+                    <h4 className="font-heading font-black uppercase tracking-widest text-lg mb-2">Waiting for Expert</h4>
+                    <p className="text-sm font-semibold text-muted-foreground max-w-sm">
+                      Funds have been locked in Escrow. Waiting for the Expert to sign the contract before work begins.
+                    </p>
                   </div>
+                ) : (
+                  <>
+                    <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-secondary/5">
+                      <div className="flex justify-center">
+                        <span className="text-[0.625rem] font-bold uppercase tracking-widest text-muted-foreground bg-secondary px-2 py-1 border-2 border-border">
+                          Contract Active. Work started.
+                        </span>
+                      </div>
 
-                  {/* Message from Expert */}
-                  <div className="flex gap-3 max-w-[80%]">
-                    <div className="w-8 h-8 shrink-0 bg-primary/20 border-2 border-border flex items-center justify-center font-bold text-xs uppercase">
-                      DS
+                      <div className="flex gap-3 max-w-[80%]">
+                        <div className="w-8 h-8 shrink-0 bg-primary/20 border-2 border-border flex items-center justify-center font-bold text-xs uppercase">
+                          DS
+                        </div>
+                        <div className="bg-card border-2 border-border p-3 shadow-[2px_2px_0px_0px_var(--border)]">
+                          <p className="text-sm font-semibold">
+                            Hi! I've started setting up the proxy pool for the
+                            scraper. Will have a sample CSV ready for you tomorrow.
+                          </p>
+                          <span className="text-[0.625rem] font-bold text-muted-foreground mt-2 block">
+                            10:42 AM
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                    <div className="bg-card border-2 border-border p-3 shadow-[2px_2px_0px_0px_var(--border)]">
-                      <p className="text-sm font-semibold">
-                        Hi! I've started setting up the proxy pool for the
-                        scraper. Will have a sample CSV ready for you tomorrow.
-                      </p>
-                      <span className="text-[0.625rem] font-bold text-muted-foreground mt-2 block">
-                        10:42 AM
-                      </span>
-                    </div>
-                  </div>
-                </div>
 
-                {/* Chat Input */}
-                <div className="p-4 border-t-2 border-border bg-card">
-                  <div className="flex gap-2 relative">
-                    <NeoButton
-                      variant="ghost"
-                      size="icon"
-                      className="absolute left-1 top-1/2 -translate-y-1/2"
-                    >
-                      <Paperclip className="w-4 h-4 text-muted-foreground" />
-                    </NeoButton>
-                    <NeoInput
-                      placeholder="Type a message..."
-                      className="pl-10 h-12 focus-visible:"
-                    />
-                    <NeoButton className="h-12 px-6">
-                      <Send className="w-4 h-4" />
-                    </NeoButton>
-                  </div>
-                </div>
+                    <div className="p-4 border-t-2 border-border bg-card">
+                      <div className="flex gap-2 relative">
+                        <NeoButton
+                          variant="ghost"
+                          size="icon"
+                          className="absolute left-1 top-1/2 -translate-y-1/2"
+                        >
+                          <Paperclip className="w-4 h-4 text-muted-foreground" />
+                        </NeoButton>
+                        <NeoInput
+                          placeholder="Type a message..."
+                          className="pl-10 h-12 focus-visible:"
+                        />
+                        <NeoButton className="h-12 px-6">
+                          <Send className="w-4 h-4" />
+                        </NeoButton>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
 
               {/* Task Reference */}
@@ -357,10 +367,10 @@ export default function QuickTaskDetailsPage({
                   </NeoButton>
                   <NeoButton 
                     className="flex-1 md:flex-none text-[0.625rem] h-12 px-6"
-                    disabled={approveDeliverableMutation.isPending}
-                    onClick={() => approveDeliverableMutation.mutate()}
+                    disabled={!activeContract || releaseFundsMutation.isPending}
+                    onClick={() => activeContract && releaseFundsMutation.mutate(activeContract.id)}
                   >
-                    {approveDeliverableMutation.isPending ? "Approving..." : "Approve & Release Funds"}
+                    {releaseFundsMutation.isPending ? "Approving..." : "Approve & Release Funds"}
                   </NeoButton>
                 </div>
               </div>

@@ -1,22 +1,23 @@
 import api from "./api";
+import { InvitationDto } from "@/types/marketplace.dto";
 
 export const invitationService = {
-  create: async (data: any) => {
+  createInvitation: async (data: Partial<InvitationDto>): Promise<InvitationDto> => {
     const response = await api.post("/invitations", data);
     return response.data;
   },
-
-  findByExpert: async (expertId: string) => {
+  getExpertInvitations: async (expertId: string): Promise<InvitationDto[]> => {
     const response = await api.get(`/invitations/expert/${expertId}`);
     return response.data;
   },
-
-  findByClient: async (clientId: string) => {
+  getClientInvitations: async (clientId: string): Promise<InvitationDto[]> => {
     const response = await api.get(`/invitations/client/${clientId}`);
     return response.data;
   },
-
-  updateStatus: async (id: string, status: "ACCEPTED" | "REJECTED" | "CANCELLED") => {
+  updateInvitationStatus: async (
+    id: string,
+    status: InvitationDto["status"]
+  ): Promise<InvitationDto> => {
     const response = await api.patch(`/invitations/${id}/status`, { status });
     return response.data;
   }

@@ -13,6 +13,7 @@ export class TeamService {
       .innerJoin("users", "users.id", "project_members.userId")
       .select([
         "project_members.id",
+        "project_members.userId",
         "project_members.role",
         "project_members.status",
         "project_members.rating",

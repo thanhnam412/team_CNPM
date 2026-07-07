@@ -8,8 +8,6 @@ import {
 } from "@/components/ui-custom/neo-card";
 import {
   NeoAvatar,
-  NeoAvatarFallback,
-  NeoAvatarImage,
 } from "@/components/ui-custom/neo-avatar";
 import { NeoBadge } from "@/components/ui-custom/neo-badge";
 import { Separator } from "@/components/ui/separator";
@@ -37,16 +35,7 @@ export default function UserProfileCard({ user }: UserProfileProps) {
   return (
     <NeoCard className="w-full max-w-md mx-auto p-4 bg-[#f8f9fa]">
       <NeoCardHeader className="flex flex-col items-center text-center space-y-4">
-        <NeoAvatar className="h-24 w-24">
-          <NeoAvatarImage src={user.avatarUrl} alt={user.name} />
-          <NeoAvatarFallback>
-            {user.name
-              .split("")
-              .map((n) => n[0])
-              .join("")
-              .toUpperCase()}
-          </NeoAvatarFallback>
-        </NeoAvatar>
+        <NeoAvatar className="h-24 w-24 text-4xl" name={user.name} />
 
         <div>
           <NeoCardTitle className="text-2xl">{user.name}</NeoCardTitle>

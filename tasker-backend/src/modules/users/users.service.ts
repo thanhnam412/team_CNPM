@@ -17,6 +17,23 @@ export class UsersService {
       .executeTakeFirst();
   }
 
+  async getMeProfile(id: string) {
+    return this.db
+      .selectFrom("users")
+      .leftJoin("wallets", "wallets.userId", "users.id")
+      .select([
+        "users.id",
+        "users.email",
+        "users.name",
+        "users.currentRole",
+        "users.avatar",
+        "wallets.balance",
+        "wallets.escrowBalance",
+      ])
+      .where("users.id", "=", id)
+      .executeTakeFirst();
+  }
+
   async findByGoogleId(googleId: string) {
     return this.db
       .selectFrom("users")
@@ -41,10 +58,12 @@ export class UsersService {
         .executeTakeFirstOrThrow();
     }
 
-    return this.db
+    const userId = crypto.randomUUID();
+
+    const newUser = await this.db
       .insertInto("users")
       .values({
-        id: crypto.randomUUID(),
+        id: userId,
         googleId: input.googleId,
         email: input.email,
         name: input.name,
@@ -53,6 +72,26 @@ export class UsersService {
       })
       .returningAll()
       .executeTakeFirstOrThrow();
+      
+    await this.db.insertInto("wallets").values({
+      id: crypto.randomUUID(),
+      userId,
+      updatedAt: new Date().toISOString(),
+    }).execute();
+    
+    await this.db.insertInto("expert_profiles").values({
+      id: crypto.randomUUID(),
+      userId,
+      updatedAt: new Date().toISOString(),
+    }).execute();
+    
+    await this.db.insertInto("client_profiles").values({
+      id: crypto.randomUUID(),
+      userId,
+      updatedAt: new Date().toISOString(),
+    }).execute();
+
+    return newUser;
   }
 
   async saveRefreshToken(userId: string, token: string, device?: string) {
@@ -108,61 +147,62 @@ export class UsersService {
   }
 
   async updateProfile(id: string, data: any) {
-    const updateData: any = { updatedAt: new Date().toISOString() };
-    if (data.name !== undefined) updateData.name = data.name;
-    if (data.avatar !== undefined) updateData.avatar = data.avatar;
-    if (data.title !== undefined) updateData.title = data.title;
-    if (data.bio !== undefined) updateData.bio = data.bio;
-    if (data.rate !== undefined) updateData.rate = data.rate;
-    if (data.location !== undefined) updateData.location = data.location;
-    if (data.skills !== undefined) updateData.skills = data.skills;
-    if (data.online !== undefined) updateData.online = data.online;
+    const userUpdate: any = { updatedAt: new Date().toISOString() };
+    if (data.name !== undefined) userUpdate.name = data.name;
+    if (data.avatar !== undefined) userUpdate.avatar = data.avatar;
+    if (data.location !== undefined) userUpdate.location = data.location;
+    if (data.online !== undefined) userUpdate.online = data.online;
 
-    return this.db
+    const user = await this.db
       .updateTable("users")
-      .set(updateData)
+      .set(userUpdate)
       .where("id", "=", id)
       .returningAll()
       .executeTakeFirst();
+
+    if (data.title !== undefined || data.bio !== undefined || data.hourlyRate !== undefined || data.skills !== undefined || data.experienceYears !== undefined || data.portfolioUrl !== undefined) {
+      const expertUpdate: any = { updatedAt: new Date().toISOString() };
+      if (data.title !== undefined) expertUpdate.title = data.title;
+      if (data.bio !== undefined) expertUpdate.bio = data.bio;
+      if (data.hourlyRate !== undefined) expertUpdate.hourlyRate = data.hourlyRate;
+      if (data.skills !== undefined) expertUpdate.skills = JSON.stringify(data.skills);
+      if (data.experienceYears !== undefined) expertUpdate.experienceYears = data.experienceYears;
+      if (data.portfolioUrl !== undefined) expertUpdate.portfolioUrl = data.portfolioUrl;
+      
+      await this.db.updateTable("expert_profiles")
+        .set(expertUpdate)
+        .where("userId", "=", id)
+        .execute();
+    }
+    
+    return user;
   }
 
   async getPublicProfile(id: string) {
     const user = await this.db
       .selectFrom("users")
+      .leftJoin("expert_profiles", "expert_profiles.userId", "users.id")
       .select([
-        "id",
-        "name",
-        "email",
-        "avatar",
-        "role",
-        "currentRole",
-        "title",
-        "bio",
-        "skills",
-        "rate",
-        "location",
-        "badge",
-        "online",
-        "createdAt",
+        "users.id",
+        "users.name",
+        "users.email",
+        "users.avatar",
+        "users.currentRole",
+        "users.location",
+        "users.online",
+        "users.createdAt",
+        "expert_profiles.title",
+        "expert_profiles.bio",
+        "expert_profiles.skills",
+        "expert_profiles.hourlyRate",
+        "expert_profiles.experienceYears",
+        "expert_profiles.portfolioUrl",
+        "expert_profiles.rating",
       ])
-      .where("id", "=", id)
+      .where("users.id", "=", id)
       .executeTakeFirst();
 
     if (!user) return null;
-
-    // Get review stats
-    const reviews = await this.db
-      .selectFrom("reviews")
-      .select(["rating"])
-      .where("expertId", "=", id)
-      .execute();
-
-    const avgRating =
-      reviews.length > 0
-        ? parseFloat(
-            (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1),
-          )
-        : 0;
 
     // Get completed tasks count
     const completedTasks = await this.db
@@ -174,8 +214,7 @@ export class UsersService {
     return {
       ...user,
       username: user.name?.toLowerCase().replace(/\s+/g, ""),
-      rating: avgRating,
-      reviewCount: reviews.length,
+      reviewCount: 0,
       completedTasks: completedTasks.length,
     };
   }

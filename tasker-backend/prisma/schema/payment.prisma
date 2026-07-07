@@ -1,3 +1,53 @@
+model Payment {
+  id                  String   @id @default(uuid())
+  contractId          String?
+  taskId              String?
+  expertId            String
+  clientId            String
+  amount              Decimal
+  fee                 Decimal  @default(0.0)
+  amountReceived      Decimal
+  status              PaymentStatus @default(PENDING)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  contract            Contract?          @relation(fields: [contractId], references: [id])
+  task                Task?              @relation(fields: [taskId], references: [id])
+  expert              ExpertProfile      @relation(fields: [expertId], references: [userId])
+  client              ClientProfile      @relation(fields: [clientId], references: [userId])
+  transactions        Transaction[]
+
+  @@map("payments")
+}
+
+model Transaction {
+  id           String          @id @default(uuid())
+  paymentId    String?
+  userId       String
+  amount       Decimal
+  date         DateTime        @default(now())
+  desc         String?
+  type         TransactionType
+  balanceAfter Decimal
+  status       String
+  source       String
+  projectId    String?
+  createdAt    DateTime        @default(now())
+  
+  payment      Payment?        @relation(fields: [paymentId], references: [id])
+  user         User            @relation("UserTransactions", fields: [userId], references: [id], onDelete: Cascade)
+  project      Project?        @relation(fields: [projectId], references: [id])
+
+  @@map("transactions")
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
 enum TransactionType {
   DEPOSIT
   ESCROW
@@ -6,23 +56,4 @@ enum TransactionType {
   REFUND
   PAYMENT_RECEIVED
   WITHDRAWAL
-}
-
-model Transaction {
-  id           String          @id @default(uuid())
-  userId       String
-  date         DateTime        @default(now())
-  desc         String
-  type         TransactionType
-  amount       Decimal
-  balanceAfter Decimal
-  status       String          @default("Success")
-  source       String?
-  projectId    String?
-  createdAt    DateTime        @default(now())
-
-  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  project Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
-
-  @@map("transactions")
 }

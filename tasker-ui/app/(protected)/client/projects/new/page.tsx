@@ -113,6 +113,11 @@ export default function CreateProjectPage() {
         title: value.title,
         description: value.description,
         budget: value.budgetMax,
+        category: value.category,
+        technicalScope: value.technicalScope,
+        type: value.type,
+        duration: value.duration,
+        commitment: value.commitment,
       }, {
         onSuccess: () => router.push("/client/projects")
       });

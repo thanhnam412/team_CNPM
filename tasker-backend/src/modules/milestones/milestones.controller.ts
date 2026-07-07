@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Patch, Delete, Body, Param } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  Body,
+  Param,
+} from "@nestjs/common";
 import { MilestonesService } from "./milestones.service";
 
 @Controller("api/projects/:projectId/milestones")
@@ -35,18 +43,18 @@ export class MilestonesController {
     return this.milestonesService.remove(id);
   }
 
-  @Get(":id/bids")
-  getBids(@Param("id") id: string) {
-    return this.milestonesService.getBids(id);
+  @Get(":id/proposals")
+  getProposals(@Param("id") id: string) {
+    return this.milestonesService.getProposals(id);
   }
 
-  @Post(":id/bids")
-  createBid(@Param("id") id: string, @Body() data: any) {
-    return this.milestonesService.createBid(id, data);
+  @Post(":id/proposals")
+  createProposal(@Param("id") id: string, @Body() data: any) {
+    return this.milestonesService.createProposal(id, data);
   }
 
-  @Post("bids/:bidId/accept")
-  acceptBid(@Param("bidId") bidId: string) {
-    return this.milestonesService.acceptBid(bidId);
+  @Post("proposals/:proposalId/accept")
+  acceptProposal(@Param("proposalId") proposalId: string) {
+    return this.milestonesService.acceptProposal(proposalId);
   }
 }

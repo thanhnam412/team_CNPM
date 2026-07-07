@@ -1,54 +1,108 @@
-enum Role {
-  CLIENT
-  EXPERT
-  ADMIN
-}
-
 model User {
-  id          String   @id @default(uuid())
-  googleId    String   @unique
-  email       String   @unique
-  name        String
-  avatar      String?
-  role        Role     @default(CLIENT)
-  currentRole Role     @default(CLIENT)
-  balance     Decimal  @default(0.0)
-  title       String?
-  bio         String?
-  skills      Json?
-  rate        String?
-  location    String?
-  badge       String?
-  online      Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                       String                    @id @default(uuid())
+  googleId                 String                    @unique
+  email                    String                    @unique
+  name                     String
+  avatar                   String?
+  createdAt                DateTime                  @default(now())
+  updatedAt                DateTime                  @updatedAt
+  currentRole              Role                      @default(CLIENT)
+  location                 String?
+  online                   Boolean                   @default(false)
 
+  wallet                   Wallet?
+  expertProfile            ExpertProfile?
+  clientProfile            ClientProfile?
   refreshTokens            RefreshToken[]
-  projectMembers           ProjectMember[]
-  assignedTasks            Task[]
-  transactions             Transaction[]
-  conversationParticipants ConversationParticipant[]
-  messages                 Message[]
+
   clientQuickTasks         QuickTask[]               @relation("ClientQuickTasks")
   expertQuickTasks         QuickTask[]               @relation("ExpertQuickTasks")
-  proposals                Proposal[]
-  bids                     Bid[]
-  reviews                  Review[]                  @relation("ReviewsReceived")
-  reviewsGiven             Review[]                  @relation("ReviewsGiven")
-  sentInvitations          Invitation[]              @relation("InvitationsSent")
-  receivedInvitations      Invitation[]              @relation("InvitationsReceived")
+
+  projectMembers           ProjectMember[]
+  assignedTasks            Task[]
+  assignedMilestones       Milestone[]               @relation("MilestoneAssignee")
+  transactions             Transaction[]             @relation("UserTransactions")
+
+  conversationParticipants ConversationParticipant[]
+  messages                 Message[]
 
   @@map("users")
+}
+
+model ExpertProfile {
+  id              String   @id @default(uuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  title           String?
+  bio             String?
+  skills          Json?
+  hourlyRate      Decimal  @default(0.0)
+  experienceYears Int      @default(0)
+  portfolioUrl    String?
+  rating          Decimal  @default(5.0)
+  status          String   @default("ACTIVE")
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  contracts       Contract[]
+  proposals       Proposal[]
+  invitations     Invitation[]
+  payments        Payment[]
+
+  @@map("expert_profiles")
+}
+
+model ClientProfile {
+  id                  String   @id @default(uuid())
+  userId              String   @unique
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  companyName         String?
+  companyWebsite      String?
+  industry            String?
+  totalSpent          Decimal  @default(0.0)
+  completedTasksCount Int      @default(0)
+  
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  
+  contracts           Contract[]
+  invitations         Invitation[]
+  payments            Payment[]
+
+  @@map("client_profiles")
+}
+
+model Wallet {
+  id            String   @id @default(uuid())
+  userId        String   @unique
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  balance       Decimal  @default(0.0)
+  escrowBalance Decimal  @default(0.0)
+  currency      String   @default("VND")
+  status        String   @default("ACTIVE")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("wallets")
 }
 
 model RefreshToken {
   id        String   @id @default(uuid())
   token     String   @unique
   userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   device    String?
   expiresAt DateTime
   createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("refresh_tokens")
+}
+
+enum Role {
+  CLIENT
+  EXPERT
+  ADMIN
 }

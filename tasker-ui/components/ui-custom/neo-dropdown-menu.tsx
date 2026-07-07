@@ -38,7 +38,7 @@ const NeoDropdownMenuContent = React.forwardRef<
     {...props}
   />
 ))
-NeoDropdownMenuContent.displayName = DropdownMenuContent.displayName
+NeoDropdownMenuContent.displayName = (DropdownMenuContent as any).displayName
 
 const NeoDropdownMenuItem = React.forwardRef<
   React.ElementRef<typeof DropdownMenuItem>,
@@ -54,7 +54,7 @@ const NeoDropdownMenuItem = React.forwardRef<
     {...props}
   />
 ))
-NeoDropdownMenuItem.displayName = DropdownMenuItem.displayName
+NeoDropdownMenuItem.displayName = (DropdownMenuItem as any).displayName
 
 const NeoDropdownMenuCheckboxItem = React.forwardRef<
   React.ElementRef<typeof DropdownMenuCheckboxItem>,
@@ -69,7 +69,7 @@ const NeoDropdownMenuCheckboxItem = React.forwardRef<
     {...props}
   />
 ))
-NeoDropdownMenuCheckboxItem.displayName = DropdownMenuCheckboxItem.displayName
+NeoDropdownMenuCheckboxItem.displayName = (DropdownMenuCheckboxItem as any).displayName
 
 const NeoDropdownMenuRadioItem = React.forwardRef<
   React.ElementRef<typeof DropdownMenuRadioItem>,
@@ -84,7 +84,7 @@ const NeoDropdownMenuRadioItem = React.forwardRef<
     {...props}
   />
 ))
-NeoDropdownMenuRadioItem.displayName = DropdownMenuRadioItem.displayName
+NeoDropdownMenuRadioItem.displayName = (DropdownMenuRadioItem as any).displayName
 
 const NeoDropdownMenuLabel = React.forwardRef<
   React.ElementRef<typeof DropdownMenuLabel>,
@@ -99,7 +99,7 @@ const NeoDropdownMenuLabel = React.forwardRef<
     {...props}
   />
 ))
-NeoDropdownMenuLabel.displayName = DropdownMenuLabel.displayName
+NeoDropdownMenuLabel.displayName = (DropdownMenuLabel as any).displayName
 
 const NeoDropdownMenuSeparator = React.forwardRef<
   React.ElementRef<typeof DropdownMenuSeparator>,
@@ -111,7 +111,7 @@ const NeoDropdownMenuSeparator = React.forwardRef<
     {...props}
   />
 ))
-NeoDropdownMenuSeparator.displayName = DropdownMenuSeparator.displayName
+NeoDropdownMenuSeparator.displayName = (DropdownMenuSeparator as any).displayName
 
 const NeoDropdownMenuShortcut = ({
   className,
@@ -142,7 +142,7 @@ const NeoDropdownMenuSubContent = React.forwardRef<
     {...props}
   />
 ))
-NeoDropdownMenuSubContent.displayName = DropdownMenuSubContent.displayName
+NeoDropdownMenuSubContent.displayName = (DropdownMenuSubContent as any).displayName
 
 const NeoDropdownMenuSubTrigger = React.forwardRef<
   React.ElementRef<typeof DropdownMenuSubTrigger>,
@@ -158,7 +158,7 @@ const NeoDropdownMenuSubTrigger = React.forwardRef<
     {...props}
   />
 ))
-NeoDropdownMenuSubTrigger.displayName = DropdownMenuSubTrigger.displayName
+NeoDropdownMenuSubTrigger.displayName = (DropdownMenuSubTrigger as any).displayName
 
 export {
   NeoDropdownMenu,

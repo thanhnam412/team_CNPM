@@ -28,7 +28,9 @@ import {
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { userService } from "@/services/userService";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { signOut } from "next-auth/react";
+import { useGetMe } from "@/tanstack/useGetMe";
 
 export function NavUser({
   user,
@@ -44,7 +46,14 @@ export function NavUser({
 }) {
   const { isMobile } = useSidebar();
   const router = useRouter();
+  const { data: me } = useGetMe();
   const [isSwitching, setIsSwitching] = useState(false);
+
+  useEffect(() => {
+    if (me) {
+      console.log("LOG ME:", Object.keys(me));
+    }
+  }, [me]);
 
   const displayName = user.name || "User";
   const displayAvatar = user.avatar || user.image || "";
@@ -187,7 +196,10 @@ export function NavUser({
 
             <NeoDropdownMenuSeparator />
 
-            <NeoDropdownMenuItem className="text-destructive hover:text-destructive focus:text-destructive">
+            <NeoDropdownMenuItem
+              className="text-destructive hover:text-destructive focus:text-destructive cursor-pointer"
+              onClick={() => signOut({ callbackUrl: "/login" })}
+            >
               <LogOutIcon className="w-4 h-4" />
               Log out
             </NeoDropdownMenuItem>

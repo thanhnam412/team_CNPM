@@ -11,6 +11,7 @@ interface ExpertSearchFilters {
   minRating?: number;
   badge?: string;
   online?: boolean;
+  excludeUserId?: string;
 }
 
 @Injectable()
@@ -18,76 +19,52 @@ export class ExpertsService {
   constructor(@Inject(KYSELY_DB) private db: Kysely<DB>) {}
 
   async findAll(filters: ExpertSearchFilters) {
-    // Get all experts (users with role EXPERT or currentRole EXPERT)
     let query = this.db
-      .selectFrom("users")
+      .selectFrom("expert_profiles")
+      .innerJoin("users", "users.id", "expert_profiles.userId")
       .select([
-        "id",
-        "name",
-        "avatar",
-        "title",
-        "bio",
-        "skills",
-        "rate",
-        "location",
-        "badge",
-        "online",
-      ])
-      .where((eb) =>
-        eb.or([
-          eb("role", "=", "EXPERT"),
-          eb("currentRole", "=", "EXPERT"),
-        ]),
-      );
+        "users.id",
+        "users.name",
+        "users.avatar",
+        "users.online",
+        "expert_profiles.title",
+        "expert_profiles.bio",
+        "expert_profiles.skills",
+        "expert_profiles.hourlyRate as rate",
+        "expert_profiles.rating as profileRating",
+      ]);
 
     // Filter by name/title search
     if (filters.search) {
       const term = `%${filters.search}%`;
       query = query.where((eb) =>
         eb.or([
-          eb("name", "ilike", term),
-          eb("title", "ilike", term),
+          eb("users.name", "ilike", term),
+          eb("expert_profiles.title", "ilike", term),
         ]),
       );
     }
 
-    // Filter by badge
-    if (filters.badge) {
-      query = query.where("badge", "=", filters.badge);
-    }
-
     // Filter by online status
     if (filters.online !== undefined) {
-      query = query.where("online", "=", filters.online);
+      query = query.where("users.online", "=", filters.online);
+    }
+
+    // Exclude current user from search results
+    if (filters.excludeUserId) {
+      query = query.where("users.id", "!=", filters.excludeUserId);
     }
 
     const experts = await query.execute();
 
-    // Get review stats for all experts
     const expertIds = experts.map((e) => e.id);
-    let reviewStats: any[] = [];
-    if (expertIds.length > 0) {
-      reviewStats = await this.db
-        .selectFrom("reviews")
-        .select([
-          "expertId",
-          sql<number>`count(*)`.as("reviewCount"),
-          sql<number>`avg(rating)`.as("avgRating"),
-        ])
-        .where("expertId", "in", expertIds)
-        .groupBy("expertId")
-        .execute();
-    }
 
     // Get completed tasks count
     let taskCounts: any[] = [];
     if (expertIds.length > 0) {
       taskCounts = await this.db
         .selectFrom("tasks")
-        .select([
-          "assigneeId",
-          sql<number>`count(*)`.as("completedTasks"),
-        ])
+        .select(["assigneeId", sql<number>`count(*)`.as("completedTasks")])
         .where("assigneeId", "in", expertIds)
         .where("status", "=", "DONE")
         .groupBy("assigneeId")
@@ -96,13 +73,14 @@ export class ExpertsService {
 
     // Merge data
     const result = experts.map((expert) => {
-      const stats = reviewStats.find((r: any) => r.expertId === expert.id);
       const tasks = taskCounts.find((t: any) => t.assigneeId === expert.id);
+      
+      const profileRating = parseFloat(expert.profileRating as any) || 0;
 
       return {
         ...expert,
-        rating: stats ? parseFloat(Number(stats.avgRating).toFixed(1)) : 0,
-        reviews: stats ? Number(stats.reviewCount) : 0,
+        rating: profileRating,
+        reviews: 0,
         completedTasks: tasks ? Number(tasks.completedTasks) : 0,
       };
     });
@@ -117,13 +95,18 @@ export class ExpertsService {
       const skillLower = filters.skill.toLowerCase();
       return result.filter((e) => {
         if (!e.skills) return false;
-        const skills = typeof e.skills === "string" ? JSON.parse(e.skills) : e.skills;
+        const skills =
+          typeof e.skills === "string" ? JSON.parse(e.skills) : e.skills;
         if (Array.isArray(skills)) {
-          return skills.some((s: string) => s.toLowerCase().includes(skillLower));
+          return skills.some((s: string) =>
+            s.toLowerCase().includes(skillLower),
+          );
         }
         // Handle { core: [...], secondary: [...] } format
         const allSkills = [...(skills.core || []), ...(skills.secondary || [])];
-        return allSkills.some((s: string) => s.toLowerCase().includes(skillLower));
+        return allSkills.some((s: string) =>
+          s.toLowerCase().includes(skillLower),
+        );
       });
     }
 
@@ -132,37 +115,27 @@ export class ExpertsService {
 
   async findOne(id: string) {
     const expert = await this.db
-      .selectFrom("users")
-      .selectAll()
-      .where("id", "=", id)
+      .selectFrom("expert_profiles")
+      .innerJoin("users", "users.id", "expert_profiles.userId")
+      .select([
+        "expert_profiles.id as cvId",
+        "users.id",
+        "users.name",
+        "users.avatar",
+        "users.online",
+        "users.location",
+        "expert_profiles.title",
+        "expert_profiles.bio",
+        "expert_profiles.skills",
+        "expert_profiles.hourlyRate as rate",
+        "expert_profiles.portfolioUrl as showcase",
+        "expert_profiles.experienceYears",
+        "expert_profiles.rating",
+      ])
+      .where("expert_profiles.userId", "=", id)
       .executeTakeFirst();
 
     if (!expert) return null;
-
-    // Get reviews
-    const reviews = await this.db
-      .selectFrom("reviews")
-      .innerJoin("users", "users.id", "reviews.reviewerId")
-      .select([
-        "reviews.id",
-        "reviews.rating",
-        "reviews.feedback",
-        "reviews.taskTitle",
-        "reviews.createdAt",
-        "users.name as reviewerName",
-        "users.avatar as reviewerAvatar",
-      ])
-      .where("reviews.expertId", "=", id)
-      .orderBy("reviews.createdAt", "desc")
-      .execute();
-
-    // Stats
-    const avgRating =
-      reviews.length > 0
-        ? parseFloat(
-            (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1),
-          )
-        : 0;
 
     const completedTasks = await this.db
       .selectFrom("tasks")
@@ -172,21 +145,39 @@ export class ExpertsService {
       .executeTakeFirst();
 
     // Work history (completed quick tasks)
-    const workHistory = await this.db
+    const quickTasksHistory = await this.db
       .selectFrom("quick_tasks")
       .select(["id", "title", "budget", "status", "createdAt"])
       .where("expertId", "=", id)
       .where("status", "=", "COMPLETED")
-      .orderBy("createdAt", "desc")
-      .limit(10)
       .execute();
+
+    // Work history (completed project tasks)
+    const projectTasksHistoryRaw = await this.db
+      .selectFrom("tasks")
+      .select(["id", "title", "status", "createdAt"])
+      .where("assigneeId", "=", id)
+      .where("status", "=", "DONE")
+      .execute();
+
+    const projectTasksHistory = projectTasksHistoryRaw.map((t) => ({
+      ...t,
+      status: "COMPLETED" as any,
+    }));
+
+    const workHistory = [...quickTasksHistory, ...projectTasksHistory]
+      .sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      )
+      .slice(0, 10);
 
     return {
       ...expert,
-      rating: avgRating,
-      reviewCount: reviews.length,
+      rating: parseFloat(expert.rating as any) || 0,
+      reviewCount: 0,
       completedTasks: completedTasks ? Number(completedTasks.count) : 0,
-      reviews,
+      reviews: [],
       workHistory,
     };
   }
@@ -194,8 +185,9 @@ export class ExpertsService {
   async getOverview(expertId: string) {
     const expert = await this.db
       .selectFrom("users")
-      .select(["balance", "skills"])
-      .where("id", "=", expertId)
+      .leftJoin("wallets", "wallets.userId", "users.id")
+      .select(["wallets.balance"])
+      .where("users.id", "=", expertId)
       .executeTakeFirst();
 
     if (!expert) throw new Error("Expert not found");
@@ -211,8 +203,11 @@ export class ExpertsService {
       .where("type", "=", "PAYMENT_RECEIVED")
       .where("createdAt", ">=", firstDayOfMonth)
       .execute();
-      
-    const earnedMTD = mtdTransactions.reduce((sum, t) => sum + parseFloat(t.amount as string), 0);
+
+    const earnedMTD = mtdTransactions.reduce(
+      (sum, t) => sum + parseFloat(t.amount),
+      0,
+    );
 
     const activeQuickTasks = await this.db
       .selectFrom("quick_tasks")
@@ -229,7 +224,10 @@ export class ExpertsService {
       .where("quick_tasks.status", "in", ["IN_PROGRESS", "REVIEW"])
       .execute();
 
-    const inEscrow = activeQuickTasks.reduce((sum, qt) => sum + parseFloat(qt.budget as string), 0);
+    const inEscrow = activeQuickTasks.reduce(
+      (sum, qt) => sum + parseFloat(qt.budget),
+      0,
+    );
 
     // 2. Action Required (Deadlines < 24h) & 3. Active Work
     const now = new Date();
@@ -245,7 +243,10 @@ export class ExpertsService {
         dueDate: qt.deadline,
         isUrgent: new Date(qt.deadline!) < tomorrow,
       }))
-      .sort((a, b) => new Date(a.dueDate!).getTime() - new Date(b.dueDate!).getTime());
+      .sort(
+        (a, b) =>
+          new Date(a.dueDate!).getTime() - new Date(b.dueDate!).getTime(),
+      );
 
     const activeWork = activeQuickTasks.map((qt) => ({
       id: qt.id,
@@ -253,7 +254,7 @@ export class ExpertsService {
       clientName: qt.clientName,
       status: qt.status,
       progressPercentage: qt.status === "REVIEW" ? 90 : 50,
-      escrowAmount: parseFloat(qt.budget as string),
+      escrowAmount: parseFloat(qt.budget),
       dueDate: qt.deadline,
     }));
 
@@ -299,7 +300,7 @@ export class ExpertsService {
 
     return {
       finance: {
-        availableToWithdraw: parseFloat(expert.balance as string),
+        availableToWithdraw: parseFloat((expert.balance as any) || "0"),
         inEscrow,
         earnedMTD,
       },
@@ -312,7 +313,7 @@ export class ExpertsService {
       recommendedTasks: recommendedTasks.map((t) => ({
         id: t.id,
         title: t.title,
-        budget: parseFloat(t.budget as string),
+        budget: parseFloat(t.budget),
         tags: ["AI", "Tech"], // Mock tags since DB doesn't have a tags array yet
         createdAt: t.createdAt,
       })),
@@ -320,35 +321,66 @@ export class ExpertsService {
   }
 
   async createReview(expertId: string, data: any) {
-    return this.db
-      .insertInto("reviews")
-      .values({
-        id: crypto.randomUUID(),
-        reviewerId: data.reviewerId,
-        expertId,
-        rating: data.rating,
-        feedback: data.feedback || null,
-        taskTitle: data.taskTitle || null,
-      })
-      .returningAll()
-      .executeTakeFirst();
+    return null;
   }
 
   async getReviews(expertId: string) {
-    return this.db
-      .selectFrom("reviews")
-      .innerJoin("users", "users.id", "reviews.reviewerId")
-      .select([
-        "reviews.id",
-        "reviews.rating",
-        "reviews.feedback",
-        "reviews.taskTitle",
-        "reviews.createdAt",
-        "users.name as reviewerName",
-        "users.avatar as reviewerAvatar",
-      ])
-      .where("reviews.expertId", "=", expertId)
-      .orderBy("reviews.createdAt", "desc")
-      .execute();
+    return [];
+  }
+
+  async getMyProfile(userId: string) {
+    const profile = await this.db
+      .selectFrom("expert_profiles")
+      .selectAll()
+      .where("userId", "=", userId)
+      .executeTakeFirst();
+    return profile || null;
+  }
+
+  async upsertProfile(userId: string, data: any) {
+    const existing = await this.getMyProfile(userId);
+
+    const updateData: any = { updatedAt: new Date() };
+    if (data.title !== undefined) updateData.title = data.title;
+    if (data.bio !== undefined) updateData.bio = data.bio;
+    if (data.skills !== undefined)
+      updateData.skills =
+        typeof data.skills === "string"
+          ? data.skills
+          : JSON.stringify(data.skills);
+    if (data.hourlyRate !== undefined) updateData.hourlyRate = data.hourlyRate;
+    if (data.experienceYears !== undefined) updateData.experienceYears = data.experienceYears;
+    if (data.portfolioUrl !== undefined) updateData.portfolioUrl = data.portfolioUrl;
+    if (data.rating !== undefined) updateData.rating = data.rating;
+
+    if (existing) {
+      return this.db
+        .updateTable("expert_profiles")
+        .set(updateData)
+        .where("id", "=", existing.id)
+        .returningAll()
+        .executeTakeFirst();
+    } else {
+      return this.db
+        .insertInto("expert_profiles")
+        .values({
+          id: crypto.randomUUID(),
+          userId,
+          title: data.title || null,
+          bio: data.bio || null,
+          skills: data.skills
+            ? typeof data.skills === "string"
+              ? data.skills
+              : JSON.stringify(data.skills)
+            : null,
+          hourlyRate: data.hourlyRate || "0",
+          experienceYears: data.experienceYears || 0,
+          portfolioUrl: data.portfolioUrl || null,
+          rating: data.rating || "0",
+          updatedAt: new Date(),
+        })
+        .returningAll()
+        .executeTakeFirst();
+    }
   }
 }

@@ -25,7 +25,8 @@ import {
   UsersIcon,
   FolderKanbanIcon,
   ZapIcon,
-  MailboxIcon
+  MailboxIcon,
+  UserCircleIcon,
 } from "lucide-react";
 
 const sharedData = {
@@ -39,7 +40,7 @@ const sharedData = {
       name: "AITasker Core",
       logo: <ZapIcon />,
       plan: "Enterprise",
-    }
+    },
   ],
 };
 
@@ -78,7 +79,7 @@ const clientNavMain = [
         title: "Post a Task",
         url: "/client/quick-tasks/create",
       },
-    ]
+    ],
   },
   {
     title: "Find Experts",
@@ -140,6 +141,11 @@ const expertNavMain = [
     icon: <WalletIcon />,
   },
   {
+    title: "My Profile",
+    url: "/expert/profile",
+    icon: <UserCircleIcon />,
+  },
+  {
     title: "Messages",
     url: "/expert/messages",
     icon: <MessageSquareIcon />,
@@ -156,12 +162,15 @@ interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
   user?: any;
 }
 
-export function AppSidebar({ isExpert = false, user, ...props }: AppSidebarProps) {
+export function AppSidebar({
+  isExpert = false,
+  user,
+  ...props
+}: AppSidebarProps) {
   const pathname = usePathname();
-  
-  // Auto-detect role based on pathname if not explicitly provided
+
   const isExpertRoute = isExpert || pathname.startsWith("/expert");
-  
+
   const navMain = isExpertRoute ? expertNavMain : clientNavMain;
 
   return (

@@ -38,15 +38,17 @@ export function NeoDrawerContent({
     >
       {children}
       {showCloseButton && (
-        <SheetClose asChild>
-          <NeoButton
-            variant="ghost"
-            size="icon"
-            className="absolute top-4 right-4 h-8 w-8 bg-secondary/30 border-2"
-          >
-            <X className="h-4 w-4" />
-            <span className="sr-only">Close</span>
-          </NeoButton>
+        <SheetClose
+          render={
+            <NeoButton
+              variant="ghost"
+              size="icon"
+              className="absolute top-4 right-4 h-8 w-8 bg-secondary/30 border-2"
+            />
+          }
+        >
+          <X className="h-4 w-4" />
+          <span className="sr-only">Close</span>
         </SheetClose>
       )}
     </BaseSheetContent>

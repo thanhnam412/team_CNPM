@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { Inject, Injectable } from "@nestjs/common";
+import { Inject, Injectable, BadRequestException, NotFoundException } from "@nestjs/common";
 import { Kysely } from "kysely";
 import { KYSELY_DB } from "../../database/database.module";
 import { DB } from "../../database/types";
@@ -93,7 +93,7 @@ export class QuickTasksService {
   }
 
   async approveDeliverable(id: string) {
-    // Client duyệt deliverable → COMPLETED + giải ngân + cập nhật internal task & milestone
+    // Client duyệt deliverable → COMPLETED
     return this.db.transaction().execute(async (trx) => {
       const quickTask = await trx
         .updateTable("quick_tasks")
@@ -102,62 +102,36 @@ export class QuickTasksService {
         .returningAll()
         .executeTakeFirstOrThrow();
 
-      // Update internal Task to DONE
-      const internalTask = await trx
-        .updateTable("tasks")
-        .set({ status: "DONE" as any, updatedAt: new Date() })
-        .where("quickTaskId", "=", id)
-        .returningAll()
-        .executeTakeFirst();
-
-      // Payout to expert
-      if (quickTask.expertId) {
-        await trx
-          .insertInto("transactions")
-          .values({
-            id: crypto.randomUUID(),
-            userId: quickTask.expertId,
-            date: new Date(),
-            desc: `Payout for: ${quickTask.title}`,
-            type: "PAYMENT_RECEIVED",
-            amount: quickTask.budget,
-            balanceAfter: "0",
-            status: "Success",
-            projectId: quickTask.projectId,
-            createdAt: new Date(),
-          })
-          .execute();
-      }
-
-      // Recalculate milestone progress if internal task belongs to one
-      if (internalTask?.milestoneId) {
-        const siblingTasks = await trx
-          .selectFrom("tasks")
-          .select(["status"])
-          .where("milestoneId", "=", internalTask.milestoneId)
-          .execute();
-
-        const totalTasks = siblingTasks.length;
-        const doneTasks = siblingTasks.filter(
-          (t) => t.status === "DONE",
-        ).length;
-        const progress =
-          totalTasks > 0 ? Math.round((doneTasks / totalTasks) * 100) : 0;
-        const milestoneStatus: any =
-          progress === 100 ? "REVIEW" : "IN_PROGRESS";
-
-        await trx
-          .updateTable("milestones")
-          .set({ progress, status: milestoneStatus, updatedAt: new Date() })
-          .where("id", "=", internalTask.milestoneId)
-          .execute();
-      }
-
+      // Note: Payment release logic will be handled in Phase 5 via contracts
+      
       return quickTask;
     });
   }
 
   async remove(id: string) {
+    const task = await this.db
+      .selectFrom("quick_tasks")
+      .select(["status"])
+      .where("id", "=", id)
+      .executeTakeFirst();
+
+    if (!task) throw new NotFoundException("Quick task not found");
+
+    if (task.status !== "OPEN") {
+      throw new BadRequestException(`Cannot delete a quick task that is ${task.status}. Only OPEN tasks can be deleted.`);
+    }
+
+    const contract = await this.db
+      .selectFrom("contracts")
+      .select(["id"])
+      .where("quickTaskId", "=", id)
+      .limit(1)
+      .execute();
+
+    if (contract.length > 0) {
+      throw new BadRequestException("Cannot delete a quick task that has an associated contract.");
+    }
+
     await this.db.deleteFrom("quick_tasks").where("id", "=", id).execute();
 
     return { success: true };

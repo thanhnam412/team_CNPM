@@ -37,17 +37,17 @@ import {
 } from "@/components/ui-custom/neo-drawer";
 
 import { useQuickTasks } from "@/tanstack/useQuickTasks";
-import { useSubmitProposalMutation } from "@/tanstack/useProposals";
-import { useSession } from "next-auth/react";
+import { useSubmitQuickTaskProposalMutation } from "@/tanstack/useProposals";
+import { useGetMe } from "@/tanstack/useGetMe";
 
 export default function FindTasksPage() {
-  const { data: session } = useSession();
+  const { data: me } = useGetMe();
   const [filter, setFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTask, setSelectedTask] = useState<any | null>(null);
   const [drawerMode, setDrawerMode] = useState<"overview" | null>(null);
   const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
-  
+
   const { data: rawTasks = [], isLoading } = useQuickTasks();
 
   const TASKS = rawTasks
@@ -74,16 +74,16 @@ export default function FindTasksPage() {
   const [coverLetter, setCoverLetter] = useState("");
   const [proposedPrice, setProposedPrice] = useState("");
 
-  const createProposalMutation = useSubmitProposalMutation();
+  const createProposalMutation = useSubmitQuickTaskProposalMutation();
 
   const handleCreateProposal = () => {
     createProposalMutation.mutate(
       {
-        taskId: selectedTask.id,
-        expertId: session?.user?.id,
-        coverLetter,
-        proposedPrice,
-        estimatedDays: 3,
+        quickTaskId: selectedTask.id,
+        payload: {
+          proposedPrice: proposedPrice,
+          coverLetter: coverLetter,
+        },
       },
       {
         onSuccess: () => {
@@ -94,7 +94,7 @@ export default function FindTasksPage() {
           setCoverLetter("");
           setProposedPrice("");
         },
-      }
+      },
     );
   };
 
@@ -125,7 +125,7 @@ export default function FindTasksPage() {
         </div>
 
         <div className="flex items-center gap-4 w-full sm:w-auto">
-          <NeoSelect value={filter} onValueChange={setFilter}>
+          <NeoSelect value={filter} onValueChange={(val) => setFilter(val || "all")}>
             <NeoSelectTrigger className="w-full sm:w-48 h-10 text-xs">
               <Filter className="w-4 h-4 mr-2" />
               <NeoSelectValue placeholder="Sort By" />
@@ -202,7 +202,7 @@ export default function FindTasksPage() {
 
                 <div className="mt-6 flex items-center gap-2 text-muted-foreground">
                   <span className="text-[0.625rem] font-black uppercase tracking-widest">
-                    {task.proposalsCount || 0}
+                    {task.proposals?.length || 0}
                   </span>
                   <span className="text-[0.625rem] font-bold uppercase tracking-widest">
                     Proposals Submitted
@@ -279,7 +279,10 @@ export default function FindTasksPage() {
                       {selectedTask?.title}
                     </div>
                     <div className="flex gap-4 text-xs font-bold uppercase text-background/80">
-                      <span>Posted: {new Date(selectedTask.createdAt).toLocaleDateString()}</span>
+                      <span>
+                        Posted:{" "}
+                        {new Date(selectedTask.createdAt).toLocaleDateString()}
+                      </span>
                       <span>Proposals: {selectedTask.proposalsCount || 0}</span>
                     </div>
                   </div>
@@ -306,18 +309,32 @@ export default function FindTasksPage() {
                 {/* Skills & Additional Info Placeholders (To be fetched from API later) */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="p-4 border-2 border-foreground bg-secondary/10">
-                    <h4 className="font-bold text-xs uppercase tracking-widest mb-3 text-muted-foreground">Required Skills</h4>
+                    <h4 className="font-bold text-xs uppercase tracking-widest mb-3 text-muted-foreground">
+                      Required Skills
+                    </h4>
                     <div className="flex flex-wrap gap-2">
                       {selectedTask?.skills?.map((skill: string) => (
                         <NeoBadge key={skill}>{skill}</NeoBadge>
-                      )) || <span className="text-xs italic text-muted-foreground">No skills specified</span>}
+                      )) || (
+                        <span className="text-xs italic text-muted-foreground">
+                          No skills specified
+                        </span>
+                      )}
                     </div>
                   </div>
                   <div className="p-4 border-2 border-foreground bg-secondary/10">
-                    <h4 className="font-bold text-xs uppercase tracking-widest mb-3 text-muted-foreground">Client Info</h4>
+                    <h4 className="font-bold text-xs uppercase tracking-widest mb-3 text-muted-foreground">
+                      Client Info
+                    </h4>
                     <div className="text-sm">
-                      <p><strong>Experience Level:</strong> {selectedTask?.experienceLevel || "Any"}</p>
-                      <p><strong>Project Type:</strong> {selectedTask?.projectType || "One-time"}</p>
+                      <p>
+                        <strong>Experience Level:</strong>{" "}
+                        {selectedTask?.experienceLevel || "Any"}
+                      </p>
+                      <p>
+                        <strong>Project Type:</strong>{" "}
+                        {selectedTask?.projectType || "One-time"}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -326,25 +343,25 @@ export default function FindTasksPage() {
           </div>
 
           <NeoDrawerFooter>
-              <NeoButton
-                variant="outline"
-                onClick={() => {
-                  setDrawerMode(null);
-                  if (!isRequestModalOpen) setSelectedTask(null);
-                }}
-                className="h-14 px-8"
-              >
-                Cancel
-              </NeoButton>
-              <NeoButton
-                onClick={() => {
-                  setDrawerMode(null);
-                  setIsRequestModalOpen(true);
-                }}
-                className="h-14 px-10 text-lg"
-              >
-                Apply Now <Handshake className="w-5 h-5 ml-2" />
-              </NeoButton>
+            <NeoButton
+              variant="outline"
+              onClick={() => {
+                setDrawerMode(null);
+                if (!isRequestModalOpen) setSelectedTask(null);
+              }}
+              className="h-14 px-8"
+            >
+              Cancel
+            </NeoButton>
+            <NeoButton
+              onClick={() => {
+                setDrawerMode(null);
+                setIsRequestModalOpen(true);
+              }}
+              className="h-14 px-10 text-lg"
+            >
+              Apply Now <Handshake className="w-5 h-5 ml-2" />
+            </NeoButton>
           </NeoDrawerFooter>
         </NeoDrawerContent>
       </NeoDrawer>
@@ -525,7 +542,7 @@ export default function FindTasksPage() {
                   createProposalMutation.isPending ||
                   !coverLetter ||
                   !proposedPrice ||
-                  !session?.user?.id
+                  !me?.id
                 }
                 onClick={handleCreateProposal}
                 className="h-14 px-10 text-lg disabled:opacity-50 disabled:cursor-not-allowed"

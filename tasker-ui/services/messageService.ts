@@ -1,31 +1,48 @@
 import api from "./api";
 
+// We don't have a strict message.dto.ts yet, so using inline types for now or any
+export interface ConversationDto {
+  id: string;
+  name: string | null;
+  projectId: string | null;
+  createdAt: string;
+  updatedAt?: string;
+  isGroup?: boolean;
+  online?: boolean;
+  contextType?: string;
+  contextName?: string;
+  contextRef?: string;
+  details?: {
+    budget?: string;
+    deadline?: string;
+    status?: string;
+  };
+  messages?: unknown[];
+}
+
+export interface MessageDto {
+  id: string;
+  conversationId: string;
+  senderId: string;
+  type: string;
+  content: string;
+  createdAt: string;
+}
+
 export const messageService = {
-  getConversations: async (userId: string) => {
+  getConversations: async (userId: string): Promise<ConversationDto[]> => {
     const { data } = await api.get(`/users/${userId}/conversations`);
     return data;
   },
-
-  getMessages: async (conversationId: string) => {
-    // Some endpoints may require userId, but based on the controller: api/users/:userId/conversations/:conversationId/messages
-    // Actually the controller has @Get(':conversationId/messages') which is under 'api/users/:userId/conversations'
-    // So the path is /users/:userId/conversations/:conversationId/messages
-    // I will need userId here
-    return []; // We will implement the correct path after double checking if needed
-  },
-
-  getMessagesWithUser: async (userId: string, conversationId: string) => {
-    const { data } = await api.get(
-      `/users/${userId}/conversations/${conversationId}/messages`,
-    );
+  getMessages: async (conversationId: string): Promise<MessageDto[]> => {
+    const { data } = await api.get(`/conversations/${conversationId}/messages`);
     return data;
   },
-
-  sendMessage: async (userId: string, conversationId: string, payload: any) => {
-    const { data } = await api.post(
-      `/users/${userId}/conversations/${conversationId}/messages`,
-      payload,
-    );
+  sendMessage: async (
+    conversationId: string,
+    payload: { content: string; type?: string; senderId: string }
+  ): Promise<MessageDto> => {
+    const { data } = await api.post(`/conversations/${conversationId}/messages`, payload);
     return data;
-  },
+  }
 };

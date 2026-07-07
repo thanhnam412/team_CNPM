@@ -64,8 +64,8 @@ export function HeroSideSection() {
         <CarouselContent>
           {testimonials.map((item, index) => (
             <CarouselItem key={index}>
-              <NeoCard className="overflow-hidden p-0 border-4 border-foreground shadow-[8px_8px_0px_0px_var(--foreground)] h-full">
-                <div className="relative aspect-video">
+              <NeoCard className="overflow-hidden p-0 border-4 border-foreground shadow-[8px_8px_0px_0px_var(--foreground)] h-full flex flex-col bg-card">
+                <div className="relative aspect-video border-b-4 border-foreground">
                   <Image
                     src={item.image}
                     alt={item.author}
@@ -73,29 +73,34 @@ export function HeroSideSection() {
                     priority
                     className="object-cover"
                   />
-
-                  <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/40 to-transparent" />
-
-                  <NeoCardContent className="absolute inset-x-0 bottom-0 p-6 text-white z-10">
-                    <div className="mb-3 flex gap-1">
+                </div>
+                
+                <NeoCardContent className="p-6 flex-1 flex flex-col justify-between">
+                  <div>
+                    <div className="mb-4 flex gap-1">
                       {Array.from({ length: 5 }).map((_, starIndex) => (
                         <Star
                           key={starIndex}
-                          className="h-4 w-4 fill-yellow-400 text-yellow-400"
+                          className="h-5 w-5 fill-[#FFB800] text-foreground border-foreground stroke-2"
                         />
                       ))}
                     </div>
 
-                    <blockquote className="text-base italic leading-relaxed">
-                      &quot;{item.quote}&quot;
+                    <blockquote className="text-xl font-black uppercase tracking-tight leading-snug">
+                      "{item.quote}"
                     </blockquote>
+                  </div>
 
-                    <div className="mt-4">
-                      <p className="font-semibold">{item.author}</p>
-                      <p className="text-sm text-white/75">{item.role}</p>
+                  <div className="mt-6 flex items-center gap-4">
+                    <div className="h-12 w-12 rounded-none border-2 border-foreground bg-primary shrink-0 flex items-center justify-center">
+                       <span className="font-black text-primary-foreground text-lg">{item.author.charAt(0)}</span>
                     </div>
-                  </NeoCardContent>
-                </div>
+                    <div>
+                      <p className="font-bold text-lg leading-none">{item.author}</p>
+                      <p className="text-sm font-medium text-muted-foreground mt-1 uppercase tracking-wider">{item.role}</p>
+                    </div>
+                  </div>
+                </NeoCardContent>
               </NeoCard>
             </CarouselItem>
           ))}

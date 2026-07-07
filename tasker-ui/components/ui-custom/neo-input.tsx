@@ -30,7 +30,7 @@ const neoInputVariants = cva(
 
 export interface NeoInputProps
   extends
-    React.ComponentProps<typeof Input>,
+    Omit<React.ComponentProps<typeof Input>, "size">,
     VariantProps<typeof neoInputVariants> {}
 
 const NeoInput = React.forwardRef<HTMLInputElement, NeoInputProps>(

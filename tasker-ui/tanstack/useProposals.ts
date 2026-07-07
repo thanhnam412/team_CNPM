@@ -1,46 +1,56 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { proposalService } from "@/services/proposalService";
+import { ProposalDto } from "@/types/marketplace.dto";
 
-export const useTaskProposals = (taskId: string) => {
+export const useQuickTaskProposals = (quickTaskId: string) => {
   return useQuery({
-    queryKey: ["proposals", taskId],
-    queryFn: () => proposalService.getProposalsForTask(taskId),
-    enabled: !!taskId,
+    queryKey: ["proposals", "quick-task", quickTaskId],
+    queryFn: () => proposalService.getProposalsForQuickTask(quickTaskId),
+    enabled: !!quickTaskId,
   });
 };
 
-export const useProjectProposals = (projectId: string) => {
+export const useUserProposals = (userId: string) => {
   return useQuery({
-    queryKey: ["proposals", "project", projectId],
-    queryFn: () => proposalService.getProposalsForProject(projectId),
-    enabled: !!projectId,
+    queryKey: ["proposals", "user", userId],
+    queryFn: () => proposalService.getProposalsForUser(userId),
+    enabled: !!userId,
   });
 };
 
-export const useSubmitProposalMutation = () => {
+export const useSubmitQuickTaskProposalMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: any) => proposalService.createProposal(data.taskId, data),
+    mutationFn: ({ quickTaskId, payload }: { quickTaskId: string; payload: { proposedPrice: string | number; coverLetter?: string } }) =>
+      proposalService.submitProposalForQuickTask(quickTaskId, payload),
     onSuccess: (data) => {
-      if (data.taskId) {
-        queryClient.invalidateQueries({ queryKey: ["proposals", data.taskId] });
-      }
-      if (data.projectId) {
-        queryClient.invalidateQueries({ queryKey: ["proposals", "project", data.projectId] });
-      }
+      queryClient.invalidateQueries({ queryKey: ["proposals", "quick-task", data.quickTaskId] });
+      queryClient.invalidateQueries({ queryKey: ["proposals", "user"] });
     },
   });
 };
 
-export const useUpdateProposalStatusMutation = (proposalId: string, taskId?: string) => {
+export const useSubmitMilestoneProposalMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (status: string) => proposalService.updateProposalStatus(proposalId, status),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["proposal", proposalId] });
-      if (taskId) {
-        queryClient.invalidateQueries({ queryKey: ["proposals", taskId] });
-        queryClient.invalidateQueries({ queryKey: ["quick-task", taskId] });
+    mutationFn: ({ milestoneId, payload }: { milestoneId: string; payload: { proposedPrice: string | number; coverLetter?: string } }) =>
+      proposalService.submitProposalForMilestone(milestoneId, payload),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["proposals", "milestone", data.milestoneId] });
+      queryClient.invalidateQueries({ queryKey: ["proposals", "user"] });
+    },
+  });
+};
+
+export const useUpdateProposalStatusMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ proposalId, status }: { proposalId: string; status: ProposalDto["status"] }) =>
+      proposalService.updateProposalStatus(proposalId, status),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["proposals"] });
+      if (data.quickTaskId) {
+        queryClient.invalidateQueries({ queryKey: ["quick-tasks", data.quickTaskId] });
       }
     },
   });

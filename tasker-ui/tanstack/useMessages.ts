@@ -9,47 +9,27 @@ export const useConversations = (userId: string) => {
   });
 };
 
-export const useMessagesWithUser = (userId: string, conversationId: string | null) => {
+export const useMessages = (conversationId: string) => {
   return useQuery({
     queryKey: ["messages", conversationId],
-    queryFn: () => messageService.getMessagesWithUser(userId, conversationId!),
-    enabled: !!conversationId && !!userId,
+    queryFn: () => messageService.getMessages(conversationId),
+    enabled: !!conversationId,
   });
 };
 
-export const useSendMessageMutation = (userId: string, conversationId: string | null) => {
+export const useSendMessageMutation = () => {
   const queryClient = useQueryClient();
-
   return useMutation({
-    mutationFn: (content: string) =>
-      messageService.sendMessage(userId, conversationId!, {
-        content,
-        type: "TEXT",
-      }),
-    onMutate: async (newContent) => {
-      // Optimistic update
-      await queryClient.cancelQueries({ queryKey: ["messages", conversationId] });
-      const previousMessages = queryClient.getQueryData(["messages", conversationId]);
-      
-      const optimisticMsg = {
-        id: `temp-${Date.now()}`,
-        content: newContent,
-        type: "TEXT",
-        senderId: userId,
-        createdAt: new Date().toISOString(),
-        sender: { name: "You" },
-      };
-
-      queryClient.setQueryData(["messages", conversationId], (old: any) => [...(old || []), optimisticMsg]);
-      return { previousMessages };
-    },
-    onError: (err, newContent, context) => {
-      if (context?.previousMessages) {
-        queryClient.setQueryData(["messages", conversationId], context.previousMessages);
-      }
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["messages", conversationId] });
+    mutationFn: ({
+      conversationId,
+      payload,
+    }: {
+      conversationId: string;
+      payload: { content: string; type?: string; senderId: string };
+    }) => messageService.sendMessage(conversationId, payload),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["messages", variables.conversationId] });
+      queryClient.invalidateQueries({ queryKey: ["conversations"] });
     },
   });
 };

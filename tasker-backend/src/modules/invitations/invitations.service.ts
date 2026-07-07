@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { Inject, Injectable } from "@nestjs/common";
+import { Inject, Injectable, BadRequestException, NotFoundException } from "@nestjs/common";
 import { Kysely } from "kysely";
 import { KYSELY_DB } from "../../database/database.module";
 import { DB } from "../../database/types";
@@ -11,7 +11,31 @@ export class InvitationsService {
 
   async create(data: any) {
     if (data.clientId === data.expertId) {
-      throw new Error("You cannot invite yourself to a task or project.");
+      throw new BadRequestException("You cannot invite yourself to a task or project.");
+    }
+
+    const projectId = data.projectId || null;
+    const quickTaskId = data.taskId || data.quickTaskId || null;
+    const milestoneId = data.milestoneId || null;
+
+    if (!projectId && !quickTaskId && !milestoneId) {
+      throw new BadRequestException("Invitation must target a project, milestone, or quick task.");
+    }
+
+    // Check for duplicates
+    let query = this.db
+      .selectFrom("invitations")
+      .select(["id"])
+      .where("clientId", "=", data.clientId)
+      .where("expertId", "=", data.expertId);
+
+    if (quickTaskId) query = query.where("quickTaskId", "=", quickTaskId);
+    else if (milestoneId) query = query.where("milestoneId", "=", milestoneId);
+    else if (projectId) query = query.where("projectId", "=", projectId);
+
+    const existing = await query.executeTakeFirst();
+    if (existing) {
+      throw new BadRequestException("You have already sent an invitation to this expert for this task/project.");
     }
 
     return this.db
@@ -21,7 +45,7 @@ export class InvitationsService {
         clientId: data.clientId,
         expertId: data.expertId,
         projectId: data.projectId || null,
-        taskId: data.taskId || null,
+        quickTaskId: data.taskId || data.quickTaskId || null,
         milestoneId: data.milestoneId || null,
         message: data.message || null,
         budget: data.budget?.toString() || null,
@@ -61,6 +85,7 @@ export class InvitationsService {
     return this.db
       .selectFrom("invitations")
       .innerJoin("users as expert", "expert.id", "invitations.expertId")
+      .leftJoin("expert_profiles as ep", "ep.userId", "expert.id")
       .leftJoin("projects", "projects.id", "invitations.projectId")
       .leftJoin("milestones", "milestones.id", "invitations.milestoneId")
       .select([
@@ -72,7 +97,7 @@ export class InvitationsService {
         "expert.id as expertId",
         "expert.name as expertName",
         "expert.avatar as expertAvatar",
-        "expert.title as expertTitle",
+        "ep.title as expertTitle",
         "projects.id as projectId",
         "projects.title as projectTitle",
         "milestones.id as milestoneId",
@@ -83,8 +108,25 @@ export class InvitationsService {
       .execute();
   }
 
-  async updateStatus(id: string, status: "ACCEPTED" | "REJECTED" | "CANCELLED") {
+  async updateStatus(
+    id: string,
+    status: "ACCEPTED" | "REJECTED" | "CANCELLED",
+  ) {
     return this.db.transaction().execute(async (trx) => {
+      // Check current status
+      const existing = await trx
+        .selectFrom("invitations")
+        .select(["status"])
+        .where("id", "=", id)
+        .executeTakeFirst();
+
+      if (!existing) {
+        throw new NotFoundException("Invitation not found.");
+      }
+
+      if (existing.status !== "PENDING") {
+        throw new BadRequestException("Cannot update an invitation that is already resolved.");
+      }
       const invitation = await trx
         .updateTable("invitations")
         .set({ status: status as any, updatedAt: new Date() })
@@ -117,16 +159,29 @@ export class InvitationsService {
           }
         }
 
-        // If invitation was for a specific internal task, assign it
-        if (invitation.taskId) {
+        // If invitation was for a specific quick task, assign it
+        if (invitation.quickTaskId) {
           await trx
-            .updateTable("tasks")
+            .updateTable("quick_tasks")
             .set({
-              assigneeId: invitation.expertId,
+              expertId: invitation.expertId,
               status: "IN_PROGRESS" as any,
               updatedAt: new Date(),
             })
-            .where("id", "=", invitation.taskId)
+            .where("id", "=", invitation.quickTaskId)
+            .execute();
+            
+          await trx
+            .insertInto("contracts")
+            .values({
+              id: crypto.randomUUID(),
+              quickTaskId: invitation.quickTaskId,
+              expertId: invitation.expertId,
+              clientId: invitation.clientId,
+              agreedPrice: invitation.budget || "0",
+              escrowStatus: "HELD",
+              updatedAt: new Date(),
+            })
             .execute();
         }
 
@@ -136,6 +191,19 @@ export class InvitationsService {
             .updateTable("milestones")
             .set({ status: "ACTIVE" as any, updatedAt: new Date() })
             .where("id", "=", invitation.milestoneId)
+            .execute();
+            
+          await trx
+            .insertInto("contracts")
+            .values({
+              id: crypto.randomUUID(),
+              milestoneId: invitation.milestoneId,
+              expertId: invitation.expertId,
+              clientId: invitation.clientId,
+              agreedPrice: invitation.budget || "0",
+              escrowStatus: "HELD",
+              updatedAt: new Date(),
+            })
             .execute();
         }
       }

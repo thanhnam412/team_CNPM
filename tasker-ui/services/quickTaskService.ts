@@ -1,47 +1,43 @@
 import api from "./api";
+import { QuickTaskDto } from "@/types/marketplace.dto";
 
 export const quickTaskService = {
-  getQuickTasks: async () => {
+  getQuickTasks: async (): Promise<QuickTaskDto[]> => {
     const { data } = await api.get("/quick-tasks");
     return data;
   },
-
-  getQuickTask: async (id: string) => {
+  getQuickTask: async (id: string): Promise<QuickTaskDto> => {
     const { data } = await api.get(`/quick-tasks/${id}`);
     return data;
   },
-
-  createQuickTask: async (payload: any) => {
-    const { data } = await api.post("/quick-tasks", payload);
-    return data;
-  },
-
-  getClientQuickTasks: async (userId: string) => {
+  getClientQuickTasks: async (userId: string): Promise<QuickTaskDto[]> => {
     const { data } = await api.get(`/quick-tasks/client/${userId}`);
     return data;
   },
-
-  updateQuickTask: async (id: string, payload: any) => {
+  createQuickTask: async (payload: Partial<QuickTaskDto>): Promise<QuickTaskDto> => {
+    const { data } = await api.post("/quick-tasks", payload);
+    return data;
+  },
+  updateQuickTask: async (id: string, payload: Partial<QuickTaskDto>): Promise<QuickTaskDto> => {
     const { data } = await api.patch(`/quick-tasks/${id}`, payload);
     return data;
   },
-
-  updateTaskStatus: async (id: string, status: string) => {
+  updateQuickTaskStatus: async (
+    id: string,
+    status: QuickTaskDto["status"]
+  ): Promise<QuickTaskDto> => {
     const { data } = await api.patch(`/quick-tasks/${id}/status`, { status });
     return data;
   },
-
-  submitDeliverable: async (id: string, payload: any) => {
+  submitDeliverable: async (id: string, payload: { note?: string }): Promise<unknown> => {
     const { data } = await api.post(`/quick-tasks/${id}/submit`, payload);
     return data;
   },
-
-  approveDeliverable: async (id: string) => {
+  approveDeliverable: async (id: string): Promise<unknown> => {
     const { data } = await api.post(`/quick-tasks/${id}/approve`);
     return data;
   },
-
-  deleteQuickTask: async (id: string) => {
+  deleteQuickTask: async (id: string): Promise<unknown> => {
     const { data } = await api.delete(`/quick-tasks/${id}`);
     return data;
   },

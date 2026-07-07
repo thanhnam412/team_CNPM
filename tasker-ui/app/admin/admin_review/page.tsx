@@ -1,6 +1,5 @@
 "use client";
 
-import ModerationDashboardPage from "@/block-ui/moderation/review/page";
 import { ActiveUserPermissionAlert } from "@/components/active-user-permission-alert";
 import { AiAutoQualityReport } from "@/components/ai-auto-quality-report";
 import { ApproveMilestoneClient } from "@/components/approve-milestone-client";
@@ -11,7 +10,6 @@ import { SystemConfigWarning } from "@/components/system-config-warning";
 export default function ReviewModerationPage() {
   return (
     <main className="flex-1 overflow-y-auto p-6 md:p-10">
-      <ModerationDashboardPage />
       <AiAutoQualityReport></AiAutoQualityReport>
       <ApproveMilestoneClient></ApproveMilestoneClient>
       <SecurityReviewAlert></SecurityReviewAlert>

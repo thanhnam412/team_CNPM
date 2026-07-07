@@ -17,8 +17,8 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useExpertTasks, useExpertUpdateTaskStatusMutation } from "@/tanstack/useTasks";
-import { useSubmitDeliverablesMutation } from "@/tanstack/useMilestones";
-import { Task } from "@/services/taskService";
+import { useSubmitMilestoneMutation } from "@/tanstack/useMilestones";
+import { TaskDto as Task } from "@/types/project.dto";
 import { NeoPageHeader } from "@/components/ui-custom/neo-page-header";
 
 export default function ExpertWorkspacePage() {
@@ -30,7 +30,7 @@ export default function ExpertWorkspacePage() {
   const [deliverableUrl, setDeliverableUrl] = useState("");
 
   const updateStatusMutation = useExpertUpdateTaskStatusMutation();
-  const submitDeliverableMutation = useSubmitDeliverablesMutation();
+  const submitMutation = useSubmitMilestoneMutation();
 
   useEffect(() => {
     if (initialTasks.length > 0) {
@@ -40,25 +40,25 @@ export default function ExpertWorkspacePage() {
 
   const columns = [
     {
-      id: "todo",
+      id: "TODO",
       title: "To Do",
       color: "border-foreground",
       bg: "bg-secondary/10",
     },
     {
-      id: "in-progress",
+      id: "IN_PROGRESS",
       title: "In Progress",
       color: "border-primary",
       bg: "bg-primary/5",
     },
     {
-      id: "review",
+      id: "REVIEW",
       title: "In Review",
       color: "border-[#E1801E]",
       bg: "bg-[#E1801E]/10",
     },
     {
-      id: "done",
+      id: "DONE",
       title: "Completed",
       color: "border-green-500",
       bg: "bg-green-500/10",
@@ -80,7 +80,10 @@ export default function ExpertWorkspacePage() {
     if (!draggedTaskId) return;
 
     const task = tasks.find((t) => t.id === draggedTaskId);
-    if (!task) return;
+    if (!task || task.status === status) {
+      setDraggedTaskId(null);
+      return;
+    }
 
     setTasks(
       tasks.map((t) =>
@@ -201,8 +204,8 @@ export default function ExpertWorkspacePage() {
                             <MessageSquare className="w-3 h-3 mr-1" /> Chat
                           </NeoButton>
                         </Link>
-                        {(task.status === "in-progress" ||
-                          task.status === "todo") &&
+                        {(task.status === "IN_PROGRESS" ||
+                          task.status === "TODO") &&
                           task.milestoneId && (
                             <NeoButton
                               size="sm"
@@ -265,23 +268,21 @@ export default function ExpertWorkspacePage() {
               </NeoButton>
               <NeoButton
                 disabled={
-                  !deliverableUrl || submitDeliverableMutation.isPending
+                  !deliverableUrl || submitMutation.isPending
                 }
-                onClick={() =>
-                  submitDeliverableMutation.mutate({
+                onClick={() => {
+                  submitMutation.mutate({
                     projectId: submitTask.projectId,
-                    milestoneId: submitTask.milestoneId!,
-                    payload: [
-                      {
-                        name: "Delivery Link",
-                        url: deliverableUrl,
-                        date: new Date().toLocaleDateString(),
-                      },
-                    ],
-                  })
-                }
+                    milestoneId: submitTask.milestoneId as string,
+                    payload: {
+                      taskId: submitTask.id,
+                      url: deliverableUrl,
+                    },
+                  });
+                }}
+                className="rounded-none border-2 h-10 px-6 uppercase font-black tracking-widest text-xs"
               >
-                {submitDeliverableMutation.isPending
+                {submitMutation.isPending
                   ? "Submitting..."
                   : "Submit Deliverables"}
               </NeoButton>

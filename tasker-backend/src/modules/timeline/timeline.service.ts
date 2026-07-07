@@ -20,14 +20,11 @@ export class TimelineService {
         "tasks.title",
         "tasks.status",
         "tasks.priority",
-        "tasks.bucket",
-        "tasks.isOutsource",
         "tasks.createdAt",
         "tasks.updatedAt",
         "projects.id as projectId",
         "projects.title as projectTitle",
         "milestones.title as milestoneName",
-        "milestones.dueDate as milestoneDueDate",
       ])
       .where("tasks.assigneeId", "=", expertId)
       .orderBy("tasks.createdAt", "asc")
@@ -55,6 +52,8 @@ export class TimelineService {
     const projectMap = new Map<string, any>();
 
     for (const task of tasks) {
+      if (!task.projectId) continue;
+
       if (!projectMap.has(task.projectId)) {
         projectMap.set(task.projectId, {
           id: task.projectId,
@@ -74,13 +73,12 @@ export class TimelineService {
       projectMap.get(task.projectId).events.push({
         id: task.id,
         title: task.title,
-        status: statusMap[task.status] || task.status,
+        status: statusMap[task.status as string] || task.status,
         priority: task.priority,
-        bucket: task.bucket,
         milestoneName: task.milestoneName,
         createdAt: task.createdAt,
         updatedAt: task.updatedAt,
-        dueDate: task.milestoneDueDate,
+        dueDate: null,
       });
     }
 

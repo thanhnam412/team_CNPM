@@ -44,6 +44,13 @@ export const MessageType = {
     SYSTEM: "SYSTEM"
 } as const;
 export type MessageType = (typeof MessageType)[keyof typeof MessageType];
+export const PaymentStatus = {
+    PENDING: "PENDING",
+    COMPLETED: "COMPLETED",
+    FAILED: "FAILED",
+    REFUNDED: "REFUNDED"
+} as const;
+export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus];
 export const TransactionType = {
     DEPOSIT: "DEPOSIT",
     ESCROW: "ESCROW",
@@ -80,14 +87,26 @@ export const MilestoneStatus = {
     PAID: "PAID"
 } as const;
 export type MilestoneStatus = (typeof MilestoneStatus)[keyof typeof MilestoneStatus];
-export type Bid = {
+export type ClientProfile = {
     id: string;
-    milestoneId: string;
+    userId: string;
+    companyName: string | null;
+    companyWebsite: string | null;
+    industry: string | null;
+    totalSpent: Generated<string>;
+    completedTasksCount: Generated<number>;
+    createdAt: Generated<Timestamp>;
+    updatedAt: Timestamp;
+};
+export type Contract = {
+    id: string;
+    quickTaskId: string | null;
+    milestoneId: string | null;
     expertId: string;
-    coverLetter: string;
-    amount: string;
-    contractType: string | null;
-    status: Generated<ProposalStatus>;
+    clientId: string;
+    agreedPrice: string;
+    escrowStatus: Generated<string>;
+    deadline: Timestamp | null;
     createdAt: Generated<Timestamp>;
     updatedAt: Timestamp;
 };
@@ -106,12 +125,26 @@ export type ConversationParticipant = {
     userId: string;
     joinedAt: Generated<Timestamp>;
 };
+export type ExpertProfile = {
+    id: string;
+    userId: string;
+    title: string | null;
+    bio: string | null;
+    skills: unknown | null;
+    hourlyRate: Generated<string>;
+    experienceYears: Generated<number>;
+    portfolioUrl: string | null;
+    rating: Generated<string>;
+    status: Generated<string>;
+    createdAt: Generated<Timestamp>;
+    updatedAt: Timestamp;
+};
 export type Invitation = {
     id: string;
     clientId: string;
     expertId: string;
     projectId: string | null;
-    taskId: string | null;
+    quickTaskId: string | null;
     milestoneId: string | null;
     message: string | null;
     budget: string | null;
@@ -131,12 +164,24 @@ export type Message = {
 export type Milestone = {
     id: string;
     projectId: string;
+    assigneeId: string | null;
     title: string;
-    amount: Generated<string>;
+    description: string | null;
+    budget: Generated<string>;
     status: Generated<MilestoneStatus>;
-    progress: Generated<number>;
-    dueDate: Timestamp | null;
-    deliverables: unknown | null;
+    createdAt: Generated<Timestamp>;
+    updatedAt: Timestamp;
+};
+export type Payment = {
+    id: string;
+    contractId: string | null;
+    taskId: string | null;
+    expertId: string;
+    clientId: string;
+    amount: string;
+    fee: Generated<string>;
+    amountReceived: string;
+    status: Generated<PaymentStatus>;
     createdAt: Generated<Timestamp>;
     updatedAt: Timestamp;
 };
@@ -144,6 +189,14 @@ export type Project = {
     id: string;
     title: string;
     description: string | null;
+    requirements: string | null;
+    industry: string | null;
+    tags: unknown | null;
+    attachmentsCount: Generated<number>;
+    links: unknown | null;
+    startDate: Timestamp | null;
+    endDate: Timestamp | null;
+    status: Generated<string>;
     budget: Generated<string>;
     spent: Generated<string>;
     escrow: Generated<string>;
@@ -162,7 +215,8 @@ export type ProjectMember = {
 };
 export type Proposal = {
     id: string;
-    quickTaskId: string;
+    quickTaskId: string | null;
+    milestoneId: string | null;
     expertId: string;
     coverLetter: string;
     proposedPrice: string;
@@ -177,11 +231,13 @@ export type QuickTask = {
     expertId: string | null;
     title: string;
     description: string;
+    requirements: string | null;
+    tags: unknown | null;
+    attachments: unknown | null;
     status: Generated<QuickTaskStatus>;
     budget: Generated<string>;
     deadline: Timestamp | null;
     proposalsCount: Generated<number>;
-    projectId: string | null;
     createdAt: Generated<Timestamp>;
     updatedAt: Timestamp;
 };
@@ -193,42 +249,30 @@ export type RefreshToken = {
     expiresAt: Timestamp;
     createdAt: Generated<Timestamp>;
 };
-export type Review = {
-    id: string;
-    reviewerId: string;
-    expertId: string;
-    rating: number;
-    feedback: string | null;
-    taskTitle: string | null;
-    createdAt: Generated<Timestamp>;
-};
 export type Task = {
     id: string;
     projectId: string;
+    milestoneId: string | null;
     title: string;
     status: Generated<TaskStatus>;
     priority: Generated<TaskPriority>;
     assigneeId: string | null;
     comments: Generated<number>;
     attachments: Generated<number>;
-    milestoneId: string | null;
-    bucket: string | null;
-    isOutsource: Generated<boolean>;
-    budget: Generated<string>;
-    quickTaskId: string | null;
     createdAt: Generated<Timestamp>;
     updatedAt: Timestamp;
 };
 export type Transaction = {
     id: string;
+    paymentId: string | null;
     userId: string;
-    date: Generated<Timestamp>;
-    desc: string;
-    type: TransactionType;
     amount: string;
+    date: Generated<Timestamp>;
+    desc: string | null;
+    type: TransactionType;
     balanceAfter: string;
-    status: Generated<string>;
-    source: string | null;
+    status: string;
+    source: string;
     projectId: string | null;
     createdAt: Generated<Timestamp>;
 };
@@ -238,33 +282,39 @@ export type User = {
     email: string;
     name: string;
     avatar: string | null;
-    role: Generated<Role>;
+    createdAt: Generated<Timestamp>;
+    updatedAt: Timestamp;
     currentRole: Generated<Role>;
-    balance: Generated<string>;
-    title: string | null;
-    bio: string | null;
-    skills: unknown | null;
-    rate: string | null;
     location: string | null;
-    badge: string | null;
     online: Generated<boolean>;
+};
+export type Wallet = {
+    id: string;
+    userId: string;
+    balance: Generated<string>;
+    escrowBalance: Generated<string>;
+    currency: Generated<string>;
+    status: Generated<string>;
     createdAt: Generated<Timestamp>;
     updatedAt: Timestamp;
 };
 export type DB = {
-    bids: Bid;
+    client_profiles: ClientProfile;
+    contracts: Contract;
     conversation_participants: ConversationParticipant;
     conversations: Conversation;
+    expert_profiles: ExpertProfile;
     invitations: Invitation;
     messages: Message;
     milestones: Milestone;
+    payments: Payment;
     project_members: ProjectMember;
     projects: Project;
     proposals: Proposal;
     quick_tasks: QuickTask;
     refresh_tokens: RefreshToken;
-    reviews: Review;
     tasks: Task;
     transactions: Transaction;
     users: User;
+    wallets: Wallet;
 };

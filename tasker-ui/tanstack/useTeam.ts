@@ -1,19 +1,19 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { teamService } from "@/services/teamService";
 
-export const useTeam = (projectId: string) => {
+export const useTeamMembers = (projectId: string) => {
   return useQuery({
     queryKey: ["team", projectId],
-    queryFn: () => teamService.getTeam(projectId),
+    queryFn: () => teamService.getTeamMembers(projectId),
     enabled: !!projectId,
   });
 };
 
-export const useUpdateRoleMutation = (projectId: string) => {
+export const useUpdateMemberRoleMutation = (projectId: string) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ memberId, role }: { memberId: string; role: string }) => 
-      teamService.updateRole(projectId, memberId, role),
+    mutationFn: ({ memberId, role }: { memberId: string; role: string }) =>
+      teamService.updateMemberRole(projectId, memberId, role),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["team", projectId] });
     },

@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { taskService } from "@/services/taskService";
+import { TaskDto } from "@/types/project.dto";
 
 export const useTasks = (projectId: string) => {
   return useQuery({
@@ -30,8 +31,7 @@ export const useExpertUpdateTaskStatusMutation = () => {
 export const useCreateTaskMutation = (projectId: string) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: { title: string; priority: string; milestoneId?: string }) =>
-      taskService.createTask(projectId, data),
+    mutationFn: (data: Partial<TaskDto>) => taskService.createTask(projectId, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks", projectId] });
     },
@@ -41,7 +41,7 @@ export const useCreateTaskMutation = (projectId: string) => {
 export const useUpdateTaskMutation = (projectId: string) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ taskId, data }: { taskId: string; data: any }) =>
+    mutationFn: ({ taskId, data }: { taskId: string; data: Partial<TaskDto> }) =>
       taskService.updateTask(projectId, taskId, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks", projectId] });

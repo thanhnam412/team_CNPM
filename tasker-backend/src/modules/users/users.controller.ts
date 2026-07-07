@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-import { Controller, Get, Patch, Param, Body } from "@nestjs/common";
+import { Controller, Get, Patch, Param, Body, Req } from "@nestjs/common";
 import { UsersService } from "./users.service";
+import { Request } from "express";
 
 @Controller("api/users")
 export class UsersController {

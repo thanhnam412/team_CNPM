@@ -18,24 +18,28 @@ export class MilestonesService {
 
     if (milestones.length === 0) return [];
 
-    const bids = await this.db
-      .selectFrom("bids as b")
-      .innerJoin("users as u", "u.id", "b.expertId")
+    const proposals = await this.db
+      .selectFrom("proposals as p")
+      .innerJoin("users as u", "u.id", "p.expertId")
       .select([
-        "b.id",
-        "b.milestoneId",
-        "b.amount",
-        "b.coverLetter",
-        "b.status",
+        "p.id",
+        "p.milestoneId",
+        "p.proposedPrice as amount",
+        "p.coverLetter",
+        "p.status",
         "u.name as expertName",
-        "u.avatar"
+        "u.avatar",
       ])
-      .where("b.milestoneId", "in", milestones.map(m => m.id))
+      .where(
+        "p.milestoneId",
+        "in",
+        milestones.map((m) => m.id),
+      )
       .execute();
 
-    return milestones.map(m => ({
+    return milestones.map((m) => ({
       ...m,
-      bids: bids.filter(b => b.milestoneId === m.id)
+      proposals: proposals.filter((p) => p.milestoneId === m.id),
     }));
   }
 
@@ -46,11 +50,10 @@ export class MilestonesService {
       .select([
         "m.id",
         "m.title",
-        "m.amount",
+        "m.budget",
         "m.status",
-        "m.dueDate",
         "m.projectId",
-        "p.title as projectTitle"
+        "p.title as projectTitle",
       ])
       .where("m.status", "=", "PENDING")
       .execute();
@@ -63,7 +66,7 @@ export class MilestonesService {
         id: crypto.randomUUID(),
         projectId,
         title: data.title,
-        amount: data.amount?.toString() || '0',
+        budget: data.amount?.toString() || data.budget?.toString() || "0",
         status: "PENDING",
         updatedAt: new Date(),
       })
@@ -74,8 +77,8 @@ export class MilestonesService {
   async update(id: string, data: any) {
     const updateData: any = { updatedAt: new Date() };
     if (data.title !== undefined) updateData.title = data.title;
-    if (data.amount !== undefined) updateData.amount = data.amount.toString();
-    if (data.dueDate !== undefined) updateData.dueDate = new Date(data.dueDate);
+    if (data.amount !== undefined) updateData.budget = data.amount.toString();
+    if (data.budget !== undefined) updateData.budget = data.budget.toString();
 
     return this.db
       .updateTable("milestones")
@@ -95,10 +98,12 @@ export class MilestonesService {
   }
 
   async submitDeliverables(id: string, data: any) {
+    // Note: The deliverables column was removed from milestones in the V1 schema.
+    // Deliverables for milestones should be handled via messages or timeline events.
+    // For now, we only update the status.
     return this.db
       .updateTable("milestones")
       .set({
-        deliverables: JSON.stringify(data.deliverables || data),
         status: "REVIEW" as any,
         updatedAt: new Date(),
       })
@@ -108,79 +113,102 @@ export class MilestonesService {
   }
 
   async remove(id: string) {
-    await this.db
-      .deleteFrom("milestones")
-      .where("id", "=", id)
-      .execute();
+    await this.db.deleteFrom("milestones").where("id", "=", id).execute();
 
     return { success: true };
   }
 
-  async getBids(milestoneId: string) {
+  async getProposals(milestoneId: string) {
     return this.db
-      .selectFrom("bids as b")
-      .innerJoin("users as u", "u.id", "b.expertId")
+      .selectFrom("proposals as p")
+      .innerJoin("users as u", "u.id", "p.expertId")
       .select([
-        "b.id",
-        "b.amount",
-        "b.coverLetter",
-        "b.status",
+        "p.id",
+        "p.proposedPrice as amount",
+        "p.coverLetter as message",
+        "p.status",
         "u.name as expertName",
         "u.avatar",
-        "b.expertId"
+        "p.expertId",
       ])
-      .where("b.milestoneId", "=", milestoneId)
+      .where("p.milestoneId", "=", milestoneId)
       .execute();
   }
 
-  async createBid(milestoneId: string, data: any) {
+  async createProposal(milestoneId: string, data: any) {
     return this.db
-      .insertInto("bids")
+      .insertInto("proposals")
       .values({
         id: crypto.randomUUID(),
         milestoneId,
         expertId: data.expertId,
-        amount: data.amount?.toString() || data.proposedPrice?.toString() || "0",
-        coverLetter: data.proposalText || data.coverLetter || "",
-        contractType: data.contractType,
-        status: "PENDING" as any,
+        proposedPrice: data.amount?.toString() || data.proposedPrice?.toString() || "0",
+        coverLetter: data.proposalText || data.coverLetter || data.message || "",
+        estimatedDays: data.estimatedDays || 0,
+        status: "PENDING",
         updatedAt: new Date(),
       })
       .returningAll()
       .executeTakeFirst();
   }
 
-  async acceptBid(bidId: string) {
-    const bid = await this.db.selectFrom("bids").selectAll().where("id", "=", bidId).executeTakeFirst();
-    if (!bid) throw new Error("Bid not found");
+  async acceptProposal(proposalId: string) {
+    const proposal = await this.db
+      .selectFrom("proposals")
+      .selectAll()
+      .where("id", "=", proposalId)
+      .executeTakeFirst();
+    if (!proposal) throw new Error("Proposal not found");
 
-    const milestone = await this.db.selectFrom("milestones").selectAll().where("id", "=", bid.milestoneId).executeTakeFirst();
+    const milestone = await this.db
+      .selectFrom("milestones")
+      .selectAll()
+      .where("id", "=", proposal.milestoneId)
+      .executeTakeFirst();
     if (!milestone) throw new Error("Milestone not found");
 
-    // Accept this bid
-    await this.db.updateTable("bids").set({ status: "ACCEPTED" as any, updatedAt: new Date() }).where("id", "=", bidId).execute();
-    
-    // Reject other bids
-    await this.db.updateTable("bids").set({ status: "REJECTED" as any, updatedAt: new Date() }).where("milestoneId", "=", bid.milestoneId).where("id", "!=", bidId).execute();
-    
+    // Accept this proposal
+    await this.db
+      .updateTable("proposals")
+      .set({ status: "ACCEPTED" as any, updatedAt: new Date() })
+      .where("id", "=", proposalId)
+      .execute();
+
+    // Reject other proposals
+    await this.db
+      .updateTable("proposals")
+      .set({ status: "REJECTED" as any, updatedAt: new Date() })
+      .where("milestoneId", "=", proposal.milestoneId)
+      .where("id", "!=", proposalId)
+      .execute();
+
     // Update Milestone status
-    await this.db.updateTable("milestones").set({ status: "ACTIVE" as any, updatedAt: new Date() }).where("id", "=", bid.milestoneId).execute();
+    await this.db
+      .updateTable("milestones")
+      .set({ status: "ACTIVE" as any, updatedAt: new Date() })
+      .where("id", "=", proposal.milestoneId)
+      .execute();
 
     // Add expert to Project members if not exists
-    const existingMember = await this.db.selectFrom("project_members").selectAll()
+    const existingMember = await this.db
+      .selectFrom("project_members")
+      .selectAll()
       .where("projectId", "=", milestone.projectId)
-      .where("userId", "=", bid.expertId)
+      .where("userId", "=", proposal.expertId)
       .executeTakeFirst();
 
     if (!existingMember) {
-      await this.db.insertInto("project_members").values({
-        id: crypto.randomUUID(),
-        projectId: milestone.projectId,
-        userId: bid.expertId,
-        role: "EXPERT" as any,
-        status: "ACTIVE",
-        updatedAt: new Date(),
-      }).execute();
+      await this.db
+        .insertInto("project_members")
+        .values({
+          id: crypto.randomUUID(),
+          projectId: milestone.projectId,
+          userId: proposal.expertId,
+          role: "EXPERT",
+          status: "ACTIVE",
+          updatedAt: new Date(),
+        })
+        .execute();
     }
 
     return { success: true };

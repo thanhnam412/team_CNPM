@@ -25,55 +25,18 @@ import {
   NeoSelectTrigger,
   NeoSelectValue,
 } from "@/components/ui-custom/neo-select";
-import { cn } from "@/lib/utils";
+import { cn, formatCurrency } from "@/lib/utils";
 import { NeoPageHeader } from "@/components/ui-custom/neo-page-header";
 import { NeoWidgetHeader } from "@/components/ui-custom/neo-widget-header";
 
-// Mock Transaction History
-const TRANSACTIONS = [
-  {
-    id: "TX-9901",
-    date: "Oct 12, 2026",
-    type: "payment_received",
-    desc: "Payment for QT-889",
-    amount: "+$150.00",
-    status: "cleared",
-  },
-  {
-    id: "TX-9902",
-    date: "Oct 12, 2026",
-    type: "platform_fee",
-    desc: "Platform Fee (10%)",
-    amount: "-$15.00",
-    status: "cleared",
-  },
-  {
-    id: "TX-9850",
-    date: "Oct 05, 2026",
-    type: "withdrawal",
-    desc: "Bank Transfer Withdraw",
-    amount: "-$1,200.00",
-    status: "completed",
-  },
-  {
-    id: "TX-9849",
-    date: "Oct 01, 2026",
-    type: "payment_received",
-    desc: "Milestone 1 - PROJ-65",
-    amount: "+$1,500.00",
-    status: "cleared",
-  },
-  {
-    id: "TX-9848",
-    date: "Oct 01, 2026",
-    type: "platform_fee",
-    desc: "Platform Fee (10%)",
-    amount: "-$150.00",
-    status: "cleared",
-  },
-];
+import { useWallet, useTransactions } from "@/tanstack/useFinance";
+import { useGetMe } from "@/tanstack/useGetMe";
 
 export default function ExpertEarningsPage() {
+  const { data: me } = useGetMe();
+  const { data: wallet } = useWallet(me?.id || "");
+  const { data: transactions = [] } = useTransactions(me?.id || "");
+
   const [withdrawAmount, setWithdrawAmount] = useState("");
   const [isWithdrawing, setIsWithdrawing] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -110,7 +73,7 @@ export default function ExpertEarningsPage() {
                 <CheckCircle2 className="w-4 h-4 text-primary" />
               </div>
               <div className="font-heading font-black text-5xl md:text-6xl text-foreground">
-                $4,350.00
+                {wallet ? formatCurrency(wallet.balance) : "$0.00"}
               </div>
               <p className="text-xs font-bold text-muted-foreground mt-4">
                 Funds have cleared and are ready for payout.
@@ -137,7 +100,7 @@ export default function ExpertEarningsPage() {
                   In Escrow (Work in Progress) <Briefcase className="w-3 h-3" />
                 </div>
                 <div className="font-heading font-black text-2xl text-muted-foreground">
-                  $1,250.00
+                  {wallet ? formatCurrency(wallet.escrowBalance) : "$0.00"}
                 </div>
               </div>
             </div>
@@ -250,7 +213,7 @@ export default function ExpertEarningsPage() {
                 </tr>
               </thead>
               <tbody className="divide-y-2 divide-border">
-                {TRANSACTIONS.map((tx) => (
+                {transactions.map((tx: any) => (
                   <tr
                     key={tx.id}
                     className="hover:bg-secondary/5 transition-colors group"
@@ -259,18 +222,22 @@ export default function ExpertEarningsPage() {
                       {tx.id}
                     </td>
                     <td className="px-6 py-4 font-semibold text-muted-foreground text-xs">
-                      {tx.date}
+                      {new Date(tx.date).toLocaleDateString()}
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
-                        {tx.type === "payment_received" && (
+                        {tx.type === "PAYMENT_RECEIVED" ||
+                        tx.type === "DEPOSIT" ? (
                           <ArrowDownLeft className="w-4 h-4 text-green-500 shrink-0" />
-                        )}
-                        {tx.type === "withdrawal" && (
+                        ) : null}
+                        {tx.type === "WITHDRAWAL" && (
                           <ArrowUpRight className="w-4 h-4 text-foreground shrink-0" />
                         )}
-                        {tx.type === "platform_fee" && (
+                        {tx.type === "FEE" && (
                           <AlertTriangle className="w-4 h-4 text-destructive shrink-0" />
+                        )}
+                        {tx.type === "ESCROW" && (
+                          <Briefcase className="w-4 h-4 text-muted-foreground shrink-0" />
                         )}
                         <span className="font-bold text-xs uppercase">
                           {tx.desc}
@@ -280,12 +247,19 @@ export default function ExpertEarningsPage() {
                     <td
                       className={cn(
                         "px-6 py-4 font-heading font-black text-right",
-                        tx.amount.startsWith("+")
+                        ["PAYMENT_RECEIVED", "DEPOSIT", "REFUND"].includes(
+                          tx.type,
+                        )
                           ? "text-green-600"
                           : "text-foreground",
                       )}
                     >
-                      {tx.amount}
+                      {["PAYMENT_RECEIVED", "DEPOSIT", "REFUND"].includes(
+                        tx.type,
+                      )
+                        ? "+"
+                        : "-"}
+                      {formatCurrency(tx.amount)}
                     </td>
                     <td className="px-6 py-4 text-center">
                       <span className="text-[0.625rem] font-black uppercase tracking-widest bg-secondary px-2 py-1 border-2 border-border">

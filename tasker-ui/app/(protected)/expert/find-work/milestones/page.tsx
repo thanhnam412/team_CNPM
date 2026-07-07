@@ -38,11 +38,12 @@ import {
 import { NeoPageHeader } from "@/components/ui-custom/neo-page-header";
 
 import { formatCurrency } from "@/lib/utils";
-import { useAvailableMilestones, useBidOnMilestoneMutation } from "@/tanstack/useMilestones";
-import { useSession } from "next-auth/react";
+import { useAvailableMilestones } from "@/tanstack/useMilestones";
+import { useSubmitMilestoneProposalMutation } from "@/tanstack/useProposals";
+import { useGetMe } from "@/tanstack/useGetMe";
 
 export default function FindMilestonesPage() {
-  const { data: session } = useSession();
+  const { data: me } = useGetMe();
   const [filter, setFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedMilestone, setSelectedMilestone] = useState<any | null>(null);
@@ -50,58 +51,66 @@ export default function FindMilestonesPage() {
     "platform" | "external" | null
   >(null);
   const [proposalText, setProposalText] = useState("");
-  
+
   const [drawerMode, setDrawerMode] = useState<"overview" | null>(null);
-  const [isBidModalOpen, setIsBidModalOpen] = useState(false);
+  const [isProposalModalOpen, setIsProposalModalOpen] = useState(false);
 
   const { data: rawMilestones = [], isLoading } = useAvailableMilestones();
-  const bidMutation = useBidOnMilestoneMutation();
+  const proposalMutation = useSubmitMilestoneProposalMutation();
 
-  const handleBid = () => {
-    if (!selectedMilestone || !session?.user?.id) return;
-    bidMutation.mutate(
+  const handleProposalSubmit = () => {
+    if (!selectedMilestone || !me?.id) return;
+    proposalMutation.mutate(
       {
         milestoneId: selectedMilestone.id,
         payload: {
-          expertId: session.user.id,
-          contractType,
-          proposalText
-        }
+          proposedPrice: selectedMilestone.budget
+            ? parseFloat(
+                String(selectedMilestone.budget).replace(/[^0-9.]/g, "")
+              ) || 0
+            : 0,
+          coverLetter: proposalText,
+        },
       },
       {
         onSuccess: () => {
           setSelectedMilestone(null);
           setContractType(null);
           setProposalText("");
-          setIsBidModalOpen(false);
+          setIsProposalModalOpen(false);
           setDrawerMode(null);
-        }
-      }
+        },
+      },
     );
   };
 
-  const MILESTONES = rawMilestones.map((m: any) => ({
-    id: m.id,
-    project: m.projectTitle || "Unknown Project",
-    title: m.title,
-    budget: m.amount ? formatCurrency(m.amount) : "TBD",
-    deadline: m.dueDate ? new Date(m.dueDate).toLocaleDateString() : "TBD",
-    difficulty: "Medium",
-    difficultyIcon: Target,
-    skills: ["General"],
-    desc: m.title
-  })).filter((m: any) => {
-    if (searchQuery) {
-      const q = searchQuery.toLowerCase();
-      if (!m.title.toLowerCase().includes(q) && !m.project.toLowerCase().includes(q)) {
-        return false;
+  const MILESTONES = rawMilestones
+    .map((m: any) => ({
+      id: m.id,
+      project: m.projectTitle || "Unknown Project",
+      title: m.title,
+      budget: m.amount ? formatCurrency(m.amount) : "TBD",
+      deadline: m.dueDate ? new Date(m.dueDate).toLocaleDateString() : "TBD",
+      difficulty: "Medium",
+      difficultyIcon: Target,
+      skills: ["General"],
+      desc: m.title,
+    }))
+    .filter((m: any) => {
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase();
+        if (
+          !m.title.toLowerCase().includes(q) &&
+          !m.project.toLowerCase().includes(q)
+        ) {
+          return false;
+        }
       }
-    }
-    if (filter !== "all") {
-      if (m.difficulty.toLowerCase() !== filter) return false;
-    }
-    return true;
-  });
+      if (filter !== "all") {
+        if (m.difficulty.toLowerCase() !== filter) return false;
+      }
+      return true;
+    });
 
   const getBadgeVariant = (difficulty: string) => {
     switch (difficulty) {
@@ -123,9 +132,7 @@ export default function FindMilestonesPage() {
       <NeoPageHeader
         title="Find Milestones"
         description="Browse available milestones and submit bids."
-        icon={
-          <Target className="w-8 h-8 md:w-10 md:h-10 text-primary" />
-        }
+        icon={<Target className="w-8 h-8 md:w-10 md:h-10 text-primary" />}
       />
 
       {/* Toolbar */}
@@ -141,7 +148,10 @@ export default function FindMilestonesPage() {
         </div>
 
         <div className="flex items-center gap-4 w-full sm:w-auto">
-          <NeoSelect value={filter} onValueChange={(val) => setFilter(val || "all")}>
+          <NeoSelect
+            value={filter}
+            onValueChange={(val) => setFilter(val || "all")}
+          >
             <NeoSelectTrigger className="w-full sm:w-48 h-10 text-xs">
               <Filter className="w-4 h-4 mr-2" />
               <NeoSelectValue placeholder="Difficulty" />
@@ -257,11 +267,11 @@ export default function FindMilestonesPage() {
                       onClick={(e) => {
                         e.stopPropagation();
                         setSelectedMilestone(milestone);
-                        setIsBidModalOpen(true);
+                        setIsProposalModalOpen(true);
                       }}
                       className="h-10 px-6 text-xs"
                     >
-                      Bid <Handshake className="w-4 h-4 ml-2" />
+                      Send Proposal <Handshake className="w-4 h-4 ml-2" />
                     </NeoButton>
                   </div>
                 </div>
@@ -277,21 +287,22 @@ export default function FindMilestonesPage() {
         onOpenChange={(open) => {
           if (!open) {
             setDrawerMode(null);
-            if (!isBidModalOpen) setSelectedMilestone(null);
+            if (!isProposalModalOpen) setSelectedMilestone(null);
           }
         }}
       >
         <NeoDrawerContent side="right">
           <NeoDrawerHeader className="flex flex-row justify-between items-center space-y-0">
             <NeoDrawerTitle className="flex items-center gap-3">
-              <FileSignature className="w-6 h-6 text-primary" /> Milestone Overview
+              <FileSignature className="w-6 h-6 text-primary" /> Milestone
+              Overview
             </NeoDrawerTitle>
             <NeoButton
               variant="ghost"
               size="icon"
               onClick={() => {
                 setDrawerMode(null);
-                if (!isBidModalOpen) setSelectedMilestone(null);
+                if (!isProposalModalOpen) setSelectedMilestone(null);
               }}
               className="border-transparent h-8 w-8 shrink-0"
             >
@@ -346,11 +357,17 @@ export default function FindMilestonesPage() {
 
                 {/* Skills Placeholder */}
                 <div className="p-4 border-2 border-foreground bg-secondary/10">
-                  <h4 className="font-bold text-xs uppercase tracking-widest mb-3 text-muted-foreground">Required Skills</h4>
+                  <h4 className="font-bold text-xs uppercase tracking-widest mb-3 text-muted-foreground">
+                    Required Skills
+                  </h4>
                   <div className="flex flex-wrap gap-2">
                     {selectedMilestone?.skills?.map((skill: string) => (
                       <NeoBadge key={skill}>{skill}</NeoBadge>
-                    )) || <span className="text-xs italic text-muted-foreground">No skills specified</span>}
+                    )) || (
+                      <span className="text-xs italic text-muted-foreground">
+                        No skills specified
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
@@ -358,42 +375,42 @@ export default function FindMilestonesPage() {
           </div>
 
           <NeoDrawerFooter>
-              <NeoButton
-                variant="outline"
-                onClick={() => {
-                  setDrawerMode(null);
-                  if (!isBidModalOpen) setSelectedMilestone(null);
-                }}
-                className="h-14 px-8"
-              >
-                Cancel
-              </NeoButton>
-              <NeoButton
-                onClick={() => {
-                  setDrawerMode(null);
-                  setIsBidModalOpen(true);
-                }}
-                className="h-14 px-10 text-lg"
-              >
-                Apply Now <Handshake className="w-5 h-5 ml-2" />
-              </NeoButton>
+            <NeoButton
+              variant="outline"
+              onClick={() => {
+                setDrawerMode(null);
+                if (!isProposalModalOpen) setSelectedMilestone(null);
+              }}
+              className="h-14 px-8"
+            >
+              Cancel
+            </NeoButton>
+            <NeoButton
+              onClick={() => {
+                setDrawerMode(null);
+                setIsProposalModalOpen(true);
+              }}
+              className="h-14 px-10 text-lg"
+            >
+              Apply Now <Handshake className="w-5 h-5 ml-2" />
+            </NeoButton>
           </NeoDrawerFooter>
         </NeoDrawerContent>
       </NeoDrawer>
 
-      {/* Contract Signing / Bid Modal */}
-      {isBidModalOpen && selectedMilestone && (
+      {/* Contract Signing / Proposal Modal */}
+      {isProposalModalOpen && selectedMilestone && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm animate-in fade-in duration-200 overflow-y-auto">
           <div className="bg-card border-4 border-foreground shadow-[12px_12px_0px_0px_var(--foreground)] w-full max-w-3xl animate-in zoom-in-95 duration-200 my-8">
             <div className="border-b-4 border-foreground p-6 flex justify-between items-center bg-secondary/30">
               <h2 className="font-heading font-black text-2xl uppercase tracking-widest flex items-center gap-3">
-                <Handshake className="w-6 h-6 text-primary" /> Bid on Milestone
+                <Handshake className="w-6 h-6 text-primary" /> Submit Proposal
               </h2>
               <NeoButton
                 variant="ghost"
                 size="icon"
                 onClick={() => {
-                  setIsBidModalOpen(false);
+                  setIsProposalModalOpen(false);
                   if (!drawerMode) setSelectedMilestone(null);
                   setContractType(null);
                 }}
@@ -526,7 +543,7 @@ export default function FindMilestonesPage() {
               <NeoButton
                 variant="outline"
                 onClick={() => {
-                  setIsBidModalOpen(false);
+                  setIsProposalModalOpen(false);
                   if (!drawerMode) setSelectedMilestone(null);
                   setContractType(null);
                 }}
@@ -535,11 +552,16 @@ export default function FindMilestonesPage() {
                 Cancel
               </NeoButton>
               <NeoButton
-                disabled={!contractType || bidMutation.isPending || !proposalText || !session?.user?.id}
-                onClick={handleBid}
+                disabled={
+                  !contractType ||
+                  proposalMutation.isPending ||
+                  !proposalText ||
+                  !me?.id
+                }
+                onClick={handleProposalSubmit}
                 className="h-14 px-10 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {bidMutation.isPending ? "Submitting..." : "Submit Bid"}
+                {proposalMutation.isPending ? "Submitting..." : "Submit Proposal"}
               </NeoButton>
             </div>
           </div>

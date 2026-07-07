@@ -1,16 +1,3 @@
-enum ConversationContextType {
-  QUICK_TASK
-  PROJECT
-  DIRECT
-}
-
-enum MessageType {
-  TEXT
-  CODE
-  FILE
-  SYSTEM
-}
-
 model Conversation {
   id          String                  @id @default(uuid())
   name        String?
@@ -49,7 +36,20 @@ model Message {
   createdAt      DateTime    @default(now())
 
   conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  sender       User?        @relation(fields: [senderId], references: [id], onDelete: SetNull)
+  sender       User?        @relation(fields: [senderId], references: [id])
 
   @@map("messages")
+}
+
+enum ConversationContextType {
+  QUICK_TASK
+  PROJECT
+  DIRECT
+}
+
+enum MessageType {
+  TEXT
+  CODE
+  FILE
+  SYSTEM
 }

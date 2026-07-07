@@ -1,23 +1,34 @@
 import api from "./api";
+import { ProposalDto } from "@/types/marketplace.dto";
 
 export const proposalService = {
-  createProposal: async (taskId: string, payload: any) => {
-    const { data } = await api.post(`/quick-tasks/${taskId}/proposals`, payload);
+  getProposalsForQuickTask: async (quickTaskId: string): Promise<ProposalDto[]> => {
+    const { data } = await api.get(`/quick-tasks/${quickTaskId}/proposals`);
     return data;
   },
-
-  getProposalsForTask: async (taskId: string) => {
-    const { data } = await api.get(`/quick-tasks/${taskId}/proposals`);
-    return data;
-  },
-
-  getProposalsForExpert: async (userId: string) => {
+  getProposalsForUser: async (userId: string): Promise<ProposalDto[]> => {
     const { data } = await api.get(`/users/${userId}/proposals`);
     return data;
   },
-
-  updateProposalStatus: async (proposalId: string, status: string) => {
+  submitProposalForQuickTask: async (
+    quickTaskId: string,
+    payload: { proposedPrice: string | number; coverLetter?: string }
+  ): Promise<ProposalDto> => {
+    const { data } = await api.post(`/quick-tasks/${quickTaskId}/proposals`, payload);
+    return data;
+  },
+  submitProposalForMilestone: async (
+    milestoneId: string,
+    payload: { proposedPrice: string | number; coverLetter?: string }
+  ): Promise<ProposalDto> => {
+    const { data } = await api.post(`/milestones/${milestoneId}/proposals`, payload);
+    return data;
+  },
+  updateProposalStatus: async (
+    proposalId: string,
+    status: ProposalDto["status"]
+  ): Promise<ProposalDto> => {
     const { data } = await api.patch(`/proposals/${proposalId}/status`, { status });
     return data;
-  }
+  },
 };

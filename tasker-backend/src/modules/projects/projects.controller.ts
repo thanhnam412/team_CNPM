@@ -1,23 +1,37 @@
-import { Controller, Get, Post, Patch, Delete, Body, Param } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  Body,
+  Param,
+  Request,
+} from "@nestjs/common";
 import { ProjectsService } from "./projects.service";
+import { Public } from "../auth/decorators/public.decorator";
 
 @Controller("api/projects")
 export class ProjectsController {
   constructor(private readonly projectsService: ProjectsService) {}
 
+  @Public()
   @Get()
   findAll() {
     return this.projectsService.findAll();
   }
 
+  @Public()
   @Get(":id")
   findOne(@Param("id") id: string) {
     return this.projectsService.findOne(id);
   }
 
   @Post()
-  create(@Body() createProjectDto: any) {
-    return this.projectsService.create(createProjectDto);
+  create(@Request() req, @Body() createProjectDto: any) {
+    const userId = req.user?.userId || createProjectDto.clientId;
+    if (!userId) throw new Error("Unauthorized: Cannot create project without user");
+    return this.projectsService.create(userId, createProjectDto);
   }
 
   @Get(":id/finance")
@@ -31,8 +45,10 @@ export class ProjectsController {
   }
 
   @Post(":id/finance/add-funds")
-  addFunds(@Param("id") id: string, @Body() data: { amount: number }) {
-    return this.projectsService.addFunds(id, data.amount);
+  addFunds(@Request() req, @Param("id") id: string, @Body() data: { amount: number }) {
+    const userId = req.user?.userId;
+    if (!userId) throw new Error("Unauthorized");
+    return this.projectsService.addFunds(id, data.amount, userId);
   }
 
   @Patch(":id")

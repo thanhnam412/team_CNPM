@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { Inject, Injectable } from "@nestjs/common";
+import { Inject, Injectable, UnauthorizedException } from "@nestjs/common";
 import { Kysely } from "kysely";
 import { KYSELY_DB } from "../../database/database.module";
 import { DB } from "../../database/types";
@@ -17,7 +17,7 @@ export class TasksService {
       .execute();
   }
 
-  async findAllForExpert() {
+  async findAllForExpert(expertId: string) {
     return this.db
       .selectFrom("tasks")
       .innerJoin("projects", "tasks.projectId", "projects.id")
@@ -27,34 +27,13 @@ export class TasksService {
         "projects.title as projectName",
         "milestones.title as milestoneName",
       ])
+      .where("tasks.assigneeId", "=", expertId)
       .execute();
   }
 
   async create(projectId: string, data: any) {
     return this.db.transaction().execute(async (trx) => {
       const taskId = crypto.randomUUID();
-      let quickTaskId: string | null = null;
-      const isOutsource = data.isOutsource === true;
-      const budget = data.budget?.toString() || "0";
-
-      if (isOutsource) {
-        quickTaskId = crypto.randomUUID();
-        const clientId = data.clientId || "user-1";
-
-        await trx
-          .insertInto("quick_tasks")
-          .values({
-            id: quickTaskId,
-            clientId,
-            projectId,
-            title: data.title,
-            description: data.description || data.title,
-            budget,
-            status: "OPEN",
-            updatedAt: new Date(),
-          })
-          .execute();
-      }
 
       const task = await trx
         .insertInto("tasks")
@@ -65,10 +44,7 @@ export class TasksService {
           status: data.status || "TODO",
           priority: data.priority || "MEDIUM",
           milestoneId: data.milestoneId || null,
-          bucket: data.bucket || null,
-          isOutsource,
-          budget,
-          quickTaskId,
+          assigneeId: data.assigneeId || null,
           updatedAt: new Date(),
         })
         .returningAll()
@@ -78,8 +54,20 @@ export class TasksService {
     });
   }
 
-  async updateStatus(id: string, status: any) {
+  async updateStatus(id: string, status: any, requestUserId?: string) {
     return this.db.transaction().execute(async (trx) => {
+      // Đầu tiên lấy task ra để check quyền
+      const existingTask = await trx
+        .selectFrom("tasks")
+        .select(["assigneeId"])
+        .where("id", "=", id)
+        .executeTakeFirstOrThrow();
+
+      // Nếu có truyền requestUserId (từ Expert API), bắt buộc phải là người được assign
+      if (requestUserId && existingTask.assigneeId !== requestUserId) {
+        throw new UnauthorizedException("You are not assigned to this task");
+      }
+
       const task = await trx
         .updateTable("tasks")
         .set({ status, updatedAt: new Date() })
@@ -101,40 +89,13 @@ export class TasksService {
         const progress =
           totalTasks > 0 ? Math.round((doneTasks / totalTasks) * 100) : 0;
 
-        const milestoneStatus: any =
-          progress === 100 ? "REVIEW" : "IN_PROGRESS";
+        const milestoneStatus: any = progress === 100 ? "REVIEW" : "ACTIVE";
 
         await trx
           .updateTable("milestones")
-          .set({ progress, status: milestoneStatus, updatedAt: new Date() })
+          .set({ status: milestoneStatus, updatedAt: new Date() })
           .where("id", "=", task.milestoneId)
           .execute();
-      }
-
-      if (task.isOutsource && status === "DONE" && task.assigneeId) {
-        await trx
-          .insertInto("transactions")
-          .values({
-            id: crypto.randomUUID(),
-            userId: task.assigneeId,
-            date: new Date(),
-            desc: `Payout for completed task: ${task.title}`,
-            type: "PAYMENT_RECEIVED",
-            amount: task.budget,
-            balanceAfter: "0",
-            status: "Success",
-            projectId: task.projectId,
-            createdAt: new Date(),
-          })
-          .execute();
-
-        if (task.quickTaskId) {
-          await trx
-            .updateTable("quick_tasks")
-            .set({ status: "COMPLETED", updatedAt: new Date() })
-            .where("id", "=", task.quickTaskId)
-            .execute();
-        }
       }
 
       return task;
@@ -145,7 +106,6 @@ export class TasksService {
     const updateData: any = { updatedAt: new Date() };
     if (data.title !== undefined) updateData.title = data.title;
     if (data.assigneeId !== undefined) updateData.assigneeId = data.assigneeId;
-    if (data.bucket !== undefined) updateData.bucket = data.bucket;
     if (data.milestoneId !== undefined)
       updateData.milestoneId = data.milestoneId;
     if (data.priority !== undefined) updateData.priority = data.priority;
@@ -183,15 +143,11 @@ export class TasksService {
         const progress =
           totalTasks > 0 ? Math.round((doneTasks / totalTasks) * 100) : 0;
         const milestoneStatus: any =
-          totalTasks === 0
-            ? "PENDING"
-            : progress === 100
-              ? "REVIEW"
-              : "IN_PROGRESS";
+          totalTasks === 0 ? "PENDING" : progress === 100 ? "REVIEW" : "ACTIVE";
 
         await trx
           .updateTable("milestones")
-          .set({ progress, status: milestoneStatus, updatedAt: new Date() })
+          .set({ status: milestoneStatus, updatedAt: new Date() })
           .where("id", "=", task.milestoneId)
           .execute();
       }
