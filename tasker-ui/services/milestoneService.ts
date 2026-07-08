@@ -22,7 +22,7 @@ export const milestoneService = {
     const { data } = await api.patch(`/projects/${projectId}/milestones/${milestoneId}`, payload);
     return data;
   },
-  deleteMilestone: async (projectId: string, milestoneId: string): Promise<unknown> => {
+  deleteMilestone: async (projectId: string, milestoneId: string): Promise<void> => {
     const { data } = await api.delete(`/projects/${projectId}/milestones/${milestoneId}`);
     return data;
   },
@@ -30,8 +30,12 @@ export const milestoneService = {
     const { data } = await api.post(`/projects/${projectId}/milestones/${milestoneId}/submit`, payload);
     return data;
   },
-  payMilestone: async (projectId: string, milestoneId: string): Promise<MilestoneDto> => {
-    const { data } = await api.patch(`/projects/${projectId}/milestones/${milestoneId}/status`, { status: "PAID" });
+  updateMilestoneStatus: async (projectId: string, milestoneId: string): Promise<MilestoneDto> => {
+    const { data } = await api.patch(`/projects/${projectId}/milestones/${milestoneId}`, { status: "PAID" });
+    return data;
+  },
+  payMilestone: async (projectId: string, milestoneId: string): Promise<unknown> => {
+    const { data } = await api.post(`/contracts/milestone/${milestoneId}/release-funds`);
     return data;
   },
 };

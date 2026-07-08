@@ -14,6 +14,7 @@ export interface ProjectMarketplaceBlockProps {
   onReviewWork: (taskId: string) => void;
   onMessageExpert: (proposalId: string) => void;
   onAcceptBid: (proposalId: string) => void;
+  onRejectBid: (proposalId: string) => void;
   onViewProfile?: (expertId: string) => void;
   isAccepting?: boolean;
 }
@@ -27,6 +28,7 @@ export function ProjectMarketplaceBlock({
   onReviewWork,
   onMessageExpert,
   onAcceptBid,
+  onRejectBid,
   onViewProfile,
   isAccepting,
 }: ProjectMarketplaceBlockProps) {
@@ -77,6 +79,7 @@ export function ProjectMarketplaceBlock({
               onReviewWork={onReviewWork}
               onMessageExpert={onMessageExpert}
               onAcceptBid={onAcceptBid}
+              onRejectBid={onRejectBid}
               onViewProfile={onViewProfile}
               isAccepting={isAccepting}
             />

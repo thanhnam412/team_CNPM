@@ -29,21 +29,21 @@ export default function ProjectOverviewPage() {
   const stats = [
     {
       title: "Completion",
-      value: `0%`,
+      value: `${project?.stats?.completion || 0}%`,
       icon: CheckCircle2,
       desc: "Based on completed tasks",
     },
     {
       title: "Active Tasks",
-      value: "0",
+      value: `${project?.stats?.activeTasks || 0}`,
       icon: Clock,
       desc: "Open or in-progress",
     },
     {
       title: "Team Members",
-      value: "0",
+      value: `${project?.stats?.totalMembers || 0}`,
       icon: Users,
-      desc: `0 Experts included`,
+      desc: `${project?.stats?.expertMembers || 0} Experts included`,
     },
     {
       title: "Budget Used",

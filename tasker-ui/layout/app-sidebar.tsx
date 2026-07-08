@@ -27,6 +27,7 @@ import {
   ZapIcon,
   MailboxIcon,
   UserCircleIcon,
+  BotIcon,
 } from "lucide-react";
 
 const sharedData = {
@@ -50,6 +51,11 @@ const clientNavMain = [
     url: "/client",
     icon: <LayoutDashboardIcon />,
     isActive: true,
+  },
+  {
+    title: "AI Copilot",
+    url: "/client/copilot",
+    icon: <BotIcon />,
   },
   {
     title: "Projects",
@@ -123,12 +129,21 @@ const expertNavMain = [
         title: "Project Milestones",
         url: "/expert/find-work/milestones",
       },
+      {
+        title: "Sent Proposals",
+        url: "/expert/proposals",
+      },
     ],
   },
   {
     title: "My Workspace",
     url: "/expert/workspace",
     icon: <BriefcaseIcon />,
+  },
+  {
+    title: "Contracts",
+    url: "/expert/contracts",
+    icon: <FolderKanbanIcon />,
   },
   {
     title: "Invitations",

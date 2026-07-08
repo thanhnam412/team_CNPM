@@ -18,6 +18,10 @@ import { InvitationsModule } from "./modules/invitations/invitations.module";
 import { PaymentsModule } from "./modules/payments/payments.module";
 import { APP_GUARD } from "@nestjs/core";
 import { JwtAuthGuard } from "./modules/auth/guards/jwt-auth.guard";
+import { ContractsModule } from "./modules/contracts/contracts.module";
+import { WalletModule } from "./modules/wallet/wallet.module";
+import { CopilotModule } from "./modules/copilot/copilot.module";
+import { ClientsModule } from "./modules/clients/clients.module";
 
 @Module({
   imports: [
@@ -39,6 +43,10 @@ import { JwtAuthGuard } from "./modules/auth/guards/jwt-auth.guard";
     TimelineModule,
     InvitationsModule,
     PaymentsModule,
+    ContractsModule,
+    WalletModule,
+    CopilotModule,
+    ClientsModule,
   ],
   providers: [
     {

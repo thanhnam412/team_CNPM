@@ -2,7 +2,7 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { useProjectMarketplace } from "@/tanstack/useProjects";
-import { useUpdateProposalStatusMutation } from "@/tanstack/useProposals";
+import { useUpdateProposalStatusMutation, useAcceptProposalMutation } from "@/tanstack/useProposals";
 import { ProjectMarketplaceBlock } from "@/block-ui/project/detail/marketplace";
 
 export default function ProjectMarketplacePage() {
@@ -14,6 +14,7 @@ export default function ProjectMarketplacePage() {
   const outsourcedTasks = Array.isArray(data) ? data : [];
 
   const updateProposalMutation = useUpdateProposalStatusMutation();
+  const acceptProposalMutation = useAcceptProposalMutation();
 
   const handleBrowseExperts = () => {
     router.push("/client/experts");
@@ -37,7 +38,11 @@ export default function ProjectMarketplacePage() {
   };
 
   const handleAcceptBid = (proposalId: string) => {
-    updateProposalMutation.mutate({ proposalId, status: "ACCEPTED" });
+    acceptProposalMutation.mutate({ proposalId });
+  };
+
+  const handleRejectBid = (proposalId: string) => {
+    updateProposalMutation.mutate({ proposalId, status: "REJECTED" });
   };
 
   const handleViewProfile = (expertId: string) => {
@@ -54,8 +59,9 @@ export default function ProjectMarketplacePage() {
       onReviewWork={handleReviewWork}
       onMessageExpert={handleMessageExpert}
       onAcceptBid={handleAcceptBid}
+      onRejectBid={handleRejectBid}
       onViewProfile={handleViewProfile}
-      isAccepting={updateProposalMutation.isPending}
+      isAccepting={acceptProposalMutation.isPending}
     />
   );
 }

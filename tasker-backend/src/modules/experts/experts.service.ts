@@ -74,8 +74,8 @@ export class ExpertsService {
     // Merge data
     const result = experts.map((expert) => {
       const tasks = taskCounts.find((t: any) => t.assigneeId === expert.id);
-      
-      const profileRating = parseFloat(expert.profileRating as any) || 0;
+
+      const profileRating = parseFloat(expert.profileRating) || 0;
 
       return {
         ...expert,
@@ -349,8 +349,10 @@ export class ExpertsService {
           ? data.skills
           : JSON.stringify(data.skills);
     if (data.hourlyRate !== undefined) updateData.hourlyRate = data.hourlyRate;
-    if (data.experienceYears !== undefined) updateData.experienceYears = data.experienceYears;
-    if (data.portfolioUrl !== undefined) updateData.portfolioUrl = data.portfolioUrl;
+    if (data.experienceYears !== undefined)
+      updateData.experienceYears = data.experienceYears;
+    if (data.portfolioUrl !== undefined)
+      updateData.portfolioUrl = data.portfolioUrl;
     if (data.rating !== undefined) updateData.rating = data.rating;
 
     if (existing) {

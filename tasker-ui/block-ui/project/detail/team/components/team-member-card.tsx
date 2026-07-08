@@ -29,9 +29,9 @@ export function TeamMemberCard({
         <div
           className={cn(
             "w-20 h-20 mb-4 border-4 flex items-center justify-center font-heading font-black text-3xl shadow-[4px_4px_0px_0px_var(--foreground)]",
-            member.role === "Expert"
+            member.role === "EXPERT"
               ? "bg-primary border-foreground text-primary-foreground"
-              : member.role === "Client Admin"
+              : member.role === "CLIENT_ADMIN"
                 ? "bg-foreground border-foreground text-background"
                 : "bg-secondary border-foreground text-foreground",
           )}
@@ -54,16 +54,16 @@ export function TeamMemberCard({
           <span
             className={cn(
               "text-[0.625rem] font-black uppercase tracking-widest px-3 py-1 border-2 flex items-center gap-1",
-              member.role === "Client Admin"
+              member.role === "CLIENT_ADMIN"
                 ? "border-foreground bg-foreground/10 text-foreground"
-                : member.role === "Expert"
+                : member.role === "EXPERT"
                   ? "border-primary bg-primary/10 text-primary"
                   : "border-border bg-secondary/20 text-muted-foreground",
             )}
           >
-            {member.role === "Client Admin" && <Shield className="w-3 h-3" />}
-            {member.role === "Expert" && <Star className="w-3 h-3" />}
-            {member.role}
+            {member.role === "CLIENT_ADMIN" && <Shield className="w-3 h-3" />}
+            {member.role === "EXPERT" && <Star className="w-3 h-3" />}
+            {member.role.replace("_", " ")}
           </span>
 
           {member.rating && (
@@ -77,17 +77,7 @@ export function TeamMemberCard({
       </div>
 
       {/* Actions */}
-      <div className="border-t-2 border-border bg-secondary/10 p-3 flex justify-between items-center">
-        <select
-          className="bg-background border-2 border-border text-[0.625rem] font-bold uppercase tracking-widest px-2 py-1 outline-none focus:border-primary cursor-pointer h-8"
-          value={member.role}
-          onChange={(e) => onUpdateRole(member.id, e.target.value)}
-          disabled={isUpdatingRole}
-        >
-          <option value="Client Admin">Client Admin</option>
-          <option value="Internal Team">Internal Team</option>
-          <option value="Expert">Expert</option>
-        </select>
+      <div className="border-t-2 border-border bg-secondary/10 p-3 flex justify-end items-center">
         <button
           onClick={() => onRemoveMember(member.id)}
           disabled={isRemoving}

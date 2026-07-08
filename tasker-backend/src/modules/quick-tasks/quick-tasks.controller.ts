@@ -6,6 +6,7 @@ import {
   Delete,
   Body,
   Param,
+  Request,
 } from "@nestjs/common";
 import { QuickTasksService } from "./quick-tasks.service";
 import { Public } from "../auth/decorators/public.decorator";
@@ -41,19 +42,15 @@ export class QuickTasksController {
     return this.quickTasksService.update(id, data);
   }
 
-  @Patch(":id/status")
-  updateStatus(@Param("id") id: string, @Body("status") status: string) {
-    return this.quickTasksService.updateStatus(id, status);
-  }
 
   @Post(":id/submit")
-  submitDeliverable(@Param("id") id: string, @Body() data: any) {
-    return this.quickTasksService.submitDeliverable(id, data);
+  submitDeliverable(@Request() req, @Param("id") id: string, @Body() data: any) {
+    return this.quickTasksService.submitDeliverable(req.user.userId, id, data);
   }
 
   @Post(":id/approve")
-  approveDeliverable(@Param("id") id: string) {
-    return this.quickTasksService.approveDeliverable(id);
+  approveDeliverable(@Request() req, @Param("id") id: string) {
+    return this.quickTasksService.approveDeliverable(req.user.userId, id);
   }
 
   @Delete(":id")

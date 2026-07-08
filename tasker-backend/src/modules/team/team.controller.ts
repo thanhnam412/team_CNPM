@@ -6,6 +6,7 @@ import {
   Delete,
   Body,
   Param,
+  Request,
 } from "@nestjs/common";
 import { TeamService } from "./team.service";
 
@@ -19,17 +20,17 @@ export class TeamController {
   }
 
   @Post()
-  addMember(@Param("projectId") projectId: string, @Body() data: any) {
-    return this.teamService.addMember(projectId, data);
+  addMember(@Request() req, @Param("projectId") projectId: string, @Body() data: any) {
+    return this.teamService.addMember(req.user.userId, projectId, data);
   }
 
   @Patch(":memberId")
-  updateRole(@Param("memberId") memberId: string, @Body("role") role: string) {
-    return this.teamService.updateRole(memberId, role);
+  updateRole(@Request() req, @Param("memberId") memberId: string, @Body("role") role: string) {
+    return this.teamService.updateRole(req.user.userId, memberId, role);
   }
 
   @Delete(":memberId")
-  removeMember(@Param("memberId") memberId: string) {
-    return this.teamService.removeMember(memberId);
+  removeMember(@Request() req, @Param("memberId") memberId: string) {
+    return this.teamService.removeMember(req.user.userId, memberId);
   }
 }

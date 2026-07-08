@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Delete,
+  Request,
 } from "@nestjs/common";
 import { TasksService } from "./tasks.service";
 
@@ -24,17 +25,21 @@ export class TasksController {
   }
 
   @Patch(":id/status")
-  updateStatus(@Param("id") id: string, @Body("status") status: string) {
-    return this.tasksService.updateStatus(id, status as any);
+  updateStatus(
+    @Request() req,
+    @Param("id") id: string,
+    @Body("status") status: string,
+  ) {
+    return this.tasksService.updateStatus(req.user.userId, id, status);
   }
 
   @Patch(":id")
-  update(@Param("id") id: string, @Body() data: any) {
-    return this.tasksService.update(id, data);
+  update(@Request() req, @Param("id") id: string, @Body() data: any) {
+    return this.tasksService.update(req.user.userId, id, data);
   }
 
   @Delete(":id")
-  remove(@Param("id") id: string) {
-    return this.tasksService.remove(id);
+  remove(@Request() req, @Param("id") id: string) {
+    return this.tasksService.remove(req.user.userId, id);
   }
 }

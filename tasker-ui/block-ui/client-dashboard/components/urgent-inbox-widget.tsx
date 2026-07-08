@@ -3,7 +3,7 @@ import { MessageSquare } from "lucide-react";
 import { NeoCard } from "@/components/ui-custom/neo-card";
 import { NeoWidgetHeader } from "@/components/ui-custom/neo-widget-header";
 import { NeoAvatar } from "@/components/ui-custom/neo-avatar";
-import { NeoBadge } from "@/components/ui-custom/neo-badge";
+import { NeoBadge as Badge } from "@/components/ui-custom/neo-badge";
 import { NeoButton } from "@/components/ui-custom/neo-button";
 
 export interface UrgentInboxWidgetProps {
@@ -22,7 +22,7 @@ export function UrgentInboxWidget({ messages }: UrgentInboxWidgetProps) {
 
       <div className="space-y-3">
         {messages.map((chat) => (
-          <Link key={chat.context} href="/client/messages" className="block">
+          <Link key={chat.id} href="/client/messages" className="block">
             <div className="border-2 border-border bg-background p-3 flex gap-3 hover:bg-secondary/10 transition-colors group">
               <NeoAvatar name={chat.name} />
               <div className="flex-1 min-w-0">
@@ -30,9 +30,9 @@ export function UrgentInboxWidget({ messages }: UrgentInboxWidgetProps) {
                   <span className="font-bold text-sm uppercase truncate group-hover:text-primary">
                     {chat.name}
                   </span>
-                  <NeoBadge variant="destructive" className="shrink-0">
+                  <Badge variant="destructive" className="shrink-0">
                     {chat.unread}
-                  </NeoBadge>
+                  </Badge>
                 </div>
                 <div className="text-xs font-semibold text-muted-foreground truncate mt-0.5">
                   {chat.msg}

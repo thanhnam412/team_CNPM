@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param } from "@nestjs/common";
+import { Controller, Get, Post, Body, Param, Request } from "@nestjs/common";
 import { MessagesService } from "./messages.service";
 
 @Controller("api/users/:userId/conversations")
@@ -17,10 +17,10 @@ export class MessagesController {
 
   @Post(":conversationId/messages")
   sendMessage(
-    @Param("userId") userId: string,
+    @Request() req,
     @Param("conversationId") conversationId: string,
     @Body() data: any,
   ) {
-    return this.messagesService.sendMessage(userId, conversationId, data);
+    return this.messagesService.sendMessage(req.user.userId, conversationId, data);
   }
 }

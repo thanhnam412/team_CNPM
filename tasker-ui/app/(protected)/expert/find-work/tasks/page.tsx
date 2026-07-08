@@ -25,7 +25,6 @@ import { NeoCard, NeoCardContent } from "@/components/ui-custom/neo-card";
 import { NeoButton } from "@/components/ui-custom/neo-button";
 import { NeoInput } from "@/components/ui-custom/neo-input";
 import { NeoTextarea } from "@/components/ui-custom/neo-textarea";
-import { NeoPageHeader } from "@/components/ui-custom/neo-page-header";
 import { NeoBadge } from "@/components/ui-custom/neo-badge";
 import {
   NeoDrawer,
@@ -104,13 +103,6 @@ export default function FindTasksPage() {
 
   return (
     <div className="flex flex-col h-full w-full bg-background overflow-hidden relative">
-      <NeoPageHeader
-        title="Find Tasks"
-        description="Browse available tasks and submit proposals."
-        icon={
-          <TerminalSquare className="w-8 h-8 md:w-10 md:h-10 text-primary" />
-        }
-      />
 
       {/* Toolbar */}
       <div className="px-6 py-4 flex flex-col sm:flex-row items-center gap-4 bg-secondary/20 border-b-2 border-border shrink-0">

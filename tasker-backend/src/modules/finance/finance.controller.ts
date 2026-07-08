@@ -15,11 +15,6 @@ export class FinanceController {
     return this.financeService.getTransactions(userId);
   }
 
-  @Post("transactions")
-  createTransaction(@Param("userId") userId: string, @Body() data: any) {
-    return this.financeService.createTransaction(userId, data);
-  }
-
   @Post("mock-topup")
   mockTopup(@Param("userId") userId: string, @Body() data: { amount: number }) {
     return this.financeService.mockTopup(userId, data.amount);

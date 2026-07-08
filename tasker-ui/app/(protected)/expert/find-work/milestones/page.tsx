@@ -35,7 +35,6 @@ import {
   NeoDrawerHeader,
   NeoDrawerTitle,
 } from "@/components/ui-custom/neo-drawer";
-import { NeoPageHeader } from "@/components/ui-custom/neo-page-header";
 
 import { formatCurrency } from "@/lib/utils";
 import { useAvailableMilestones } from "@/tanstack/useMilestones";
@@ -89,7 +88,7 @@ export default function FindMilestonesPage() {
       id: m.id,
       project: m.projectTitle || "Unknown Project",
       title: m.title,
-      budget: m.amount ? formatCurrency(m.amount) : "TBD",
+      budget: m.budget ? formatCurrency(m.budget) : "TBD",
       deadline: m.dueDate ? new Date(m.dueDate).toLocaleDateString() : "TBD",
       difficulty: "Medium",
       difficultyIcon: Target,
@@ -129,11 +128,6 @@ export default function FindMilestonesPage() {
 
   return (
     <div className="flex flex-col h-full w-full bg-background overflow-hidden relative">
-      <NeoPageHeader
-        title="Find Milestones"
-        description="Browse available milestones and submit bids."
-        icon={<Target className="w-8 h-8 md:w-10 md:h-10 text-primary" />}
-      />
 
       {/* Toolbar */}
       <div className="px-6 py-4 flex flex-col sm:flex-row items-center gap-4 bg-secondary/20 border-b-2 border-border shrink-0">

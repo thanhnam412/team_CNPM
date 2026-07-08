@@ -72,24 +72,33 @@ export class UsersService {
       })
       .returningAll()
       .executeTakeFirstOrThrow();
-      
-    await this.db.insertInto("wallets").values({
-      id: crypto.randomUUID(),
-      userId,
-      updatedAt: new Date().toISOString(),
-    }).execute();
-    
-    await this.db.insertInto("expert_profiles").values({
-      id: crypto.randomUUID(),
-      userId,
-      updatedAt: new Date().toISOString(),
-    }).execute();
-    
-    await this.db.insertInto("client_profiles").values({
-      id: crypto.randomUUID(),
-      userId,
-      updatedAt: new Date().toISOString(),
-    }).execute();
+
+    await this.db
+      .insertInto("wallets")
+      .values({
+        id: crypto.randomUUID(),
+        userId,
+        updatedAt: new Date().toISOString(),
+      })
+      .execute();
+
+    await this.db
+      .insertInto("expert_profiles")
+      .values({
+        id: crypto.randomUUID(),
+        userId,
+        updatedAt: new Date().toISOString(),
+      })
+      .execute();
+
+    await this.db
+      .insertInto("client_profiles")
+      .values({
+        id: crypto.randomUUID(),
+        userId,
+        updatedAt: new Date().toISOString(),
+      })
+      .execute();
 
     return newUser;
   }
@@ -160,21 +169,33 @@ export class UsersService {
       .returningAll()
       .executeTakeFirst();
 
-    if (data.title !== undefined || data.bio !== undefined || data.hourlyRate !== undefined || data.skills !== undefined || data.experienceYears !== undefined || data.portfolioUrl !== undefined) {
+    if (
+      data.title !== undefined ||
+      data.bio !== undefined ||
+      data.hourlyRate !== undefined ||
+      data.skills !== undefined ||
+      data.experienceYears !== undefined ||
+      data.portfolioUrl !== undefined
+    ) {
       const expertUpdate: any = { updatedAt: new Date().toISOString() };
       if (data.title !== undefined) expertUpdate.title = data.title;
       if (data.bio !== undefined) expertUpdate.bio = data.bio;
-      if (data.hourlyRate !== undefined) expertUpdate.hourlyRate = data.hourlyRate;
-      if (data.skills !== undefined) expertUpdate.skills = JSON.stringify(data.skills);
-      if (data.experienceYears !== undefined) expertUpdate.experienceYears = data.experienceYears;
-      if (data.portfolioUrl !== undefined) expertUpdate.portfolioUrl = data.portfolioUrl;
-      
-      await this.db.updateTable("expert_profiles")
+      if (data.hourlyRate !== undefined)
+        expertUpdate.hourlyRate = data.hourlyRate;
+      if (data.skills !== undefined)
+        expertUpdate.skills = JSON.stringify(data.skills);
+      if (data.experienceYears !== undefined)
+        expertUpdate.experienceYears = data.experienceYears;
+      if (data.portfolioUrl !== undefined)
+        expertUpdate.portfolioUrl = data.portfolioUrl;
+
+      await this.db
+        .updateTable("expert_profiles")
         .set(expertUpdate)
         .where("userId", "=", id)
         .execute();
     }
-    
+
     return user;
   }
 

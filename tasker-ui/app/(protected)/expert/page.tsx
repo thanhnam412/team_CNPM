@@ -60,7 +60,7 @@ export default function ExpertDashboardOverviewPage() {
                   Available to Withdraw
                 </div>
                 <div className="font-heading font-black text-3xl md:text-4xl text-primary">
-                  {formatCurrency(me?.wallet?.balance || 0)}
+                  {formatCurrency(overview?.finance?.availableToWithdraw || me?.wallet?.balance || 0)}
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4 pt-4 border-t-2 border-border border-dashed">
@@ -69,7 +69,7 @@ export default function ExpertDashboardOverviewPage() {
                     In Escrow
                   </div>
                   <div className="font-heading font-black text-lg text-muted-foreground">
-                    {formatCurrency(me?.wallet?.escrowBalance || 0)}
+                    {formatCurrency(overview?.finance?.inEscrow || me?.wallet?.escrowBalance || 0)}
                   </div>
                 </div>
                 <div>
@@ -77,7 +77,7 @@ export default function ExpertDashboardOverviewPage() {
                     Total Earned
                   </div>
                   <div className="font-heading font-black text-lg">
-                    {formatCurrency(me?.wallet?.totalEarned || 0)}
+                    {formatCurrency(overview?.finance?.earnedMTD || me?.wallet?.totalEarned || 0)}
                   </div>
                 </div>
               </div>
@@ -102,15 +102,17 @@ export default function ExpertDashboardOverviewPage() {
             </div>
 
             <p className="text-sm font-bold text-foreground mb-6">
-              You have 0 tasks/milestones
+              You have {overview?.actionRequired?.length || 0} tasks/milestones
               due soon. Submit your deliverables to release escrow funds.
             </p>
 
             <div className="space-y-3 flex-1">
+              {(!overview?.actionRequired || overview.actionRequired.length === 0) && (
                 <div className="text-sm font-semibold text-muted-foreground">
                   No urgent tasks due soon.
                 </div>
-              {[]?.map((item: any, i: number) => (
+              )}
+              {(overview?.actionRequired || []).map((item: any, i: number) => (
                 <div
                   key={i}
                   className={cn(
@@ -160,10 +162,12 @@ export default function ExpertDashboardOverviewPage() {
             />
 
             <div className="space-y-6">
+              {(!overview?.activeWork || overview.activeWork.length === 0) && (
                 <div className="text-sm font-semibold text-muted-foreground">
                   No active work at the moment.
                 </div>
-              {[]?.map((work: any, i: number) => (
+              )}
+              {(overview?.activeWork || []).map((work: any, i: number) => (
                 <div key={i}>
                   <div className="flex justify-between items-start mb-2">
                     <div>
@@ -211,10 +215,12 @@ export default function ExpertDashboardOverviewPage() {
             />
 
             <div className="space-y-3">
+              {(!overview?.messages?.recentChats || overview.messages.recentChats.length === 0) && (
                 <div className="text-sm font-semibold text-muted-foreground">
                   No recent messages.
                 </div>
-              {[]?.map((chat: any, i: number) => (
+              )}
+              {(overview?.messages?.recentChats || []).map((chat: any, i: number) => (
                 <Link key={i} href="/expert/messages" className="block">
                   <div className="border-2 border-border bg-background p-3 flex gap-3 hover:bg-secondary/10 transition-colors group">
                     <NeoAvatar name={chat.senderName} />
@@ -261,10 +267,12 @@ export default function ExpertDashboardOverviewPage() {
           />
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="text-sm font-semibold text-muted-foreground col-span-3">
-                No recommended tasks at the moment.
-              </div>
-            {[]?.map((task: any, i: number) => (
+              {(!overview?.recommendedTasks || overview.recommendedTasks.length === 0) && (
+                <div className="text-sm font-semibold text-muted-foreground col-span-3">
+                  No recommended tasks at the moment.
+                </div>
+              )}
+            {(overview?.recommendedTasks || []).map((task: any, i: number) => (
               <NeoCard
                 key={i}
                 variant="interactive"

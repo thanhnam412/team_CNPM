@@ -1,6 +1,7 @@
 import { AlertTriangle } from "lucide-react";
+import Link from "next/link";
 import { NeoCard } from "@/components/ui-custom/neo-card";
-import { NeoBadge } from "@/components/ui-custom/neo-badge";
+import { NeoBadge as Badge } from "@/components/ui-custom/neo-badge";
 import { NeoButton } from "@/components/ui-custom/neo-button";
 
 export interface ActionRequiredWidgetProps {
@@ -33,7 +34,7 @@ export function ActionRequiredWidget({ pendingActions }: ActionRequiredWidgetPro
           >
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <NeoBadge variant="secondary">{item.type}</NeoBadge>
+                <Badge variant="secondary">{item.type}</Badge>
                 <span className="text-[0.625rem] font-bold uppercase tracking-widest text-muted-foreground">
                   {item.id}
                 </span>
@@ -43,7 +44,15 @@ export function ActionRequiredWidget({ pendingActions }: ActionRequiredWidgetPro
                 Submitted by {item.expert}
               </div>
             </div>
-            <NeoButton className="h-8 px-4 text-xs shrink-0">Review</NeoButton>
+            <Link
+              href={
+                item.type === "Quick Task"
+                  ? `/client/quick-tasks/${item.id}`
+                  : `/client/projects/${item.projectId}/milestones`
+              }
+            >
+              <NeoButton className="h-8 px-4 text-xs shrink-0">Review</NeoButton>
+            </Link>
           </div>
         ))}
       </div>

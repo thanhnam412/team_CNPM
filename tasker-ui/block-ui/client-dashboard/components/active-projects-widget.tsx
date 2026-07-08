@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Briefcase, AlertTriangle } from "lucide-react";
 import { NeoCard } from "@/components/ui-custom/neo-card";
 import { NeoWidgetHeader } from "@/components/ui-custom/neo-widget-header";
-import { NeoBadge } from "@/components/ui-custom/neo-badge";
+import { NeoBadge as Badge } from "@/components/ui-custom/neo-badge";
 import { NeoProgress } from "@/components/ui-custom/neo-progress";
 
 export interface ActiveProjectsWidgetProps {
@@ -43,11 +43,11 @@ export function ActiveProjectsWidget({ projects }: ActiveProjectsWidgetProps) {
                   {project.deadlineInfo}
                 </div>
               </div>
-              <NeoBadge
+              <Badge
                 variant={project.status === "At Risk" ? "warning" : "success"}
               >
                 {project.status}
-              </NeoBadge>
+              </Badge>
             </div>
             <NeoProgress
               value={project.progress}

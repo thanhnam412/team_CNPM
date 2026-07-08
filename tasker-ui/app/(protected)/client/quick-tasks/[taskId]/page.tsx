@@ -25,7 +25,7 @@ import { NeoTextarea } from "@/components/ui-custom/neo-textarea";
 import { cn } from "@/lib/utils";
 
 import { useQuickTask, useApproveQuickTaskDeliverableMutation } from "@/tanstack/useQuickTasks";
-import { useQuickTaskProposals, useUpdateProposalStatusMutation } from "@/tanstack/useProposals";
+import { useQuickTaskProposals, useUpdateProposalStatusMutation, useAcceptProposalMutation } from "@/tanstack/useProposals";
 import { useContracts, useReleaseFundsMutation } from "@/tanstack/useContracts";
 
 export default function QuickTaskDetailsPage({
@@ -41,6 +41,7 @@ export default function QuickTaskDetailsPage({
   const { data: contracts = [] } = useContracts();
 
   const updateProposalMutation = useUpdateProposalStatusMutation();
+  const acceptProposalMutation = useAcceptProposalMutation();
   const releaseFundsMutation = useReleaseFundsMutation();
   
   const activeContract = contracts.find((c) => c.quickTaskId === taskId);
@@ -231,8 +232,8 @@ export default function QuickTaskDetailsPage({
                         </NeoButton>
                         <NeoButton 
                           className="flex-1 text-[0.625rem] h-8"
-                          disabled={updateProposalMutation.isPending}
-                          onClick={() => updateProposalMutation.mutate({ proposalId: p.id, status: "ACCEPTED" })}
+                          disabled={acceptProposalMutation.isPending}
+                          onClick={() => acceptProposalMutation.mutate({ proposalId: p.id })}
                         >
                           Accept & Hire
                         </NeoButton>
@@ -263,16 +264,6 @@ export default function QuickTaskDetailsPage({
                   </div>
                 </div>
 
-                {activeContract?.status === "DRAFT" ? (
-                  <div className="flex-1 flex flex-col items-center justify-center p-6 text-center">
-                    <Clock className="w-12 h-12 text-[#E1801E] mb-4" />
-                    <h4 className="font-heading font-black uppercase tracking-widest text-lg mb-2">Waiting for Expert</h4>
-                    <p className="text-sm font-semibold text-muted-foreground max-w-sm">
-                      Funds have been locked in Escrow. Waiting for the Expert to sign the contract before work begins.
-                    </p>
-                  </div>
-                ) : (
-                  <>
                     <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-secondary/5">
                       <div className="flex justify-center">
                         <span className="text-[0.625rem] font-bold uppercase tracking-widest text-muted-foreground bg-secondary px-2 py-1 border-2 border-border">
@@ -314,8 +305,6 @@ export default function QuickTaskDetailsPage({
                         </NeoButton>
                       </div>
                     </div>
-                  </>
-                )}
               </div>
 
               {/* Task Reference */}

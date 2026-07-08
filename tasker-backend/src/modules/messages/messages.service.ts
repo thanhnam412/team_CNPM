@@ -1,4 +1,4 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { Inject, Injectable, ForbiddenException } from "@nestjs/common";
 import { Kysely } from "kysely";
 import { KYSELY_DB } from "../../database/database.module";
 import { DB } from "../../database/types";
@@ -30,6 +30,17 @@ export class MessagesService {
   }
 
   async sendMessage(userId: string, conversationId: string, data: any) {
+    const participant = await this.db
+      .selectFrom("conversation_participants")
+      .select("id")
+      .where("conversationId", "=", conversationId)
+      .where("userId", "=", userId)
+      .executeTakeFirst();
+    
+    if (!participant) {
+      throw new ForbiddenException("You are not a participant in this conversation");
+    }
+
     return this.db
       .insertInto("messages")
       .values({

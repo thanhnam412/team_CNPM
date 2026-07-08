@@ -11,9 +11,12 @@ import {
 } from "@/tanstack/useMilestones";
 import { MilestoneDto } from "@/types/project.dto";
 import { ProjectMilestonesBlock } from "@/block-ui/project/detail/milestone";
+import { useProject } from "@/tanstack/useProjects";
+import { formatCurrency } from "@/lib/utils";
 
 export default function ProjectMilestonesPage() {
   const { projectId } = useParams() as { projectId: string };
+  const { data: project } = useProject(projectId);
   const { data: milestones = [], isLoading } = useMilestones(projectId);
 
   const [revisionMilestone, setRevisionMilestone] =
@@ -88,8 +91,8 @@ export default function ProjectMilestonesPage() {
     <ProjectMilestonesBlock
       milestones={milestones}
       isLoading={isLoading}
-      totalBudget="$10,000" // Hardcoded in original file
-      totalPaid="$2,000" // Hardcoded in original file
+      totalBudget={project?.budget !== undefined ? formatCurrency(project.budget) : "$0.00"}
+      totalPaid={project?.spent !== undefined ? formatCurrency(project.spent) : "$0.00"}
       revisionMilestone={revisionMilestone}
       revisionFeedback={revisionFeedback}
       onRevisionFeedbackChange={setRevisionFeedback}

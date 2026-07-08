@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Param, Query, Body, Req } from "@nestjs/common";
+import { Controller, Get, Post, Param, Query, Body, Req, ForbiddenException } from "@nestjs/common";
 import { ExpertsService } from "./experts.service";
 import { Public } from "../auth/decorators/public.decorator";
 
@@ -28,10 +28,12 @@ export class ExpertsController {
   ) {
     let currentUserId: string | undefined;
     const authHeader = req.headers.authorization;
-    if (authHeader && authHeader.startsWith('Bearer ')) {
-      const token = authHeader.split(' ')[1];
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+      const token = authHeader.split(" ")[1];
       try {
-        const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+        const payload = JSON.parse(
+          Buffer.from(token.split(".")[1], "base64").toString(),
+        );
         currentUserId = payload.sub;
       } catch (e) {}
     }
@@ -52,9 +54,9 @@ export class ExpertsController {
     return this.expertsService.findOne(id);
   }
 
-  @Public()
   @Get(":id/overview")
-  getOverview(@Param("id") id: string) {
+  getOverview(@Req() req, @Param("id") id: string) {
+    if (req.user.userId !== id) throw new ForbiddenException("Cannot view overview of another expert");
     return this.expertsService.getOverview(id);
   }
 

@@ -25,6 +25,7 @@ export default function MessagesPage() {
 
   // Fetch Messages for Selected Chat
   const { data: messages = [], isLoading: isMessagesLoading } = useMessages(
+    currentUserId,
     selectedChat ?? "",
   );
 
@@ -39,6 +40,7 @@ export default function MessagesPage() {
     onSubmit: async ({ value }) => {
       if (!value.content.trim() || !selectedChat) return;
       sendMessageMutation.mutate({
+        userId: currentUserId,
         conversationId: selectedChat,
         payload: {
           content: value.content,

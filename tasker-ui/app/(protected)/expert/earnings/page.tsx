@@ -41,6 +41,10 @@ export default function ExpertEarningsPage() {
   const [isWithdrawing, setIsWithdrawing] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
+  const totalEarned = transactions
+    .filter((tx: any) => tx.type === "PAYMENT_RECEIVED")
+    .reduce((sum: number, tx: any) => sum + Number(tx.amount), 0);
+
   const handleWithdraw = () => {
     setIsWithdrawing(true);
     setTimeout(() => {
@@ -81,16 +85,16 @@ export default function ExpertEarningsPage() {
             </div>
 
             <div className="space-y-6">
-              {/* In Clearance */}
-              <div className="bg-[#E1801E]/10 border-2 border-[#E1801E] p-4 flex flex-col justify-center shadow-[4px_4px_0px_0px_#E1801E]">
-                <div className="text-[0.625rem] font-black uppercase tracking-widest text-[#E1801E] mb-1 flex items-center gap-2">
-                  In Clearance <Clock className="w-3 h-3" />
+              {/* Total Earned */}
+              <div className="bg-primary/10 border-2 border-primary p-4 flex flex-col justify-center shadow-[4px_4px_0px_0px_var(--primary)]">
+                <div className="text-[0.625rem] font-black uppercase tracking-widest text-primary mb-1 flex items-center gap-2">
+                  Total Earned <Landmark className="w-3 h-3" />
                 </div>
                 <div className="font-heading font-black text-2xl text-foreground">
-                  $800.00
+                  {formatCurrency(totalEarned)}
                 </div>
                 <div className="text-[0.625rem] font-bold uppercase tracking-widest text-muted-foreground mt-2">
-                  Pending 5-day security hold
+                  All time earnings
                 </div>
               </div>
 

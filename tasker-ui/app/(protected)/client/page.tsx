@@ -2,73 +2,52 @@
 
 import { ClientDashboardBlock } from "@/block-ui/client-dashboard";
 
-export default function DashboardOverviewPage() {
-  const userName = "Client_01";
+import { useClientOverview } from "@/tanstack/useClient";
+import { useGetMe } from "@/tanstack/useGetMe";
+import { Loader2 } from "lucide-react";
+import { formatCurrency } from "@/lib/utils";
 
-  // Mock Data
-  const finance = {
-    availableBalance: "$4,500.00",
-    inEscrow: "$2,150.00",
-    spentMTD: "$850.00",
+export default function DashboardOverviewPage() {
+  const { data: me } = useGetMe();
+  const userName = me?.name || "Client";
+  
+  const { data, isLoading, isError } = useClientOverview();
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-[50vh]">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (isError || !data) {
+    return (
+      <div className="flex items-center justify-center h-[50vh] text-destructive">
+        Failed to load dashboard overview.
+      </div>
+    );
+  }
+
+  const { finance, pendingActions, activeProjects, unreadMessages } = data;
+
+  const formattedFinance = {
+    availableBalance: formatCurrency(Number(finance.availableBalance)),
+    inEscrow: formatCurrency(Number(finance.inEscrow)),
+    spentMTD: formatCurrency(Number(finance.spentMTD)),
   };
 
-  const pendingActions = [
-    {
-      task: "API Integration Module",
-      expert: "Alex_Code",
-      type: "Project",
-      id: "PROJ-123",
-    },
-    {
-      task: "Web Scraper Script",
-      expert: "Data_Wizard_99",
-      type: "Quick Task",
-      id: "QT-889",
-    },
-  ];
-
-  const activeProjects = [
-    {
-      id: "PROJ-123",
-      name: "Hệ thống Quản lý Doanh nghiệp (ERP)",
-      deadlineInfo: "Deadline: Dec 31, 2026",
-      status: "On Track",
-      progress: 65,
-      escrow: "$5,000.00",
-    },
-    {
-      id: "PROJ-124",
-      name: "B2B E-commerce Platform",
-      deadlineInfo: "Due in 3 days",
-      status: "At Risk",
-      progress: 85,
-      escrow: "$3,200.00",
-    },
-  ];
-
-  const unreadMessages = [
-    {
-      name: "Alex_Code",
-      time: "10:42 AM",
-      msg: "I've started setting up the proxy pool for the scraper.",
-      unread: 2,
-      context: "QT-889",
-    },
-    {
-      name: "DesignStudio",
-      time: "Yesterday",
-      msg: "Attached the initial wireframes for your review.",
-      unread: 1,
-      context: "PROJ-124",
-    },
-  ];
+  const formattedProjects = activeProjects.map(p => ({
+    ...p,
+    escrow: formatCurrency(Number(p.escrow)),
+  }));
 
   return (
     <ClientDashboardBlock
       userName={userName}
-      finance={finance}
+      finance={formattedFinance}
       pendingActions={pendingActions}
-      activeProjects={activeProjects}
+      activeProjects={formattedProjects}
       unreadMessages={unreadMessages}
     />
   );

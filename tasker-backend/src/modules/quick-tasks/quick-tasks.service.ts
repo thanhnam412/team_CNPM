@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { Inject, Injectable, BadRequestException, NotFoundException } from "@nestjs/common";
-import { Kysely } from "kysely";
+import { Inject, Injectable, BadRequestException, NotFoundException, ForbiddenException } from "@nestjs/common";
+import { Kysely, Transaction } from "kysely";
 import { KYSELY_DB } from "../../database/database.module";
 import { DB } from "../../database/types";
 
@@ -79,7 +79,16 @@ export class QuickTasksService {
       .executeTakeFirst();
   }
 
-  async submitDeliverable(id: string, data: any) {
+  async submitDeliverable(actorId: string, id: string, data: any) {
+    const qt = await this.db.selectFrom("quick_tasks").select(["status", "expertId"]).where("id", "=", id).executeTakeFirst();
+    if (!qt) throw new NotFoundException("Quick task not found");
+    if (qt.expertId !== actorId) {
+      throw new ForbiddenException("Only the assigned expert can submit deliverables");
+    }
+    if (qt.status !== "IN_PROGRESS") {
+      throw new BadRequestException(`Cannot submit deliverable for task in status ${qt.status}. Must be IN_PROGRESS.`);
+    }
+
     // Expert nộp sản phẩm → chuyển sang REVIEW
     return this.db
       .updateTable("quick_tasks")
@@ -92,9 +101,18 @@ export class QuickTasksService {
       .executeTakeFirst();
   }
 
-  async approveDeliverable(id: string) {
+  async approveDeliverable(actorId: string, id: string) {
     // Client duyệt deliverable → COMPLETED
     return this.db.transaction().execute(async (trx) => {
+      const current = await trx.selectFrom("quick_tasks").select(["status", "clientId"]).where("id", "=", id).executeTakeFirst();
+      if (!current) throw new NotFoundException("Quick task not found");
+      if (current.clientId !== actorId) {
+        throw new ForbiddenException("Only the client can approve deliverables");
+      }
+      if (current.status !== "REVIEW") {
+        throw new BadRequestException(`Cannot approve task in status ${current.status}. Must be REVIEW.`);
+      }
+
       const quickTask = await trx
         .updateTable("quick_tasks")
         .set({ status: "COMPLETED" as any, updatedAt: new Date() })
@@ -135,5 +153,27 @@ export class QuickTasksService {
     await this.db.deleteFrom("quick_tasks").where("id", "=", id).execute();
 
     return { success: true };
+  }
+
+  // ─── DOMAIN ACTIONS (gọi từ UseCase, nhận trx) ──────────────────────────────
+
+  /**
+   * Gán Expert cho QuickTask khi Proposal được Accept.
+   * Đổi status = IN_PROGRESS và set expertId.
+   */
+  async assignExpert(
+    quickTaskId: string,
+    expertId: string,
+    trx: Transaction<DB>,
+  ): Promise<void> {
+    await trx
+      .updateTable("quick_tasks")
+      .set({
+        expertId,
+        status: "IN_PROGRESS" as any,
+        updatedAt: new Date(),
+      })
+      .where("id", "=", quickTaskId)
+      .execute();
   }
 }

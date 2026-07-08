@@ -26,9 +26,13 @@ export const proposalService = {
   },
   updateProposalStatus: async (
     proposalId: string,
-    status: ProposalDto["status"]
+    status: "REJECTED" | "WITHDRAWN"
   ): Promise<ProposalDto> => {
     const { data } = await api.patch(`/proposals/${proposalId}/status`, { status });
+    return data;
+  },
+  acceptProposal: async (proposalId: string): Promise<ProposalDto> => {
+    const { data } = await api.patch(`/proposals/${proposalId}/accept`);
     return data;
   },
 };

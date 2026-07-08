@@ -12,15 +12,7 @@ export const contractService = {
     return data;
   },
 
-  generateContract: async (payload: { proposalId: string }): Promise<ContractDto> => {
-    const { data } = await api.post("/contracts/generate", payload);
-    return data;
-  },
 
-  signContract: async (id: string): Promise<ContractDto> => {
-    const { data } = await api.patch(`/contracts/${id}/sign`);
-    return data;
-  },
 
   releaseFunds: async (id: string): Promise<{ success: boolean; message: string }> => {
     const { data } = await api.post(`/contracts/${id}/release-funds`);

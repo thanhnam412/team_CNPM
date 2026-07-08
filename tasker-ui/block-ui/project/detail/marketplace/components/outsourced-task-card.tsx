@@ -8,6 +8,7 @@ export interface OutsourcedTaskCardProps {
   onReviewWork: (taskId: string) => void;
   onMessageExpert: (proposalId: string) => void;
   onAcceptBid: (proposalId: string) => void;
+  onRejectBid: (proposalId: string) => void;
   onViewProfile?: (expertId: string) => void;
   isAccepting?: boolean;
 }
@@ -18,6 +19,7 @@ export function OutsourcedTaskCard({
   onReviewWork,
   onMessageExpert,
   onAcceptBid,
+  onRejectBid,
   onViewProfile,
   isAccepting,
 }: OutsourcedTaskCardProps) {
@@ -99,7 +101,10 @@ export function OutsourcedTaskCard({
               ) : task.proposals?.map((p: any) => (
                 <div
                   key={p.id}
-                  className="p-4 border-2 border-border bg-background flex flex-col md:flex-row justify-between items-start md:items-center gap-6 hover:border-primary/50 transition-colors"
+                  className={cn(
+                    "p-4 border-2 border-border bg-background flex flex-col md:flex-row justify-between items-start md:items-center gap-6 transition-colors",
+                    p.status === "REJECTED" ? "opacity-50 grayscale" : "hover:border-primary/50"
+                  )}
                 >
                   <div className="flex-1">
                     <div className="flex flex-wrap items-center gap-3 mb-3">
@@ -113,7 +118,7 @@ export function OutsourcedTaskCard({
                         ★ 5.0
                       </span>
                       <span className="text-[0.625rem] font-bold px-2 py-0.5 border-2 border-border bg-secondary">
-                        Bid: {formatCurrency(p.proposedPrice)}
+                        Bid: {Number(p.proposedPrice) > 0 ? formatCurrency(p.proposedPrice) : formatCurrency(task.budget)}
                       </span>
                     </div>
                     <p className="text-sm font-semibold text-muted-foreground italic leading-relaxed">
@@ -121,23 +126,39 @@ export function OutsourcedTaskCard({
                     </p>
                   </div>
 
-                  <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto shrink-0 border-t-2 border-border md:border-t-0 pt-4 md:pt-0">
-                    <NeoButton
-                      variant="outline"
-                      className="w-full sm:w-auto text-[0.625rem] h-10 px-4"
-                      onClick={() => onMessageExpert(p.id)}
-                    >
-                      <MessageSquareText className="w-3 h-3 mr-2" />{" "}
-                      Message
-                    </NeoButton>
-                    <NeoButton 
-                      className="w-full sm:w-auto text-[0.625rem] h-10 px-4"
-                      onClick={() => onAcceptBid(p.id)}
-                      disabled={isAccepting}
-                    >
-                      {isAccepting ? "Accepting..." : "Accept Bid"}
-                    </NeoButton>
-                  </div>
+                  {p.status === "REJECTED" ? (
+                    <div className="flex flex-col sm:flex-row items-center justify-end gap-3 w-full md:w-auto shrink-0 border-t-2 border-border md:border-t-0 pt-4 md:pt-0">
+                      <span className="text-xs font-bold text-destructive uppercase px-4 py-2 border-2 border-destructive bg-destructive/10">
+                        Rejected
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto shrink-0 border-t-2 border-border md:border-t-0 pt-4 md:pt-0">
+                      <NeoButton
+                        variant="outline"
+                        className="w-full sm:w-auto text-[0.625rem] h-10 px-4"
+                        onClick={() => onMessageExpert(p.id)}
+                      >
+                        <MessageSquareText className="w-3 h-3 mr-2" />{" "}
+                        Message
+                      </NeoButton>
+                      <NeoButton
+                        variant="outline"
+                        className="w-full sm:w-auto text-[0.625rem] h-10 px-4 border-destructive text-destructive hover:bg-destructive/10"
+                        onClick={() => onRejectBid(p.id)}
+                        disabled={isAccepting}
+                      >
+                        Reject
+                      </NeoButton>
+                      <NeoButton 
+                        className="w-full sm:w-auto text-[0.625rem] h-10 px-4"
+                        onClick={() => onAcceptBid(p.id)}
+                        disabled={isAccepting}
+                      >
+                        {isAccepting ? "Accepting..." : "Accept Bid"}
+                      </NeoButton>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>

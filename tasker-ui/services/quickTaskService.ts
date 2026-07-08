@@ -24,9 +24,9 @@ export const quickTaskService = {
   },
   updateQuickTaskStatus: async (
     id: string,
-    status: QuickTaskDto["status"]
+    status: string
   ): Promise<QuickTaskDto> => {
-    const { data } = await api.patch(`/quick-tasks/${id}/status`, { status });
+    const { data } = await api.patch(`/quick-tasks/${id}`, { status });
     return data;
   },
   submitDeliverable: async (id: string, payload: { note?: string }): Promise<unknown> => {

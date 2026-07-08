@@ -19,7 +19,7 @@ export function ExpertCard({
   return (
     <div className="bg-card border-2 border-border shadow-[4px_4px_0px_0px_var(--border)] hover:shadow-[6px_6px_0px_0px_var(--primary)] hover:-translate-y-1 hover:-translate-x-1 transition-all flex flex-col group">
       {/* Card Header (Avatar + Rate) */}
-      <div className="p-5 border-b-2 border-border flex justify-between items-start bg-secondary/10 relative">
+      <div className="p-5 border-b-2 border-border flex flex-wrap justify-between items-start bg-secondary/10 relative gap-2">
         {/* Badge */}
         {expert.badge && (
           <div className="absolute -top-3 -left-3 bg-purple-500 text-white border-2 border-border px-2 py-1 flex items-center gap-1 shadow-[2px_2px_0px_0px_var(--border)]">
@@ -30,7 +30,7 @@ export function ExpertCard({
           </div>
         )}
 
-        <div className="flex gap-4 items-center w-full mt-2">
+        <div className="flex gap-4 items-center flex-1 min-w-[150px] mt-2">
           <div className="relative shrink-0">
             <div className="w-16 h-16 border-2 border-border bg-background flex items-center justify-center font-heading font-black text-2xl group-hover:bg-primary group-hover:text-primary-foreground transition-colors overflow-hidden">
               {expert.avatar && expert.avatar.startsWith("http") ? (
@@ -113,7 +113,7 @@ export function ExpertCard({
       </div>
 
       {/* Card Footer (Actions) */}
-      <div className="p-4 border-t-2 border-border bg-secondary/5 flex gap-3">
+      <div className="p-4 border-t-2 border-border bg-secondary/5 flex flex-wrap gap-2">
         <NeoButton
           variant="outline"
           size="icon"

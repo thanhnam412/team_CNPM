@@ -34,12 +34,17 @@ export default function ExpertProfilePage() {
         `Hi ${expert.name},\n\nI reviewed your profile and I'd like to invite you to collaborate with us. Let me know if you are available.`,
       );
     }
-    setInviteContext("none");
+    const firstQt = quickTasks?.find((qt: any) => qt.status === "OPEN")?.id;
+    const firstProj = projects?.[0]?.id;
+    setInviteContext(firstQt ? `qt_${firstQt}` : firstProj ? `proj_${firstProj}` : "");
     setIsInviteOpen(true);
   };
 
   const handleSendInvite = () => {
-    if (!me?.id || !expert?.id) return;
+    if (!me?.id || !expert?.id || !inviteContext) {
+      toast.error("Please select a project or quick task to invite the expert to.");
+      return;
+    }
 
     let projectId = undefined;
     let quickTaskId = undefined;

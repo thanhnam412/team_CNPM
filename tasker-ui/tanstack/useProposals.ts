@@ -45,13 +45,27 @@ export const useSubmitMilestoneProposalMutation = () => {
 export const useUpdateProposalStatusMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ proposalId, status }: { proposalId: string; status: ProposalDto["status"] }) =>
+    mutationFn: ({ proposalId, status }: { proposalId: string; status: "REJECTED" | "WITHDRAWN" }) =>
       proposalService.updateProposalStatus(proposalId, status),
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["proposals"] });
-      if (data.quickTaskId) {
-        queryClient.invalidateQueries({ queryKey: ["quick-tasks", data.quickTaskId] });
-      }
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["quick-task-proposals"] });
+      queryClient.invalidateQueries({ queryKey: ["expertProposals"] });
+      queryClient.invalidateQueries({ queryKey: ["expert-proposals"] });
+    },
+  });
+};
+
+export const useAcceptProposalMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ proposalId }: { proposalId: string }) =>
+      proposalService.acceptProposal(proposalId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["quick-task-proposals"] });
+      queryClient.invalidateQueries({ queryKey: ["expertProposals"] });
+      queryClient.invalidateQueries({ queryKey: ["expert-proposals"] });
+      queryClient.invalidateQueries({ queryKey: ["quick-tasks"] });
+      queryClient.invalidateQueries({ queryKey: ["client-quick-tasks"] });
     },
   });
 };

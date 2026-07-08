@@ -1,4 +1,4 @@
-import { Controller, Get, Patch, Param, Body, Req } from "@nestjs/common";
+import { Controller, Get, Patch, Param, Body, Req, ForbiddenException } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { Request } from "express";
 
@@ -17,12 +17,14 @@ export class UsersController {
   }
 
   @Patch(":id/switch-role")
-  switchRole(@Param("id") id: string, @Body("role") role: "CLIENT" | "EXPERT") {
+  switchRole(@Req() req, @Param("id") id: string, @Body("role") role: "CLIENT" | "EXPERT") {
+    if (req.user.userId !== id) throw new ForbiddenException("Not allowed");
     return this.usersService.switchRole(id, role);
   }
 
   @Patch(":id")
-  updateProfile(@Param("id") id: string, @Body() data: any) {
+  updateProfile(@Req() req, @Param("id") id: string, @Body() data: any) {
+    if (req.user.userId !== id) throw new ForbiddenException("Not allowed");
     return this.usersService.updateProfile(id, data);
   }
 }

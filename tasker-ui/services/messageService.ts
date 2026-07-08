@@ -34,15 +34,16 @@ export const messageService = {
     const { data } = await api.get(`/users/${userId}/conversations`);
     return data;
   },
-  getMessages: async (conversationId: string): Promise<MessageDto[]> => {
-    const { data } = await api.get(`/conversations/${conversationId}/messages`);
+  getMessages: async (userId: string, conversationId: string): Promise<MessageDto[]> => {
+    const { data } = await api.get(`/users/${userId}/conversations/${conversationId}/messages`);
     return data;
   },
   sendMessage: async (
+    userId: string,
     conversationId: string,
     payload: { content: string; type?: string; senderId: string }
   ): Promise<MessageDto> => {
-    const { data } = await api.post(`/conversations/${conversationId}/messages`, payload);
+    const { data } = await api.post(`/users/${userId}/conversations/${conversationId}/messages`, payload);
     return data;
   }
 };

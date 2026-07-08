@@ -96,8 +96,8 @@ export function InviteModal({
                 <NeoSelectValue placeholder="Select a Project or Quick Task" />
               </NeoSelectTrigger>
               <NeoSelectContent>
-                <NeoSelectItem value="none" className="text-sm">
-                  General Inquiry (No project)
+                <NeoSelectItem value="" className="text-sm" disabled>
+                  Select a target...
                 </NeoSelectItem>
 
                 {quickTasks && quickTasks.length > 0 && (

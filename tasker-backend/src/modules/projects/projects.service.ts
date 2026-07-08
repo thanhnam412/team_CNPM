@@ -4,10 +4,14 @@ import { Inject, Injectable, BadRequestException, NotFoundException } from "@nes
 import { Kysely } from "kysely";
 import { KYSELY_DB } from "../../database/database.module";
 import { DB } from "../../database/types";
+import { WalletService } from "../wallet/wallet.service";
 
 @Injectable()
 export class ProjectsService {
-  constructor(@Inject(KYSELY_DB) private db: Kysely<DB>) {}
+  constructor(
+    @Inject(KYSELY_DB) private db: Kysely<DB>,
+    private readonly walletService: WalletService,
+  ) {}
 
   async findAll() {
     return this.db.selectFrom("projects").selectAll().execute();
@@ -151,40 +155,34 @@ export class ProjectsService {
   }
 
   async addFunds(projectId: string, amount: number, userId: string) {
-    const project = await this.db
-      .selectFrom("projects")
-      .select(["budget"])
-      .where("id", "=", projectId)
-      .executeTakeFirst();
+    return this.db.transaction().execute(async (trx) => {
+      const project = await trx
+        .selectFrom("projects")
+        .select(["budget", "escrow"])
+        .where("id", "=", projectId)
+        .executeTakeFirst();
 
-    if (!project) throw new NotFoundException("Project not found");
+      if (!project) throw new NotFoundException("Project not found");
 
-    const newBudget = (Number(project.budget) + amount).toString();
-
-    await this.db
-      .updateTable("projects")
-      .set({ budget: newBudget, updatedAt: new Date() })
-      .where("id", "=", projectId)
-      .execute();
-
-    await this.db
-      .insertInto("transactions")
-      .values({
-        id: crypto.randomUUID(),
+      await this.walletService.escrowFunds(
         userId,
-        date: new Date(),
-        desc: "Added funds to project budget",
-        type: "DEPOSIT",
-        amount: amount.toString(),
-        balanceAfter: newBudget,
-        status: "Success",
-        source: "Credit Card",
-        projectId: projectId,
-        createdAt: new Date(),
-      } as any)
-      .execute();
+        amount,
+        `Added funds to project escrow`,
+        trx,
+        projectId,
+      );
 
-    return { success: true, newBudget };
+      const newBudget = (Number(project.budget) + amount).toString();
+      const newEscrow = (Number(project.escrow) + amount).toString();
+
+      await trx
+        .updateTable("projects")
+        .set({ budget: newBudget, escrow: newEscrow, updatedAt: new Date() })
+        .where("id", "=", projectId)
+        .execute();
+
+      return { success: true, newBudget, newEscrow };
+    });
   }
 
   async update(id: string, data: any) {

@@ -1,40 +1,59 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { Inject, Injectable } from "@nestjs/common";
-import { Kysely } from "kysely";
-import { KYSELY_DB } from "../../database/database.module";
-import { DB } from "../../database/types";
+import {
+  Inject,
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+  ForbiddenException,
+} from '@nestjs/common';
+import { Kysely, Transaction, sql } from 'kysely';
+import { KYSELY_DB } from '../../database/database.module';
+import { DB } from '../../database/types';
 
+/**
+ * MilestonesService — DOMAIN OWNER của: milestones
+ *
+ * Các method dạng "domain action" (activate, markAsPaid, ...) nhận trx từ UseCase
+ * để đảm bảo toàn bộ flow nằm trong 1 transaction duy nhất.
+ */
 @Injectable()
 export class MilestonesService {
   constructor(@Inject(KYSELY_DB) private db: Kysely<DB>) {}
 
+  private async _checkAdmin(userId: string, projectId: string) {
+    const admin = await this.db
+      .selectFrom("project_members")
+      .select("id")
+      .where("projectId", "=", projectId)
+      .where("userId", "=", userId)
+      .where("role", "=", "CLIENT_ADMIN")
+      .executeTakeFirst();
+    if (!admin) throw new ForbiddenException("Must be CLIENT_ADMIN to manage milestones");
+  }
+
+  // ─── READ ───────────────────────────────────────────────────────────────────
+
   async findByProject(projectId: string) {
     const milestones = await this.db
-      .selectFrom("milestones")
+      .selectFrom('milestones')
       .selectAll()
-      .where("projectId", "=", projectId)
+      .where('projectId', '=', projectId)
       .execute();
 
     if (milestones.length === 0) return [];
 
     const proposals = await this.db
-      .selectFrom("proposals as p")
-      .innerJoin("users as u", "u.id", "p.expertId")
+      .selectFrom('proposals as p')
+      .innerJoin('users as u', 'u.id', 'p.expertId')
       .select([
-        "p.id",
-        "p.milestoneId",
-        "p.proposedPrice as amount",
-        "p.coverLetter",
-        "p.status",
-        "u.name as expertName",
-        "u.avatar",
+        'p.id',
+        'p.milestoneId',
+        'p.proposedPrice as amount',
+        'p.coverLetter',
+        'p.status',
+        'u.name as expertName',
+        'u.avatar',
       ])
-      .where(
-        "p.milestoneId",
-        "in",
-        milestones.map((m) => m.id),
-      )
+      .where('p.milestoneId', 'in', milestones.map((m) => m.id))
       .execute();
 
     return milestones.map((m) => ({
@@ -45,172 +64,255 @@ export class MilestonesService {
 
   async findAvailable() {
     return this.db
-      .selectFrom("milestones as m")
-      .innerJoin("projects as p", "p.id", "m.projectId")
+      .selectFrom('milestones as m')
+      .innerJoin('projects as p', 'p.id', 'm.projectId')
       .select([
-        "m.id",
-        "m.title",
-        "m.budget",
-        "m.status",
-        "m.projectId",
-        "p.title as projectTitle",
+        'm.id',
+        'm.title',
+        'm.budget',
+        'm.status',
+        'm.projectId',
+        'p.title as projectTitle',
       ])
-      .where("m.status", "=", "PENDING")
+      .where('m.status', '=', 'PENDING')
       .execute();
   }
 
-  async create(projectId: string, data: any) {
+  async findByIdOrThrow(milestoneId: string, trx?: Transaction<DB>) {
+    const db = trx ?? this.db;
+    const milestone = await db
+      .selectFrom('milestones')
+      .selectAll()
+      .where('id', '=', milestoneId)
+      .executeTakeFirst();
+
+    if (!milestone) throw new NotFoundException(`Milestone ${milestoneId} not found`);
+    return milestone;
+  }
+
+  async getProposals(milestoneId: string) {
     return this.db
-      .insertInto("milestones")
+      .selectFrom('proposals as p')
+      .innerJoin('users as u', 'u.id', 'p.expertId')
+      .select([
+        'p.id',
+        'p.proposedPrice as amount',
+        'p.coverLetter as message',
+        'p.status',
+        'u.name as expertName',
+        'u.avatar',
+        'p.expertId',
+      ])
+      .where('p.milestoneId', '=', milestoneId)
+      .execute();
+  }
+
+  // ─── WRITE (CRUD) ────────────────────────────────────────────────────────────
+
+  async create(projectId: string, data: CreateMilestoneData) {
+    return this.db
+      .insertInto('milestones')
       .values({
         id: crypto.randomUUID(),
         projectId,
         title: data.title,
-        budget: data.amount?.toString() || data.budget?.toString() || "0",
-        status: "PENDING",
+        budget: (data.amount ?? data.budget ?? 0).toString(),
+        status: 'PENDING',
         updatedAt: new Date(),
       })
       .returningAll()
-      .executeTakeFirst();
+      .executeTakeFirstOrThrow();
   }
 
-  async update(id: string, data: any) {
-    const updateData: any = { updatedAt: new Date() };
-    if (data.title !== undefined) updateData.title = data.title;
-    if (data.amount !== undefined) updateData.budget = data.amount.toString();
-    if (data.budget !== undefined) updateData.budget = data.budget.toString();
+  async update(actorId: string, id: string, data: any) {
+    const milestone = await this.db.selectFrom("milestones").select("projectId").where("id", "=", id).executeTakeFirst();
+    if (!milestone) throw new NotFoundException("Milestone not found");
+    await this._checkAdmin(actorId, milestone.projectId);
+
+    const patch: any = { updatedAt: new Date() };
+    if (data.title !== undefined) patch.title = data.title;
+    if (data.amount !== undefined) patch.budget = data.amount.toString();
+    if (data.budget !== undefined) patch.budget = data.budget.toString();
 
     return this.db
-      .updateTable("milestones")
-      .set(updateData)
-      .where("id", "=", id)
+      .updateTable('milestones')
+      .set(patch as any)
+      .where('id', '=', id)
       .returningAll()
       .executeTakeFirst();
   }
 
   async updateStatus(id: string, status: string) {
     return this.db
-      .updateTable("milestones")
+      .updateTable('milestones')
       .set({ status: status as any, updatedAt: new Date() })
-      .where("id", "=", id)
+      .where('id', '=', id)
       .returningAll()
       .executeTakeFirst();
   }
 
-  async submitDeliverables(id: string, data: any) {
-    // Note: The deliverables column was removed from milestones in the V1 schema.
-    // Deliverables for milestones should be handled via messages or timeline events.
-    // For now, we only update the status.
-    return this.db
-      .updateTable("milestones")
-      .set({
-        status: "REVIEW" as any,
-        updatedAt: new Date(),
-      })
-      .where("id", "=", id)
-      .returningAll()
+  async submitDeliverables(actorId: string, id: string, data: any) {
+    const proposal = await this.db
+      .selectFrom("proposals")
+      .select("expertId")
+      .where("milestoneId", "=", id)
+      .where("status", "=", "ACCEPTED")
       .executeTakeFirst();
+      
+    if (proposal?.expertId !== actorId) {
+      throw new ForbiddenException("Only the assigned expert can submit deliverables");
+    }
+
+    return this.db.transaction().execute(async (trx) => {
+      return trx
+        .updateTable('milestones')
+        .set({ status: 'REVIEW' as any, updatedAt: new Date() })
+        .where('id', '=', id)
+        .returningAll()
+        .executeTakeFirst();
+    });
   }
 
-  async remove(id: string) {
-    await this.db.deleteFrom("milestones").where("id", "=", id).execute();
+  async remove(actorId: string, id: string) {
+    const milestone = await this.db
+      .selectFrom('milestones')
+      .select(['status', 'projectId'])
+      .where('id', '=', id)
+      .executeTakeFirst();
 
+    if (!milestone) throw new NotFoundException(`Milestone ${id} not found`);
+    await this._checkAdmin(actorId, milestone.projectId);
+    if (['ACTIVE', 'REVIEW', 'PAID'].includes(milestone.status as string)) {
+      throw new BadRequestException(`Cannot delete a milestone with status ${milestone.status}`);
+    }
+
+    await this.db.transaction().execute(async (trx) => {
+      await trx.deleteFrom('proposals').where('milestoneId', '=', id).where('status', '=', 'PENDING').execute();
+      await trx.deleteFrom('milestones').where('id', '=', id).execute();
+    });
     return { success: true };
   }
 
-  async getProposals(milestoneId: string) {
-    return this.db
-      .selectFrom("proposals as p")
-      .innerJoin("users as u", "u.id", "p.expertId")
-      .select([
-        "p.id",
-        "p.proposedPrice as amount",
-        "p.coverLetter as message",
-        "p.status",
-        "u.name as expertName",
-        "u.avatar",
-        "p.expertId",
-      ])
-      .where("p.milestoneId", "=", milestoneId)
-      .execute();
-  }
+  // ─── DOMAIN ACTIONS (gọi từ UseCase, nhận trx) ──────────────────────────────
 
-  async createProposal(milestoneId: string, data: any) {
-    return this.db
-      .insertInto("proposals")
-      .values({
-        id: crypto.randomUUID(),
-        milestoneId,
-        expertId: data.expertId,
-        proposedPrice: data.amount?.toString() || data.proposedPrice?.toString() || "0",
-        coverLetter: data.proposalText || data.coverLetter || data.message || "",
-        estimatedDays: data.estimatedDays || 0,
-        status: "PENDING",
+  /**
+   * Kích hoạt Milestone khi Proposal được Accept.
+   * Cập nhật: milestones.status = ACTIVE, assigneeId
+   * Cập nhật: projects.escrow += price
+   * Thêm Expert vào project_members nếu chưa có.
+   */
+  async activate(
+    milestoneId: string,
+    expertId: string,
+    price: number,
+    trx: Transaction<DB>,
+  ): Promise<void> {
+    const milestone = await trx
+      .selectFrom('milestones')
+      .selectAll()
+      .where('id', '=', milestoneId)
+      .executeTakeFirstOrThrow();
+
+    await trx
+      .updateTable('milestones')
+      .set({ assigneeId: expertId, status: 'ACTIVE' as any, updatedAt: new Date() })
+      .where('id', '=', milestoneId)
+      .execute();
+
+    const project = await trx
+      .selectFrom('projects')
+      .select('escrow')
+      .where('id', '=', milestone.projectId)
+      .executeTakeFirstOrThrow();
+
+    const newEscrow = (Number(project.escrow) + price).toString();
+
+    await trx
+      .updateTable('projects')
+      .set({
+        escrow: newEscrow,
         updatedAt: new Date(),
       })
-      .returningAll()
-      .executeTakeFirst();
-  }
-
-  async acceptProposal(proposalId: string) {
-    const proposal = await this.db
-      .selectFrom("proposals")
-      .selectAll()
-      .where("id", "=", proposalId)
-      .executeTakeFirst();
-    if (!proposal) throw new Error("Proposal not found");
-
-    const milestone = await this.db
-      .selectFrom("milestones")
-      .selectAll()
-      .where("id", "=", proposal.milestoneId)
-      .executeTakeFirst();
-    if (!milestone) throw new Error("Milestone not found");
-
-    // Accept this proposal
-    await this.db
-      .updateTable("proposals")
-      .set({ status: "ACCEPTED" as any, updatedAt: new Date() })
-      .where("id", "=", proposalId)
+      .where('id', '=', milestone.projectId)
       .execute();
 
-    // Reject other proposals
-    await this.db
-      .updateTable("proposals")
-      .set({ status: "REJECTED" as any, updatedAt: new Date() })
-      .where("milestoneId", "=", proposal.milestoneId)
-      .where("id", "!=", proposalId)
-      .execute();
-
-    // Update Milestone status
-    await this.db
-      .updateTable("milestones")
-      .set({ status: "ACTIVE" as any, updatedAt: new Date() })
-      .where("id", "=", proposal.milestoneId)
-      .execute();
-
-    // Add expert to Project members if not exists
-    const existingMember = await this.db
-      .selectFrom("project_members")
-      .selectAll()
-      .where("projectId", "=", milestone.projectId)
-      .where("userId", "=", proposal.expertId)
+    // Thêm expert vào project_members nếu chưa có
+    const existing = await trx
+      .selectFrom('project_members')
+      .select(['id'])
+      .where('projectId', '=', milestone.projectId)
+      .where('userId', '=', expertId)
       .executeTakeFirst();
 
-    if (!existingMember) {
-      await this.db
-        .insertInto("project_members")
+    if (!existing) {
+      await trx
+        .insertInto('project_members')
         .values({
           id: crypto.randomUUID(),
           projectId: milestone.projectId,
-          userId: proposal.expertId,
-          role: "EXPERT",
-          status: "ACTIVE",
+          userId: expertId,
+          role: 'EXPERT',
+          status: 'ACTIVE',
           updatedAt: new Date(),
         })
         .execute();
     }
-
-    return { success: true };
   }
+
+  /**
+   * Đánh dấu Milestone là PAID và điều chỉnh lại escrow/spent của Project.
+   * Gọi từ ReleasePaymentUseCase.
+   */
+  async markAsPaid(
+    milestoneId: string,
+    amount: number,
+    trx: Transaction<DB>,
+  ): Promise<void> {
+    const milestone = await trx
+      .selectFrom('milestones')
+      .selectAll()
+      .where('id', '=', milestoneId)
+      .executeTakeFirstOrThrow();
+
+    await trx
+      .updateTable('milestones')
+      .set({ status: 'PAID' as any, updatedAt: new Date() })
+      .where('id', '=', milestoneId)
+      .execute();
+
+    const project = await trx
+      .selectFrom('projects')
+      .select(['id', 'escrow', 'spent'])
+      .where('id', '=', milestone.projectId)
+      .executeTakeFirst();
+
+    if (project) {
+      const newEscrow = Math.max(0, Number(project.escrow) - amount);
+      const newSpent = Number(project.spent) + amount;
+
+      await trx
+        .updateTable('projects')
+        .set({
+          escrow: newEscrow.toString(),
+          spent: newSpent.toString(),
+          updatedAt: new Date(),
+        })
+        .where('id', '=', project.id)
+        .execute();
+    }
+  }
+}
+
+// ─── LOCAL TYPES ─────────────────────────────────────────────────────────────
+
+export interface CreateMilestoneData {
+  title: string;
+  amount?: number;
+  budget?: number;
+}
+
+export interface UpdateMilestoneData {
+  title?: string;
+  amount?: number;
+  budget?: number;
 }

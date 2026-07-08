@@ -8,17 +8,16 @@ import { NeoBadge } from "@/components/ui-custom/neo-badge";
 import { formatCurrency } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 
-import { useContracts, useSignContractMutation } from "@/tanstack/useContracts";
+import { useContracts } from "@/tanstack/useContracts";
 
 export default function ExpertContractsPage() {
   const { data: contracts = [], isLoading } = useContracts();
-  const signContractMutation = useSignContractMutation();
 
-  const [filter, setFilter] = useState<"ALL" | "DRAFT" | "ACTIVE">("ALL");
+  const [filter, setFilter] = useState<"ALL" | "HELD" | "RELEASED">("ALL");
 
   const filteredContracts = contracts.filter((c) => {
     if (filter === "ALL") return true;
-    return c.status === filter;
+    return c.escrowStatus === filter;
   });
 
   return (
@@ -44,18 +43,18 @@ export default function ExpertContractsPage() {
               All
             </NeoButton>
             <NeoButton 
-              variant={filter === "DRAFT" ? "default" : "outline"}
-              onClick={() => setFilter("DRAFT")}
+              variant={filter === "HELD" ? "default" : "outline"}
+              onClick={() => setFilter("HELD")}
               className="text-xs h-8 px-4"
             >
-              Pending Signature
+              Active (Escrow Held)
             </NeoButton>
             <NeoButton 
-              variant={filter === "ACTIVE" ? "default" : "outline"}
-              onClick={() => setFilter("ACTIVE")}
+              variant={filter === "RELEASED" ? "default" : "outline"}
+              onClick={() => setFilter("RELEASED")}
               className="text-xs h-8 px-4"
             >
-              Active
+              Completed (Released)
             </NeoButton>
           </div>
 
@@ -83,9 +82,9 @@ export default function ExpertContractsPage() {
                 >
                   <div className="flex justify-between items-start mb-4">
                     <NeoBadge 
-                      variant={contract.status === "DRAFT" ? "nightmare" : contract.status === "ACTIVE" ? "default" : "secondary"}
+                      variant={contract.escrowStatus === "HELD" ? "default" : "secondary"}
                     >
-                      {contract.status}
+                      {contract.escrowStatus}
                     </NeoBadge>
                     <div className="text-[0.625rem] font-bold uppercase tracking-widest text-muted-foreground flex items-center">
                       <Clock className="w-3 h-3 mr-1" />
@@ -132,24 +131,17 @@ export default function ExpertContractsPage() {
                     </div>
                   </div>
 
-                  {contract.status === "DRAFT" && (
-                    <div className="pt-4 border-t-2 border-border flex gap-3">
-                      <NeoButton 
-                        className="flex-1"
-                        disabled={signContractMutation.isPending}
-                        onClick={() => signContractMutation.mutate(contract.id)}
-                      >
-                        {signContractMutation.isPending ? "Signing..." : "Sign Contract"}
-                      </NeoButton>
-                      <NeoButton variant="outline" className="flex-1 border-destructive text-destructive">
-                        Reject
-                      </NeoButton>
-                    </div>
-                  )}
-                  {contract.status === "ACTIVE" && (
+                  {contract.escrowStatus === "HELD" && (
                     <div className="pt-4 border-t-2 border-border">
                       <div className="text-xs font-bold uppercase tracking-widest text-green-600 bg-green-500/10 p-2 border-2 border-green-500 text-center">
                         Contract is Active. Workspace unlocked.
+                      </div>
+                    </div>
+                  )}
+                  {contract.escrowStatus === "RELEASED" && (
+                    <div className="pt-4 border-t-2 border-border">
+                      <div className="text-xs font-bold uppercase tracking-widest text-muted-foreground bg-secondary/50 p-2 border-2 border-border text-center">
+                        Funds have been released. Task Completed.
                       </div>
                     </div>
                   )}
