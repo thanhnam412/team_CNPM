@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { proposalService } from "@/services/proposalService";
 import { ProposalDto } from "@/types/marketplace.dto";
+import { toast } from "sonner";
 
 export const useQuickTaskProposals = (quickTaskId: string) => {
   return useQuery({
@@ -66,6 +67,11 @@ export const useAcceptProposalMutation = () => {
       queryClient.invalidateQueries({ queryKey: ["expert-proposals"] });
       queryClient.invalidateQueries({ queryKey: ["quick-tasks"] });
       queryClient.invalidateQueries({ queryKey: ["client-quick-tasks"] });
+      toast.success("Proposal accepted successfully!");
     },
+    onError: (err: any) => {
+      const errorMessage = err.response?.data?.message || err.message;
+      toast.error(errorMessage);
+    }
   });
 };
