@@ -11,9 +11,9 @@ import { DB } from "../../database/types";
 /**
  * WalletService — DOMAIN OWNER của: wallets, transactions
  *
- * ✅ Chỉ service này được phép write vào hai bảng trên.
- * ✅ Mọi UseCase cần thao tác tài chính BẮT BUỘC inject và gọi service này.
- * ❌ Không service nào khác được tự UPDATE wallets hay INSERT transactions.
+ *  Chỉ service này được phép write vào hai bảng trên.
+ *  Mọi UseCase cần thao tác tài chính BẮT BUỘC inject và gọi service này.
+ *  Không service nào khác được tự UPDATE wallets hay INSERT transactions.
  */
 @Injectable()
 export class WalletService {
@@ -198,7 +198,7 @@ export class WalletService {
 
       await this._logTransaction(trx, {
         userId: clientId,
-        type: "SPENT" as any,
+        type: "SPENT",
         amount,
         balanceAfter: Number(clientWallet.balance),
         desc: `Released: ${contractDesc}`,
@@ -239,7 +239,7 @@ export class WalletService {
 
     await this._logTransaction(trx, {
       userId: expertId,
-      type: "PAYMENT_RECEIVED" as any,
+      type: "PAYMENT_RECEIVED",
       amount,
       balanceAfter: newExpertBalance,
       desc: `Payment received: ${contractDesc}`,

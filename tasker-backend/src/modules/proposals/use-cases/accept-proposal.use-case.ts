@@ -1,12 +1,17 @@
-import { Injectable, Inject, BadRequestException, ForbiddenException } from '@nestjs/common';
-import { Kysely } from 'kysely';
-import { KYSELY_DB } from '../../../database/database.module';
-import { DB } from '../../../database/types';
-import { ProposalsService } from '../proposals.service';
-import { WalletService } from '../../wallet/wallet.service';
-import { MilestonesService } from '../../milestones/milestones.service';
-import { QuickTasksService } from '../../quick-tasks/quick-tasks.service';
-import { ContractsService } from '../../contracts/contracts.service';
+import {
+  Injectable,
+  Inject,
+  BadRequestException,
+  ForbiddenException,
+} from "@nestjs/common";
+import { Kysely } from "kysely";
+import { KYSELY_DB } from "../../../database/database.module";
+import { DB } from "../../../database/types";
+import { ProposalsService } from "../proposals.service";
+import { WalletService } from "../../wallet/wallet.service";
+import { MilestonesService } from "../../milestones/milestones.service";
+import { QuickTasksService } from "../../quick-tasks/quick-tasks.service";
+import { ContractsService } from "../../contracts/contracts.service";
 
 /**
  * AcceptProposalUseCase — Orchestrator cho luồng Accept Proposal
@@ -34,29 +39,35 @@ export class AcceptProposalUseCase {
     @Inject(KYSELY_DB) private db: Kysely<DB>,
   ) {}
 
-  async execute(proposalId: string, _actorId: string): Promise<{ success: true }> {
+  async execute(
+    proposalId: string,
+    _actorId: string,
+  ): Promise<{ success: true }> {
     return this.db.transaction().execute(async (trx) => {
       // ── Step 1: Tìm proposal, validate trạng thái ──────────────────────────
-      const proposal = await this.proposalsService.findByIdOrThrow(proposalId, trx);
+      const proposal = await this.proposalsService.findByIdOrThrow(
+        proposalId,
+        trx,
+      );
 
-      if (proposal.status !== 'PENDING') {
+      if (proposal.status !== "PENDING") {
         throw new BadRequestException(
           `Proposal is already ${proposal.status}. Only PENDING proposals can be accepted.`,
         );
       }
 
       // ── Step 2: Xác định clientId và giá chốt ─────────────────────────────
-      const { clientId, price } = await this.proposalsService.resolveClientAndPrice(
-        proposal,
-        trx,
-      );
+      const { clientId, price } =
+        await this.proposalsService.resolveClientAndPrice(proposal, trx);
 
       if (price <= 0) {
-        throw new BadRequestException('Proposal price must be greater than 0.');
+        throw new BadRequestException("Proposal price must be greater than 0.");
       }
 
       if (clientId !== _actorId) {
-        throw new ForbiddenException('You are not authorized to accept proposals for this task/project.');
+        throw new ForbiddenException(
+          "You are not authorized to accept proposals for this task/project.",
+        );
       }
 
       // ── Step 3: Escrow tiền từ ví Client ──────────────────────────────────
@@ -76,9 +87,18 @@ export class AcceptProposalUseCase {
 
       // ── Step 4: Activate Milestone hoặc assign QuickTask ──────────────────
       if (proposal.milestoneId) {
-        await this.milestonesService.activate(proposal.milestoneId, proposal.expertId, price, trx);
+        await this.milestonesService.activate(
+          proposal.milestoneId,
+          proposal.expertId,
+          price,
+          trx,
+        );
       } else if (proposal.quickTaskId) {
-        await this.quickTasksService.assignExpert(proposal.quickTaskId, proposal.expertId, trx);
+        await this.quickTasksService.assignExpert(
+          proposal.quickTaskId,
+          proposal.expertId,
+          trx,
+        );
       }
 
       // ── Step 5: Accept proposal + reject các proposal còn lại ─────────────
@@ -100,11 +120,14 @@ export class AcceptProposalUseCase {
     });
   }
 
-  private async _getProjectIdFromMilestone(milestoneId: string, trx: any): Promise<string | undefined> {
+  private async _getProjectIdFromMilestone(
+    milestoneId: string,
+    trx: any,
+  ): Promise<string | undefined> {
     const ms = await trx
-      .selectFrom('milestones')
-      .select(['projectId'])
-      .where('id', '=', milestoneId)
+      .selectFrom("milestones")
+      .select(["projectId"])
+      .where("id", "=", milestoneId)
       .executeTakeFirst();
     return ms?.projectId;
   }

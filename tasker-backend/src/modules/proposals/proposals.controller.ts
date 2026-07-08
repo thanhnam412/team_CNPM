@@ -8,11 +8,11 @@ import {
   Request,
   HttpCode,
   HttpStatus,
-} from '@nestjs/common';
-import { ProposalsService } from './proposals.service';
-import { AcceptProposalUseCase } from './use-cases/accept-proposal.use-case';
+} from "@nestjs/common";
+import { ProposalsService } from "./proposals.service";
+import { AcceptProposalUseCase } from "./use-cases/accept-proposal.use-case";
 
-@Controller('api')
+@Controller("api")
 export class ProposalsController {
   constructor(
     private readonly proposalsService: ProposalsService,
@@ -21,38 +21,46 @@ export class ProposalsController {
 
   // ─── CREATE ─────────────────────────────────────────────────────────────────
 
-  @Post('quick-tasks/:taskId/proposals')
+  @Post("quick-tasks/:taskId/proposals")
   createProposal(
     @Request() req,
-    @Param('taskId') taskId: string,
+    @Param("taskId") taskId: string,
     @Body() data: any,
   ) {
-    return this.proposalsService.createProposal({ quickTaskId: taskId }, req.user.userId, data);
+    return this.proposalsService.createProposal(
+      { quickTaskId: taskId },
+      req.user.userId,
+      data,
+    );
   }
 
-  @Post('milestones/:milestoneId/proposals')
+  @Post("milestones/:milestoneId/proposals")
   createMilestoneProposal(
     @Request() req,
-    @Param('milestoneId') milestoneId: string,
+    @Param("milestoneId") milestoneId: string,
     @Body() data: any,
   ) {
-    return this.proposalsService.createProposal({ milestoneId }, req.user.userId, data);
+    return this.proposalsService.createProposal(
+      { milestoneId },
+      req.user.userId,
+      data,
+    );
   }
 
   // ─── READ ────────────────────────────────────────────────────────────────────
 
-  @Get('quick-tasks/:taskId/proposals')
-  getProposalsForTask(@Param('taskId') taskId: string) {
+  @Get("quick-tasks/:taskId/proposals")
+  getProposalsForTask(@Param("taskId") taskId: string) {
     return this.proposalsService.getProposalsForTask(taskId);
   }
 
-  @Get('milestones/:milestoneId/proposals')
-  getProposalsForMilestone(@Param('milestoneId') milestoneId: string) {
+  @Get("milestones/:milestoneId/proposals")
+  getProposalsForMilestone(@Param("milestoneId") milestoneId: string) {
     return this.proposalsService.getProposalsForMilestone(milestoneId);
   }
 
-  @Get('users/:userId/proposals')
-  getProposalsForExpert(@Param('userId') userId: string) {
+  @Get("users/:userId/proposals")
+  getProposalsForExpert(@Param("userId") userId: string) {
     return this.proposalsService.getProposalsForExpert(userId);
   }
 
@@ -62,9 +70,9 @@ export class ProposalsController {
    * PATCH /api/proposals/:id/accept — Dùng AcceptProposalUseCase
    * Đây là action phức tạp nhất: escrow tiền, activate milestone/task, tạo contract
    */
-  @Patch('proposals/:proposalId/accept')
+  @Patch("proposals/:proposalId/accept")
   @HttpCode(HttpStatus.OK)
-  acceptProposal(@Request() req, @Param('proposalId') proposalId: string) {
+  acceptProposal(@Request() req, @Param("proposalId") proposalId: string) {
     const actorId = req.user?.userId;
     return this.acceptProposalUseCase.execute(proposalId, actorId);
   }
@@ -73,12 +81,16 @@ export class ProposalsController {
    * PATCH /api/proposals/:id/status — Chỉ dùng cho REJECTED / WITHDRAWN
    * Accept phải đi qua /accept endpoint để đảm bảo luồng đầy đủ
    */
-  @Patch('proposals/:proposalId/status')
+  @Patch("proposals/:proposalId/status")
   updateProposalStatus(
     @Request() req,
-    @Param('proposalId') proposalId: string,
-    @Body() data: { status: 'REJECTED' | 'WITHDRAWN' },
+    @Param("proposalId") proposalId: string,
+    @Body() data: { status: "REJECTED" | "WITHDRAWN" },
   ) {
-    return this.proposalsService.updateStatus(req.user.userId, proposalId, data.status);
+    return this.proposalsService.updateStatus(
+      req.user.userId,
+      proposalId,
+      data.status,
+    );
   }
 }

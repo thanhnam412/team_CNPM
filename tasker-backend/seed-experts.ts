@@ -186,7 +186,7 @@ async function main() {
     }
   }
 
-  console.log("\n✅ Seeding completed! Created", count, "experts.");
+  console.log("\n Seeding completed! Created", count, "experts.");
 }
 
 main()
