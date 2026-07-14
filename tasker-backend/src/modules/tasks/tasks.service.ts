@@ -5,6 +5,37 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { Kysely, Transaction } from "kysely";
+import {
+  validateTaskAction,
+  TaskAction,
+  TaskError,
+  TaskSnapshot,
+  calculateMilestoneStatus,
+} from "@/modules/tasks/core/domain";
+
+function mapLogicError(err: Error): never {
+  if (err instanceof TaskError) {
+    throw new ForbiddenException(err.message);
+  }
+  throw err;
+}
+
+function validateLogic(
+  action: TaskAction,
+  task: TaskSnapshot,
+  actorId: string,
+  isProjectAdmin: boolean,
+): void {
+  try {
+    if (action === "MODIFY") {
+      validateTaskAction("MODIFY", task, actorId, isProjectAdmin);
+    } else {
+      validateTaskAction("DELETE", task, actorId, isProjectAdmin);
+    }
+  } catch (err) {
+    mapLogicError(err as Error);
+  }
+}
 import { KYSELY_DB } from "@/database/database.module";
 import { DB } from "@/database/types";
 import {
@@ -43,17 +74,9 @@ export class TasksService {
   constructor(@Inject(KYSELY_DB) private db: Kysely<DB>) {}
 
   private async _checkAdmin(userId: string, projectId: string) {
+    if (!projectId) return false;
     const admin = await checkAdminQuery(this.db, userId, projectId);
     return !!admin;
-  }
-
-  private async _checkAssigneeOrAdmin(userId: string, task: any) {
-    if (task.assigneeId === userId) return true;
-    if (task.projectId) {
-      const isAdmin = await this._checkAdmin(userId, task.projectId);
-      if (isAdmin) return true;
-    }
-    throw new ForbiddenException("Not authorized to modify this task");
   }
 
   // ─── READ ───────────────────────────────────────────────────────────────────
@@ -87,7 +110,10 @@ export class TasksService {
     const task = await getTaskForUpdateQuery(this.db, id);
 
     if (!task) throw new NotFoundException("Task not found");
-    await this._checkAssigneeOrAdmin(actorId, task);
+    
+    const isAdmin = await this._checkAdmin(actorId, task.projectId as string);
+    const snapshot: TaskSnapshot = { assigneeId: task.assigneeId, projectId: task.projectId };
+    validateLogic("MODIFY", snapshot, actorId, isAdmin);
 
     return this.db.transaction().execute(async (trx) => {
       const updatedTask = await updateTaskStatusQuery(trx, id, status);
@@ -104,7 +130,10 @@ export class TasksService {
     const task = await getTaskForUpdateQuery(this.db, id);
 
     if (!task) throw new NotFoundException("Task not found");
-    await this._checkAssigneeOrAdmin(actorId, task);
+    
+    const isAdmin = await this._checkAdmin(actorId, task.projectId as string);
+    const snapshot: TaskSnapshot = { assigneeId: task.assigneeId, projectId: task.projectId };
+    validateLogic("MODIFY", snapshot, actorId, isAdmin);
 
     const patch: Record<string, unknown> = {};
     if (data.title !== undefined) patch.title = data.title;
@@ -121,11 +150,9 @@ export class TasksService {
 
       if (!task) throw new NotFoundException(`Task ${id} not found`);
 
-      if (task.projectId) {
-        const isAdmin = await checkAdminQuery(trx, actorId, task.projectId);
-        if (!isAdmin)
-          throw new ForbiddenException("Must be CLIENT_ADMIN to delete a task");
-      }
+      const isAdmin = await this._checkAdmin(actorId, task.projectId as string);
+      const snapshot: TaskSnapshot = { projectId: task.projectId };
+      validateLogic("DELETE", snapshot, actorId, isAdmin);
 
       await deleteTaskQuery(trx, id);
 
@@ -155,13 +182,9 @@ export class TasksService {
     const siblingTasks = await getSiblingTasksQuery(trx, milestoneId);
 
     const total = siblingTasks.length;
-    const done = siblingTasks.filter((t) => t.status === "DONE").length;
-    const progress = total > 0 ? Math.round((done / total) * 100) : 0;
+    const doneTasks = siblingTasks.filter((t) => t.status === "DONE").length;
 
-    let milestoneStatus: string;
-    if (total === 0) milestoneStatus = "PENDING";
-    else if (progress === 100) milestoneStatus = "REVIEW";
-    else milestoneStatus = "ACTIVE";
+    const milestoneStatus = calculateMilestoneStatus(total, doneTasks);
 
     await updateMilestoneStatusQuery(trx, milestoneId, milestoneStatus);
   }

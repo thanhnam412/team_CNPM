@@ -8,6 +8,7 @@ import {
   checkConversationParticipantQuery,
   insertMessageQuery,
 } from "@/queries/messages";
+import { SendMessageDto } from "./core/dto/messages.dto";
 
 @Injectable()
 export class MessagesService {
@@ -21,7 +22,11 @@ export class MessagesService {
     return getConversationMessagesQuery(this.db, conversationId);
   }
 
-  async sendMessage(userId: string, conversationId: string, data: any) {
+  async sendMessage(
+    userId: string,
+    conversationId: string,
+    data: SendMessageDto,
+  ) {
     const participant = await checkConversationParticipantQuery(
       this.db,
       userId,

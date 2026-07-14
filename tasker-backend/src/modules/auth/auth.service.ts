@@ -7,7 +7,7 @@ import { JwtService } from "@nestjs/jwt";
 import { OAuth2Client } from "google-auth-library";
 import { UsersService } from "@/modules/users/users.service";
 import { TokenService } from "./token/token.service";
-import { IdToken } from "./dto/google-login.dto";
+import { IdToken } from "./core/dto/google-login.dto";
 
 @Injectable()
 export class AuthService {

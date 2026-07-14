@@ -8,12 +8,9 @@ import {
   Req,
   ForbiddenException,
 } from "@nestjs/common";
-import { ExpertsService } from './experts.service';
+import { ExpertsService } from "./experts.service";
 import { Public } from "../../decorators/public.decorator";
-import {
-  UpsertExpertProfileDto,
-  CreateReviewDto,
-} from './dto/experts.dto';
+import { UpsertExpertProfileDto, CreateReviewDto } from "./core/dto/experts.dto";
 
 @Controller("api/experts")
 export class ExpertsController {

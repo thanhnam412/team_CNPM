@@ -60,8 +60,23 @@ model Proposal {
   quickTask     QuickTask?     @relation(fields: [quickTaskId], references: [id], onDelete: Cascade)
   milestone     Milestone?     @relation(fields: [milestoneId], references: [id], onDelete: Cascade)
   expert        ExpertProfile  @relation(fields: [expertId], references: [userId], onDelete: Cascade)
+  negotiations  ProposalNegotiation[]
 
   @@map("proposals")
+}
+
+model ProposalNegotiation {
+  id            String         @id @default(uuid())
+  proposalId    String
+  actorId       String
+  actorRole     String         // "CLIENT" or "EXPERT"
+  offeredPrice  Decimal
+  status        String         @default("PENDING") // PENDING, ACCEPTED, REJECTED
+  createdAt     DateTime       @default(now())
+
+  proposal      Proposal       @relation(fields: [proposalId], references: [id], onDelete: Cascade)
+
+  @@map("proposal_negotiations")
 }
 
 model Invitation {
@@ -91,6 +106,8 @@ enum QuickTaskStatus {
   IN_PROGRESS
   REVIEW
   COMPLETED
+  DISPUTE
+  SYSTEM_RESOLVING
 }
 
 enum ProposalStatus {

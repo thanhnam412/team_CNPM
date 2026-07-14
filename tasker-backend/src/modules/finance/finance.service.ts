@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { WalletService } from "@/modules/wallet/wallet.service";
+import { TopupService } from "../wallet/topup/topup.service";
 
 /**
  * FinanceService — Facade trên WalletService cho Finance API endpoints.
@@ -9,7 +10,10 @@ import { WalletService } from "@/modules/wallet/wallet.service";
  */
 @Injectable()
 export class FinanceService {
-  constructor(private readonly walletService: WalletService) {}
+  constructor(
+    private readonly walletService: WalletService,
+    private readonly topupService: TopupService,
+  ) {}
 
   getWallet(userId: string) {
     return this.walletService.getWalletByUserId(userId);
@@ -20,6 +24,6 @@ export class FinanceService {
   }
 
   mockTopup(userId: string, amount: number) {
-    return this.walletService.mockTopup(userId, amount);
+    return this.topupService.mockTopup(userId, amount);
   }
 }

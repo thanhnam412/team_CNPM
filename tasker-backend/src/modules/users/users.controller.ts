@@ -6,12 +6,10 @@ import {
   Body,
   Req,
   ForbiddenException,
-  UseGuards,
 } from "@nestjs/common";
-import { JwtAuthGuard } from "@/modules/auth/guards/jwt-auth-guards.service";
 import { UsersService } from "./users.service";
 import { ProfileService } from "./profile/profile.service";
-import { UpdateUserProfileDto, SwitchRoleDto } from "./dto/profile.dto";
+import { UpdateUserProfileDto, SwitchRoleDto } from "./core/dto/profile.dto";
 
 @Controller("api/users")
 export class UsersController {

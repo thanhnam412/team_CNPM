@@ -18,6 +18,7 @@ import {
 } from "@/queries/experts";
 import { KYSELY_DB } from "@/database/database.module";
 import { DB } from "@/database/types";
+import { UpsertExpertProfileDto, CreateReviewDto } from "./core/dto/experts.dto";
 
 interface ExpertSearchFilters {
   search?: string;
@@ -37,13 +38,17 @@ export class ExpertsService {
 
     const expertIds = experts.map((e) => e.id);
 
-    let taskCounts: any[] = [];
+    let taskCounts: { assigneeId: string; completedTasks: string | number }[] =
+      [];
     if (expertIds.length > 0) {
-      taskCounts = await getCompletedTasksCountsQuery(this.db, expertIds);
+      taskCounts = (await getCompletedTasksCountsQuery(
+        this.db,
+        expertIds,
+      )) as any;
     }
 
     const result = experts.map((expert) => {
-      const tasks = taskCounts.find((t: any) => t.assigneeId === expert.id);
+      const tasks = taskCounts.find((t) => t.assigneeId === expert.id);
       const profileRating = parseFloat(expert.profileRating) || 0;
 
       return {
@@ -208,7 +213,7 @@ export class ExpertsService {
     };
   }
 
-  async createReview(expertId: string, data: any) {
+  async createReview(expertId: string, data: CreateReviewDto) {
     return null;
   }
 
@@ -221,10 +226,12 @@ export class ExpertsService {
     return profile || null;
   }
 
-  async upsertProfile(userId: string, data: any) {
+  async upsertProfile(userId: string, data: UpsertExpertProfileDto) {
     const existing = await this.getMyProfile(userId);
 
-    const updateData: any = { updatedAt: new Date().toISOString() };
+    const updateData: Record<string, any> = {
+      updatedAt: new Date().toISOString(),
+    };
     if (data.title !== undefined) updateData.title = data.title;
     if (data.bio !== undefined) updateData.bio = data.bio;
     if (data.skills !== undefined)

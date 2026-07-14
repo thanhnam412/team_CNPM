@@ -1,9 +1,9 @@
 import { Controller, Post, Body, Request } from "@nestjs/common";
-import { CopilotService } from "./copilot.service";
+import { ChatCopilotService } from "./chat/chat-copilot.service";
 
 @Controller("api/copilot")
 export class CopilotController {
-  constructor(private readonly copilotService: CopilotService) {}
+  constructor(private readonly chatCopilotService: ChatCopilotService) {}
 
   @Post("chat")
   async chat(@Request() req, @Body("message") message: string) {
@@ -11,6 +11,6 @@ export class CopilotController {
     if (!userId) {
       throw new Error("Unauthorized");
     }
-    return this.copilotService.processChat(userId, message);
+    return this.chatCopilotService.processChat(userId, message);
   }
 }

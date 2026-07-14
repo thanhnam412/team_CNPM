@@ -1,6 +1,13 @@
-import { Controller, Get, Post, Body, Req, UnauthorizedException } from "@nestjs/common";
-import { PaymentsService } from './payments.service';
-import { MockTopupDto } from './dto/payments.dto';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Req,
+  UnauthorizedException,
+} from "@nestjs/common";
+import { PaymentsService } from "./payments.service";
+import { MockTopupDto } from "./core/dto/payments.dto";
 
 @Controller("api/payments")
 export class PaymentsController {

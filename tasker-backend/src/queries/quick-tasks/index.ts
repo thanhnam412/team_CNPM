@@ -146,3 +146,38 @@ export const assignExpertToQuickTaskQuery = async (
     .where("id", "=", quickTaskId)
     .execute();
 };
+
+/**
+ * Fetch QuickTaskSnapshot để truyền vào logic layer.
+ * JOIN với contracts để lấy contractEscrowStatus (null nếu chưa có contract).
+ * Service gọi hàm này trước khi gọi bất kỳ case nào trong src/logic/quick-task/.
+ */
+export const getQuickTaskSnapshotQuery = async (
+  db: Kysely<DB> | Transaction<DB>,
+  id: string,
+) => {
+  const row = await db
+    .selectFrom("quick_tasks")
+    .leftJoin("contracts", "contracts.quickTaskId", "quick_tasks.id")
+    .select([
+      "quick_tasks.id",
+      "quick_tasks.status",
+      "quick_tasks.expertId",
+      "quick_tasks.clientId",
+      "contracts.escrowStatus as contractEscrowStatus",
+    ])
+    .where("quick_tasks.id", "=", id)
+    .executeTakeFirst();
+
+  if (!row) return null;
+
+  return {
+    id: row.id,
+    status: row.status as import("@/modules/quick-tasks/core/domain").QuickTaskStatus,
+    expertId: row.expertId,
+    clientId: row.clientId,
+    contractEscrowStatus: row.contractEscrowStatus as
+      | import("@/modules/quick-tasks/core/domain").ContractEscrowStatus
+      | null,
+  };
+};

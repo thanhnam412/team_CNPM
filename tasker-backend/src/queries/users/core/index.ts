@@ -1,6 +1,6 @@
 import { Kysely } from "kysely";
 import { DB } from "@/database/types";
-import { GoogleUserInput } from "@/modules/users/dto/users.dto";
+import { GoogleUserInput } from "@/modules/users/core/dto/users.dto";
 
 export const findByIdQuery = async (db: Kysely<DB>, id: string) => {
   return db

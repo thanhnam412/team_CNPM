@@ -8,6 +8,7 @@ import {
   getTeamMembersQuery,
   updateTeamMemberRoleQuery,
 } from "@/queries/team";
+import { AddMemberDto } from "./core/dto/team.dto";
 import {
   Inject,
   Injectable,
@@ -30,7 +31,7 @@ export class TeamService {
     return getTeamMembersQuery(this.db, projectId);
   }
 
-  async addMember(actorId: string, projectId: string, data: any) {
+  async addMember(actorId: string, projectId: string, data: AddMemberDto) {
     await this._checkAdmin(actorId, projectId);
     return addTeamMemberQuery(this.db, projectId, data);
   }

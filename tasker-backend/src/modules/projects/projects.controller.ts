@@ -15,7 +15,7 @@ import {
   CreateProjectDto,
   UpdateProjectDto,
   AddFundsDto,
-} from './dto/project.dto';
+} from "./core/dto/project.dto";
 
 @Controller("api/projects")
 export class ProjectsController {

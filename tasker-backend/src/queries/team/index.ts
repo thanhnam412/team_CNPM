@@ -1,7 +1,11 @@
-import { Kysely, Transaction } from 'kysely';
-import { DB } from '@/database/types';
+import { Kysely, Transaction } from "kysely";
+import { DB } from "@/database/types";
 
-export const checkAdminQuery = async (db: Kysely<DB> | Transaction<DB>, userId: string, projectId: string) => {
+export const checkAdminQuery = async (
+  db: Kysely<DB> | Transaction<DB>,
+  userId: string,
+  projectId: string,
+) => {
   return db
     .selectFrom("project_members")
     .select("id")
@@ -11,7 +15,10 @@ export const checkAdminQuery = async (db: Kysely<DB> | Transaction<DB>, userId: 
     .executeTakeFirst();
 };
 
-export const getTeamMembersQuery = async (db: Kysely<DB> | Transaction<DB>, projectId: string) => {
+export const getTeamMembersQuery = async (
+  db: Kysely<DB> | Transaction<DB>,
+  projectId: string,
+) => {
   return db
     .selectFrom("project_members")
     .innerJoin("users", "users.id", "project_members.userId")
@@ -29,7 +36,11 @@ export const getTeamMembersQuery = async (db: Kysely<DB> | Transaction<DB>, proj
     .execute();
 };
 
-export const addTeamMemberQuery = async (db: Kysely<DB> | Transaction<DB>, projectId: string, data: any) => {
+export const addTeamMemberQuery = async (
+  db: Kysely<DB> | Transaction<DB>,
+  projectId: string,
+  data: any,
+) => {
   return db
     .insertInto("project_members")
     .values({
@@ -44,11 +55,22 @@ export const addTeamMemberQuery = async (db: Kysely<DB> | Transaction<DB>, proje
     .executeTakeFirst();
 };
 
-export const getTeamMemberProjectQuery = async (db: Kysely<DB> | Transaction<DB>, memberId: string) => {
-  return db.selectFrom("project_members").select("projectId").where("id", "=", memberId).executeTakeFirst();
+export const getTeamMemberProjectQuery = async (
+  db: Kysely<DB> | Transaction<DB>,
+  memberId: string,
+) => {
+  return db
+    .selectFrom("project_members")
+    .select("projectId")
+    .where("id", "=", memberId)
+    .executeTakeFirst();
 };
 
-export const updateTeamMemberRoleQuery = async (db: Kysely<DB> | Transaction<DB>, memberId: string, role: string) => {
+export const updateTeamMemberRoleQuery = async (
+  db: Kysely<DB> | Transaction<DB>,
+  memberId: string,
+  role: string,
+) => {
   return db
     .updateTable("project_members")
     .set({ role: role as any, updatedAt: new Date().toISOString() })
@@ -57,9 +79,9 @@ export const updateTeamMemberRoleQuery = async (db: Kysely<DB> | Transaction<DB>
     .executeTakeFirst();
 };
 
-export const deleteTeamMemberQuery = async (db: Kysely<DB> | Transaction<DB>, memberId: string) => {
-  return db
-    .deleteFrom("project_members")
-    .where("id", "=", memberId)
-    .execute();
+export const deleteTeamMemberQuery = async (
+  db: Kysely<DB> | Transaction<DB>,
+  memberId: string,
+) => {
+  return db.deleteFrom("project_members").where("id", "=", memberId).execute();
 };

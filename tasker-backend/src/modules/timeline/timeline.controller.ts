@@ -1,4 +1,11 @@
-import { Controller, Get, Param, Query, Req, ForbiddenException } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Param,
+  Query,
+  Req,
+  ForbiddenException,
+} from "@nestjs/common";
 import { TimelineService } from "./timeline.service";
 
 @Controller("api/experts/:expertId/timeline")

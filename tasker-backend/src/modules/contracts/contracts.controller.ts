@@ -8,13 +8,13 @@ import {
   UnauthorizedException,
 } from "@nestjs/common";
 import { ContractsService } from "./contracts.service";
-import { ReleasePaymentUseCase } from "./use-cases/release-payment-use-cases.service";
+import { ReleasePaymentService } from "./release/release-payment.service";
 
 @Controller("api/contracts")
 export class ContractsController {
   constructor(
     private readonly contractsService: ContractsService,
-    private readonly releasePaymentUseCase: ReleasePaymentUseCase,
+    private readonly releasePaymentService: ReleasePaymentService,
   ) {}
 
   @Get()
@@ -35,7 +35,7 @@ export class ContractsController {
   releaseFunds(@Request() req, @Param("id") id: string) {
     const clientId = req.user?.userId;
     if (!clientId) throw new UnauthorizedException("Unauthorized");
-    return this.releasePaymentUseCase.execute(id, clientId);
+    return this.releasePaymentService.execute(id, clientId);
   }
 
   @Post("milestone/:milestoneId/release-funds")
@@ -51,6 +51,6 @@ export class ContractsController {
         "Active contract not found for this milestone",
       );
     }
-    return this.releasePaymentUseCase.execute(contract.id, clientId);
+    return this.releasePaymentService.execute(contract.id, clientId);
   }
 }

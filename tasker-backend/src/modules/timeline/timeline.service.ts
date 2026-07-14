@@ -1,11 +1,12 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Inject, Injectable } from "@nestjs/common";
 import { Kysely } from "kysely";
 import { KYSELY_DB } from "@/database/database.module";
 import { DB } from "@/database/types";
 
-import { getExpertTasksQuery, getExpertQuickTasksQuery } from "@/queries/timeline";
+import {
+  getExpertTasksQuery,
+  getExpertQuickTasksQuery,
+} from "@/queries/timeline";
 
 @Injectable()
 export class TimelineService {

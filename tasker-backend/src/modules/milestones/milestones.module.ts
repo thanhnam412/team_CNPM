@@ -1,13 +1,19 @@
 import { Module } from "@nestjs/common";
 import { MilestonesController } from "./milestones.controller";
-import { AvailableMilestonesController } from "./available-milestones.controller";
-import { MilestonesService } from './milestones.service';
-// KHÔNG import ProposalsModule ở đây — tránh circular dependency
-// Accept endpoint nằm ở ProposalsController (PATCH /api/proposals/:id/accept)
+import { AvailableMilestonesController } from "./available/available-milestones.controller";
+import { MilestonesService } from "./milestones.service";
+import { ApproveMilestoneService } from "./approve/approve-milestone.service";
+import { CancelMilestoneService } from "./cancel/cancel-milestone.service";
+import { SubmitDeliverablesService } from "./submit-deliverables/submit-deliverables.service";
 
 @Module({
   controllers: [MilestonesController, AvailableMilestonesController],
-  providers: [MilestonesService],
-  exports: [MilestonesService], // Export để ProposalsModule và ContractsModule dùng
+  providers: [
+    MilestonesService,
+    ApproveMilestoneService,
+    CancelMilestoneService,
+    SubmitDeliverablesService,
+  ],
+  exports: [MilestonesService],
 })
 export class MilestonesModule {}

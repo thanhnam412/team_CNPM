@@ -12,3 +12,10 @@ When a user signs up, they are assigned the `CLIENT` role by default.
 
 ## 3. Token Management
 Use the `refresh_tokens` table for managing session lifetimes securely.
+
+## ARCHITECTURE RULE: VERTICAL SLICE
+**CRITICAL:** This module STRICTLY follows Vertical Slice Architecture.
+- Do NOT add new business logic methods to a monolithic service file.
+- Any new business action (e.g., Create, Update, Cancel, Approve) MUST be implemented in its own dedicated directory (e.g., `create/create-entity.service.ts`).
+- Do NOT use a `use-cases` directory. Name the action directory exactly what the action does.
+

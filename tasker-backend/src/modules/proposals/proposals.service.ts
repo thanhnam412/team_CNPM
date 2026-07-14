@@ -19,7 +19,10 @@ import {
   createProposalQuery,
   acceptProposalQuery,
   updateProposalStatusQuery,
+  insertProposalNegotiationQuery,
+  findNegotiationsForProposalQuery,
 } from "@/queries/proposals";
+import { CreateProposalDto } from "./core/dto/proposals.dto";
 
 @Injectable()
 export class ProposalsService {
@@ -48,72 +51,7 @@ export class ProposalsService {
     return findProposalsForExpertQuery(this.db, expertId);
   }
 
-  // ─── WRITE (CRUD) ────────────────────────────────────────────────────────────
 
-  async createProposal(
-    params: { quickTaskId?: string; milestoneId?: string },
-    expertId: string,
-    data: any,
-  ) {
-    const { quickTaskId, milestoneId } = params;
-
-    if (!quickTaskId && !milestoneId) {
-      throw new BadRequestException(
-        "Proposal must target a QuickTask or a Milestone.",
-      );
-    }
-
-    if (quickTaskId) {
-      const quickTask = await getQuickTaskStatusAndClientQuery(
-        this.db,
-        quickTaskId,
-      );
-      if (!quickTask) throw new NotFoundException("QuickTask not found");
-      if (quickTask.status !== "OPEN") {
-        throw new BadRequestException(
-          "This QuickTask is no longer open for proposals.",
-        );
-      }
-      if (quickTask.clientId === expertId) {
-        throw new BadRequestException("You cannot propose to your own task.");
-      }
-    }
-
-    if (milestoneId) {
-      const milestone = await getMilestoneStatusAndProjectQuery(
-        this.db,
-        milestoneId,
-      );
-      if (!milestone) throw new NotFoundException("Milestone not found");
-      if (milestone.status !== "PENDING") {
-        throw new BadRequestException(
-          "This Milestone is no longer accepting proposals.",
-        );
-      }
-
-      const adminMember = await getProjectClientAdminQuery(
-        this.db,
-        milestone.projectId,
-      );
-      if (adminMember?.userId === expertId) {
-        throw new BadRequestException(
-          "You cannot propose to your own project milestone.",
-        );
-      }
-    }
-
-    return this.db.transaction().execute(async (trx) => {
-      return createProposalQuery(
-        trx,
-        quickTaskId ?? null,
-        milestoneId ?? null,
-        expertId,
-        data,
-      );
-    });
-  }
-
-  // ─── DOMAIN ACTIONS (gọi từ UseCase, nhận trx) ──────────────────────────────
 
   async accept(proposalId: string, trx: Transaction<DB>): Promise<void> {
     await acceptProposalQuery(trx, proposalId);
@@ -158,34 +96,5 @@ export class ProposalsService {
     return { clientId, price };
   }
 
-  async updateStatus(
-    actorId: string,
-    proposalId: string,
-    status: "REJECTED" | "WITHDRAWN",
-  ) {
-    if (status !== "REJECTED" && status !== "WITHDRAWN") {
-      throw new BadRequestException(
-        "Status can only be updated to REJECTED or WITHDRAWN via this endpoint.",
-      );
-    }
 
-    const proposal = await this.findByIdOrThrow(proposalId);
-
-    if (status === "WITHDRAWN") {
-      if (proposal.expertId !== actorId) {
-        throw new ForbiddenException(
-          "Only the expert can withdraw their proposal.",
-        );
-      }
-    } else if (status === "REJECTED") {
-      const { clientId } = await this.resolveClientAndPrice(proposal, this.db);
-      if (clientId !== actorId) {
-        throw new ForbiddenException(
-          "Only the client can reject this proposal.",
-        );
-      }
-    }
-
-    return updateProposalStatusQuery(this.db, proposalId, status);
-  }
 }

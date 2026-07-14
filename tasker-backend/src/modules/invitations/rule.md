@@ -11,3 +11,10 @@ When a `Proposal` or `Invitation` changes status to `ACCEPTED`, the system MUST 
 
 ## 3. Invitations Flow
 Invitations are sent by Clients to Experts. If accepted, similar to proposals, it results in a contract being established.
+
+## ARCHITECTURE RULE: VERTICAL SLICE
+**CRITICAL:** This module STRICTLY follows Vertical Slice Architecture.
+- Do NOT add new business logic methods to a monolithic service file.
+- Any new business action (e.g., Create, Update, Cancel, Approve) MUST be implemented in its own dedicated directory (e.g., `create/create-entity.service.ts`).
+- Do NOT use a `use-cases` directory. Name the action directory exactly what the action does.
+

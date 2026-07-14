@@ -9,19 +9,26 @@ import {
   HttpCode,
   HttpStatus,
 } from "@nestjs/common";
-import { ProposalsService } from './proposals.service';
-import { AcceptProposalUseCase } from "./use-cases/accept-proposal-use-cases.service";
+import { ProposalsService } from "./proposals.service";
+import { AcceptProposalService } from "./accept/accept-proposal.service";
+import { CreateProposalService } from "./create/create-proposal.service";
+import { UpdateProposalStatusService } from "./update-status/update-proposal-status.service";
+import { NegotiateProposalService } from "./negotiate/negotiate-proposal.service";
 import { Public } from "../../decorators/public.decorator";
 import {
   CreateProposalDto,
   UpdateProposalStatusDto,
-} from './dto/proposals.dto';
+  NegotiateProposalDto,
+} from "./core/dto/proposals.dto";
 
 @Controller("api")
 export class ProposalsController {
   constructor(
     private readonly proposalsService: ProposalsService,
-    private readonly acceptProposalUseCase: AcceptProposalUseCase,
+    private readonly acceptProposalService: AcceptProposalService,
+    private readonly createProposalService: CreateProposalService,
+    private readonly updateProposalStatusService: UpdateProposalStatusService,
+    private readonly negotiateProposalService: NegotiateProposalService,
   ) {}
 
   // ─── CREATE ─────────────────────────────────────────────────────────────────
@@ -32,7 +39,7 @@ export class ProposalsController {
     @Param("taskId") taskId: string,
     @Body() data: CreateProposalDto,
   ) {
-    return this.proposalsService.createProposal(
+    return this.createProposalService.execute(
       { quickTaskId: taskId },
       req.user.userId,
       data,
@@ -45,7 +52,7 @@ export class ProposalsController {
     @Param("milestoneId") milestoneId: string,
     @Body() data: CreateProposalDto,
   ) {
-    return this.proposalsService.createProposal(
+    return this.createProposalService.execute(
       { milestoneId },
       req.user.userId,
       data,
@@ -79,7 +86,7 @@ export class ProposalsController {
   @HttpCode(HttpStatus.OK)
   acceptProposal(@Request() req, @Param("proposalId") proposalId: string) {
     const actorId = req.user?.userId;
-    return this.acceptProposalUseCase.execute(proposalId, actorId);
+    return this.acceptProposalService.execute(proposalId, actorId);
   }
 
   /**
@@ -92,10 +99,26 @@ export class ProposalsController {
     @Param("proposalId") proposalId: string,
     @Body() data: UpdateProposalStatusDto,
   ) {
-    return this.proposalsService.updateStatus(
+    return this.updateProposalStatusService.execute(
       req.user.userId,
       proposalId,
       data.status,
+    );
+  }
+
+  /**
+   * POST /api/proposals/:id/negotiate — Tạo một lượt thương lượng giá mới
+   */
+  @Post("proposals/:proposalId/negotiate")
+  negotiateProposal(
+    @Request() req,
+    @Param("proposalId") proposalId: string,
+    @Body() data: NegotiateProposalDto,
+  ) {
+    return this.negotiateProposalService.execute(
+      req.user.userId,
+      proposalId,
+      data.offeredPrice,
     );
   }
 }

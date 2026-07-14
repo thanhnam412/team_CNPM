@@ -8,14 +8,20 @@ export const getInvitationQuery = async (db: Kysely<DB> | any, params: any) => {
     .where("clientId", "=", params.clientId)
     .where("expertId", "=", params.expertId);
 
-  if (params.quickTaskId) query = query.where("quickTaskId", "=", params.quickTaskId);
-  else if (params.milestoneId) query = query.where("milestoneId", "=", params.milestoneId);
-  else if (params.projectId) query = query.where("projectId", "=", params.projectId);
+  if (params.quickTaskId)
+    query = query.where("quickTaskId", "=", params.quickTaskId);
+  else if (params.milestoneId)
+    query = query.where("milestoneId", "=", params.milestoneId);
+  else if (params.projectId)
+    query = query.where("projectId", "=", params.projectId);
 
   return query.executeTakeFirst();
 };
 
-export const insertInvitationQuery = async (db: Kysely<DB> | any, data: any) => {
+export const insertInvitationQuery = async (
+  db: Kysely<DB> | any,
+  data: any,
+) => {
   return db
     .insertInto("invitations")
     .values(data)
@@ -23,7 +29,10 @@ export const insertInvitationQuery = async (db: Kysely<DB> | any, data: any) => 
     .executeTakeFirst();
 };
 
-export const findInvitationsByExpertQuery = async (db: Kysely<DB>, expertId: string) => {
+export const findInvitationsByExpertQuery = async (
+  db: Kysely<DB>,
+  expertId: string,
+) => {
   return db
     .selectFrom("invitations")
     .innerJoin("users as client", "client.id", "invitations.clientId")
@@ -48,7 +57,10 @@ export const findInvitationsByExpertQuery = async (db: Kysely<DB>, expertId: str
     .execute();
 };
 
-export const findInvitationsByClientQuery = async (db: Kysely<DB>, clientId: string) => {
+export const findInvitationsByClientQuery = async (
+  db: Kysely<DB>,
+  clientId: string,
+) => {
   return db
     .selectFrom("invitations")
     .innerJoin("users as expert", "expert.id", "invitations.expertId")
@@ -83,7 +95,11 @@ export const getInvitationStatusQuery = async (trx: any, id: string) => {
     .executeTakeFirst();
 };
 
-export const updateInvitationStatusQuery = async (trx: any, id: string, status: string) => {
+export const updateInvitationStatusQuery = async (
+  trx: any,
+  id: string,
+  status: string,
+) => {
   return trx
     .updateTable("invitations")
     .set({ status: status as any, updatedAt: new Date() })
@@ -92,7 +108,11 @@ export const updateInvitationStatusQuery = async (trx: any, id: string, status: 
     .executeTakeFirstOrThrow();
 };
 
-export const checkProjectMemberQuery = async (trx: any, projectId: string, userId: string) => {
+export const checkProjectMemberQuery = async (
+  trx: any,
+  projectId: string,
+  userId: string,
+) => {
   return trx
     .selectFrom("project_members")
     .select(["id"])
@@ -105,7 +125,11 @@ export const insertProjectMemberQuery = async (trx: any, data: any) => {
   return trx.insertInto("project_members").values(data).execute();
 };
 
-export const updateQuickTaskExpertQuery = async (trx: any, quickTaskId: string, expertId: string) => {
+export const updateQuickTaskExpertQuery = async (
+  trx: any,
+  quickTaskId: string,
+  expertId: string,
+) => {
   return trx
     .updateTable("quick_tasks")
     .set({
@@ -121,7 +145,10 @@ export const insertContractQuery = async (trx: any, data: any) => {
   return trx.insertInto("contracts").values(data).execute();
 };
 
-export const updateMilestoneStatusQuery = async (trx: any, milestoneId: string) => {
+export const updateMilestoneStatusQuery = async (
+  trx: any,
+  milestoneId: string,
+) => {
   return trx
     .updateTable("milestones")
     .set({ status: "ACTIVE" as any, updatedAt: new Date() })

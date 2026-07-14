@@ -12,3 +12,10 @@
 ## 3. Relationships
 - A `Task` must have a `projectId`.
 - A `Task` can optionally have a `milestoneId`.
+
+## ARCHITECTURE RULE: VERTICAL SLICE
+**CRITICAL:** This module STRICTLY follows Vertical Slice Architecture.
+- Do NOT add new business logic methods to a monolithic service file.
+- Any new business action (e.g., Create, Update, Cancel, Approve) MUST be implemented in its own dedicated directory (e.g., `create/create-entity.service.ts`).
+- Do NOT use a `use-cases` directory. Name the action directory exactly what the action does.
+

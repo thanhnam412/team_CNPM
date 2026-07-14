@@ -5,8 +5,49 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { Kysely } from "kysely";
+import {
+  validateProjectAction,
+  ProjectAction,
+  ProjectError,
+  ProjectDeleteSnapshot,
+  ProjectUpdatePatch,
+  ProjectUpdateSnapshot,
+} from "@/modules/projects/core/domain";
+
+function mapLogicError(err: Error): never {
+  if (err instanceof ProjectError) {
+    throw new BadRequestException(err.message);
+  }
+  throw err;
+}
+
+function validateLogic(
+  action: "UPDATE",
+  patch: ProjectUpdatePatch,
+  snapshot: ProjectUpdateSnapshot,
+): void;
+function validateLogic(
+  action: "DELETE",
+  snapshot: ProjectDeleteSnapshot,
+): void;
+function validateLogic(
+  action: ProjectAction,
+  payload1: any,
+  payload2?: any,
+): void {
+  try {
+    if (action === "UPDATE") {
+      validateProjectAction("UPDATE", payload1 as ProjectUpdatePatch, payload2 as ProjectUpdateSnapshot);
+    } else {
+      validateProjectAction("DELETE", payload1 as ProjectDeleteSnapshot);
+    }
+  } catch (err) {
+    mapLogicError(err as Error);
+  }
+}
 import { KYSELY_DB } from "@/database/database.module";
 import { DB } from "@/database/types";
+import { EscrowService } from "../wallet/escrow/escrow.service";
 import { WalletService } from "@/modules/wallet/wallet.service";
 import {
   findAllProjectsQuery,
@@ -25,12 +66,13 @@ import {
   checkProjectActiveMilestonesQuery,
   deleteProjectQuery,
 } from "@/queries/projects";
+import { CreateProjectDto, UpdateProjectDto } from "./core/dto/project.dto";
 
 @Injectable()
 export class ProjectsService {
   constructor(
     @Inject(KYSELY_DB) private db: Kysely<DB>,
-    private readonly walletService: WalletService,
+    private readonly escrowService: EscrowService,
   ) {}
 
   async findAll() {
@@ -44,16 +86,14 @@ export class ProjectsService {
 
     const tasks = await getProjectTasksStatsQuery(this.db, id);
 
-    const completedTasks = tasks.filter((t: any) => t.status === "DONE").length;
+    const completedTasks = tasks.filter((t) => t.status === "DONE").length;
     const totalTasks = tasks.length;
-    const activeTasks = tasks.filter((t: any) => t.status !== "DONE").length;
+    const activeTasks = tasks.filter((t) => t.status !== "DONE").length;
 
     const members = await getProjectMembersStatsQuery(this.db, id);
 
     const totalMembers = members.length;
-    const expertMembers = members.filter(
-      (m: any) => m.role === "EXPERT",
-    ).length;
+    const expertMembers = members.filter((m) => m.role === "EXPERT").length;
 
     const milestones = await getUpcomingMilestonesQuery(this.db, id);
 
@@ -72,7 +112,7 @@ export class ProjectsService {
     };
   }
 
-  async create(userId: string, data: any) {
+  async create(userId: string, data: CreateProjectDto) {
     return this.db.transaction().execute(async (trx) => {
       return createProjectQuery(trx, userId, data);
     });
@@ -95,12 +135,12 @@ export class ProjectsService {
 
     if (milestones.length === 0) return [];
 
-    const milestoneIds = milestones.map((m: any) => m.id);
+    const milestoneIds = milestones.map((m) => m.id);
     const proposals = await getMilestoneProposalsQuery(this.db, milestoneIds);
 
-    return milestones.map((m: any) => ({
+    return milestones.map((m) => ({
       ...m,
-      proposals: proposals.filter((p: any) => p.milestoneId === m.id),
+      proposals: proposals.filter((p) => p.milestoneId === m.id),
     }));
   }
 
@@ -110,7 +150,7 @@ export class ProjectsService {
 
       if (!project) throw new NotFoundException("Project not found");
 
-      await this.walletService.processEscrow(
+      await this.escrowService.processEscrow(
         trx,
         userId,
         amount,
@@ -127,13 +167,22 @@ export class ProjectsService {
     });
   }
 
-  async update(id: string, data: any) {
-    const updateData: any = { updatedAt: new Date().toISOString() };
+  async update(id: string, data: UpdateProjectDto) {
+    const project = await getProjectFinanceQuery(this.db, id);
+    if (!project) throw new NotFoundException("Project not found");
+
+    const patch: ProjectUpdatePatch = { budget: data.budget, status: data.status };
+    const snapshot: ProjectUpdateSnapshot = { status: project.status || "DRAFT", escrow: Number(project.escrow || 0) };
+
+    validateLogic("UPDATE", patch, snapshot);
+
+    const updateData: Record<string, any> = {
+      updatedAt: new Date().toISOString(),
+    };
     if (data.title !== undefined) updateData.title = data.title;
     if (data.description !== undefined)
       updateData.description = data.description;
     if (data.status !== undefined) updateData.status = data.status;
-    if (data.budget !== undefined) updateData.budget = data.budget.toString();
 
     return updateProjectQuery(this.db, id, updateData);
   }
@@ -143,30 +192,17 @@ export class ProjectsService {
 
     if (!project) throw new NotFoundException("Project not found");
 
-    if (Number(project.escrow) > 0 || Number(project.spent) > 0) {
-      throw new BadRequestException(
-        "Cannot delete a project that holds escrow funds or has a financial history.",
-      );
-    }
-
     const transactions = await checkProjectActiveTransactionsQuery(this.db, id);
+    const activeMilestones = await checkProjectActiveMilestonesQuery(this.db, id);
 
-    if (transactions.length > 0) {
-      throw new BadRequestException(
-        "Cannot delete a project with financial transactions. Please archive it instead.",
-      );
-    }
+    const snapshot: ProjectDeleteSnapshot = {
+      escrow: Number(project.escrow || 0),
+      spent: Number(project.spent || 0),
+      activeTransactionsCount: transactions.length,
+      activeMilestonesCount: activeMilestones.length,
+    };
 
-    const activeMilestones = await checkProjectActiveMilestonesQuery(
-      this.db,
-      id,
-    );
-
-    if (activeMilestones.length > 0) {
-      throw new BadRequestException(
-        "Cannot delete a project that has active, in-review, or paid milestones.",
-      );
-    }
+    validateLogic("DELETE", snapshot);
 
     await deleteProjectQuery(this.db, id);
 

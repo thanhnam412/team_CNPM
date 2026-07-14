@@ -190,3 +190,37 @@ export const getProjectIdFromMilestoneQuery = async (
     .where("id", "=", milestoneId)
     .executeTakeFirst();
 };
+
+export const insertProposalNegotiationQuery = async (
+  db: Kysely<DB> | Transaction<DB>,
+  proposalId: string,
+  actorId: string,
+  actorRole: string,
+  offeredPrice: number,
+) => {
+  return db
+    .insertInto("proposal_negotiations")
+    .values({
+      id: crypto.randomUUID(),
+      proposalId,
+      actorId,
+      actorRole,
+      offeredPrice: offeredPrice.toString(),
+      status: "PENDING",
+      createdAt: new Date().toISOString(),
+    })
+    .returningAll()
+    .executeTakeFirstOrThrow();
+};
+
+export const findNegotiationsForProposalQuery = async (
+  db: Kysely<DB> | Transaction<DB>,
+  proposalId: string,
+) => {
+  return db
+    .selectFrom("proposal_negotiations")
+    .selectAll()
+    .where("proposalId", "=", proposalId)
+    .orderBy("createdAt", "asc")
+    .execute();
+};

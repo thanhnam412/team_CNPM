@@ -23,4 +23,13 @@ These rules dictate the architectural choices, schema paradigms, and coding conv
 - **Proposals:** Use "Proposals" (not "Bids") for experts applying to work.
 - **Expert Profiles:** CVs are deprecated; use `expert_profiles` for bio, skills, and portfolios.
 - **Contracts:** The `contracts` table is the central entity tracking escrowed payments and expert-client agreements.
+
+## 4. Vertical Slice Architecture
+**CRITICAL:** The entire backend strictly adheres to Vertical Slice Architecture.
+- **No Monolithic Services:** Do NOT stuff multiple business logic methods (create, update, delete, specialized actions) into a single module service file (e.g. `quick-tasks.service.ts`).
+- **Feature Folders:** Any distinct business action MUST be implemented in its own dedicated directory and class (e.g., `create/create-quick-task.service.ts`).
+- **Shared Core:** Any shared utilities, DTOs, or pure domain logic MUST be placed inside a `core/` directory within the module (e.g., `core/domain/`, `core/utils/`, `core/dto/`). DO NOT place them at the root of the module.
+- **Naming Conventions:** Class names must match the directory intent (e.g., `CancelQuickTaskService`). Do NOT append `.command.ts` or `.utils.ts` in filenames unless it's a pure utility file.
+- **No Use Cases:** We do NOT use generic `use-cases` folders. Name the folder according to the specific action (e.g., `release/` instead of `use-cases/`).
+- **Clean DI:** Inject the granular action services directly into the controller.
 <!-- END:tasker-backend-rules -->

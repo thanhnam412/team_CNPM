@@ -1,7 +1,10 @@
-import { Kysely, Transaction } from 'kysely';
-import { DB } from '@/database/types';
+import { Kysely, Transaction } from "kysely";
+import { DB } from "@/database/types";
 
-export const getUserConversationsQuery = async (db: Kysely<DB> | Transaction<DB>, userId: string) => {
+export const getUserConversationsQuery = async (
+  db: Kysely<DB> | Transaction<DB>,
+  userId: string,
+) => {
   return db
     .selectFrom("conversations")
     .innerJoin(
@@ -14,7 +17,10 @@ export const getUserConversationsQuery = async (db: Kysely<DB> | Transaction<DB>
     .execute();
 };
 
-export const getConversationMessagesQuery = async (db: Kysely<DB> | Transaction<DB>, conversationId: string) => {
+export const getConversationMessagesQuery = async (
+  db: Kysely<DB> | Transaction<DB>,
+  conversationId: string,
+) => {
   return db
     .selectFrom("messages")
     .selectAll()
@@ -23,7 +29,11 @@ export const getConversationMessagesQuery = async (db: Kysely<DB> | Transaction<
     .execute();
 };
 
-export const checkConversationParticipantQuery = async (db: Kysely<DB> | Transaction<DB>, userId: string, conversationId: string) => {
+export const checkConversationParticipantQuery = async (
+  db: Kysely<DB> | Transaction<DB>,
+  userId: string,
+  conversationId: string,
+) => {
   return db
     .selectFrom("conversation_participants")
     .select("id")
@@ -32,7 +42,10 @@ export const checkConversationParticipantQuery = async (db: Kysely<DB> | Transac
     .executeTakeFirst();
 };
 
-export const insertMessageQuery = async (db: Kysely<DB> | Transaction<DB>, data: any) => {
+export const insertMessageQuery = async (
+  db: Kysely<DB> | Transaction<DB>,
+  data: any,
+) => {
   return db
     .insertInto("messages")
     .values({

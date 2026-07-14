@@ -2,7 +2,7 @@ import { Inject, Injectable } from "@nestjs/common";
 import { Kysely } from "kysely";
 import { KYSELY_DB } from "@/database/database.module";
 import { DB } from "@/database/types";
-import { UpdateUserProfileDto } from "../dto/profile.dto";
+import { UpdateUserProfileDto } from "../core/dto/profile.dto";
 import {
   getMeProfileQuery,
   switchRoleQuery,

@@ -1,11 +1,25 @@
 import { Module } from "@nestjs/common";
 
-import { DatabaseModule } from "@/database/database.module";
 import { WalletService } from "./wallet.service";
+import { TopupService } from "./topup/topup.service";
+import { EscrowService } from "./escrow/escrow.service";
+import { ReleaseService } from "./release/release.service";
+import { RefundService } from "./refund/refund.service";
 
 @Module({
-  imports: [DatabaseModule],
-  providers: [WalletService],
-  exports: [WalletService],
+  providers: [
+    WalletService,
+    TopupService,
+    EscrowService,
+    ReleaseService,
+    RefundService,
+  ],
+  exports: [
+    WalletService,
+    TopupService,
+    EscrowService,
+    ReleaseService,
+    RefundService,
+  ],
 })
 export class WalletModule {}

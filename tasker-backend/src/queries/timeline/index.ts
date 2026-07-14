@@ -22,7 +22,10 @@ export const getExpertTasksQuery = async (db: Kysely<DB>, expertId: string) => {
     .execute();
 };
 
-export const getExpertQuickTasksQuery = async (db: Kysely<DB>, expertId: string) => {
+export const getExpertQuickTasksQuery = async (
+  db: Kysely<DB>,
+  expertId: string,
+) => {
   return db
     .selectFrom("quick_tasks")
     .innerJoin("users", "users.id", "quick_tasks.clientId")

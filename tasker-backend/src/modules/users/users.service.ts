@@ -3,7 +3,7 @@ import { Kysely } from "kysely";
 
 import { KYSELY_DB } from "@/database/database.module";
 import { DB } from "@/database/types";
-import { GoogleUserInput } from "./dto/users.dto";
+import { GoogleUserInput } from "./core/dto/users.dto";
 import {
   findByIdQuery,
   findByGoogleIdQuery,

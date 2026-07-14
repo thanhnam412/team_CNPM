@@ -1,6 +1,6 @@
 import { Kysely } from "kysely";
 import { DB } from "@/database/types";
-import { UpdateUserProfileDto } from "@/modules/users/dto/profile.dto";
+import { UpdateUserProfileDto } from "@/modules/users/core/dto/profile.dto";
 
 export const getMeProfileQuery = async (db: Kysely<DB>, id: string) => {
   return db

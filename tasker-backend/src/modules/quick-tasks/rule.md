@@ -12,3 +12,10 @@ Experts do not "bid" on Quick Tasks. They submit **Proposals**.
 
 ## 3. Contracts
 When a Proposal for a Quick Task is accepted, a `Contract` should be created to manage the escrow and expert assignment.
+
+## ARCHITECTURE RULE: VERTICAL SLICE
+**CRITICAL:** This module STRICTLY follows Vertical Slice Architecture.
+- Do NOT add new business logic methods to a monolithic service file.
+- Any new business action (e.g., Create, Update, Cancel, Approve) MUST be implemented in its own dedicated directory (e.g., `create/create-entity.service.ts`).
+- Do NOT use a `use-cases` directory. Name the action directory exactly what the action does.
+

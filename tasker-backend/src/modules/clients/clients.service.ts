@@ -113,7 +113,7 @@ export class ClientsService {
     const unreadMessages = messagesRaw.map((m) => ({
       id: m.id,
       name: m.name,
-      time: new Date(m.time as any).toLocaleTimeString([], {
+      time: new Date(m.time).toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",
       }),

@@ -1,7 +1,11 @@
-import { Kysely, Transaction } from 'kysely';
-import { DB } from '@/database/types';
+import { Kysely, Transaction } from "kysely";
+import { DB } from "@/database/types";
 
-export const checkAdminQuery = async (db: Kysely<DB> | Transaction<DB>, userId: string, projectId: string) => {
+export const checkAdminQuery = async (
+  db: Kysely<DB> | Transaction<DB>,
+  userId: string,
+  projectId: string,
+) => {
   return db
     .selectFrom("project_members")
     .select("id")
@@ -11,7 +15,10 @@ export const checkAdminQuery = async (db: Kysely<DB> | Transaction<DB>, userId: 
     .executeTakeFirst();
 };
 
-export const findTasksByProjectQuery = async (db: Kysely<DB> | Transaction<DB>, projectId: string) => {
+export const findTasksByProjectQuery = async (
+  db: Kysely<DB> | Transaction<DB>,
+  projectId: string,
+) => {
   return db
     .selectFrom("tasks")
     .selectAll()
@@ -19,7 +26,10 @@ export const findTasksByProjectQuery = async (db: Kysely<DB> | Transaction<DB>, 
     .execute();
 };
 
-export const findAllTasksForExpertQuery = async (db: Kysely<DB> | Transaction<DB>, expertId: string) => {
+export const findAllTasksForExpertQuery = async (
+  db: Kysely<DB> | Transaction<DB>,
+  expertId: string,
+) => {
   return db
     .selectFrom("tasks")
     .innerJoin("projects", "tasks.projectId", "projects.id")
@@ -33,7 +43,10 @@ export const findAllTasksForExpertQuery = async (db: Kysely<DB> | Transaction<DB
     .execute();
 };
 
-export const getMilestoneAssigneeQuery = async (trx: Transaction<DB>, milestoneId: string) => {
+export const getMilestoneAssigneeQuery = async (
+  trx: Transaction<DB>,
+  milestoneId: string,
+) => {
   return trx
     .selectFrom("milestones")
     .select("assigneeId")
@@ -48,8 +61,8 @@ export const createTaskQuery = async (trx: Transaction<DB>, data: any) => {
       id: crypto.randomUUID(),
       projectId: data.projectId,
       title: data.title,
-      status: (data.status ?? "TODO") as any,
-      priority: (data.priority ?? "MEDIUM") as any,
+      status: data.status ?? "TODO",
+      priority: data.priority ?? "MEDIUM",
       milestoneId: data.milestoneId ?? null,
       assigneeId: data.assigneeId,
       updatedAt: new Date().toISOString(),
@@ -58,7 +71,10 @@ export const createTaskQuery = async (trx: Transaction<DB>, data: any) => {
     .executeTakeFirstOrThrow();
 };
 
-export const getTaskForUpdateQuery = async (db: Kysely<DB> | Transaction<DB>, id: string) => {
+export const getTaskForUpdateQuery = async (
+  db: Kysely<DB> | Transaction<DB>,
+  id: string,
+) => {
   return db
     .selectFrom("tasks")
     .select(["projectId", "milestoneId", "assigneeId"])
@@ -66,7 +82,11 @@ export const getTaskForUpdateQuery = async (db: Kysely<DB> | Transaction<DB>, id
     .executeTakeFirst();
 };
 
-export const updateTaskStatusQuery = async (trx: Transaction<DB>, id: string, status: string) => {
+export const updateTaskStatusQuery = async (
+  trx: Transaction<DB>,
+  id: string,
+  status: string,
+) => {
   return trx
     .updateTable("tasks")
     .set({ status: status as any, updatedAt: new Date().toISOString() })
@@ -75,7 +95,11 @@ export const updateTaskStatusQuery = async (trx: Transaction<DB>, id: string, st
     .executeTakeFirstOrThrow();
 };
 
-export const updateTaskQuery = async (db: Kysely<DB> | Transaction<DB>, id: string, patch: any) => {
+export const updateTaskQuery = async (
+  db: Kysely<DB> | Transaction<DB>,
+  id: string,
+  patch: any,
+) => {
   return db
     .updateTable("tasks")
     .set({ ...patch, updatedAt: new Date().toISOString() })
@@ -84,7 +108,10 @@ export const updateTaskQuery = async (db: Kysely<DB> | Transaction<DB>, id: stri
     .executeTakeFirst();
 };
 
-export const getTaskForDeleteQuery = async (trx: Transaction<DB>, id: string) => {
+export const getTaskForDeleteQuery = async (
+  trx: Transaction<DB>,
+  id: string,
+) => {
   return trx
     .selectFrom("tasks")
     .select(["id", "milestoneId", "projectId"])
@@ -96,15 +123,21 @@ export const deleteTaskQuery = async (trx: Transaction<DB>, id: string) => {
   return trx.deleteFrom("tasks").where("id", "=", id).execute();
 };
 
-export const getMilestoneStatusQuery = async (trx: Transaction<DB>, milestoneId: string) => {
+export const getMilestoneStatusQuery = async (
+  trx: Transaction<DB>,
+  milestoneId: string,
+) => {
   return trx
-    .selectFrom('milestones')
-    .select(['status'])
-    .where('id', '=', milestoneId)
+    .selectFrom("milestones")
+    .select(["status"])
+    .where("id", "=", milestoneId)
     .executeTakeFirst();
 };
 
-export const getSiblingTasksQuery = async (trx: Transaction<DB>, milestoneId: string) => {
+export const getSiblingTasksQuery = async (
+  trx: Transaction<DB>,
+  milestoneId: string,
+) => {
   return trx
     .selectFrom("tasks")
     .select(["status"])
@@ -112,7 +145,11 @@ export const getSiblingTasksQuery = async (trx: Transaction<DB>, milestoneId: st
     .execute();
 };
 
-export const updateMilestoneStatusQuery = async (trx: Transaction<DB>, milestoneId: string, status: string) => {
+export const updateMilestoneStatusQuery = async (
+  trx: Transaction<DB>,
+  milestoneId: string,
+  status: string,
+) => {
   return trx
     .updateTable("milestones")
     .set({ status: status as any, updatedAt: new Date().toISOString() })
