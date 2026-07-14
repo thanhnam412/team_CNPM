@@ -17,7 +17,7 @@ import { TimelineModule } from "./modules/timeline/timeline.module";
 import { InvitationsModule } from "./modules/invitations/invitations.module";
 import { PaymentsModule } from "./modules/payments/payments.module";
 import { APP_GUARD } from "@nestjs/core";
-import { JwtAuthGuard } from "./modules/auth/guards/jwt-auth.guard";
+import { JwtAuthGuard } from "./modules/auth/guards/jwt-auth-guards.service";
 import { ContractsModule } from "./modules/contracts/contracts.module";
 import { WalletModule } from "./modules/wallet/wallet.module";
 import { CopilotModule } from "./modules/copilot/copilot.module";

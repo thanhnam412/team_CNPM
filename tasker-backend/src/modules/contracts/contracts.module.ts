@@ -1,10 +1,10 @@
 import { Module } from "@nestjs/common";
 import { ContractsController } from "./contracts.controller";
 import { ContractsService } from "./contracts.service";
-import { ReleasePaymentUseCase } from "./use-cases/release-payment.use-case";
+import { ReleasePaymentUseCase } from "./use-cases/release-payment-use-cases.service";
 import { WalletModule } from "../wallet/wallet.module";
 import { MilestonesModule } from "../milestones/milestones.module";
-import { DatabaseModule } from "../../database/database.module";
+import { DatabaseModule } from "@/database/database.module";
 
 @Module({
   imports: [

@@ -1,6 +1,14 @@
-import { Controller, Get, Post, Param, Request, NotFoundException } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  Request,
+  NotFoundException,
+  UnauthorizedException,
+} from "@nestjs/common";
 import { ContractsService } from "./contracts.service";
-import { ReleasePaymentUseCase } from "./use-cases/release-payment.use-case";
+import { ReleasePaymentUseCase } from "./use-cases/release-payment-use-cases.service";
 
 @Controller("api/contracts")
 export class ContractsController {
@@ -26,15 +34,22 @@ export class ContractsController {
   @Post(":id/release-funds")
   releaseFunds(@Request() req, @Param("id") id: string) {
     const clientId = req.user?.userId;
+    if (!clientId) throw new UnauthorizedException("Unauthorized");
     return this.releasePaymentUseCase.execute(id, clientId);
   }
 
   @Post("milestone/:milestoneId/release-funds")
-  async releaseByMilestone(@Request() req, @Param("milestoneId") milestoneId: string) {
+  async releaseByMilestone(
+    @Request() req,
+    @Param("milestoneId") milestoneId: string,
+  ) {
     const clientId = req.user?.userId;
+    if (!clientId) throw new UnauthorizedException("Unauthorized");
     const contract = await this.contractsService.findByMilestone(milestoneId);
     if (!contract) {
-      throw new NotFoundException("Active contract not found for this milestone");
+      throw new NotFoundException(
+        "Active contract not found for this milestone",
+      );
     }
     return this.releasePaymentUseCase.execute(contract.id, clientId);
   }

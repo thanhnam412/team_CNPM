@@ -1,7 +1,17 @@
 import { Injectable, Inject } from "@nestjs/common";
-import { Kysely, sql } from "kysely";
-import { KYSELY_DB } from "../../database/database.module";
-import { DB } from "../../database/types";
+import { Kysely } from "kysely";
+import { KYSELY_DB } from "@/database/database.module";
+import { DB } from "@/database/types";
+import {
+  getClientWalletQuery,
+  getClientSpentMtdQuery,
+  getClientActiveProjectsQuery,
+  getProjectTasksQuery,
+  getClientPendingQuickTasksQuery,
+  getUserNameQuery,
+  getClientPendingMilestonesQuery,
+  getClientUnreadMessagesQuery,
+} from "@/queries/clients";
 
 @Injectable()
 export class ClientsService {
@@ -9,25 +19,17 @@ export class ClientsService {
 
   async getOverview(userId: string) {
     // 1. FINANCE
-    const wallet = await this.db
-      .selectFrom("wallets")
-      .where("userId", "=", userId)
-      .select(["balance", "escrowBalance"])
-      .executeTakeFirst();
+    const wallet = await getClientWalletQuery(this.db, userId);
 
     // SPENT MTD
     const now = new Date();
     const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    
-    const spentResult = await this.db
-      .selectFrom("transactions")
-      .where("userId", "=", userId)
-      .where("type", "=", "SPENT")
-      .where("date", ">=", firstDayOfMonth)
-      .select(({ fn }) => [
-        fn.sum<string>("amount").as("totalSpent")
-      ])
-      .executeTakeFirst();
+
+    const spentResult = await getClientSpentMtdQuery(
+      this.db,
+      userId,
+      firstDayOfMonth,
+    );
 
     const finance = {
       availableBalance: wallet?.balance || "0",
@@ -36,63 +38,43 @@ export class ClientsService {
     };
 
     // 2. ACTIVE PROJECTS
-    const activeProjectsRaw = await this.db
-      .selectFrom("projects")
-      .innerJoin("project_members", "projects.id", "project_members.projectId")
-      .where("project_members.userId", "=", userId)
-      .where("project_members.role", "=", "CLIENT_ADMIN")
-      .where("projects.status", "not in", ["COMPLETED", "CANCELLED"])
-      .select([
-        "projects.id",
-        "projects.title as name",
-        "projects.endDate",
-        "projects.status",
-        "projects.escrow",
-      ])
-      .orderBy("projects.createdAt", "desc")
-      .limit(5)
-      .execute();
+    const activeProjectsRaw = await getClientActiveProjectsQuery(
+      this.db,
+      userId,
+    );
 
     const activeProjects = await Promise.all(
-      activeProjectsRaw.map(async p => {
-        const tasks = await this.db
-          .selectFrom("tasks")
-          .select(["status"])
-          .where("projectId", "=", p.id)
-          .execute();
+      activeProjectsRaw.map(async (p) => {
+        const tasks = await getProjectTasksQuery(this.db, p.id);
 
-        const completedTasks = tasks.filter(t => t.status === "DONE").length;
+        const completedTasks = tasks.filter((t) => t.status === "DONE").length;
         const totalTasks = tasks.length;
-        const progress = totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
+        const progress =
+          totalTasks === 0
+            ? 0
+            : Math.round((completedTasks / totalTasks) * 100);
 
         return {
           id: p.id,
           name: p.name,
-          deadlineInfo: p.endDate ? `Due ${p.endDate.toLocaleDateString()}` : "No deadline",
+          deadlineInfo: p.endDate
+            ? `Due ${new Date(p.endDate).toLocaleDateString()}`
+            : "No deadline",
           status: p.status,
           progress,
           escrow: p.escrow || "0",
         };
-      })
+      }),
     );
 
     // 3. PENDING ACTIONS
-    const quickTasks = await this.db
-      .selectFrom("quick_tasks")
-      .where("clientId", "=", userId)
-      .where("status", "in", ["REVIEW", "IN_PROGRESS"])
-      .select(["id", "title as task", "expertId"])
-      .execute();
+    const quickTasks = await getClientPendingQuickTasksQuery(this.db, userId);
 
     const qtActions = await Promise.all(
-      quickTasks.map(async qt => {
+      quickTasks.map(async (qt) => {
         let expertName = "Unknown";
         if (qt.expertId) {
-          const user = await this.db
-            .selectFrom("users")
-            .where("id", "=", qt.expertId)
-            .select("name")
-            .executeTakeFirst();
+          const user = await getUserNameQuery(this.db, qt.expertId);
           expertName = user?.name || "Unknown";
         }
         return {
@@ -101,34 +83,16 @@ export class ClientsService {
           expert: expertName,
           type: "Quick Task",
         };
-      })
+      }),
     );
 
-    const milestones = await this.db
-      .selectFrom("milestones")
-      .innerJoin("projects", "milestones.projectId", "projects.id")
-      .innerJoin("project_members", "projects.id", "project_members.projectId")
-      .where("project_members.userId", "=", userId)
-      .where("project_members.role", "=", "CLIENT_ADMIN")
-      .where("milestones.status", "=", "REVIEW")
-      .select([
-        "milestones.id",
-        "milestones.title as task",
-        "projects.title as projectName",
-        "milestones.assigneeId",
-        "projects.id as projectId"
-      ])
-      .execute();
+    const milestones = await getClientPendingMilestonesQuery(this.db, userId);
 
     const msActions = await Promise.all(
-      milestones.map(async ms => {
+      milestones.map(async (ms) => {
         let expertName = "Unknown";
         if (ms.assigneeId) {
-          const user = await this.db
-            .selectFrom("users")
-            .where("id", "=", ms.assigneeId)
-            .select("name")
-            .executeTakeFirst();
+          const user = await getUserNameQuery(this.db, ms.assigneeId);
           expertName = user?.name || "Unknown";
         }
         return {
@@ -138,33 +102,21 @@ export class ClientsService {
           expert: expertName,
           type: "Milestone",
         };
-      })
+      }),
     );
 
     const pendingActions = [...qtActions, ...msActions];
 
     // 4. UNREAD MESSAGES (Mocking recent messages for now)
-    const messagesRaw = await this.db
-      .selectFrom("messages")
-      .innerJoin("conversation_participants", "messages.conversationId", "conversation_participants.conversationId")
-      .innerJoin("users", "messages.senderId", "users.id")
-      .where("conversation_participants.userId", "=", userId)
-      .where("messages.senderId", "!=", userId)
-      .select([
-        "messages.id",
-        "messages.content as msg",
-        "messages.createdAt as time",
-        "users.name",
-        "messages.conversationId"
-      ])
-      .orderBy("messages.createdAt", "desc")
-      .limit(3)
-      .execute();
+    const messagesRaw = await getClientUnreadMessagesQuery(this.db, userId);
 
-    const unreadMessages = messagesRaw.map(m => ({
+    const unreadMessages = messagesRaw.map((m) => ({
       id: m.id,
       name: m.name,
-      time: m.time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      time: new Date(m.time as any).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
       msg: m.msg,
       unread: 1,
       context: "Direct Message",

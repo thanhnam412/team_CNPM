@@ -5,7 +5,8 @@ import {
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { OAuth2Client } from "google-auth-library";
-import { UsersService } from "../users/users.service";
+import { UsersService } from "@/modules/users/users.service";
+import { TokenService } from "./token/token.service";
 import { IdToken } from "./dto/google-login.dto";
 
 @Injectable()
@@ -15,6 +16,7 @@ export class AuthService {
   constructor(
     private jwtService: JwtService,
     private usersService: UsersService,
+    private tokenService: TokenService,
   ) {}
 
   async verifyGoogleToken(idToken: string, device?: string) {
@@ -53,7 +55,7 @@ export class AuthService {
       throw new UnauthorizedException("Refresh token invalid or expired");
     }
 
-    const isValid = await this.usersService.validateRefreshToken(
+    const isValid = await this.tokenService.validateRefreshToken(
       payload.sub,
       refreshToken,
     );
@@ -76,8 +78,8 @@ export class AuthService {
     );
 
     // Revoke token cũ, lưu token mới
-    await this.usersService.revokeRefreshToken(refreshToken);
-    await this.usersService.saveRefreshToken(user.id, new_refresh_token);
+    await this.tokenService.revokeRefreshToken(refreshToken);
+    await this.tokenService.saveRefreshToken(user.id, new_refresh_token);
 
     return {
       access_token,
@@ -86,7 +88,7 @@ export class AuthService {
   }
 
   async logout(refreshToken: string) {
-    await this.usersService.revokeRefreshToken(refreshToken);
+    await this.tokenService.revokeRefreshToken(refreshToken);
     return { success: true };
   }
 
@@ -102,7 +104,7 @@ export class AuthService {
     );
 
     try {
-      await this.usersService.saveRefreshToken(userId, refresh_token, device);
+      await this.tokenService.saveRefreshToken(userId, refresh_token, device);
     } catch {
       throw new InternalServerErrorException("Failed to save refresh token");
     }

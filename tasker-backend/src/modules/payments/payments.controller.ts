@@ -1,22 +1,26 @@
-import { Controller, Get, Post, Body, Param } from "@nestjs/common";
-import { PaymentsService } from "./payments.service";
+import { Controller, Get, Post, Body, Req, UnauthorizedException } from "@nestjs/common";
+import { PaymentsService } from './payments.service';
+import { MockTopupDto } from './dto/payments.dto';
 
 @Controller("api/payments")
 export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) {}
 
-  @Get("users/:userId/balance")
-  getBalance(@Param("userId") userId: string) {
-    return this.paymentsService.getBalance(userId);
+  @Get("me/balance")
+  getBalance(@Req() req) {
+    if (!req.user?.userId) throw new UnauthorizedException();
+    return this.paymentsService.getBalance(req.user.userId);
   }
 
-  @Get("users/:userId/transactions")
-  getTransactions(@Param("userId") userId: string) {
-    return this.paymentsService.getTransactions(userId);
+  @Get("me/transactions")
+  getTransactions(@Req() req) {
+    if (!req.user?.userId) throw new UnauthorizedException();
+    return this.paymentsService.getTransactions(req.user.userId);
   }
 
-  @Post("users/:userId/mock-topup")
-  mockTopup(@Param("userId") userId: string, @Body("amount") amount: number) {
-    return this.paymentsService.mockTopup(userId, amount);
+  @Post("me/mock-topup")
+  mockTopup(@Req() req, @Body() data: MockTopupDto) {
+    if (!req.user?.userId) throw new UnauthorizedException();
+    return this.paymentsService.mockTopup(req.user.userId, data.amount);
   }
 }

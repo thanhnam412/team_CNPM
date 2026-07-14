@@ -7,9 +7,16 @@ import {
   Body,
   Param,
   Request,
+  UnauthorizedException,
+  ForbiddenException,
 } from "@nestjs/common";
-import { QuickTasksService } from "./quick-tasks.service";
-import { Public } from "../auth/decorators/public.decorator";
+import { QuickTasksService } from './quick-tasks.service';
+import { Public } from "../../decorators/public.decorator";
+import {
+  CreateQuickTaskDto,
+  UpdateQuickTaskDto,
+  SubmitDeliverableDto,
+} from './dto/quick-tasks.dto';
 
 @Controller("api/quick-tasks")
 export class QuickTasksController {
@@ -28,8 +35,13 @@ export class QuickTasksController {
   }
 
   @Post()
-  create(@Body() data: any) {
-    return this.quickTasksService.create(data.clientId, data);
+  create(@Request() req, @Body() data: CreateQuickTaskDto) {
+    const userId = req.user?.userId;
+    if (!userId)
+      throw new UnauthorizedException(
+        "Cannot create a quick task without being logged in",
+      );
+    return this.quickTasksService.create(userId, data);
   }
 
   @Get("client/:userId")
@@ -38,13 +50,16 @@ export class QuickTasksController {
   }
 
   @Patch(":id")
-  update(@Param("id") id: string, @Body() data: any) {
+  update(@Param("id") id: string, @Body() data: UpdateQuickTaskDto) {
     return this.quickTasksService.update(id, data);
   }
 
-
   @Post(":id/submit")
-  submitDeliverable(@Request() req, @Param("id") id: string, @Body() data: any) {
+  submitDeliverable(
+    @Request() req,
+    @Param("id") id: string,
+    @Body() data: SubmitDeliverableDto,
+  ) {
     return this.quickTasksService.submitDeliverable(req.user.userId, id, data);
   }
 

@@ -1,9 +1,23 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Inject, Injectable } from "@nestjs/common";
-import { Kysely, sql } from "kysely";
-import { KYSELY_DB } from "../../database/database.module";
-import { DB } from "../../database/types";
+import { Kysely } from "kysely";
+import {
+  findAllExpertsQuery,
+  getCompletedTasksCountsQuery,
+  findExpertByIdQuery,
+  getCompletedTasksCountQuery,
+  getQuickTasksHistoryQuery,
+  getProjectTasksHistoryQuery,
+  getExpertOverviewQuery,
+  getMtdTransactionsQuery,
+  getActiveQuickTasksQuery,
+  getConversationsQuery,
+  getRecommendedTasksQuery,
+  getMyProfileQuery,
+  updateExpertProfileQuery,
+  createExpertProfileQuery,
+} from "@/queries/experts";
+import { KYSELY_DB } from "@/database/database.module";
+import { DB } from "@/database/types";
 
 interface ExpertSearchFilters {
   search?: string;
@@ -19,62 +33,17 @@ export class ExpertsService {
   constructor(@Inject(KYSELY_DB) private db: Kysely<DB>) {}
 
   async findAll(filters: ExpertSearchFilters) {
-    let query = this.db
-      .selectFrom("expert_profiles")
-      .innerJoin("users", "users.id", "expert_profiles.userId")
-      .select([
-        "users.id",
-        "users.name",
-        "users.avatar",
-        "users.online",
-        "expert_profiles.title",
-        "expert_profiles.bio",
-        "expert_profiles.skills",
-        "expert_profiles.hourlyRate as rate",
-        "expert_profiles.rating as profileRating",
-      ]);
-
-    // Filter by name/title search
-    if (filters.search) {
-      const term = `%${filters.search}%`;
-      query = query.where((eb) =>
-        eb.or([
-          eb("users.name", "ilike", term),
-          eb("expert_profiles.title", "ilike", term),
-        ]),
-      );
-    }
-
-    // Filter by online status
-    if (filters.online !== undefined) {
-      query = query.where("users.online", "=", filters.online);
-    }
-
-    // Exclude current user from search results
-    if (filters.excludeUserId) {
-      query = query.where("users.id", "!=", filters.excludeUserId);
-    }
-
-    const experts = await query.execute();
+    const experts = await findAllExpertsQuery(this.db, filters);
 
     const expertIds = experts.map((e) => e.id);
 
-    // Get completed tasks count
     let taskCounts: any[] = [];
     if (expertIds.length > 0) {
-      taskCounts = await this.db
-        .selectFrom("tasks")
-        .select(["assigneeId", sql<number>`count(*)`.as("completedTasks")])
-        .where("assigneeId", "in", expertIds)
-        .where("status", "=", "DONE")
-        .groupBy("assigneeId")
-        .execute();
+      taskCounts = await getCompletedTasksCountsQuery(this.db, expertIds);
     }
 
-    // Merge data
     const result = experts.map((expert) => {
       const tasks = taskCounts.find((t: any) => t.assigneeId === expert.id);
-
       const profileRating = parseFloat(expert.profileRating) || 0;
 
       return {
@@ -85,12 +54,10 @@ export class ExpertsService {
       };
     });
 
-    // Filter by minRating (post-query since it's aggregated)
     if (filters.minRating) {
       return result.filter((e) => e.rating >= filters.minRating!);
     }
 
-    // Filter by skill (post-query since skills is JSON)
     if (filters.skill) {
       const skillLower = filters.skill.toLowerCase();
       return result.filter((e) => {
@@ -102,7 +69,6 @@ export class ExpertsService {
             s.toLowerCase().includes(skillLower),
           );
         }
-        // Handle { core: [...], secondary: [...] } format
         const allSkills = [...(skills.core || []), ...(skills.secondary || [])];
         return allSkills.some((s: string) =>
           s.toLowerCase().includes(skillLower),
@@ -114,51 +80,16 @@ export class ExpertsService {
   }
 
   async findOne(id: string) {
-    const expert = await this.db
-      .selectFrom("expert_profiles")
-      .innerJoin("users", "users.id", "expert_profiles.userId")
-      .select([
-        "expert_profiles.id as cvId",
-        "users.id",
-        "users.name",
-        "users.avatar",
-        "users.online",
-        "users.location",
-        "expert_profiles.title",
-        "expert_profiles.bio",
-        "expert_profiles.skills",
-        "expert_profiles.hourlyRate as rate",
-        "expert_profiles.portfolioUrl as showcase",
-        "expert_profiles.experienceYears",
-        "expert_profiles.rating",
-      ])
-      .where("expert_profiles.userId", "=", id)
-      .executeTakeFirst();
+    const expert = await findExpertByIdQuery(this.db, id);
 
     if (!expert) return null;
 
-    const completedTasks = await this.db
-      .selectFrom("tasks")
-      .select(sql<number>`count(*)`.as("count"))
-      .where("assigneeId", "=", id)
-      .where("status", "=", "DONE")
-      .executeTakeFirst();
-
-    // Work history (completed quick tasks)
-    const quickTasksHistory = await this.db
-      .selectFrom("quick_tasks")
-      .select(["id", "title", "budget", "status", "createdAt"])
-      .where("expertId", "=", id)
-      .where("status", "=", "COMPLETED")
-      .execute();
-
-    // Work history (completed project tasks)
-    const projectTasksHistoryRaw = await this.db
-      .selectFrom("tasks")
-      .select(["id", "title", "status", "createdAt"])
-      .where("assigneeId", "=", id)
-      .where("status", "=", "DONE")
-      .execute();
+    const completedTasks = await getCompletedTasksCountQuery(this.db, id);
+    const quickTasksHistory = await getQuickTasksHistoryQuery(this.db, id);
+    const projectTasksHistoryRaw = await getProjectTasksHistoryQuery(
+      this.db,
+      id,
+    );
 
     const projectTasksHistory = projectTasksHistoryRaw.map((t) => ({
       ...t,
@@ -174,7 +105,7 @@ export class ExpertsService {
 
     return {
       ...expert,
-      rating: parseFloat(expert.rating as any) || 0,
+      rating: parseFloat(expert.rating) || 0,
       reviewCount: 0,
       completedTasks: completedTasks ? Number(completedTasks.count) : 0,
       reviews: [],
@@ -183,53 +114,31 @@ export class ExpertsService {
   }
 
   async getOverview(expertId: string) {
-    const expert = await this.db
-      .selectFrom("users")
-      .leftJoin("wallets", "wallets.userId", "users.id")
-      .select(["wallets.balance"])
-      .where("users.id", "=", expertId)
-      .executeTakeFirst();
+    const expert = await getExpertOverviewQuery(this.db, expertId);
 
     if (!expert) throw new Error("Expert not found");
 
-    // 1. Finance Stats
     const date = new Date();
     const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
 
-    const mtdTransactions = await this.db
-      .selectFrom("transactions")
-      .select(["amount"])
-      .where("userId", "=", expertId)
-      .where("type", "=", "PAYMENT_RECEIVED")
-      .where("createdAt", ">=", firstDayOfMonth)
-      .execute();
+    const mtdTransactions = await getMtdTransactionsQuery(
+      this.db,
+      expertId,
+      firstDayOfMonth,
+    );
 
     const earnedMTD = mtdTransactions.reduce(
       (sum, t) => sum + parseFloat(t.amount),
       0,
     );
 
-    const activeQuickTasks = await this.db
-      .selectFrom("quick_tasks")
-      .innerJoin("users as client", "client.id", "quick_tasks.clientId")
-      .select([
-        "quick_tasks.id",
-        "quick_tasks.title",
-        "quick_tasks.budget",
-        "quick_tasks.deadline",
-        "quick_tasks.status",
-        "client.name as clientName",
-      ])
-      .where("quick_tasks.expertId", "=", expertId)
-      .where("quick_tasks.status", "in", ["IN_PROGRESS", "REVIEW"])
-      .execute();
+    const activeQuickTasks = await getActiveQuickTasksQuery(this.db, expertId);
 
     const inEscrow = activeQuickTasks.reduce(
       (sum, qt) => sum + parseFloat(qt.budget),
       0,
     );
 
-    // 2. Action Required (Deadlines < 24h) & 3. Active Work
     const now = new Date();
     const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
 
@@ -241,12 +150,13 @@ export class ExpertsService {
         taskName: qt.title,
         clientName: qt.clientName,
         dueDate: qt.deadline,
-        isUrgent: new Date(qt.deadline!) < tomorrow,
+        isUrgent: qt.deadline ? new Date(qt.deadline) < tomorrow : false,
       }))
-      .sort(
-        (a, b) =>
-          new Date(a.dueDate!).getTime() - new Date(b.dueDate!).getTime(),
-      );
+      .sort((a, b) => {
+        const timeA = a.dueDate ? new Date(a.dueDate).getTime() : 0;
+        const timeB = b.dueDate ? new Date(b.dueDate).getTime() : 0;
+        return timeA - timeB;
+      });
 
     const activeWork = activeQuickTasks.map((qt) => ({
       id: qt.id,
@@ -258,22 +168,8 @@ export class ExpertsService {
       dueDate: qt.deadline,
     }));
 
-    // 4. Messages (Mock unread for now, fetch real recent chats)
-    const convos = await this.db
-      .selectFrom("conversation_participants as cp")
-      .innerJoin("conversations as c", "c.id", "cp.conversationId")
-      .leftJoin("messages as m", "m.conversationId", "c.id")
-      .select([
-        "c.id as conversationId",
-        "c.name as chatName",
-        "m.content as lastMessage",
-        "m.createdAt as time",
-      ])
-      .where("cp.userId", "=", expertId)
-      .orderBy("m.createdAt", "desc")
-      .execute();
+    const convos = await getConversationsQuery(this.db, expertId);
 
-    // Deduplicate to get the latest message per conversation
     const recentChatsMap = new Map();
     for (const c of convos) {
       if (c.lastMessage && !recentChatsMap.has(c.conversationId)) {
@@ -288,15 +184,7 @@ export class ExpertsService {
     }
     const recentChats = Array.from(recentChatsMap.values()).slice(0, 3);
 
-    // 5. Recommended Tasks
-    const recommendedTasks = await this.db
-      .selectFrom("quick_tasks")
-      .select(["id", "title", "budget", "createdAt"])
-      .where("status", "=", "OPEN")
-      .where("expertId", "is", null)
-      .orderBy("createdAt", "desc")
-      .limit(5)
-      .execute();
+    const recommendedTasks = await getRecommendedTasksQuery(this.db);
 
     return {
       finance: {
@@ -314,7 +202,7 @@ export class ExpertsService {
         id: t.id,
         title: t.title,
         budget: parseFloat(t.budget),
-        tags: ["AI", "Tech"], // Mock tags since DB doesn't have a tags array yet
+        tags: ["AI", "Tech"],
         createdAt: t.createdAt,
       })),
     };
@@ -329,18 +217,14 @@ export class ExpertsService {
   }
 
   async getMyProfile(userId: string) {
-    const profile = await this.db
-      .selectFrom("expert_profiles")
-      .selectAll()
-      .where("userId", "=", userId)
-      .executeTakeFirst();
+    const profile = await getMyProfileQuery(this.db, userId);
     return profile || null;
   }
 
   async upsertProfile(userId: string, data: any) {
     const existing = await this.getMyProfile(userId);
 
-    const updateData: any = { updatedAt: new Date() };
+    const updateData: any = { updatedAt: new Date().toISOString() };
     if (data.title !== undefined) updateData.title = data.title;
     if (data.bio !== undefined) updateData.bio = data.bio;
     if (data.skills !== undefined)
@@ -356,33 +240,9 @@ export class ExpertsService {
     if (data.rating !== undefined) updateData.rating = data.rating;
 
     if (existing) {
-      return this.db
-        .updateTable("expert_profiles")
-        .set(updateData)
-        .where("id", "=", existing.id)
-        .returningAll()
-        .executeTakeFirst();
+      return updateExpertProfileQuery(this.db, existing.id, updateData);
     } else {
-      return this.db
-        .insertInto("expert_profiles")
-        .values({
-          id: crypto.randomUUID(),
-          userId,
-          title: data.title || null,
-          bio: data.bio || null,
-          skills: data.skills
-            ? typeof data.skills === "string"
-              ? data.skills
-              : JSON.stringify(data.skills)
-            : null,
-          hourlyRate: data.hourlyRate || "0",
-          experienceYears: data.experienceYears || 0,
-          portfolioUrl: data.portfolioUrl || null,
-          rating: data.rating || "0",
-          updatedAt: new Date(),
-        })
-        .returningAll()
-        .executeTakeFirst();
+      return createExpertProfileQuery(this.db, userId, data);
     }
   }
 }

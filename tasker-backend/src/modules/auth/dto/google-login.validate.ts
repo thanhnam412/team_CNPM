@@ -9,9 +9,3 @@ export class GoogleLoginDto {
   @IsOptional()
   device?: string;
 }
-
-export class RefreshTokenDto {
-  @IsString()
-  @IsNotEmpty()
-  refreshToken!: string;
-}

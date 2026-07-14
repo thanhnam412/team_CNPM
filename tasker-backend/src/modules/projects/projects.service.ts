@@ -1,10 +1,30 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { Inject, Injectable, BadRequestException, NotFoundException } from "@nestjs/common";
+import {
+  Inject,
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from "@nestjs/common";
 import { Kysely } from "kysely";
-import { KYSELY_DB } from "../../database/database.module";
-import { DB } from "../../database/types";
-import { WalletService } from "../wallet/wallet.service";
+import { KYSELY_DB } from "@/database/database.module";
+import { DB } from "@/database/types";
+import { WalletService } from "@/modules/wallet/wallet.service";
+import {
+  findAllProjectsQuery,
+  findProjectByIdQuery,
+  getProjectTasksStatsQuery,
+  getProjectMembersStatsQuery,
+  getUpcomingMilestonesQuery,
+  createProjectQuery,
+  getProjectFinanceQuery,
+  getProjectTransactionsQuery,
+  getProjectMilestonesQuery,
+  getMilestoneProposalsQuery,
+  updateProjectFinanceQuery,
+  updateProjectQuery,
+  checkProjectActiveTransactionsQuery,
+  checkProjectActiveMilestonesQuery,
+  deleteProjectQuery,
+} from "@/queries/projects";
 
 @Injectable()
 export class ProjectsService {
@@ -14,44 +34,28 @@ export class ProjectsService {
   ) {}
 
   async findAll() {
-    return this.db.selectFrom("projects").selectAll().execute();
+    return findAllProjectsQuery(this.db);
   }
 
   async findOne(id: string) {
-    const project = await this.db
-      .selectFrom("projects")
-      .selectAll()
-      .where("id", "=", id)
-      .executeTakeFirst();
+    const project = await findProjectByIdQuery(this.db, id);
 
     if (!project) return null;
 
-    const tasks = await this.db
-      .selectFrom("tasks")
-      .select(["status"])
-      .where("projectId", "=", id)
-      .execute();
+    const tasks = await getProjectTasksStatsQuery(this.db, id);
 
-    const completedTasks = tasks.filter((t) => t.status === "DONE").length;
+    const completedTasks = tasks.filter((t: any) => t.status === "DONE").length;
     const totalTasks = tasks.length;
-    const activeTasks = tasks.filter((t) => t.status !== "DONE").length;
+    const activeTasks = tasks.filter((t: any) => t.status !== "DONE").length;
 
-    const members = await this.db
-      .selectFrom("project_members")
-      .select(["role"])
-      .where("projectId", "=", id)
-      .execute();
+    const members = await getProjectMembersStatsQuery(this.db, id);
 
     const totalMembers = members.length;
-    const expertMembers = members.filter((m) => m.role === "EXPERT").length;
+    const expertMembers = members.filter(
+      (m: any) => m.role === "EXPERT",
+    ).length;
 
-    const milestones = await this.db
-      .selectFrom("milestones")
-      .selectAll()
-      .where("projectId", "=", id)
-      .orderBy("createdAt", "asc")
-      .limit(3)
-      .execute();
+    const milestones = await getUpcomingMilestonesQuery(this.db, id);
 
     return {
       ...project,
@@ -69,60 +73,14 @@ export class ProjectsService {
   }
 
   async create(userId: string, data: any) {
-    const tags = {
-      type: data.type || "fixed",
-      duration: data.duration || "medium",
-      commitment: data.commitment || "part",
-      ...data.tags
-    };
-
     return this.db.transaction().execute(async (trx) => {
-      const project = await trx
-        .insertInto("projects")
-        .values({
-          id: crypto.randomUUID(),
-          title: data.title,
-          description: data.description || null,
-          industry: data.category || data.industry || null,
-          requirements: data.technicalScope || data.requirements || null,
-          tags: JSON.stringify(tags),
-          budget: data.budgetMax?.toString() || data.budget?.toString() || "0",
-          spent: "0",
-          escrow: "0",
-          updatedAt: new Date(),
-        })
-        .returningAll()
-        .executeTakeFirstOrThrow();
-
-      await trx
-        .insertInto("project_members")
-        .values({
-          id: crypto.randomUUID(),
-          projectId: project.id,
-          userId,
-          role: "CLIENT_ADMIN",
-          status: "ACTIVE",
-          updatedAt: new Date(),
-        })
-        .execute();
-
-      return project;
+      return createProjectQuery(trx, userId, data);
     });
   }
 
   async getFinance(projectId: string) {
-    const project = await this.db
-      .selectFrom("projects")
-      .select(["budget", "spent", "escrow"])
-      .where("id", "=", projectId)
-      .executeTakeFirst();
-
-    const transactions = await this.db
-      .selectFrom("transactions")
-      .selectAll()
-      .where("projectId", "=", projectId)
-      .orderBy("createdAt", "desc")
-      .execute();
+    const project = await getProjectFinanceQuery(this.db, projectId);
+    const transactions = await getProjectTransactionsQuery(this.db, projectId);
 
     return {
       budget: project?.budget || "0",
@@ -133,111 +91,84 @@ export class ProjectsService {
   }
 
   async getMarketplace(projectId: string) {
-    const milestones = await this.db
-      .selectFrom("milestones")
-      .selectAll()
-      .where("projectId", "=", projectId)
-      .execute();
-      
+    const milestones = await getProjectMilestonesQuery(this.db, projectId);
+
     if (milestones.length === 0) return [];
 
-    const milestoneIds = milestones.map((m) => m.id);
-    const proposals = await this.db
-      .selectFrom("proposals")
-      .selectAll()
-      .where("milestoneId", "in", milestoneIds)
-      .execute();
+    const milestoneIds = milestones.map((m: any) => m.id);
+    const proposals = await getMilestoneProposalsQuery(this.db, milestoneIds);
 
-    return milestones.map((m) => ({
+    return milestones.map((m: any) => ({
       ...m,
-      proposals: proposals.filter((p) => p.milestoneId === m.id),
+      proposals: proposals.filter((p: any) => p.milestoneId === m.id),
     }));
   }
 
   async addFunds(projectId: string, amount: number, userId: string) {
     return this.db.transaction().execute(async (trx) => {
-      const project = await trx
-        .selectFrom("projects")
-        .select(["budget", "escrow"])
-        .where("id", "=", projectId)
-        .executeTakeFirst();
+      const project = await getProjectFinanceQuery(trx, projectId);
 
       if (!project) throw new NotFoundException("Project not found");
 
-      await this.walletService.escrowFunds(
+      await this.walletService.processEscrow(
+        trx,
         userId,
         amount,
         `Added funds to project escrow`,
-        trx,
         projectId,
       );
 
       const newBudget = (Number(project.budget) + amount).toString();
       const newEscrow = (Number(project.escrow) + amount).toString();
 
-      await trx
-        .updateTable("projects")
-        .set({ budget: newBudget, escrow: newEscrow, updatedAt: new Date() })
-        .where("id", "=", projectId)
-        .execute();
+      await updateProjectFinanceQuery(trx, projectId, newBudget, newEscrow);
 
       return { success: true, newBudget, newEscrow };
     });
   }
 
   async update(id: string, data: any) {
-    const updateData: any = { updatedAt: new Date() };
+    const updateData: any = { updatedAt: new Date().toISOString() };
     if (data.title !== undefined) updateData.title = data.title;
     if (data.description !== undefined)
       updateData.description = data.description;
     if (data.status !== undefined) updateData.status = data.status;
     if (data.budget !== undefined) updateData.budget = data.budget.toString();
 
-    return this.db
-      .updateTable("projects")
-      .set(updateData)
-      .where("id", "=", id)
-      .returningAll()
-      .executeTakeFirst();
+    return updateProjectQuery(this.db, id, updateData);
   }
 
   async remove(id: string) {
-    const project = await this.db
-      .selectFrom("projects")
-      .select(["escrow", "spent", "status"])
-      .where("id", "=", id)
-      .executeTakeFirst();
+    const project = await getProjectFinanceQuery(this.db, id);
 
     if (!project) throw new NotFoundException("Project not found");
 
     if (Number(project.escrow) > 0 || Number(project.spent) > 0) {
-      throw new BadRequestException("Cannot delete a project that holds escrow funds or has a financial history.");
+      throw new BadRequestException(
+        "Cannot delete a project that holds escrow funds or has a financial history.",
+      );
     }
 
-    const transactions = await this.db
-      .selectFrom("transactions")
-      .select(["id"])
-      .where("projectId", "=", id)
-      .limit(1)
-      .execute();
+    const transactions = await checkProjectActiveTransactionsQuery(this.db, id);
 
     if (transactions.length > 0) {
-      throw new BadRequestException("Cannot delete a project with financial transactions. Please archive it instead.");
+      throw new BadRequestException(
+        "Cannot delete a project with financial transactions. Please archive it instead.",
+      );
     }
 
-    const activeMilestones = await this.db
-      .selectFrom("milestones")
-      .select(["id"])
-      .where("projectId", "=", id)
-      .where("status", "in", ["ACTIVE", "REVIEW", "PAID"])
-      .limit(1)
-      .execute();
+    const activeMilestones = await checkProjectActiveMilestonesQuery(
+      this.db,
+      id,
+    );
 
     if (activeMilestones.length > 0) {
-      throw new BadRequestException("Cannot delete a project that has active, in-review, or paid milestones.");
+      throw new BadRequestException(
+        "Cannot delete a project that has active, in-review, or paid milestones.",
+      );
     }
 
-    await this.db.deleteFrom("projects").where("id", "=", id).execute();
+    await deleteProjectQuery(this.db, id);
 
     return { success: true };
   }

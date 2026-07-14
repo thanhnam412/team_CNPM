@@ -1,7 +1,8 @@
-import { Body, Controller, Post } from "@nestjs/common";
+import { Controller, Post, Body } from "@nestjs/common";
 import { AuthService } from "./auth.service";
-import { GoogleLoginDto, RefreshTokenDto } from "./dto/google-login.validate";
-import { Public } from "./decorators/public.decorator";
+import { GoogleLoginDto } from "./dto/google-login.validate";
+import { RefreshTokenDto } from "./dto/token.dto";
+import { Public } from "@/decorators/public.decorator";
 
 @Controller("auth")
 export class AuthController {

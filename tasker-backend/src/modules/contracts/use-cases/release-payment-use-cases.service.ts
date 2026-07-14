@@ -1,9 +1,19 @@
-import { Injectable, Inject, BadRequestException, NotFoundException } from '@nestjs/common';
-import { Kysely } from 'kysely';
-import { KYSELY_DB } from '../../../database/database.module';
-import { DB } from '../../../database/types';
-import { WalletService } from '../../wallet/wallet.service';
-import { MilestonesService } from '../../milestones/milestones.service';
+import { KYSELY_DB } from "@/database/database.module";
+import { DB } from "@/database/types";
+import { MilestonesService } from "@/modules/milestones/milestones.service";
+import { WalletService } from "@/modules/wallet/wallet.service";
+import {
+  getClientContractQuery,
+  markContractReleasedQuery,
+  markQuickTaskCompletedQuery,
+} from "@/queries/contracts";
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
+import { Kysely } from "kysely";
 
 /**
  * ReleasePaymentUseCase — Orchestrator cho luồng Release Funds (Client trả tiền cho Expert)
@@ -24,21 +34,21 @@ export class ReleasePaymentUseCase {
     @Inject(KYSELY_DB) private db: Kysely<DB>,
   ) {}
 
-  async execute(contractId: string, clientId: string): Promise<{ success: true }> {
+  async execute(
+    contractId: string,
+    clientId: string,
+  ): Promise<{ success: true }> {
     return this.db.transaction().execute(async (trx) => {
       // ── Step 1: Lấy contract, validate ────────────────────────────────────
-      const contract = await trx
-        .selectFrom('contracts')
-        .selectAll()
-        .where('id', '=', contractId)
-        .where('clientId', '=', clientId)
-        .executeTakeFirst();
+      const contract = await getClientContractQuery(trx, contractId, clientId);
 
       if (!contract) {
-        throw new NotFoundException('Contract not found or you are not authorized.');
+        throw new NotFoundException(
+          "Contract not found or you are not authorized.",
+        );
       }
 
-      if (contract.escrowStatus !== 'HELD') {
+      if (contract.escrowStatus !== "HELD") {
         throw new BadRequestException(
           `Cannot release funds. Contract escrow status is "${contract.escrowStatus}", expected "HELD".`,
         );
@@ -50,33 +60,29 @@ export class ReleasePaymentUseCase {
         : `Quick Task contract #${contract.quickTaskId?.slice(-6)}`;
 
       // ── Step 2: Chuyển tiền từ escrow Client → ví Expert ──────────────────
-      await this.walletService.releaseEscrowToExpert(
+      await this.walletService.processRelease(
+        trx,
         clientId,
         contract.expertId,
         amount,
         contractDesc,
-        trx,
       );
 
       // ── Step 3: Cập nhật Milestone hoặc QuickTask ─────────────────────────
       if (contract.milestoneId) {
-        await this.milestonesService.markAsPaid(contract.milestoneId, amount, trx);
+        await this.milestonesService.markAsPaid(
+          contract.milestoneId,
+          amount,
+          trx,
+        );
       }
 
       if (contract.quickTaskId) {
-        await trx
-          .updateTable('quick_tasks')
-          .set({ status: 'COMPLETED' as any, updatedAt: new Date() })
-          .where('id', '=', contract.quickTaskId)
-          .execute();
+        await markQuickTaskCompletedQuery(trx, contract.quickTaskId);
       }
 
       // ── Step 4: Đổi trạng thái Contract ───────────────────────────────────
-      await trx
-        .updateTable('contracts')
-        .set({ escrowStatus: 'RELEASED' as any, updatedAt: new Date() })
-        .where('id', '=', contractId)
-        .execute();
+      await markContractReleasedQuery(trx, contractId);
 
       return { success: true };
     });

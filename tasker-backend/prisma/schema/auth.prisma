@@ -1,27 +1,27 @@
 model User {
-  id                       String                    @id @default(uuid())
-  googleId                 String                    @unique
-  email                    String                    @unique
-  name                     String
-  avatar                   String?
-  createdAt                DateTime                  @default(now())
-  updatedAt                DateTime                  @updatedAt
-  currentRole              Role                      @default(CLIENT)
-  location                 String?
-  online                   Boolean                   @default(false)
+  id          String   @id @default(uuid())
+  googleId    String   @unique
+  email       String   @unique
+  name        String
+  avatar      String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  currentRole Role     @default(CLIENT)
+  location    String?
+  online      Boolean  @default(false)
 
-  wallet                   Wallet?
-  expertProfile            ExpertProfile?
-  clientProfile            ClientProfile?
-  refreshTokens            RefreshToken[]
+  wallet        Wallet?
+  expertProfile ExpertProfile?
+  clientProfile ClientProfile?
+  refreshTokens RefreshToken[]
 
-  clientQuickTasks         QuickTask[]               @relation("ClientQuickTasks")
-  expertQuickTasks         QuickTask[]               @relation("ExpertQuickTasks")
+  clientQuickTasks QuickTask[] @relation("ClientQuickTasks")
+  expertQuickTasks QuickTask[] @relation("ExpertQuickTasks")
 
-  projectMembers           ProjectMember[]
-  assignedTasks            Task[]
-  assignedMilestones       Milestone[]               @relation("MilestoneAssignee")
-  transactions             Transaction[]             @relation("UserTransactions")
+  projectMembers     ProjectMember[]
+  assignedTasks      Task[]
+  assignedMilestones Milestone[]     @relation("MilestoneAssignee")
+  transactions       Transaction[]   @relation("UserTransactions")
 
   conversationParticipants ConversationParticipant[]
   messages                 Message[]
@@ -30,47 +30,47 @@ model User {
 }
 
 model ExpertProfile {
-  id              String   @id @default(uuid())
-  userId          String   @unique
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   title           String?
   bio             String?
   skills          Json?
-  hourlyRate      Decimal  @default(0.0)
-  experienceYears Int      @default(0)
+  hourlyRate      Decimal @default(0.0)
+  experienceYears Int     @default(0)
   portfolioUrl    String?
-  rating          Decimal  @default(5.0)
-  status          String   @default("ACTIVE")
-  
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  
-  contracts       Contract[]
-  proposals       Proposal[]
-  invitations     Invitation[]
-  payments        Payment[]
+  rating          Decimal @default(5.0)
+  status          String  @default("ACTIVE")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  contracts   Contract[]
+  proposals   Proposal[]
+  invitations Invitation[]
+  payments    Payment[]
 
   @@map("expert_profiles")
 }
 
 model ClientProfile {
-  id                  String   @id @default(uuid())
-  userId              String   @unique
-  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   companyName         String?
   companyWebsite      String?
   industry            String?
-  totalSpent          Decimal  @default(0.0)
-  completedTasksCount Int      @default(0)
-  
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
-  
-  contracts           Contract[]
-  invitations         Invitation[]
-  payments            Payment[]
+  totalSpent          Decimal @default(0.0)
+  completedTasksCount Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  contracts   Contract[]
+  invitations Invitation[]
+  payments    Payment[]
 
   @@map("client_profiles")
 }

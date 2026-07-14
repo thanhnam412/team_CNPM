@@ -5,13 +5,14 @@ import {
   ForbiddenException,
 } from "@nestjs/common";
 import { Kysely } from "kysely";
-import { KYSELY_DB } from "../../../database/database.module";
-import { DB } from "../../../database/types";
-import { ProposalsService } from "../proposals.service";
-import { WalletService } from "../../wallet/wallet.service";
-import { MilestonesService } from "../../milestones/milestones.service";
-import { QuickTasksService } from "../../quick-tasks/quick-tasks.service";
-import { ContractsService } from "../../contracts/contracts.service";
+import { KYSELY_DB } from "@/database/database.module";
+import { DB } from "@/database/types";
+import { ProposalsService } from "@/modules/proposals/proposals.service";
+import { WalletService } from "@/modules/wallet/wallet.service";
+import { MilestonesService } from "@/modules/milestones/milestones.service";
+import { QuickTasksService } from "@/modules/quick-tasks/quick-tasks.service";
+import { ContractsService } from "@/modules/contracts/contracts.service";
+import { getProjectIdFromMilestoneQuery } from "@/queries/proposals";
 
 /**
  * AcceptProposalUseCase — Orchestrator cho luồng Accept Proposal
@@ -75,13 +76,16 @@ export class AcceptProposalUseCase {
         ? `Escrow for Milestone`
         : `Escrow for Quick Task`;
 
-      await this.walletService.escrowFunds(
+      await this.walletService.processEscrow(
+        trx,
         clientId,
         price,
         escrowDesc,
-        trx,
         proposal.milestoneId
-          ? await this._getProjectIdFromMilestone(proposal.milestoneId, trx)
+          ? await getProjectIdFromMilestoneQuery(
+              trx,
+              proposal.milestoneId,
+            ).then((res) => res?.projectId)
           : undefined,
       );
 
@@ -118,17 +122,5 @@ export class AcceptProposalUseCase {
 
       return { success: true };
     });
-  }
-
-  private async _getProjectIdFromMilestone(
-    milestoneId: string,
-    trx: any,
-  ): Promise<string | undefined> {
-    const ms = await trx
-      .selectFrom("milestones")
-      .select(["projectId"])
-      .where("id", "=", milestoneId)
-      .executeTakeFirst();
-    return ms?.projectId;
   }
 }

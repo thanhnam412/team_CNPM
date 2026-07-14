@@ -9,6 +9,7 @@ import {
   Request,
 } from '@nestjs/common';
 import { MilestonesService } from './milestones.service';
+import { CreateMilestoneDto, UpdateMilestoneDto, SubmitDeliverablesDto } from './dto/milestones.dto';
 
 /**
  * MilestonesController — chỉ xử lý CRUD của milestones.
@@ -26,18 +27,18 @@ export class MilestonesController {
   }
 
   @Post()
-  create(@Param('projectId') projectId: string, @Body() data: any) {
+  create(@Param('projectId') projectId: string, @Body() data: CreateMilestoneDto) {
     return this.milestonesService.create(projectId, data);
   }
 
   @Patch(':id')
-  update(@Request() req, @Param('id') id: string, @Body() data: any) {
+  update(@Request() req, @Param('id') id: string, @Body() data: UpdateMilestoneDto) {
     return this.milestonesService.update(req.user.userId, id, data);
   }
 
 
   @Post(':id/submit')
-  submitDeliverables(@Request() req, @Param('id') id: string, @Body() data: any) {
+  submitDeliverables(@Request() req, @Param('id') id: string, @Body() data: SubmitDeliverablesDto) {
     return this.milestonesService.submitDeliverables(req.user.userId, id, data);
   }
 

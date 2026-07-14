@@ -1,26 +1,26 @@
 model Project {
-  id               String          @id @default(uuid())
+  id               String    @id @default(uuid())
   title            String
   description      String?
   requirements     String?
   industry         String?
   tags             Json?
-  attachmentsCount Int             @default(0)
+  attachmentsCount Int       @default(0)
   links            Json?
   startDate        DateTime?
   endDate          DateTime?
-  status           String          @default("ACTIVE")
-  budget           Decimal         @default(0.0)
-  spent            Decimal         @default(0.0)
-  escrow           Decimal         @default(0.0)
-  createdAt        DateTime        @default(now())
-  updatedAt        DateTime        @updatedAt
+  status           String    @default("ACTIVE")
+  budget           Decimal   @default(0.0)
+  spent            Decimal   @default(0.0)
+  escrow           Decimal   @default(0.0)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
 
-  milestones       Milestone[]
-  members          ProjectMember[]
-  tasks            Task[]
-  invitations      Invitation[]
-  transactions     Transaction[]
+  milestones   Milestone[]
+  members      ProjectMember[]
+  tasks        Task[]
+  invitations  Invitation[]
+  transactions Transaction[]
 
   @@map("projects")
 }
@@ -35,31 +35,31 @@ model ProjectMember {
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
 
-  project   Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([projectId, userId])
   @@map("project_members")
 }
 
 model Milestone {
-  id           String          @id @default(uuid())
-  projectId    String
-  assigneeId   String?
-  title        String
-  description  String?
-  budget       Decimal         @default(0.0)
-  status       MilestoneStatus @default(PENDING)
-  createdAt    DateTime        @default(now())
-  updatedAt    DateTime        @updatedAt
+  id          String          @id @default(uuid())
+  projectId   String
+  assigneeId  String?
+  title       String
+  description String?
+  budget      Decimal         @default(0.0)
+  status      MilestoneStatus @default(PENDING)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
 
-  project      Project         @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  assignee     User?           @relation("MilestoneAssignee", fields: [assigneeId], references: [id])
-  
-  contract     Contract?
-  proposals    Proposal[]
-  tasks        Task[]
-  invitations  Invitation[]
+  project  Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  assignee User?   @relation("MilestoneAssignee", fields: [assigneeId], references: [id])
+
+  contract    Contract?
+  proposals   Proposal[]
+  tasks       Task[]
+  invitations Invitation[]
 
   @@map("milestones")
 }
@@ -77,11 +77,11 @@ model Task {
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 
-  project     Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  milestone   Milestone?   @relation(fields: [milestoneId], references: [id])
-  assignee    User?        @relation(fields: [assigneeId], references: [id])
-  
-  payments    Payment[]
+  project   Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  milestone Milestone? @relation(fields: [milestoneId], references: [id])
+  assignee  User?      @relation(fields: [assigneeId], references: [id])
+
+  payments Payment[]
 
   @@map("tasks")
 }

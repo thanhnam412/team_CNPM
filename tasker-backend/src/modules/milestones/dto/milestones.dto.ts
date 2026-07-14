@@ -30,3 +30,12 @@ export class UpdateMilestoneDto {
   @IsOptional()
   budget?: number;
 }
+
+export class SubmitDeliverablesDto {
+  @IsString()
+  @IsOptional()
+  message?: string;
+
+  @IsOptional()
+  attachments?: any;
+}

@@ -1,58 +1,43 @@
 import { Inject, Injectable, ForbiddenException } from "@nestjs/common";
 import { Kysely } from "kysely";
-import { KYSELY_DB } from "../../database/database.module";
-import { DB } from "../../database/types";
+import { KYSELY_DB } from "@/database/database.module";
+import { DB } from "@/database/types";
+import {
+  getUserConversationsQuery,
+  getConversationMessagesQuery,
+  checkConversationParticipantQuery,
+  insertMessageQuery,
+} from "@/queries/messages";
 
 @Injectable()
 export class MessagesService {
   constructor(@Inject(KYSELY_DB) private db: Kysely<DB>) {}
 
   async getConversations(userId: string) {
-    return this.db
-      .selectFrom("conversations")
-      .innerJoin(
-        "conversation_participants",
-        "conversation_participants.conversationId",
-        "conversations.id",
-      )
-      .selectAll("conversations")
-      .where("conversation_participants.userId", "=", userId)
-      .execute();
+    return getUserConversationsQuery(this.db, userId);
   }
 
   async getMessages(conversationId: string) {
-    return this.db
-      .selectFrom("messages")
-      .selectAll()
-      .where("conversationId", "=", conversationId)
-      .orderBy("createdAt", "asc")
-      .execute();
+    return getConversationMessagesQuery(this.db, conversationId);
   }
 
   async sendMessage(userId: string, conversationId: string, data: any) {
-    const participant = await this.db
-      .selectFrom("conversation_participants")
-      .select("id")
-      .where("conversationId", "=", conversationId)
-      .where("userId", "=", userId)
-      .executeTakeFirst();
-    
+    const participant = await checkConversationParticipantQuery(
+      this.db,
+      userId,
+      conversationId,
+    );
+
     if (!participant) {
-      throw new ForbiddenException("You are not a participant in this conversation");
+      throw new ForbiddenException(
+        "You are not a participant in this conversation",
+      );
     }
 
-    return this.db
-      .insertInto("messages")
-      .values({
-        id: crypto.randomUUID(),
-        conversationId,
-        senderId: userId,
-        type: data.type || "TEXT",
-        content: data.content,
-        metadata: data.metadata ? JSON.stringify(data.metadata) : null,
-        createdAt: new Date(),
-      })
-      .returningAll()
-      .executeTakeFirst();
+    return insertMessageQuery(this.db, {
+      ...data,
+      conversationId,
+      userId,
+    });
   }
 }

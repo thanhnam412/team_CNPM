@@ -1,23 +1,33 @@
 import { Injectable, Inject } from "@nestjs/common";
 import { Kysely } from "kysely";
-import { KYSELY_DB } from "../../database/database.module";
-import { DB } from "../../database/types";
+import { KYSELY_DB } from "@/database/database.module";
+import { DB } from "@/database/types";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { ConfigService } from "@nestjs/config";
+import {
+  insertProjectCopilotQuery,
+  insertProjectMemberCopilotQuery,
+  insertMilestoneCopilotQuery,
+  insertTaskCopilotQuery,
+  getProjectCopilotQuery,
+  searchExpertsCopilotQuery,
+  insertQuickTaskCopilotQuery,
+} from "@/queries/copilot";
 
 @Injectable()
 export class CopilotService {
-  private genAI: GoogleGenerativeAI;
+  private genAI: GoogleGenerativeAI | undefined;
   private model: any;
 
   constructor(
     @Inject(KYSELY_DB) private db: Kysely<DB>,
-    private configService: ConfigService
+    private configService: ConfigService,
   ) {}
 
   private getModel() {
     if (!this.model) {
-      const apiKey = this.configService.get<string>("GEMINI_API_KEY") || "MISSING_API_KEY";
+      const apiKey =
+        this.configService.get<string>("GEMINI_API_KEY") || "MISSING_API_KEY";
       this.genAI = new GoogleGenerativeAI(apiKey);
       this.model = this.genAI.getGenerativeModel({ model: "gemini-3.5-flash" });
     }
@@ -118,72 +128,56 @@ User request: "${message}"`;
   ) {
     // 1. Create project
     const projectId = crypto.randomUUID();
-    await this.db
-      .insertInto("projects")
-      .values({
-        id: projectId,
-        title: data.title || "Untitled Project",
-        description: data.description || "",
-        budget: data.budget?.toString() || "0",
-        status: "OPEN",
-        spent: "0",
-        escrow: "0",
-        updatedAt: new Date(),
-      })
-      .execute();
+    await insertProjectCopilotQuery(this.db, {
+      id: projectId,
+      title: data.title || "Untitled Project",
+      description: data.description || "",
+      budget: data.budget?.toString() || "0",
+      status: "OPEN",
+      spent: "0",
+      escrow: "0",
+      updatedAt: new Date(),
+    });
 
     // 2. Create project member (Client Admin)
-    await this.db
-      .insertInto("project_members")
-      .values({
-        id: crypto.randomUUID(),
-        projectId,
-        userId,
-        role: "CLIENT_ADMIN",
-        status: "ACTIVE",
-        updatedAt: new Date(),
-      })
-      .execute();
+    await insertProjectMemberCopilotQuery(this.db, {
+      id: crypto.randomUUID(),
+      projectId,
+      userId,
+      role: "CLIENT_ADMIN",
+      status: "ACTIVE",
+      updatedAt: new Date(),
+    });
 
     // 3. Create milestones & tasks
     const milestones = data.milestones || [];
     for (const milestoneData of milestones) {
       const milestoneId = crypto.randomUUID();
-      await this.db
-        .insertInto("milestones")
-        .values({
-          id: milestoneId,
-          projectId,
-          title: milestoneData.title || "Milestone",
-          budget: milestoneData.budget?.toString() || "0",
-          status: "PENDING",
-          updatedAt: new Date(),
-        })
-        .execute();
+      await insertMilestoneCopilotQuery(this.db, {
+        id: milestoneId,
+        projectId,
+        title: milestoneData.title || "Milestone",
+        budget: milestoneData.budget?.toString() || "0",
+        status: "PENDING",
+        updatedAt: new Date(),
+      });
 
       const tasks = milestoneData.tasks || [];
       for (const taskTitle of tasks) {
-        await this.db
-          .insertInto("tasks")
-          .values({
-            id: crypto.randomUUID(),
-            projectId,
-            milestoneId,
-            title: taskTitle,
-            status: "TODO",
-            priority: "MEDIUM",
-            updatedAt: new Date(),
-          })
-          .execute();
+        await insertTaskCopilotQuery(this.db, {
+          id: crypto.randomUUID(),
+          projectId,
+          milestoneId,
+          title: taskTitle,
+          status: "TODO",
+          priority: "MEDIUM",
+          updatedAt: new Date(),
+        });
       }
     }
 
     // Fetch the fully created project to return
-    const project = await this.db
-      .selectFrom("projects")
-      .selectAll()
-      .where("id", "=", projectId)
-      .executeTakeFirst();
+    const project = await getProjectCopilotQuery(this.db, projectId);
 
     return {
       intent: "CREATE_PROJECT",
@@ -193,40 +187,11 @@ User request: "${message}"`;
   }
 
   private async executeSearchExperts(data: any, message: string) {
-    // A simplified search using Kysely
-    let query = this.db
-      .selectFrom("users")
-      .innerJoin("expert_profiles", "expert_profiles.userId", "users.id")
-      .select([
-        "users.id",
-        "users.name",
-        "users.avatar",
-        "users.email",
-        "expert_profiles.title",
-        "expert_profiles.bio",
-        "expert_profiles.skills",
-        "expert_profiles.hourlyRate",
-      ]);
-
     const keywords = data.keywords || [];
     const skills = data.skills || [];
     const searchTerms = [...keywords, ...skills];
 
-    if (searchTerms.length > 0) {
-      // Simplified OR search across title or bio
-      query = query.where((eb) => {
-        const clauses = searchTerms.map((term: string) =>
-          eb("expert_profiles.bio", "ilike", `%${term}%`).or(
-            "expert_profiles.title",
-            "ilike",
-            `%${term}%`,
-          ),
-        );
-        return eb.or(clauses);
-      });
-    }
-
-    const experts = await query.limit(10).execute();
+    const experts = await searchExpertsCopilotQuery(this.db, searchTerms);
 
     return {
       intent: "SEARCH_EXPERTS",
@@ -251,19 +216,16 @@ User request: "${message}"`;
   ) {
     const taskId = crypto.randomUUID();
 
-    await this.db
-      .insertInto("quick_tasks")
-      .values({
-        id: taskId,
-        clientId: userId,
-        title: data.title || "Untitled Task",
-        description: data.description || "",
-        budget: data.budget?.toString() || "0",
-        status: "OPEN",
-        proposalsCount: 0,
-        updatedAt: new Date(),
-      })
-      .execute();
+    await insertQuickTaskCopilotQuery(this.db, {
+      id: taskId,
+      clientId: userId,
+      title: data.title || "Untitled Task",
+      description: data.description || "",
+      budget: data.budget?.toString() || "0",
+      status: "OPEN",
+      proposalsCount: 0,
+      updatedAt: new Date(),
+    });
 
     return {
       intent: "CREATE_QUICK_TASK",

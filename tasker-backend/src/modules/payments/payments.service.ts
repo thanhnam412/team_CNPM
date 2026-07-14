@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { WalletService } from '../wallet/wallet.service';
+import { Injectable } from "@nestjs/common";
+import { WalletService } from "@/modules/wallet/wallet.service";
 
 /**
  * PaymentsService — Facade trên WalletService cho Payments API endpoints.

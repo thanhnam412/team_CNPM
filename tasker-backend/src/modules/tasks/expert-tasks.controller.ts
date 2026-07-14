@@ -20,6 +20,6 @@ export class ExpertTasksController {
     @Req() req: Request,
   ) {
     const user: any = req.user;
-    return this.tasksService.updateStatus(id, status as any, user.userId);
+    return this.tasksService.updateStatus(id, status, user.userId);
   }
 }

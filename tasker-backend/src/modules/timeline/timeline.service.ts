@@ -2,8 +2,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Inject, Injectable } from "@nestjs/common";
 import { Kysely } from "kysely";
-import { KYSELY_DB } from "../../database/database.module";
-import { DB } from "../../database/types";
+import { KYSELY_DB } from "@/database/database.module";
+import { DB } from "@/database/types";
+
+import { getExpertTasksQuery, getExpertQuickTasksQuery } from "@/queries/timeline";
 
 @Injectable()
 export class TimelineService {
@@ -11,42 +13,10 @@ export class TimelineService {
 
   async getTimeline(expertId: string, startDate?: string, endDate?: string) {
     // Get all tasks assigned to this expert
-    const tasks = await this.db
-      .selectFrom("tasks")
-      .innerJoin("projects", "tasks.projectId", "projects.id")
-      .leftJoin("milestones", "tasks.milestoneId", "milestones.id")
-      .select([
-        "tasks.id",
-        "tasks.title",
-        "tasks.status",
-        "tasks.priority",
-        "tasks.createdAt",
-        "tasks.updatedAt",
-        "projects.id as projectId",
-        "projects.title as projectTitle",
-        "milestones.title as milestoneName",
-      ])
-      .where("tasks.assigneeId", "=", expertId)
-      .orderBy("tasks.createdAt", "asc")
-      .execute();
+    const tasks = await getExpertTasksQuery(this.db, expertId);
 
     // Get all quick tasks assigned to this expert (standalone, not linked to internal task)
-    const quickTasks = await this.db
-      .selectFrom("quick_tasks")
-      .innerJoin("users", "users.id", "quick_tasks.clientId")
-      .select([
-        "quick_tasks.id",
-        "quick_tasks.title",
-        "quick_tasks.status",
-        "quick_tasks.budget",
-        "quick_tasks.deadline",
-        "quick_tasks.createdAt",
-        "quick_tasks.updatedAt",
-        "users.name as clientName",
-      ])
-      .where("quick_tasks.expertId", "=", expertId)
-      .orderBy("quick_tasks.createdAt", "asc")
-      .execute();
+    const quickTasks = await getExpertQuickTasksQuery(this.db, expertId);
 
     // Group tasks by project for Gantt-style rows
     const projectMap = new Map<string, any>();

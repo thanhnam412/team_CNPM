@@ -1,6 +1,19 @@
-import { Controller, Get, Post, Param, Query, Body, Req, ForbiddenException } from "@nestjs/common";
-import { ExpertsService } from "./experts.service";
-import { Public } from "../auth/decorators/public.decorator";
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  Query,
+  Body,
+  Req,
+  ForbiddenException,
+} from "@nestjs/common";
+import { ExpertsService } from './experts.service';
+import { Public } from "../../decorators/public.decorator";
+import {
+  UpsertExpertProfileDto,
+  CreateReviewDto,
+} from './dto/experts.dto';
 
 @Controller("api/experts")
 export class ExpertsController {
@@ -12,7 +25,7 @@ export class ExpertsController {
   }
 
   @Post("me")
-  async upsertMyProfile(@Req() req: any, @Body() data: any) {
+  async upsertMyProfile(@Req() req: any, @Body() data: UpsertExpertProfileDto) {
     return this.expertsService.upsertProfile(req.user.userId, data);
   }
 
@@ -56,12 +69,13 @@ export class ExpertsController {
 
   @Get(":id/overview")
   getOverview(@Req() req, @Param("id") id: string) {
-    if (req.user.userId !== id) throw new ForbiddenException("Cannot view overview of another expert");
+    if (req.user.userId !== id)
+      throw new ForbiddenException("Cannot view overview of another expert");
     return this.expertsService.getOverview(id);
   }
 
   @Post(":id/reviews")
-  createReview(@Param("id") expertId: string, @Body() data: any) {
+  createReview(@Param("id") expertId: string, @Body() data: CreateReviewDto) {
     return this.expertsService.createReview(expertId, data);
   }
 

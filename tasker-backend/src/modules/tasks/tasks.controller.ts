@@ -8,7 +8,8 @@ import {
   Delete,
   Request,
 } from "@nestjs/common";
-import { TasksService } from "./tasks.service";
+import { TasksService } from './tasks.service';
+import { CreateTaskDto, UpdateTaskDto } from './dto/tasks.dto';
 
 @Controller("api/projects/:projectId/tasks")
 export class TasksController {

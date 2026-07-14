@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   Inject,
   Injectable,
@@ -6,25 +5,45 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { Kysely, Transaction } from "kysely";
-import { KYSELY_DB } from "../../database/database.module";
-import { DB } from "../../database/types";
+import { KYSELY_DB } from "@/database/database.module";
+import { DB } from "@/database/types";
+import {
+  checkAdminQuery,
+  findTasksByProjectQuery,
+  findAllTasksForExpertQuery,
+  getMilestoneAssigneeQuery,
+  createTaskQuery,
+  getTaskForUpdateQuery,
+  updateTaskStatusQuery,
+  updateTaskQuery,
+  getTaskForDeleteQuery,
+  deleteTaskQuery,
+  getMilestoneStatusQuery,
+  getSiblingTasksQuery,
+  updateMilestoneStatusQuery,
+} from "@/queries/tasks";
 
-/**
- * TasksService — DOMAIN OWNER của: tasks
- * Ngoài ra có thể UPDATE milestones để tính toán progress (side-effect cần thiết).
- */
+export interface CreateTaskData {
+  title: string;
+  status?: string;
+  priority?: string;
+  milestoneId?: string;
+  assigneeId?: string;
+}
+
+export interface UpdateTaskData {
+  title?: string;
+  assigneeId?: string;
+  milestoneId?: string;
+  priority?: string;
+}
+
 @Injectable()
 export class TasksService {
   constructor(@Inject(KYSELY_DB) private db: Kysely<DB>) {}
 
   private async _checkAdmin(userId: string, projectId: string) {
-    const admin = await this.db
-      .selectFrom("project_members")
-      .select("id")
-      .where("projectId", "=", projectId)
-      .where("userId", "=", userId)
-      .where("role", "=", "CLIENT_ADMIN")
-      .executeTakeFirst();
+    const admin = await checkAdminQuery(this.db, userId, projectId);
     return !!admin;
   }
 
@@ -40,76 +59,38 @@ export class TasksService {
   // ─── READ ───────────────────────────────────────────────────────────────────
 
   async findByProject(projectId: string) {
-    return this.db
-      .selectFrom("tasks")
-      .selectAll()
-      .where("projectId", "=", projectId)
-      .execute();
+    return findTasksByProjectQuery(this.db, projectId);
   }
 
   async findAllForExpert(expertId: string) {
-    return this.db
-      .selectFrom("tasks")
-      .innerJoin("projects", "tasks.projectId", "projects.id")
-      .leftJoin("milestones", "tasks.milestoneId", "milestones.id")
-      .selectAll("tasks")
-      .select([
-        "projects.title as projectName",
-        "milestones.title as milestoneName",
-      ])
-      .where("tasks.assigneeId", "=", expertId)
-      .execute();
+    return findAllTasksForExpertQuery(this.db, expertId);
   }
 
   // ─── WRITE ──────────────────────────────────────────────────────────────────
 
   async create(projectId: string, data: CreateTaskData) {
     return this.db.transaction().execute(async (trx) => {
-      // Auto-inherit assigneeId từ milestone nếu không set explicitly
       let assigneeId = data.assigneeId ?? null;
       if (!assigneeId && data.milestoneId) {
-        const milestone = await trx
-          .selectFrom("milestones")
-          .select("assigneeId")
-          .where("id", "=", data.milestoneId)
-          .executeTakeFirst();
+        const milestone = await getMilestoneAssigneeQuery(
+          trx,
+          data.milestoneId,
+        );
         assigneeId = milestone?.assigneeId ?? null;
       }
 
-      return trx
-        .insertInto("tasks")
-        .values({
-          id: crypto.randomUUID(),
-          projectId,
-          title: data.title,
-          status: (data.status ?? "TODO") as any,
-          priority: (data.priority ?? "MEDIUM") as any,
-          milestoneId: data.milestoneId ?? null,
-          assigneeId,
-          updatedAt: new Date(),
-        })
-        .returningAll()
-        .executeTakeFirstOrThrow();
+      return createTaskQuery(trx, { ...data, projectId, assigneeId });
     });
   }
 
   async updateStatus(actorId: string, id: string, status: string) {
-    const task = await this.db
-      .selectFrom("tasks")
-      .select(["projectId", "milestoneId", "assigneeId"])
-      .where("id", "=", id)
-      .executeTakeFirst();
+    const task = await getTaskForUpdateQuery(this.db, id);
 
     if (!task) throw new NotFoundException("Task not found");
     await this._checkAssigneeOrAdmin(actorId, task);
 
     return this.db.transaction().execute(async (trx) => {
-      const updatedTask = await trx
-        .updateTable("tasks")
-        .set({ status: status as any, updatedAt: new Date() })
-        .where("id", "=", id)
-        .returningAll()
-        .executeTakeFirstOrThrow();
+      const updatedTask = await updateTaskStatusQuery(trx, id, status);
 
       if (updatedTask.milestoneId) {
         await this._recalculateMilestoneProgress(trx, updatedTask.milestoneId);
@@ -120,44 +101,33 @@ export class TasksService {
   }
 
   async update(actorId: string, id: string, data: UpdateTaskData) {
-    const task = await this.db
-      .selectFrom("tasks")
-      .select(["projectId", "assigneeId"])
-      .where("id", "=", id)
-      .executeTakeFirst();
+    const task = await getTaskForUpdateQuery(this.db, id);
+
     if (!task) throw new NotFoundException("Task not found");
     await this._checkAssigneeOrAdmin(actorId, task);
 
-    const patch: Record<string, unknown> = { updatedAt: new Date() };
+    const patch: Record<string, unknown> = {};
     if (data.title !== undefined) patch.title = data.title;
     if (data.assigneeId !== undefined) patch.assigneeId = data.assigneeId;
     if (data.milestoneId !== undefined) patch.milestoneId = data.milestoneId;
     if (data.priority !== undefined) patch.priority = data.priority;
 
-    return this.db
-      .updateTable("tasks")
-      .set(patch as any)
-      .where("id", "=", id)
-      .returningAll()
-      .executeTakeFirst();
+    return updateTaskQuery(this.db, id, patch);
   }
 
   async remove(actorId: string, id: string) {
     return this.db.transaction().execute(async (trx) => {
-      const task = await trx
-        .selectFrom("tasks")
-        .select(["id", "milestoneId", "projectId"])
-        .where("id", "=", id)
-        .executeTakeFirst();
+      const task = await getTaskForDeleteQuery(trx, id);
 
       if (!task) throw new NotFoundException(`Task ${id} not found`);
 
       if (task.projectId) {
-        const isAdmin = await this._checkAdmin(actorId, task.projectId);
-        if (!isAdmin) throw new ForbiddenException("Must be CLIENT_ADMIN to delete a task");
+        const isAdmin = await checkAdminQuery(trx, actorId, task.projectId);
+        if (!isAdmin)
+          throw new ForbiddenException("Must be CLIENT_ADMIN to delete a task");
       }
 
-      await trx.deleteFrom("tasks").where("id", "=", id).execute();
+      await deleteTaskQuery(trx, id);
 
       if (task.milestoneId) {
         await this._recalculateMilestoneProgress(trx, task.milestoneId);
@@ -169,28 +139,20 @@ export class TasksService {
 
   // ─── PRIVATE HELPERS ────────────────────────────────────────────────────────
 
-  /**
-   * Tính lại % hoàn thành của Milestone dựa trên các task hiện tại.
-   * Tách ra private method để tránh duplicate code giữa updateStatus và remove.
-   */
   private async _recalculateMilestoneProgress(
     trx: Transaction<DB>,
     milestoneId: string,
   ): Promise<void> {
-    const currentMilestone = await trx
-      .selectFrom('milestones')
-      .select(['status'])
-      .where('id', '=', milestoneId)
-      .executeTakeFirst();
+    const currentMilestone = await getMilestoneStatusQuery(trx, milestoneId);
 
     if (!currentMilestone) return;
-    if (currentMilestone.status === 'PAID' || currentMilestone.status === 'REVIEW') return; // Không revert trạng thái nếu đã PAID hoặc REVIEW
+    if (
+      currentMilestone.status === "PAID" ||
+      currentMilestone.status === "REVIEW"
+    )
+      return;
 
-    const siblingTasks = await trx
-      .selectFrom("tasks")
-      .select(["status"])
-      .where("milestoneId", "=", milestoneId)
-      .execute();
+    const siblingTasks = await getSiblingTasksQuery(trx, milestoneId);
 
     const total = siblingTasks.length;
     const done = siblingTasks.filter((t) => t.status === "DONE").length;
@@ -201,27 +163,6 @@ export class TasksService {
     else if (progress === 100) milestoneStatus = "REVIEW";
     else milestoneStatus = "ACTIVE";
 
-    await trx
-      .updateTable("milestones")
-      .set({ status: milestoneStatus as any, updatedAt: new Date() })
-      .where("id", "=", milestoneId)
-      .execute();
+    await updateMilestoneStatusQuery(trx, milestoneId, milestoneStatus);
   }
-}
-
-// ─── LOCAL TYPES ─────────────────────────────────────────────────────────────
-
-export interface CreateTaskData {
-  title: string;
-  status?: string;
-  priority?: string;
-  milestoneId?: string;
-  assigneeId?: string;
-}
-
-export interface UpdateTaskData {
-  title?: string;
-  assigneeId?: string;
-  milestoneId?: string;
-  priority?: string;
 }

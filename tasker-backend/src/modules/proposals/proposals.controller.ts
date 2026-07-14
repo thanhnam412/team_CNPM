@@ -9,8 +9,13 @@ import {
   HttpCode,
   HttpStatus,
 } from "@nestjs/common";
-import { ProposalsService } from "./proposals.service";
-import { AcceptProposalUseCase } from "./use-cases/accept-proposal.use-case";
+import { ProposalsService } from './proposals.service';
+import { AcceptProposalUseCase } from "./use-cases/accept-proposal-use-cases.service";
+import { Public } from "../../decorators/public.decorator";
+import {
+  CreateProposalDto,
+  UpdateProposalStatusDto,
+} from './dto/proposals.dto';
 
 @Controller("api")
 export class ProposalsController {
@@ -25,7 +30,7 @@ export class ProposalsController {
   createProposal(
     @Request() req,
     @Param("taskId") taskId: string,
-    @Body() data: any,
+    @Body() data: CreateProposalDto,
   ) {
     return this.proposalsService.createProposal(
       { quickTaskId: taskId },
@@ -38,7 +43,7 @@ export class ProposalsController {
   createMilestoneProposal(
     @Request() req,
     @Param("milestoneId") milestoneId: string,
-    @Body() data: any,
+    @Body() data: CreateProposalDto,
   ) {
     return this.proposalsService.createProposal(
       { milestoneId },
@@ -85,7 +90,7 @@ export class ProposalsController {
   updateProposalStatus(
     @Request() req,
     @Param("proposalId") proposalId: string,
-    @Body() data: { status: "REJECTED" | "WITHDRAWN" },
+    @Body() data: UpdateProposalStatusDto,
   ) {
     return this.proposalsService.updateStatus(
       req.user.userId,
