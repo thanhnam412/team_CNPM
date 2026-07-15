@@ -14,6 +14,8 @@ import { MilestonesService } from "@/modules/milestones/milestones.service";
 import { QuickTasksService } from "@/modules/quick-tasks/quick-tasks.service";
 import { ContractsService } from "@/modules/contracts/contracts.service";
 import { getProjectIdFromMilestoneQuery } from "@/queries/proposals";
+import { validateLogic } from "../core/utils/proposal";
+import { ProposalSnapshot } from "../core/domain";
 
 /**
  * AcceptProposalUseCase — Orchestrator cho luồng Accept Proposal
@@ -53,12 +55,6 @@ export class AcceptProposalService {
         trx,
       );
 
-      if (proposal.status !== "PENDING") {
-        throw new BadRequestException(
-          `Proposal is already ${proposal.status}. Only PENDING proposals can be accepted.`,
-        );
-      }
-
       // ── Step 2: Xác định clientId và giá chốt ─────────────────────────────
       const { clientId, price } =
         await this.proposalsService.resolveClientAndPrice(proposal, trx);
@@ -67,11 +63,14 @@ export class AcceptProposalService {
         throw new BadRequestException("Proposal price must be greater than 0.");
       }
 
-      if (clientId !== _actorId) {
-        throw new ForbiddenException(
-          "You are not authorized to accept proposals for this task/project.",
-        );
-      }
+      const snapshot: ProposalSnapshot = {
+        id: proposal.id,
+        status: proposal.status,
+        clientId: clientId,
+        expertId: proposal.expertId,
+      };
+
+      validateLogic("ACCEPT", snapshot, _actorId);
 
       // ── Step 3: Escrow tiền (Tùy loại) ──────────────────────────────────
       if (proposal.milestoneId) {

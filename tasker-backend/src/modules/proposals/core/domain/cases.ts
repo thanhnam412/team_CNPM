@@ -1,4 +1,4 @@
-import { InvalidCounterOfferError } from "./errors";
+import { InvalidCounterOfferError, NotProposalClientError, NotProposalExpertError, InvalidStatusForProposalActionError } from "./errors";
 
 export type ActorRole = "CLIENT" | "EXPERT";
 
@@ -32,5 +32,39 @@ export function canCounterOffer(
         `Expert can only counter with a higher or equal price. Min allowed: ${minAllowed}`,
       );
     }
+  }
+}
+
+export interface ProposalSnapshot {
+  id: string;
+  status: string;
+  clientId: string;
+  expertId: string;
+}
+
+export function canAccept(proposal: ProposalSnapshot, actorId: string): void {
+  if (proposal.clientId !== actorId) {
+    throw new NotProposalClientError();
+  }
+  if (proposal.status !== "PENDING") {
+    throw new InvalidStatusForProposalActionError(proposal.status, "ACCEPT");
+  }
+}
+
+export function canReject(proposal: ProposalSnapshot, actorId: string): void {
+  if (proposal.clientId !== actorId) {
+    throw new NotProposalClientError();
+  }
+  if (proposal.status !== "PENDING") {
+    throw new InvalidStatusForProposalActionError(proposal.status, "REJECT");
+  }
+}
+
+export function canWithdraw(proposal: ProposalSnapshot, actorId: string): void {
+  if (proposal.expertId !== actorId) {
+    throw new NotProposalExpertError();
+  }
+  if (proposal.status !== "PENDING") {
+    throw new InvalidStatusForProposalActionError(proposal.status, "WITHDRAW");
   }
 }

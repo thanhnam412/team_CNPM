@@ -62,6 +62,44 @@ export const findProposalsForExpertQuery = async (
     .execute();
 };
 
+export const findProposalsForClientQuery = async (
+  db: Kysely<DB> | Transaction<DB>,
+  clientId: string,
+) => {
+  return db
+    .selectFrom("proposals")
+    .leftJoin("quick_tasks", "proposals.quickTaskId", "quick_tasks.id")
+    .leftJoin("milestones", "proposals.milestoneId", "milestones.id")
+    .leftJoin("projects", "milestones.projectId", "projects.id")
+    .leftJoin("project_members", "projects.id", "project_members.projectId")
+    .select([
+      "proposals.id",
+      "proposals.quickTaskId",
+      "proposals.milestoneId",
+      "proposals.coverLetter",
+      "proposals.proposedPrice",
+      "proposals.estimatedDays",
+      "proposals.status",
+      "proposals.createdAt",
+      "proposals.expertId",
+      "quick_tasks.title as quickTaskTitle",
+      "milestones.title as milestoneTitle",
+      "projects.title as projectTitle",
+      "projects.id as projectId",
+    ])
+    .where((eb) =>
+      eb.or([
+        eb("quick_tasks.clientId", "=", clientId),
+        eb.and([
+          eb("project_members.userId", "=", clientId),
+          eb("project_members.role", "=", "CLIENT_ADMIN"),
+        ]),
+      ]),
+    )
+    .orderBy("proposals.createdAt", "desc")
+    .execute();
+};
+
 export const getQuickTaskStatusAndClientQuery = async (
   db: Kysely<DB> | Transaction<DB>,
   quickTaskId: string,

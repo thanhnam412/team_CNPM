@@ -1,20 +1,25 @@
-import { canCounterOffer, ActorRole, DealContext } from "./cases";
+import { canCounterOffer, canAccept, canReject, canWithdraw, ActorRole, DealContext, ProposalSnapshot } from "./cases";
 
-export type ProposalAction = "COUNTER_OFFER";
+export type ProposalAction = "COUNTER_OFFER" | "ACCEPT" | "REJECT" | "WITHDRAW";
 
 export function validateProposalAction(
   action: ProposalAction,
-  context: DealContext,
-  role: ActorRole,
-  newPrice: number,
+  payload: any,
+  actorId?: string,
 ): void {
   switch (action) {
     case "COUNTER_OFFER":
-      return canCounterOffer(context, role, newPrice);
+      return canCounterOffer(payload.context, payload.role, payload.newPrice);
+    case "ACCEPT":
+      return canAccept(payload as ProposalSnapshot, actorId!);
+    case "REJECT":
+      return canReject(payload as ProposalSnapshot, actorId!);
+    case "WITHDRAW":
+      return canWithdraw(payload as ProposalSnapshot, actorId!);
     default:
       throw new Error(`Unhandled logic action: ${String(action)}`);
   }
 }
 
-export { ProposalError, InvalidCounterOfferError } from "./errors";
-export { ActorRole, DealContext } from "./cases";
+export { ProposalError, InvalidCounterOfferError, NotProposalClientError, NotProposalExpertError, InvalidStatusForProposalActionError } from "./errors";
+export { ActorRole, DealContext, ProposalSnapshot } from "./cases";

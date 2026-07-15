@@ -16,17 +16,17 @@ export class RemoveQuickTaskService {
     private readonly refundService: RefundService,
   ) {}
 
-  async execute(id: string) {
+  async execute(id: string, actorId: string) {
     const qt = await this.db
       .selectFrom("quick_tasks")
       .select("budget")
       .where("id", "=", id)
       .executeTakeFirst();
-      
+
     const snapshot = await getQuickTaskSnapshotQuery(this.db, id);
     if (!snapshot) throw new NotFoundException("Quick task not found");
 
-    validateLogic("DELETE", snapshot);
+    validateLogic("DELETE", snapshot, actorId);
 
     return this.db.transaction().execute(async (trx) => {
       const budget = Number(qt?.budget || 0);

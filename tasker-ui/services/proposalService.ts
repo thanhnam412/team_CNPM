@@ -10,6 +10,10 @@ export const proposalService = {
     const { data } = await api.get(`/users/${userId}/proposals`);
     return data;
   },
+  getProposalsForClient: async (clientId: string): Promise<ProposalDto[]> => {
+    const { data } = await api.get(`/clients/${clientId}/proposals`);
+    return data;
+  },
   submitProposalForQuickTask: async (
     quickTaskId: string,
     payload: { proposedPrice: string | number; coverLetter?: string }

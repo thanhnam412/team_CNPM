@@ -30,7 +30,10 @@ export function canApproveDeliverable(
 /**
  * Case: Xóa Quick Task
  */
-export function canDelete(task: QuickTaskSnapshot): void {
+export function canDelete(task: QuickTaskSnapshot, actorId: string): void {
+  if (task.clientId !== actorId) {
+    throw new NotTaskClientError();
+  }
   if (task.status !== "OPEN") {
     throw new TaskNotDeletableStatusError(task.status);
   }
@@ -84,7 +87,10 @@ export function canTransitionToInProgress(task: QuickTaskSnapshot): void {
 /**
  * Case: Hủy Quick Task
  */
-export function canCancel(task: QuickTaskSnapshot): void {
+export function canCancel(task: QuickTaskSnapshot, actorId: string): void {
+  if (task.clientId !== actorId) {
+    throw new NotTaskClientError();
+  }
   // Can only cancel before it becomes IN_PROGRESS (e.g. while OPEN)
   if (task.status !== "OPEN") {
     throw new InvalidStatusForCancelError(task.status);

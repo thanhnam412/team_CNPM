@@ -76,7 +76,12 @@ export default function CopilotPage() {
     setMessages((prev) => [...prev, userMsg]);
     setInput("");
 
-    copilotMutation.mutate(userMsg.text, {
+    const history = messages.map((m) => ({
+      role: m.sender === "user" ? "user" : "model",
+      content: m.text
+    }));
+
+    copilotMutation.mutate({ message: userMsg.text, history }, {
       onSuccess: (res: any) => {
         setMessages((prev) => [
           ...prev,

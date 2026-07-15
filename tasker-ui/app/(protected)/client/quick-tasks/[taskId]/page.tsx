@@ -22,9 +22,9 @@ import {
 import { NeoButton } from "@/components/ui-custom/neo-button";
 import { NeoInput } from "@/components/ui-custom/neo-input";
 import { NeoTextarea } from "@/components/ui-custom/neo-textarea";
-import { cn } from "@/lib/utils";
+import { cn, formatCurrency } from "@/lib/utils";
 
-import { useQuickTask, useApproveQuickTaskDeliverableMutation } from "@/tanstack/useQuickTasks";
+import { useQuickTask, useApproveQuickTaskDeliverableMutation, useCancelQuickTaskMutation } from "@/tanstack/useQuickTasks";
 import { useQuickTaskProposals, useUpdateProposalStatusMutation, useAcceptProposalMutation } from "@/tanstack/useProposals";
 import { useContracts, useReleaseFundsMutation } from "@/tanstack/useContracts";
 
@@ -42,7 +42,8 @@ export default function QuickTaskDetailsPage({
 
   const updateProposalMutation = useUpdateProposalStatusMutation();
   const acceptProposalMutation = useAcceptProposalMutation();
-  const releaseFundsMutation = useReleaseFundsMutation();
+  const approveQuickTaskMutation = useApproveQuickTaskDeliverableMutation();
+  const cancelTaskMutation = useCancelQuickTaskMutation();
   
   const activeContract = contracts.find((c) => c.quickTaskId === taskId);
 
@@ -122,8 +123,10 @@ export default function QuickTaskDetailsPage({
                   <NeoButton
                     variant="outline"
                     className="border-destructive text-destructive text-[0.625rem] h-8 px-4"
+                    disabled={cancelTaskMutation.isPending}
+                    onClick={() => cancelTaskMutation.mutate(taskId)}
                   >
-                    Cancel Task
+                    {cancelTaskMutation.isPending ? "Canceling..." : "Cancel Task"}
                   </NeoButton>
                 </div>
               )}
@@ -141,6 +144,7 @@ export default function QuickTaskDetailsPage({
                     Unfunded
                   </div>
                   <p className="text-[0.625rem] font-semibold text-muted-foreground leading-relaxed">
+                    <span className="font-bold text-foreground block mb-1">Budget: {formatCurrency(Number(task.budget))}</span>
                     Deposit funds to safely hire an expert. Money is held
                     securely until you approve the work.
                   </p>
@@ -148,11 +152,21 @@ export default function QuickTaskDetailsPage({
               ) : (
                 <div>
                   <div className="text-3xl font-heading font-black tracking-wider text-[#E1801E] mb-2">
-                    ${task.budget}
+                    {formatCurrency(Number(activeContract?.agreedPrice || task.budget))}
                   </div>
-                  <div className="flex items-center gap-1 text-[0.625rem] font-bold uppercase tracking-widest text-[#E1801E] bg-[#E1801E]/10 px-2 py-1 border-2 border-[#E1801E]">
+                  <div className="flex items-center gap-1 text-[0.625rem] font-bold uppercase tracking-widest text-[#E1801E] bg-[#E1801E]/10 px-2 py-1 border-2 border-[#E1801E] mb-2">
                     <ShieldCheck className="w-3 h-3" /> Locked & Secured
                   </div>
+                  {activeContract && Number(activeContract.agreedPrice) < Number(task.budget) && (
+                    <div className="text-[0.625rem] font-bold text-green-600 bg-green-500/10 px-2 py-1 border border-green-500 uppercase tracking-widest mt-2 text-center">
+                      Saved {formatCurrency(Number(task.budget) - Number(activeContract.agreedPrice))} vs budget!
+                    </div>
+                  )}
+                  {activeContract && Number(activeContract.agreedPrice) > Number(task.budget) && (
+                    <div className="text-[0.625rem] font-bold text-destructive bg-destructive/10 px-2 py-1 border border-destructive uppercase tracking-widest mt-2 text-center">
+                      {formatCurrency(Number(activeContract.agreedPrice) - Number(task.budget))} over budget
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -215,29 +229,52 @@ export default function QuickTaskDetailsPage({
                           </h4>
                         </div>
                         <div className="text-right">
-                          <div className="font-heading font-black">
-                            ${p.amount}
+                          <div className={cn("font-heading font-black", Number(p.proposedPrice) < Number(task.budget) ? "text-green-600" : Number(p.proposedPrice) > Number(task.budget) ? "text-destructive" : "")}>
+                            {formatCurrency(Number(p.proposedPrice || 0))}
+                          </div>
+                          {Number(p.proposedPrice) < Number(task.budget) && (
+                            <div className="text-[0.625rem] text-green-600 font-bold uppercase tracking-widest">
+                              -{formatCurrency(Number(task.budget) - Number(p.proposedPrice))}
+                            </div>
+                          )}
+                          {Number(p.proposedPrice) > Number(task.budget) && (
+                            <div className="text-[0.625rem] text-destructive font-bold uppercase tracking-widest">
+                              +{formatCurrency(Number(p.proposedPrice) - Number(task.budget))}
+                            </div>
+                          )}
+                          <div className="text-[0.625rem] font-bold uppercase tracking-widest text-muted-foreground">
+                            {p.status}
                           </div>
                         </div>
                       </div>
                       <p className="text-xs font-semibold text-muted-foreground italic mb-3 line-clamp-2">
-                        "{p.message || 'No cover letter provided'}"
+                        "{p.coverLetter || 'No cover letter provided'}"
                       </p>
-                      <div className="flex gap-2">
-                        <NeoButton
-                          variant="outline"
-                          className="flex-1 text-[0.625rem] h-8"
-                        >
-                          Chat
-                        </NeoButton>
-                        <NeoButton 
-                          className="flex-1 text-[0.625rem] h-8"
-                          disabled={acceptProposalMutation.isPending}
-                          onClick={() => acceptProposalMutation.mutate({ proposalId: p.id })}
-                        >
-                          Accept & Hire
-                        </NeoButton>
-                      </div>
+                      {p.status === "PENDING" && (
+                        <div className="flex gap-2">
+                          <NeoButton
+                            variant="outline"
+                            className="flex-1 text-[0.625rem] h-8"
+                          >
+                            Chat
+                          </NeoButton>
+                          <NeoButton
+                            variant="outline"
+                            className="flex-1 border-destructive text-destructive text-[0.625rem] h-8"
+                            disabled={updateProposalMutation.isPending}
+                            onClick={() => updateProposalMutation.mutate({ proposalId: p.id, status: "REJECTED" })}
+                          >
+                            Reject
+                          </NeoButton>
+                          <NeoButton 
+                            className="flex-1 text-[0.625rem] h-8"
+                            disabled={acceptProposalMutation.isPending}
+                            onClick={() => acceptProposalMutation.mutate({ proposalId: p.id })}
+                          >
+                            Accept & Hire
+                          </NeoButton>
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -356,10 +393,10 @@ export default function QuickTaskDetailsPage({
                   </NeoButton>
                   <NeoButton 
                     className="flex-1 md:flex-none text-[0.625rem] h-12 px-6"
-                    disabled={!activeContract || releaseFundsMutation.isPending}
-                    onClick={() => activeContract && releaseFundsMutation.mutate(activeContract.id)}
+                    disabled={approveQuickTaskMutation.isPending}
+                    onClick={() => approveQuickTaskMutation.mutate(taskId)}
                   >
-                    {releaseFundsMutation.isPending ? "Approving..." : "Approve & Release Funds"}
+                    {approveQuickTaskMutation.isPending ? "Approving..." : "Approve & Release Funds"}
                   </NeoButton>
                 </div>
               </div>

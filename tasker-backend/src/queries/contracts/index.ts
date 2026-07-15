@@ -37,6 +37,17 @@ export const findContractByMilestoneQuery = async (
     .executeTakeFirst();
 };
 
+export const findContractByQuickTaskIdQuery = async (
+  db: Kysely<DB> | Transaction<DB>,
+  quickTaskId: string,
+) => {
+  return db
+    .selectFrom("contracts")
+    .selectAll()
+    .where("quickTaskId", "=", quickTaskId)
+    .executeTakeFirst();
+};
+
 export const createContractQuery = async (trx: Transaction<DB>, data: any) => {
   return trx
     .insertInto("contracts")
@@ -90,3 +101,21 @@ export const markContractReleasedQuery = async (
     .where("id", "=", contractId)
     .execute();
 };
+
+export const getProjectContractsQuery = async (
+  db: Kysely<DB> | Transaction<DB>,
+  projectId: string,
+) => {
+  return db
+    .selectFrom("contracts")
+    .innerJoin("milestones", "contracts.milestoneId", "milestones.id")
+    .innerJoin("users as expert", "contracts.expertId", "expert.id")
+    .selectAll("contracts")
+    .select([
+      "milestones.title as milestoneName",
+      "expert.name as expertName",
+    ])
+    .where("milestones.projectId", "=", projectId)
+    .execute();
+};
+

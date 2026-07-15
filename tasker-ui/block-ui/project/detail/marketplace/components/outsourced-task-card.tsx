@@ -117,8 +117,13 @@ export function OutsourcedTaskCard({
                       <span className="text-[0.625rem] font-bold bg-[#E1801E]/10 text-[#E1801E] px-2 py-0.5 border-2 border-[#E1801E]">
                         ★ 5.0
                       </span>
-                      <span className="text-[0.625rem] font-bold px-2 py-0.5 border-2 border-border bg-secondary">
-                        Bid: {Number(p.proposedPrice) > 0 ? formatCurrency(p.proposedPrice) : formatCurrency(task.budget)}
+                      <span className={cn(
+                        "text-[0.625rem] font-bold px-2 py-0.5 border-2",
+                        Number(p.proposedPrice) < Number(task.budget) ? "border-green-500 bg-green-500/10 text-green-600" :
+                        Number(p.proposedPrice) > Number(task.budget) ? "border-destructive bg-destructive/10 text-destructive" :
+                        "border-border bg-secondary"
+                      )}>
+                        Bid: {formatCurrency(Number(p.proposedPrice || 0))}
                       </span>
                     </div>
                     <p className="text-sm font-semibold text-muted-foreground italic leading-relaxed">

@@ -41,4 +41,8 @@ export const quickTaskService = {
     const { data } = await api.delete(`/quick-tasks/${id}`);
     return data;
   },
+  cancelQuickTask: async (id: string): Promise<unknown> => {
+    const { data } = await api.post(`/quick-tasks/${id}/cancel`);
+    return data;
+  },
 };

@@ -3,8 +3,8 @@ import api from "@/services/api";
 
 export const useCopilotChatMutation = () => {
   return useMutation({
-    mutationFn: async (message: string) => {
-      const { data } = await api.post("/copilot/chat", { message });
+    mutationFn: async (payload: { message: string, history: any[] }) => {
+      const { data } = await api.post("/copilot/chat", payload);
       return data;
     },
   });

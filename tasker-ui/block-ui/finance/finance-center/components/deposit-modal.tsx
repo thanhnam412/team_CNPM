@@ -12,6 +12,7 @@ import { useState } from "react";
 import { useMockTopupMutation } from "@/tanstack/useFinance";
 import { useGetMe } from "@/tanstack/useGetMe";
 import { formatCurrency, parseDecimalInput } from "@/lib/utils";
+import { toast } from "sonner";
 
 export interface DepositModalProps {
   isOpen: boolean;
@@ -29,8 +30,12 @@ export function DepositModal({ isOpen, onClose }: DepositModalProps) {
       { userId: me.id, amount: Number(amount) },
       {
         onSuccess: () => {
+          toast.success("Deposit successful!");
           onClose();
         },
+        onError: () => {
+          toast.error("Deposit failed. Please try again.");
+        }
       }
     );
   };

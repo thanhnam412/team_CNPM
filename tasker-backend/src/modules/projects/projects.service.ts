@@ -66,6 +66,7 @@ import {
   checkProjectActiveMilestonesQuery,
   deleteProjectQuery,
 } from "@/queries/projects";
+import { getProjectContractsQuery } from "@/queries/contracts";
 import { CreateProjectDto, UpdateProjectDto } from "./core/dto/project.dto";
 
 @Injectable()
@@ -121,12 +122,32 @@ export class ProjectsService {
   async getFinance(projectId: string) {
     const project = await getProjectFinanceQuery(this.db, projectId);
     const transactions = await getProjectTransactionsQuery(this.db, projectId);
+    const contracts = await getProjectContractsQuery(this.db, projectId);
+
+    const trueEscrow = contracts
+      .filter((c) => c.escrowStatus === "HELD")
+      .reduce((sum, c) => sum + Number(c.agreedPrice || 0), 0);
+
+    const trueSpent = contracts
+      .filter((c) => c.escrowStatus === "RELEASED")
+      .reduce((sum, c) => sum + Number(c.agreedPrice || 0), 0);
+
+    const activeContracts = contracts
+      .filter((c) => c.escrowStatus === "HELD")
+      .map((c) => ({
+        id: c.id,
+        milestoneName: (c as any).milestoneName,
+        expertName: (c as any).expertName,
+        agreedPrice: c.agreedPrice,
+        createdAt: c.createdAt,
+      }));
 
     return {
       budget: project?.budget || "0",
-      spent: project?.spent || "0",
-      escrow: project?.escrow || "0",
+      spent: trueSpent.toString(),
+      escrow: trueEscrow.toString(),
       transactions,
+      activeContracts,
     };
   }
 

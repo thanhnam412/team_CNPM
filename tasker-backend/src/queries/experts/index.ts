@@ -143,23 +143,29 @@ export const getMtdTransactionsQuery = async (
     .execute();
 };
 
-export const getActiveQuickTasksQuery = async (
+export const getActiveContractsQuery = async (
   db: Kysely<DB> | Transaction<DB>,
   expertId: string,
 ) => {
   return db
-    .selectFrom("quick_tasks")
-    .innerJoin("users as client", "client.id", "quick_tasks.clientId")
+    .selectFrom("contracts")
+    .innerJoin("users as client", "client.id", "contracts.clientId")
+    .leftJoin("quick_tasks", "quick_tasks.id", "contracts.quickTaskId")
+    .leftJoin("milestones", "milestones.id", "contracts.milestoneId")
     .select([
-      "quick_tasks.id",
-      "quick_tasks.title",
-      "quick_tasks.budget",
-      "quick_tasks.deadline",
-      "quick_tasks.status",
+      "contracts.id",
+      "contracts.agreedPrice as escrowAmount",
+      "contracts.deadline",
+      "contracts.quickTaskId",
+      "contracts.milestoneId",
+      "quick_tasks.title as quickTaskTitle",
+      "milestones.title as milestoneTitle",
+      "quick_tasks.status as quickTaskStatus",
+      "milestones.status as milestoneStatus",
       "client.name as clientName",
     ])
-    .where("quick_tasks.expertId", "=", expertId)
-    .where("quick_tasks.status", "in", ["IN_PROGRESS", "REVIEW"])
+    .where("contracts.expertId", "=", expertId)
+    .where("contracts.escrowStatus", "=", "HELD")
     .execute();
 };
 

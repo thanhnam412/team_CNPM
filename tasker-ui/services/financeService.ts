@@ -13,5 +13,9 @@ export const financeService = {
   mockTopup: async (userId: string, amount: number): Promise<{ success: boolean; newBalance: string | number }> => {
     const { data } = await api.post(`/users/${userId}/finance/mock-topup`, { amount });
     return data;
+  },
+  mockWithdraw: async (userId: string, amount: number): Promise<{ success: boolean; newBalance: string | number }> => {
+    const { data } = await api.post(`/users/${userId}/finance/mock-withdraw`, { amount });
+    return data;
   }
 };

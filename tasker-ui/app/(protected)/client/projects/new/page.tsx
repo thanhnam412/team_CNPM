@@ -155,7 +155,7 @@ export default function CreateProjectPage() {
         steps={[
           { num: 1, label: "Basics" },
           { num: 2, label: "AI Scoping" },
-          { num: 3, label: "Budget & Post" },
+          { num: 3, label: "Budget & Setup" },
         ]}
       />
 
@@ -294,7 +294,7 @@ export default function CreateProjectPage() {
               </WizardStepContainer>
             )}
 
-            {/* STEP 3: BUDGET & POST */}
+            {/* STEP 3: BUDGET & SETUP */}
             {step === 3 && (
               <WizardStepContainer>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -379,8 +379,8 @@ export default function CreateProjectPage() {
                         className="border-4 h-16 px-10 text-lg group"
                       >
                         {isSubmitting
-                          ? "Posting..."
-                          : "Post Project to Marketplace"}
+                          ? "Creating..."
+                          : "Create Project Workspace"}
                         <Wand2 className="w-6 h-6 ml-3 group-hover:rotate-12 transition-transform" />
                       </NeoButton>
                     )}

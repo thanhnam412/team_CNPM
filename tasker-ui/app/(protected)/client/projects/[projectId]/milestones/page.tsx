@@ -7,7 +7,7 @@ import {
   useDeleteMilestoneMutation,
   useCreateMilestoneMutation,
   useUpdateMilestoneMutation,
-  usePayMilestoneMutation,
+  useApproveMilestoneMutation,
 } from "@/tanstack/useMilestones";
 import { MilestoneDto } from "@/types/project.dto";
 import { ProjectMilestonesBlock } from "@/block-ui/project/detail/milestone";
@@ -24,7 +24,7 @@ export default function ProjectMilestonesPage() {
   const [revisionFeedback, setRevisionFeedback] = useState("");
 
   const requestRevisionMutation = useUpdateMilestoneMutation();
-  const payMilestoneMutation = usePayMilestoneMutation();
+  const approveMilestoneMutation = useApproveMilestoneMutation();
   const deleteMilestoneMutation = useDeleteMilestoneMutation();
 
   const [isCreatingMilestone, setIsCreatingMilestone] = useState(false);
@@ -81,7 +81,7 @@ export default function ProjectMilestonesPage() {
   };
 
   const handleApproveMilestone = (id: string) => {
-    payMilestoneMutation.mutate({
+    approveMilestoneMutation.mutate({
       projectId,
       milestoneId: id,
     });
@@ -112,7 +112,8 @@ export default function ProjectMilestonesPage() {
       isSubmittingCreate={createMilestoneMutation.isPending}
       onDeleteMilestone={handleDeleteMilestone}
       onApproveMilestone={handleApproveMilestone}
-      isApproving={payMilestoneMutation.isPending}
+      isApproving={approveMilestoneMutation.isPending}
+      isDeleting={deleteMilestoneMutation.isPending}
     />
   );
 }

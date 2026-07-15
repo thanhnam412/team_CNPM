@@ -86,7 +86,8 @@ export const MilestoneStatus = {
     PENDING: "PENDING",
     ACTIVE: "ACTIVE",
     REVIEW: "REVIEW",
-    PAID: "PAID"
+    PAID: "PAID",
+    CANCELLED: "CANCELLED"
 } as const;
 export type MilestoneStatus = (typeof MilestoneStatus)[keyof typeof MilestoneStatus];
 export type ClientProfile = {

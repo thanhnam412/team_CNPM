@@ -11,6 +11,7 @@ import { AddFundsModal } from "./components/add-funds-modal";
 export interface ProjectFinanceBlockProps {
   stats: StatItem[];
   transactions: any[];
+  activeContracts?: any[];
   isLoading: boolean;
   isAddFundsOpen: boolean;
   onOpenAddFunds: () => void;
@@ -21,6 +22,7 @@ export interface ProjectFinanceBlockProps {
 export function ProjectFinanceBlock({
   stats,
   transactions,
+  activeContracts = [],
   isLoading,
   isAddFundsOpen,
   onOpenAddFunds,
@@ -47,7 +49,7 @@ export function ProjectFinanceBlock({
 
       <FinanceStats stats={stats} />
 
-      <ActiveEscrow />
+      <ActiveEscrow contracts={activeContracts} />
 
       <TransactionLedger transactions={transactions} isLoading={isLoading} />
 

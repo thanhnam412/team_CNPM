@@ -13,6 +13,7 @@ import {
   findProposalsForTaskQuery,
   findProposalsForMilestoneQuery,
   findProposalsForExpertQuery,
+  findProposalsForClientQuery,
   getQuickTaskStatusAndClientQuery,
   getMilestoneStatusAndProjectQuery,
   getProjectClientAdminQuery,
@@ -49,6 +50,10 @@ export class ProposalsService {
 
   async getProposalsForExpert(expertId: string) {
     return findProposalsForExpertQuery(this.db, expertId);
+  }
+
+  async getProposalsForClient(clientId: string) {
+    return findProposalsForClientQuery(this.db, clientId);
   }
 
 

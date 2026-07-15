@@ -8,6 +8,8 @@ import {
 } from "@/queries/quick-tasks";
 import { RefundService } from "@/modules/wallet/refund/refund.service";
 
+import { validateLogic } from "../core/utils/quick-task";
+
 @Injectable()
 export class CancelQuickTaskService {
   constructor(
@@ -20,9 +22,7 @@ export class CancelQuickTaskService {
       const snapshot = await getQuickTaskSnapshotQuery(trx, id);
       if (!snapshot) throw new NotFoundException("Quick task not found");
 
-      if (snapshot.clientId !== actorId) {
-        throw new ForbiddenException("Only client can cancel this task.");
-      }
+      validateLogic("CANCEL", snapshot, actorId);
 
       const qt = await trx
         .selectFrom("quick_tasks")

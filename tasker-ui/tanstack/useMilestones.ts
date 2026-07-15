@@ -86,3 +86,25 @@ export const usePayMilestoneMutation = () => {
     },
   });
 };
+
+export const useApproveMilestoneMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ projectId, milestoneId }: { projectId: string; milestoneId: string }) =>
+      milestoneService.approveMilestone(projectId, milestoneId),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["milestones", variables.projectId] });
+    },
+  });
+};
+
+export const useCancelMilestoneMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ projectId, milestoneId }: { projectId: string; milestoneId: string }) =>
+      milestoneService.cancelMilestone(projectId, milestoneId),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["milestones", variables.projectId] });
+    },
+  });
+};

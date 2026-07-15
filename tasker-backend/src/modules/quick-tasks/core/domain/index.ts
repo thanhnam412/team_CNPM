@@ -34,7 +34,7 @@ export function validateQuickTaskAction(
     case "APPROVE_DELIVERABLE":
       return canApproveDeliverable(snapshot, actorId as string);
     case "DELETE":
-      return canDelete(snapshot);
+      return canDelete(snapshot, actorId as string);
     case "TRANSITION_TO_IN_PROGRESS":
       return canTransitionToInProgress(snapshot);
     case "DISPUTE":
@@ -42,7 +42,7 @@ export function validateQuickTaskAction(
     case "TIMEOUT":
       return canTimeout(snapshot);
     case "CANCEL":
-      return canCancel(snapshot);
+      return canCancel(snapshot, actorId as string);
     default:
       throw new Error(`Unhandled logic action: ${String(action)}`);
   }

@@ -52,6 +52,7 @@ import {
   getMilestoneStatusQuery,
   getSiblingTasksQuery,
   updateMilestoneStatusQuery,
+  findQuickTasksForExpertWorkspaceQuery,
 } from "@/queries/tasks";
 
 export interface CreateTaskData {
@@ -86,7 +87,29 @@ export class TasksService {
   }
 
   async findAllForExpert(expertId: string) {
-    return findAllTasksForExpertQuery(this.db, expertId);
+    const internalTasks = await findAllTasksForExpertQuery(this.db, expertId);
+    const quickTasks = await findQuickTasksForExpertWorkspaceQuery(this.db, expertId);
+
+    const formattedQuickTasks = quickTasks.map((qt) => ({
+      id: qt.id,
+      projectId: null,
+      milestoneId: null,
+      title: qt.title,
+      // Map Quick Task status to Kanban columns
+      status: qt.status === "COMPLETED" ? "DONE" : qt.status,
+      priority: "HIGH",
+      assigneeId: qt.expertId,
+      projectName: "Quick Task",
+      milestoneName: null,
+      clientName: (qt as any).clientName,
+      createdAt: qt.createdAt,
+      updatedAt: qt.updatedAt,
+      isQuickTask: true,
+    }));
+
+    return [...internalTasks, ...formattedQuickTasks].sort(
+      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
   }
 
   // ─── WRITE ──────────────────────────────────────────────────────────────────
@@ -114,6 +137,11 @@ export class TasksService {
     const isAdmin = await this._checkAdmin(actorId, task.projectId as string);
     const snapshot: TaskSnapshot = { assigneeId: task.assigneeId, projectId: task.projectId };
     validateLogic("MODIFY", snapshot, actorId, isAdmin);
+
+    // Experts cannot move Milestone tasks to DONE directly
+    if (task.milestoneId && status === "DONE" && !isAdmin) {
+      throw new ForbiddenException("Experts can only move milestone tasks to REVIEW. DONE is automatically set when Client approves the milestone.");
+    }
 
     return this.db.transaction().execute(async (trx) => {
       const updatedTask = await updateTaskStatusQuery(trx, id, status);

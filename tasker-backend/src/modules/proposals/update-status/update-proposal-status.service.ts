@@ -4,6 +4,8 @@ import { KYSELY_DB } from "@/database/database.module";
 import { DB } from "@/database/types";
 import { ProposalsService } from "../proposals.service";
 import { updateProposalStatusQuery } from "@/queries/proposals";
+import { validateLogic } from "../core/utils/proposal";
+import { ProposalSnapshot } from "../core/domain";
 
 @Injectable()
 export class UpdateProposalStatusService {
@@ -24,20 +26,19 @@ export class UpdateProposalStatusService {
     }
 
     const proposal = await this.proposalsService.findByIdOrThrow(proposalId);
+    const { clientId } = await this.proposalsService.resolveClientAndPrice(proposal, this.db);
+
+    const snapshot: ProposalSnapshot = {
+      id: proposal.id,
+      status: proposal.status,
+      clientId: clientId,
+      expertId: proposal.expertId,
+    };
 
     if (status === "WITHDRAWN") {
-      if (proposal.expertId !== actorId) {
-        throw new ForbiddenException(
-          "Only the expert can withdraw their proposal.",
-        );
-      }
+      validateLogic("WITHDRAW", snapshot, actorId);
     } else if (status === "REJECTED") {
-      const { clientId } = await this.proposalsService.resolveClientAndPrice(proposal, this.db);
-      if (clientId !== actorId) {
-        throw new ForbiddenException(
-          "Only the client can reject this proposal.",
-        );
-      }
+      validateLogic("REJECT", snapshot, actorId);
     }
 
     return updateProposalStatusQuery(this.db, proposalId, status);

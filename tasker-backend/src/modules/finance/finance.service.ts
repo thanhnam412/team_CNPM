@@ -26,4 +26,8 @@ export class FinanceService {
   mockTopup(userId: string, amount: number) {
     return this.topupService.mockTopup(userId, amount);
   }
+
+  mockWithdraw(userId: string, amount: number) {
+    return this.topupService.mockWithdraw(userId, amount);
+  }
 }

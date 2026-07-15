@@ -9,7 +9,7 @@ import {
   getProjectTasksHistoryQuery,
   getExpertOverviewQuery,
   getMtdTransactionsQuery,
-  getActiveQuickTasksQuery,
+  getActiveContractsQuery,
   getConversationsQuery,
   getRecommendedTasksQuery,
   getMyProfileQuery,
@@ -137,41 +137,49 @@ export class ExpertsService {
       0,
     );
 
-    const activeQuickTasks = await getActiveQuickTasksQuery(this.db, expertId);
+    const activeContracts = await getActiveContractsQuery(this.db, expertId);
 
-    const inEscrow = activeQuickTasks.reduce(
-      (sum, qt) => sum + parseFloat(qt.budget),
+    const inEscrow = activeContracts.reduce(
+      (sum, c) => sum + parseFloat(c.escrowAmount),
       0,
     );
 
     const now = new Date();
     const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
 
-    const actionRequired = activeQuickTasks
-      .filter((qt) => qt.deadline)
-      .map((qt) => ({
-        id: qt.id,
-        type: "Task",
-        taskName: qt.title,
-        clientName: qt.clientName,
-        dueDate: qt.deadline,
-        isUrgent: qt.deadline ? new Date(qt.deadline) < tomorrow : false,
-      }))
+    const actionRequired = activeContracts
+      .filter((c) => c.deadline)
+      .map((c) => {
+        const title = c.quickTaskTitle || c.milestoneTitle || "Untitled Contract";
+        const isMilestone = !!c.milestoneId;
+        return {
+          id: c.quickTaskId || c.milestoneId,
+          type: isMilestone ? "Milestone" : "Task",
+          taskName: title,
+          clientName: c.clientName,
+          dueDate: c.deadline,
+          isUrgent: c.deadline ? new Date(c.deadline) < tomorrow : false,
+        };
+      })
       .sort((a, b) => {
         const timeA = a.dueDate ? new Date(a.dueDate).getTime() : 0;
         const timeB = b.dueDate ? new Date(b.dueDate).getTime() : 0;
         return timeA - timeB;
       });
 
-    const activeWork = activeQuickTasks.map((qt) => ({
-      id: qt.id,
-      title: qt.title,
-      clientName: qt.clientName,
-      status: qt.status,
-      progressPercentage: qt.status === "REVIEW" ? 90 : 50,
-      escrowAmount: parseFloat(qt.budget),
-      dueDate: qt.deadline,
-    }));
+    const activeWork = activeContracts.map((c) => {
+      const title = c.quickTaskTitle || c.milestoneTitle || "Untitled Contract";
+      const status = c.quickTaskStatus || c.milestoneStatus || "IN_PROGRESS";
+      return {
+        id: c.quickTaskId || c.milestoneId,
+        title,
+        clientName: c.clientName,
+        status,
+        progressPercentage: status === "REVIEW" ? 90 : 50,
+        escrowAmount: parseFloat(c.escrowAmount as any),
+        dueDate: c.deadline,
+      };
+    });
 
     const convos = await getConversationsQuery(this.db, expertId);
 

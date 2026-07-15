@@ -46,7 +46,7 @@ export class EscrowService {
     await insertTransactionQuery(trx, {
       userId,
       projectId,
-      type: "DEBIT",
+      type: "ESCROW",
       amount: amount,
       balanceAfter: newBalance,
       desc: desc || "Escrow for project/milestone",

@@ -76,6 +76,11 @@ export class ProposalsController {
     return this.proposalsService.getProposalsForExpert(userId);
   }
 
+  @Get("clients/:clientId/proposals")
+  getProposalsForClient(@Param("clientId") clientId: string) {
+    return this.proposalsService.getProposalsForClient(clientId);
+  }
+
   // ─── ACTIONS ─────────────────────────────────────────────────────────────────
 
   /**

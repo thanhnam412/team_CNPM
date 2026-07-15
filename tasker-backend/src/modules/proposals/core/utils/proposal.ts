@@ -12,6 +12,11 @@ export function mapLogicError(err: Error): never {
     switch (err.code) {
       case "PROPOSAL_INVALID_COUNTER_OFFER":
         throw new BadRequestException(err.message);
+      case "PROPOSAL_NOT_CLIENT":
+      case "PROPOSAL_NOT_EXPERT":
+        throw new BadRequestException(err.message);
+      case "PROPOSAL_INVALID_STATUS":
+        throw new BadRequestException(err.message);
       default:
         throw new BadRequestException(err.message);
     }
@@ -21,12 +26,11 @@ export function mapLogicError(err: Error): never {
 
 export function validateLogic(
   action: ProposalAction,
-  context: DealContext,
-  role: ActorRole,
-  newPrice: number,
+  payload: any,
+  actorId?: string,
 ): void {
   try {
-    validateProposalAction(action, context, role, newPrice);
+    validateProposalAction(action, payload, actorId);
   } catch (err) {
     mapLogicError(err as Error);
   }

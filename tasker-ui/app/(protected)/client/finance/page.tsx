@@ -4,6 +4,9 @@ import { useState } from "react";
 import { useTransactions, useWallet } from "@/tanstack/useFinance";
 import { useGetMe } from "@/tanstack/useGetMe";
 import { formatCurrency } from "@/lib/utils";
+import { useProjects } from "@/tanstack/useProjects";
+import { useClientQuickTasks } from "@/tanstack/useQuickTasks";
+import { useContracts } from "@/tanstack/useContracts";
 import { Wallet, Lock, ArrowUpRight, ArrowDownRight } from "lucide-react";
 import { FinanceCenterBlock } from "@/block-ui/finance/finance-center";
 
@@ -32,37 +35,64 @@ export default function GlobalFinancePage() {
     { title: "Total Deposited", value: formatCurrency(totalDeposited), icon: ArrowDownRight, color: "text-foreground" },
   ];
 
-  const pendingPayouts = [
-    {
-      id: "PO-101",
-      expert: "Alex_Code",
-      avatar: "A",
-      task: "Write a Python script for web scraping (QT-889)",
-      amount: "$150.00",
-      deadline: "Auto-release in 2 Days",
-    },
-    {
-      id: "PO-102",
-      expert: "DesignStudio",
-      avatar: "D",
-      task: "Logo Design Milestone (PROJ-123)",
-      amount: "$450.00",
-      deadline: "Auto-release in 5 Hrs",
-    },
-    {
-      id: "PO-103",
-      expert: "AI_Vision_Pro",
-      avatar: "V",
-      task: "Fine-tune Llama-3 Dataset Prep (QT-2)",
-      amount: "$500.00",
-      deadline: "Action Required",
-    },
-  ];
+  const { data: projects = [] } = useProjects();
+  const { data: quickTasks = [] } = useClientQuickTasks(currentUserId);
+  const { data: contracts = [] } = useContracts();
+
+  const pendingPayouts = contracts
+    .filter((c: any) => c.escrowStatus === "HELD")
+    .filter((c: any) => {
+      if (c.quickTaskId) {
+        const qt = quickTasks.find((q: any) => q.id === c.quickTaskId);
+        return qt?.status === "REVIEW";
+      }
+      return false;
+    })
+    .map((c: any) => {
+      const qt = quickTasks.find((q: any) => q.id === c.quickTaskId);
+      return {
+        id: c.id.substring(0, 8),
+        quickTaskId: c.quickTaskId,
+        expert: c.expertId.substring(0, 8),
+        avatar: c.expertId.substring(0, 1).toUpperCase(),
+        task: qt ? qt.title : `Milestone`,
+        amount: formatCurrency(c.agreedPrice),
+        deadline: "Needs Approval",
+      };
+    });
+
+  const projectReports = projects.map((p: any) => {
+    const projContracts = contracts.filter((c: any) => c.projectId === p.id);
+    const escrow = projContracts.filter((c: any) => c.escrowStatus === "HELD").reduce((acc: number, c: any) => acc + Number(c.agreedPrice), 0);
+    const spent = projContracts.filter((c: any) => c.escrowStatus === "RELEASED").reduce((acc: number, c: any) => acc + Number(c.agreedPrice), 0);
+    const utilized = Number(p.budget) > 0 ? ((spent + escrow) / Number(p.budget)) * 100 : 0;
+    
+    return {
+      id: p.id,
+      name: p.title,
+      expected: formatCurrency(p.budget || 0),
+      spent: formatCurrency(spent),
+      escrow: formatCurrency(escrow),
+      utilized: Math.round(utilized),
+    };
+  });
+
+  const qtContracts = contracts.filter((c: any) => c.quickTaskId);
+  const qtEscrow = qtContracts.filter((c: any) => c.escrowStatus === "HELD").reduce((acc: number, c: any) => acc + Number(c.agreedPrice), 0);
+  const qtSpent = qtContracts.filter((c: any) => c.escrowStatus === "RELEASED").reduce((acc: number, c: any) => acc + Number(c.agreedPrice), 0);
+  const qtExpected = quickTasks.reduce((acc: number, qt: any) => acc + Number(qt.budget), 0);
+  const qtUtilized = qtExpected > 0 ? ((qtSpent + qtEscrow) / qtExpected) * 100 : 0;
 
   const budgetReports = [
-    { id: "PROJ-1", name: "Hệ thống AI ATS", expected: "$5,000", spent: "$3,200", escrow: "$1,000", utilized: 84 },
-    { id: "PROJ-2", name: "B2B E-commerce", expected: "$10,000", spent: "$2,000", escrow: "$4,500", utilized: 65 },
-    { id: "QT-ALL", name: "Quick Tasks (All)", expected: "$2,000", spent: "$1,850", escrow: "$150", utilized: 100 },
+    ...projectReports,
+    {
+      id: "QT-ALL",
+      name: "Quick Tasks (All)",
+      expected: formatCurrency(qtExpected),
+      spent: formatCurrency(qtSpent),
+      escrow: formatCurrency(qtEscrow),
+      utilized: Math.round(qtUtilized),
+    }
   ];
 
   return (

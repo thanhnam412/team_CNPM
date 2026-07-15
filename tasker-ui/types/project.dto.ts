@@ -52,7 +52,7 @@ export interface MilestoneDto {
   title: string;
   description: string | null;
   budget: string | number;
-  status: "PENDING" | "ACTIVE" | "REVIEW" | "PAID";
+  status: "PENDING" | "ACTIVE" | "REVIEW" | "PAID" | "CANCELLED";
   createdAt: string;
   updatedAt: string;
   endDate?: string;

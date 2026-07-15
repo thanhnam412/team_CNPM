@@ -51,7 +51,7 @@ export class ReleaseService {
     await insertTransactionQuery(trx, {
       userId: clientId,
       projectId,
-      type: "DEBIT",
+      type: "SPENT",
       amount: amount,
       balanceAfter: snapshot.balance,
       desc: `Release escrow to expert ${expertId}`,
@@ -63,7 +63,7 @@ export class ReleaseService {
       await insertTransactionQuery(trx, {
         userId: clientId, // Or SYSTEM user if there's one
         projectId,
-        type: "DEBIT",
+        type: "FEE",
         amount: feeAmount,
         balanceAfter: snapshot.balance,
         desc: `Platform fee (1%) for releasing escrow`,
@@ -86,7 +86,7 @@ export class ReleaseService {
     await insertTransactionQuery(trx, {
       userId: expertId,
       projectId,
-      type: "CREDIT",
+      type: "PAYMENT_RECEIVED",
       amount: expertAmount,
       balanceAfter: newExpertBalance,
       desc: `Receive payment from client ${clientId} (after fee)`,

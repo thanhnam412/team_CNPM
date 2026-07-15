@@ -29,10 +29,45 @@ export class TopupService {
 
       await insertTransactionQuery(trx, {
         userId,
-        type: "CREDIT",
+        type: "DEPOSIT",
         amount: amount,
         balanceAfter: newBalance,
         desc: "Mock Topup",
+        source: "BANK_TRANSFER",
+        status: "COMPLETED",
+      });
+
+      return { success: true, newBalance };
+    });
+  }
+  
+  async mockWithdraw(userId: string, amount: number) {
+    return this.db.transaction().execute(async (trx) => {
+      let wallet = await getWalletByUserIdQuery(trx, userId);
+
+      if (!wallet) {
+        throw new Error("Wallet not found");
+      }
+
+      const numAmount = Number(amount);
+      const currentBalance = Number(wallet.balance);
+
+      if (currentBalance < numAmount) {
+        throw new Error("Insufficient funds");
+      }
+
+      const newBalance = currentBalance - numAmount;
+
+      await updateWalletQuery(trx, wallet.id, {
+        balance: newBalance.toString(),
+      });
+
+      await insertTransactionQuery(trx, {
+        userId,
+        type: "WITHDRAWAL",
+        amount: numAmount,
+        balanceAfter: newBalance,
+        desc: "Mock Withdrawal",
         source: "BANK_TRANSFER",
         status: "COMPLETED",
       });

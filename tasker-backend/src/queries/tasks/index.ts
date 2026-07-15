@@ -43,6 +43,20 @@ export const findAllTasksForExpertQuery = async (
     .execute();
 };
 
+export const findQuickTasksForExpertWorkspaceQuery = async (
+  db: Kysely<DB> | Transaction<DB>,
+  expertId: string,
+) => {
+  return db
+    .selectFrom("quick_tasks")
+    .leftJoin("users", "quick_tasks.clientId", "users.id")
+    .selectAll("quick_tasks")
+    .select("users.name as clientName" as any)
+    .where("quick_tasks.expertId", "=", expertId)
+    .where("quick_tasks.status", "not in", ["OPEN" as any, "CANCELLED" as any])
+    .execute();
+};
+
 export const getMilestoneAssigneeQuery = async (
   trx: Transaction<DB>,
   milestoneId: string,

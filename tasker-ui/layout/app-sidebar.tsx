@@ -73,6 +73,11 @@ const clientNavMain = [
     ],
   },
   {
+    title: "Proposals",
+    url: "/client/proposals",
+    icon: <MessageSquareIcon />,
+  },
+  {
     title: "Quick Tasks",
     url: "/client/quick-tasks",
     icon: <TargetIcon />,

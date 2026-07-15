@@ -29,8 +29,9 @@ import { cn, formatCurrency } from "@/lib/utils";
 import { NeoPageHeader } from "@/components/ui-custom/neo-page-header";
 import { NeoWidgetHeader } from "@/components/ui-custom/neo-widget-header";
 
-import { useWallet, useTransactions } from "@/tanstack/useFinance";
+import { useWallet, useTransactions, useMockWithdrawMutation } from "@/tanstack/useFinance";
 import { useGetMe } from "@/tanstack/useGetMe";
+import { toast } from "sonner";
 
 export default function ExpertEarningsPage() {
   const { data: me } = useGetMe();
@@ -45,14 +46,33 @@ export default function ExpertEarningsPage() {
     .filter((tx: any) => tx.type === "PAYMENT_RECEIVED")
     .reduce((sum: number, tx: any) => sum + Number(tx.amount), 0);
 
+  const withdrawMutation = useMockWithdrawMutation();
+
   const handleWithdraw = () => {
+    if (!me?.id || !withdrawAmount) return;
+    const amount = Number(withdrawAmount);
+    if (amount <= 0 || amount > Number(wallet?.balance || 0)) {
+      toast.error("Invalid amount or insufficient funds");
+      return;
+    }
+
     setIsWithdrawing(true);
-    setTimeout(() => {
-      setIsWithdrawing(false);
-      setShowSuccess(true);
-      setTimeout(() => setShowSuccess(false), 3000);
-      setWithdrawAmount("");
-    }, 1500);
+    withdrawMutation.mutate(
+      { userId: me.id, amount },
+      {
+        onSuccess: () => {
+          setIsWithdrawing(false);
+          setShowSuccess(true);
+          toast.success("Withdrawal successful!");
+          setTimeout(() => setShowSuccess(false), 3000);
+          setWithdrawAmount("");
+        },
+        onError: () => {
+          setIsWithdrawing(false);
+          toast.error("Withdrawal failed. Please try again.");
+        }
+      }
+    );
   };
 
   return (
@@ -175,7 +195,7 @@ export default function ExpertEarningsPage() {
 
             <NeoButton
               onClick={handleWithdraw}
-              disabled={isWithdrawing || !withdrawAmount}
+              disabled={isWithdrawing || withdrawMutation.isPending || !withdrawAmount}
               className={cn(
                 "w-full h-14 text-sm mt-6",
                 showSuccess
@@ -183,7 +203,7 @@ export default function ExpertEarningsPage() {
                   : "hover:-translate-y-1  active:translate-y-1  disabled:opacity-50 disabled:hover:translate-y-0",
               )}
             >
-              {isWithdrawing
+              {isWithdrawing || withdrawMutation.isPending
                 ? "Processing..."
                 : showSuccess
                   ? "Success!"

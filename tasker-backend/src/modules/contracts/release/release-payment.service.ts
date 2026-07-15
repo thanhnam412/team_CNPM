@@ -14,6 +14,8 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { Kysely } from "kysely";
+import { validateLogic } from "../core/utils/contract";
+import { ContractSnapshot } from "../core/domain";
 
 /**
  * ReleasePaymentUseCase — Orchestrator cho luồng Release Funds (Client trả tiền cho Expert)
@@ -44,15 +46,18 @@ export class ReleasePaymentService {
 
       if (!contract) {
         throw new NotFoundException(
-          "Contract not found or you are not authorized.",
+          "Contract not found.",
         );
       }
 
-      if (contract.escrowStatus !== "HELD") {
-        throw new BadRequestException(
-          `Cannot release funds. Contract escrow status is "${contract.escrowStatus}", expected "HELD".`,
-        );
-      }
+      const snapshot: ContractSnapshot = {
+        id: contract.id,
+        clientId: contract.clientId,
+        expertId: contract.expertId,
+        escrowStatus: contract.escrowStatus as any,
+      };
+
+      validateLogic("RELEASE", snapshot, clientId);
 
       const amount = Number(contract.agreedPrice);
       const contractDesc = contract.milestoneId

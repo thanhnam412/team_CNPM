@@ -40,16 +40,16 @@ import { formatCurrency } from "@/lib/utils";
 import { useAvailableMilestones } from "@/tanstack/useMilestones";
 import { useSubmitMilestoneProposalMutation } from "@/tanstack/useProposals";
 import { useGetMe } from "@/tanstack/useGetMe";
+import {
+  ApplyTaskModal,
+  ApplyTaskPayload,
+} from "@/block-ui/expert/find-work/components/apply-task-modal";
 
 export default function FindMilestonesPage() {
   const { data: me } = useGetMe();
   const [filter, setFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedMilestone, setSelectedMilestone] = useState<any | null>(null);
-  const [contractType, setContractType] = useState<
-    "platform" | "external" | null
-  >(null);
-  const [proposalText, setProposalText] = useState("");
 
   const [drawerMode, setDrawerMode] = useState<"overview" | null>(null);
   const [isProposalModalOpen, setIsProposalModalOpen] = useState(false);
@@ -57,25 +57,21 @@ export default function FindMilestonesPage() {
   const { data: rawMilestones = [], isLoading } = useAvailableMilestones();
   const proposalMutation = useSubmitMilestoneProposalMutation();
 
-  const handleProposalSubmit = () => {
+  const handleProposalSubmit = (payload: ApplyTaskPayload) => {
     if (!selectedMilestone || !me?.id) return;
     proposalMutation.mutate(
       {
         milestoneId: selectedMilestone.id,
         payload: {
-          proposedPrice: selectedMilestone.budget
-            ? parseFloat(
-                String(selectedMilestone.budget).replace(/[^0-9.]/g, "")
-              ) || 0
+          proposedPrice: payload.proposedPrice
+            ? parseFloat(payload.proposedPrice)
             : 0,
-          coverLetter: proposalText,
+          coverLetter: payload.coverLetter,
         },
       },
       {
         onSuccess: () => {
           setSelectedMilestone(null);
-          setContractType(null);
-          setProposalText("");
           setIsProposalModalOpen(false);
           setDrawerMode(null);
         },
@@ -88,7 +84,7 @@ export default function FindMilestonesPage() {
       id: m.id,
       project: m.projectTitle || "Unknown Project",
       title: m.title,
-      budget: m.budget ? formatCurrency(m.budget) : "TBD",
+      budget: m.budget,
       deadline: m.dueDate ? new Date(m.dueDate).toLocaleDateString() : "TBD",
       difficulty: "Medium",
       difficultyIcon: Target,
@@ -128,7 +124,6 @@ export default function FindMilestonesPage() {
 
   return (
     <div className="flex flex-col h-full w-full bg-background overflow-hidden relative">
-
       {/* Toolbar */}
       <div className="px-6 py-4 flex flex-col sm:flex-row items-center gap-4 bg-secondary/20 border-b-2 border-border shrink-0">
         <div className="relative flex-1 w-full max-w-md">
@@ -242,7 +237,7 @@ export default function FindMilestonesPage() {
                           Budget
                         </div>
                         <div className="font-heading font-black text-xl text-primary">
-                          {milestone.budget}
+                          {milestone.budget ? formatCurrency(milestone.budget) : "TBD"}
                         </div>
                       </div>
                       <div>
@@ -326,7 +321,7 @@ export default function FindMilestonesPage() {
                         Budget
                       </div>
                       <div className="font-heading font-black text-3xl text-warning">
-                        {selectedMilestone.budget}
+                        {selectedMilestone.budget ? formatCurrency(selectedMilestone.budget) : "TBD"}
                       </div>
                     </div>
                     <NeoBadge
@@ -392,175 +387,16 @@ export default function FindMilestonesPage() {
         </NeoDrawerContent>
       </NeoDrawer>
 
-      {/* Contract Signing / Proposal Modal */}
-      {isProposalModalOpen && selectedMilestone && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm animate-in fade-in duration-200 overflow-y-auto">
-          <div className="bg-card border-4 border-foreground shadow-[12px_12px_0px_0px_var(--foreground)] w-full max-w-3xl animate-in zoom-in-95 duration-200 my-8">
-            <div className="border-b-4 border-foreground p-6 flex justify-between items-center bg-secondary/30">
-              <h2 className="font-heading font-black text-2xl uppercase tracking-widest flex items-center gap-3">
-                <Handshake className="w-6 h-6 text-primary" /> Submit Proposal
-              </h2>
-              <NeoButton
-                variant="ghost"
-                size="icon"
-                onClick={() => {
-                  setIsProposalModalOpen(false);
-                  if (!drawerMode) setSelectedMilestone(null);
-                  setContractType(null);
-                }}
-                className="border-transparent h-8 w-8"
-              >
-                <X className="w-5 h-5" />
-              </NeoButton>
-            </div>
-
-            <div className="p-6 md:p-8 space-y-8">
-              {/* Milestone Summary */}
-              <div className="bg-foreground text-background p-4 border-b-4 border-primary">
-                <div className="text-[0.625rem] font-bold uppercase tracking-widest text-background/60 mb-1">
-                  Project: {selectedMilestone.project}
-                </div>
-                <div className="font-heading font-black text-xl uppercase mb-4">
-                  {selectedMilestone.title}
-                </div>
-
-                <div className="flex flex-wrap gap-4 items-center justify-between border-t border-background/20 pt-4">
-                  <NeoBadge
-                    variant={getBadgeVariant(selectedMilestone.difficulty)}
-                    className="gap-1 px-2 py-1 shadow-none"
-                  >
-                    <selectedMilestone.difficultyIcon className="w-4 h-4" />
-                    {selectedMilestone.difficulty}
-                  </NeoBadge>
-                  <div className="font-heading font-black text-2xl text-primary">
-                    {selectedMilestone.budget}
-                  </div>
-                </div>
-              </div>
-
-              {/* Proposal Input */}
-              <div>
-                <label className="text-xs font-bold uppercase tracking-widest text-foreground block mb-2">
-                  Your Proposal for this Milestone
-                </label>
-                <NeoTextarea
-                  placeholder="Explain your approach, timeline, and why you can handle this difficulty level..."
-                  className="min-h-[120px] focus-visible: text-sm font-semibold p-4"
-                  value={proposalText}
-                  onChange={(e) => setProposalText(e.target.value)}
-                />
-              </div>
-
-              {/* Contract Signing Selection */}
-              <div>
-                <label className="text-xs font-bold uppercase tracking-widest text-foreground block mb-4 flex items-center gap-2">
-                  <FileSignature className="w-4 h-4 text-primary" /> Contract
-                  Signing Method
-                </label>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {/* Platform Option */}
-                  <div
-                    onClick={() => setContractType("platform")}
-                    className={cn(
-                      "border-4 p-6 cursor-pointer transition-all flex flex-col justify-between h-full min-h-[180px]",
-                      contractType === "platform"
-                        ? "border-primary bg-primary/5 shadow-[6px_6px_0px_0px_var(--primary)] -translate-y-1"
-                        : "border-border bg-card hover:border-foreground hover:shadow-[4px_4px_0px_0px_var(--border)]",
-                    )}
-                  >
-                    <div>
-                      <div className="w-10 h-10 bg-primary/20 border-2 border-primary flex items-center justify-center mb-4">
-                        <Handshake className="w-5 h-5 text-primary" />
-                      </div>
-                      <h3 className="font-heading font-black uppercase text-lg mb-2">
-                        Platform Escrow
-                      </h3>
-                      <p className="text-[0.625rem] font-bold text-muted-foreground uppercase tracking-widest leading-relaxed">
-                        Sign internal smart contract. Client pays AITasker
-                        upfront. Guaranteed payment upon task approval.
-                      </p>
-                    </div>
-                    {contractType === "platform" && (
-                      <div className="mt-4 text-xs font-black text-primary uppercase tracking-widest flex items-center gap-1">
-                        Selected <CheckCircle2 className="w-3 h-3" />
-                      </div>
-                    )}
-                  </div>
-
-                  {/* External Option */}
-                  <div
-                    onClick={() => setContractType("external")}
-                    className={cn(
-                      "border-4 p-6 cursor-pointer transition-all flex flex-col justify-between h-full min-h-[180px]",
-                      contractType === "external"
-                        ? "border-[#E1801E] bg-[#E1801E]/5 shadow-[6px_6px_0px_0px_#E1801E] -translate-y-1"
-                        : "border-border bg-card hover:border-foreground hover:shadow-[4px_4px_0px_0px_var(--border)]",
-                    )}
-                  >
-                    <div>
-                      <div className="w-10 h-10 bg-secondary border-2 border-foreground flex items-center justify-center mb-4">
-                        <ExternalLink className="w-5 h-5 text-foreground" />
-                      </div>
-                      <h3 className="font-heading font-black uppercase text-lg mb-2">
-                        External Contract
-                      </h3>
-                      <p className="text-[0.625rem] font-bold text-muted-foreground uppercase tracking-widest leading-relaxed">
-                        Sign via Upwork, DocuSign, etc. AITasker does not hold
-                        funds or guarantee payment.
-                      </p>
-                    </div>
-                    {contractType === "external" && (
-                      <div className="mt-4 text-xs font-black text-[#E1801E] uppercase tracking-widest flex items-center gap-1">
-                        Selected <CheckCircle2 className="w-3 h-3" />
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* External Link Input (Conditional) */}
-                {contractType === "external" && (
-                  <div className="mt-4 p-4 border-2 border-dashed border-[#E1801E] bg-[#E1801E]/5 animate-in fade-in slide-in-from-top-2">
-                    <label className="text-[0.625rem] font-black uppercase tracking-widest text-foreground block mb-2">
-                      External Platform URL (Upwork Job Link, DocuSign, etc.) *
-                    </label>
-                    <NeoInput
-                      placeholder="https://..."
-                      className="bg-background h-12"
-                    />
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="border-t-4 border-foreground p-6 bg-secondary/30 flex justify-end gap-4">
-              <NeoButton
-                variant="outline"
-                onClick={() => {
-                  setIsProposalModalOpen(false);
-                  if (!drawerMode) setSelectedMilestone(null);
-                  setContractType(null);
-                }}
-                className="h-14 px-8"
-              >
-                Cancel
-              </NeoButton>
-              <NeoButton
-                disabled={
-                  !contractType ||
-                  proposalMutation.isPending ||
-                  !proposalText ||
-                  !me?.id
-                }
-                onClick={handleProposalSubmit}
-                className="h-14 px-10 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {proposalMutation.isPending ? "Submitting..." : "Submit Proposal"}
-              </NeoButton>
-            </div>
-          </div>
-        </div>
-      )}
+      <ApplyTaskModal
+        isOpen={isProposalModalOpen}
+        task={selectedMilestone}
+        isLoading={proposalMutation.isPending}
+        onClose={() => {
+          setIsProposalModalOpen(false);
+          if (!drawerMode) setSelectedMilestone(null);
+        }}
+        onSubmit={handleProposalSubmit}
+      />
     </div>
   );
 }

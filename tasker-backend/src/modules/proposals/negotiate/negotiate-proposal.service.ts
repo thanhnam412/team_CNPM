@@ -50,7 +50,7 @@ export class NegotiateProposalService {
       };
 
       // Validate logic layer
-      validateLogic("COUNTER_OFFER", context, role, offeredPrice);
+      validateLogic("COUNTER_OFFER", { context, role, newPrice: offeredPrice });
 
       // Insert new negotiation
       const negotiation = await insertProposalNegotiationQuery(

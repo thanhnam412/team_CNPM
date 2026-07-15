@@ -6,8 +6,10 @@ import { CreateProjectCopilotService } from "./create-project/create-project-cop
 import { SearchExpertsCopilotService } from "./search-experts/search-experts-copilot.service";
 import { CreateQuickTaskCopilotService } from "./create-quick-task/create-quick-task-copilot.service";
 
+import { WalletModule } from "@/modules/wallet/wallet.module";
+
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, WalletModule],
   controllers: [CopilotController],
   providers: [
     ChatCopilotService,

@@ -77,8 +77,8 @@ export class QuickTasksController {
   }
 
   @Delete(":id")
-  remove(@Param("id") id: string) {
-    return this.removeQuickTaskService.execute(id);
+  remove(@Request() req, @Param("id") id: string) {
+    return this.removeQuickTaskService.execute(id, req.user.userId);
   }
 
   @Post(":id/cancel")

@@ -95,3 +95,15 @@ export const useDeleteQuickTaskMutation = () => {
     },
   });
 };
+
+export const useCancelQuickTaskMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => quickTaskService.cancelQuickTask(id),
+    onSuccess: (_, id) => {
+      queryClient.invalidateQueries({ queryKey: ["quick-tasks", id] });
+      queryClient.invalidateQueries({ queryKey: ["quick-tasks"] });
+      queryClient.invalidateQueries({ queryKey: ["client-quick-tasks"] });
+    },
+  });
+};

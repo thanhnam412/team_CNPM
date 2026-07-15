@@ -19,6 +19,14 @@ export const useUserProposals = (userId: string) => {
   });
 };
 
+export const useClientProposals = (clientId: string) => {
+  return useQuery({
+    queryKey: ["proposals", "client", clientId],
+    queryFn: () => proposalService.getProposalsForClient(clientId),
+    enabled: !!clientId,
+  });
+};
+
 export const useSubmitQuickTaskProposalMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({

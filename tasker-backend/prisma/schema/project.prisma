@@ -110,4 +110,5 @@ enum MilestoneStatus {
   ACTIVE
   REVIEW
   PAID
+  CANCELLED
 }

@@ -24,6 +24,20 @@ export const useMockTopupMutation = () => {
       financeService.mockTopup(userId, amount),
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries({ queryKey: ["transactions", variables.userId] });
+      queryClient.invalidateQueries({ queryKey: ["wallet", variables.userId] });
+      queryClient.invalidateQueries({ queryKey: ["me"] });
+    },
+  });
+};
+
+export const useMockWithdrawMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ userId, amount }: { userId: string; amount: number }) =>
+      financeService.mockWithdraw(userId, amount),
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["transactions", variables.userId] });
+      queryClient.invalidateQueries({ queryKey: ["wallet", variables.userId] });
       queryClient.invalidateQueries({ queryKey: ["me"] });
     },
   });

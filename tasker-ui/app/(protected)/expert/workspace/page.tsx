@@ -18,11 +18,30 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useExpertTasks, useExpertUpdateTaskStatusMutation } from "@/tanstack/useTasks";
 import { useSubmitMilestoneMutation } from "@/tanstack/useMilestones";
+import { useSubmitQuickTaskDeliverableMutation } from "@/tanstack/useQuickTasks";
+import { useContracts } from "@/tanstack/useContracts";
+import { formatCurrency } from "@/lib/utils";
 import { TaskDto as Task } from "@/types/project.dto";
 import { NeoPageHeader } from "@/components/ui-custom/neo-page-header";
 
 export default function ExpertWorkspacePage() {
   const { data: initialTasks = [], isLoading } = useExpertTasks();
+  const { data: contracts = [] } = useContracts();
+  
+  const totalInEscrow = contracts
+    .filter((c) => c.escrowStatus === "HELD")
+    .reduce((sum, c) => sum + Number(c.agreedPrice || 0), 0);
+
+  const getEscrowAmountForTask = (task: any) => {
+    if (task.isQuickTask) {
+      const contract = contracts.find((c) => c.quickTaskId === task.id);
+      return contract?.agreedPrice || task.budget;
+    } else if (task.milestoneId) {
+      const contract = contracts.find((c) => c.milestoneId === task.milestoneId);
+      return contract?.agreedPrice;
+    }
+    return null;
+  };
 
   const [tasks, setTasks] = useState<Task[]>([]);
   const [draggedTaskId, setDraggedTaskId] = useState<string | null>(null);
@@ -31,6 +50,7 @@ export default function ExpertWorkspacePage() {
 
   const updateStatusMutation = useExpertUpdateTaskStatusMutation();
   const submitMutation = useSubmitMilestoneMutation();
+  const submitQuickTaskMutation = useSubmitQuickTaskDeliverableMutation();
 
   useEffect(() => {
     if (initialTasks.length > 0) {
@@ -85,6 +105,12 @@ export default function ExpertWorkspacePage() {
       return;
     }
 
+    // Lock Drag and Drop for Quick Tasks
+    if ((task as any).isQuickTask) {
+      setDraggedTaskId(null);
+      return;
+    }
+
     setTasks(
       tasks.map((t) =>
         t.id === draggedTaskId ? { ...t, status: status as any } : t,
@@ -114,7 +140,7 @@ export default function ExpertWorkspacePage() {
                 Total in Escrow
               </div>
               <div className="font-heading font-black text-xl text-primary">
-                $1,250.00
+                {formatCurrency(totalInEscrow)}
               </div>
             </div>
             <Link href="/client/experts">
@@ -160,13 +186,21 @@ export default function ExpertWorkspacePage() {
                       key={task.id}
                       draggable
                       onDragStart={(e) => handleDragStart(e, task.id)}
-                      className="bg-card border-2 border-foreground p-4 shadow-[2px_2px_0px_0px_var(--foreground)] hover:-translate-y-[2px] hover:-translate-x-[2px] hover:shadow-[4px_4px_0px_0px_var(--primary)] hover:border-primary transition-all cursor-grab active:cursor-grabbing group flex flex-col"
+                      className={cn(
+                        "bg-card border-2 border-foreground p-4 shadow-[2px_2px_0px_0px_var(--foreground)] transition-all flex flex-col group",
+                        !(task as any).isQuickTask && "hover:-translate-y-[2px] hover:-translate-x-[2px] hover:shadow-[4px_4px_0px_0px_var(--primary)] hover:border-primary cursor-grab active:cursor-grabbing",
+                        (task as any).isQuickTask && "opacity-90"
+                      )}
                     >
                       <div className="flex justify-between items-start mb-2">
                         <NeoBadge variant="secondary" className="truncate max-w-[120px]" title={task.id}>
                           {task.id}
                         </NeoBadge>
-                        {task.milestone && (
+                        {(task as any).isQuickTask ? (
+                          <NeoBadge variant="primary" title="Quick Task">
+                            Quick Task
+                          </NeoBadge>
+                        ) : task.milestoneId && (
                           <NeoBadge variant="nightmare" title="Part of a Milestone">
                             Milestone
                           </NeoBadge>
@@ -177,8 +211,8 @@ export default function ExpertWorkspacePage() {
                         {task.title}
                       </h3>
 
-                      <div className="text-[0.625rem] font-bold uppercase tracking-widest text-muted-foreground mb-4">
-                        Client: {task.client}
+                      <div className="text-[0.625rem] font-bold uppercase tracking-widest text-muted-foreground mb-4 line-clamp-1">
+                        {task.projectName} {(task as any).clientName ? `• ${(task as any).clientName}` : ""}
                       </div>
 
                       <div className="flex flex-wrap gap-1 mb-4 mt-auto">
@@ -188,9 +222,16 @@ export default function ExpertWorkspacePage() {
                       </div>
 
                       <div className="flex items-center justify-between border-t-2 border-border border-dashed pt-3 mt-auto">
-                        <div className="flex items-center gap-1 text-[0.625rem] font-bold uppercase tracking-widest text-[#E1801E]">
-                          <Clock className="w-3 h-3" />{" "}
-                          {new Date(task.createdAt).toLocaleDateString()}
+                        <div className="flex flex-col gap-2">
+                          <div className="flex items-center gap-1 text-[0.625rem] font-bold uppercase tracking-widest text-[#E1801E]">
+                            <Clock className="w-3 h-3" />{" "}
+                            {new Date(task.createdAt).toLocaleDateString()}
+                          </div>
+                          {getEscrowAmountForTask(task) && (
+                            <div className="flex items-center gap-1 text-[0.625rem] font-bold uppercase tracking-widest text-[#E1801E]">
+                              <Briefcase className="w-3 h-3" /> Escrow: {formatCurrency(Number(getEscrowAmountForTask(task)))}
+                            </div>
+                          )}
                         </div>
                       </div>
 
@@ -206,7 +247,7 @@ export default function ExpertWorkspacePage() {
                         </Link>
                         {(task.status === "IN_PROGRESS" ||
                           task.status === "TODO") &&
-                          task.milestoneId && (
+                          (task.milestoneId || (task as any).isQuickTask) && (
                             <NeoButton
                               size="sm"
                               className="flex-1 transition-transform"
@@ -244,9 +285,10 @@ export default function ExpertWorkspacePage() {
             </div>
             <div className="p-6 space-y-4">
               <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">
-                Submit deliverables for milestone:{" "}
+                Submit deliverables for{" "}
+                {(submitTask as any).isQuickTask ? "quick task:" : "milestone:"}{" "}
                 <span className="text-foreground">
-                  {submitTask.milestone?.title}
+                  {(submitTask as any).isQuickTask ? submitTask.title : submitTask.milestone?.title}
                 </span>
               </p>
 
@@ -268,21 +310,41 @@ export default function ExpertWorkspacePage() {
               </NeoButton>
               <NeoButton
                 disabled={
-                  !deliverableUrl || submitMutation.isPending
+                  !deliverableUrl || submitMutation.isPending || submitQuickTaskMutation.isPending
                 }
                 onClick={() => {
-                  submitMutation.mutate({
-                    projectId: submitTask.projectId,
-                    milestoneId: submitTask.milestoneId as string,
-                    payload: {
-                      taskId: submitTask.id,
-                      url: deliverableUrl,
-                    },
-                  });
+                  if ((submitTask as any).isQuickTask) {
+                    submitQuickTaskMutation.mutate(
+                      { id: submitTask.id, data: { note: deliverableUrl } },
+                      {
+                        onSuccess: () => {
+                          setSubmitTask(null);
+                          setDeliverableUrl("");
+                        }
+                      }
+                    );
+                  } else {
+                    submitMutation.mutate(
+                      {
+                        projectId: submitTask.projectId,
+                        milestoneId: submitTask.milestoneId as string,
+                        payload: {
+                          taskId: submitTask.id,
+                          url: deliverableUrl,
+                        },
+                      },
+                      {
+                        onSuccess: () => {
+                          setSubmitTask(null);
+                          setDeliverableUrl("");
+                        }
+                      }
+                    );
+                  }
                 }}
                 className="rounded-none border-2 h-10 px-6 uppercase font-black tracking-widest text-xs"
               >
-                {submitMutation.isPending
+                {submitMutation.isPending || submitQuickTaskMutation.isPending
                   ? "Submitting..."
                   : "Submit Deliverables"}
               </NeoButton>

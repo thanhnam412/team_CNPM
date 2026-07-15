@@ -19,4 +19,9 @@ export class FinanceController {
   mockTopup(@Param("userId") userId: string, @Body() data: { amount: number }) {
     return this.financeService.mockTopup(userId, data.amount);
   }
+
+  @Post("mock-withdraw")
+  mockWithdraw(@Param("userId") userId: string, @Body() data: { amount: number }) {
+    return this.financeService.mockWithdraw(userId, data.amount);
+  }
 }

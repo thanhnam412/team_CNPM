@@ -46,7 +46,7 @@ export class RefundService {
     await insertTransactionQuery(trx, {
       userId,
       projectId,
-      type: "CREDIT",
+      type: "REFUND",
       amount: amount,
       balanceAfter: newBalance,
       desc: desc || "Refund from Escrow",

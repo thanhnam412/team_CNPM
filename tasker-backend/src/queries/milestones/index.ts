@@ -215,6 +215,16 @@ export const activateMilestoneQuery = async (
     .where("id", "=", milestoneId)
     .execute();
 
+  await trx
+    .updateTable("tasks")
+    .set({
+      assigneeId: expertId,
+      updatedAt: new Date().toISOString(),
+    })
+    .where("milestoneId", "=", milestoneId)
+    .where("assigneeId", "is", null)
+    .execute();
+
   const project = await trx
     .selectFrom("projects")
     .select("escrow")

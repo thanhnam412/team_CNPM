@@ -1,6 +1,7 @@
 import { NeoButton } from "@/components/ui-custom/neo-button";
 import { NeoCheckbox } from "@/components/ui-custom/neo-checkbox";
 import { cn, formatCurrency } from "@/lib/utils";
+import Link from "next/link";
 
 export interface TabPayoutsProps {
   pendingPayouts: any[];
@@ -94,12 +95,14 @@ export function TabPayouts({ pendingPayouts }: TabPayoutsProps) {
                   </span>
                 </td>
                 <td className="p-4 text-center">
-                  <NeoButton
-                    variant="outline"
-                    className="text-[0.625rem] h-8 bg-primary/10 w-full"
-                  >
-                    Release
-                  </NeoButton>
+                  <Link href={`/client/quick-tasks/${po.quickTaskId}`}>
+                    <NeoButton
+                      variant="outline"
+                      className="text-[0.625rem] h-8 bg-primary/10 w-full"
+                    >
+                      Review Work
+                    </NeoButton>
+                  </Link>
                 </td>
               </tr>
             ))}

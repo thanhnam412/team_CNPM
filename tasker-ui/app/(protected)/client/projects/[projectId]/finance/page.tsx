@@ -73,6 +73,7 @@ export default function ProjectFinancePage() {
     <ProjectFinanceBlock
       stats={stats}
       transactions={transactions}
+      activeContracts={financeData?.activeContracts || []}
       isLoading={isLoading}
       isAddFundsOpen={isAddFundsOpen}
       onOpenAddFunds={() => setIsAddFundsOpen(true)}
